@@ -1,5 +1,6 @@
 package com.centurylink.sdk2.dsl.language.endpoint;
 
+import com.centurylink.sdk2.dsl.language.structure.StructureSpecification;
 import com.google.common.base.Joiner;
 
 /**
@@ -10,6 +11,8 @@ public class EndpointBuilder {
     private String description;
     private String url;
     private Method method;
+    private StructureSpecification request;
+    private StructureSpecification response;
 
     public EndpointBuilder(String endpointName) {
         this.endpointName = endpointName;
@@ -42,11 +45,13 @@ public class EndpointBuilder {
         return this;
     }
 
-    public EndpointBuilder request(Object arg) {
+    public EndpointBuilder request(StructureSpecification request) {
+        this.request = request;
         return this;
     }
 
-    public EndpointBuilder response(Object arg) {
+    public EndpointBuilder response(StructureSpecification response) {
+        this.response = response;
         return this;
     }
 

@@ -1,6 +1,3 @@
-package com.centurylink.sdk2;
-
-
 public class CreateServerCommand {
 
 
@@ -71,42 +68,42 @@ public class CreateServerCommand {
     /**
      * Name of the server to create. Alphanumeric characters and dashes only. Must be between 1-7 characters depending on the length of the account alias. (This name will be appended with a two digit number and prepended with the datacenter code and account alias to make up the final server name.)
      */
-    public java.lang.String getName(java.lang.String name) {
+    public java.lang.String getName() {
         return name;
     }
 
     /**
      * ID of the parent group. Retrieved from query to parent group, or by looking at the URL on the UI pages in the Control Portal.
      */
-    public java.lang.String getGroupId(java.lang.String groupId) {
+    public java.lang.String getGroupId() {
         return groupId;
     }
 
     /**
      * ID of the server to use a source. May be the ID of a template, or when cloning, an existing server ID. The list of available templates for a given account in a data center can be retrieved from the Get Data Center Deployment Capabilities API operation.
      */
-    public java.lang.String getSourceServerId(java.lang.String sourceServerId) {
+    public java.lang.String getSourceServerId() {
         return sourceServerId;
     }
 
     /**
      * Number of processors to configure the server with (1-16)
      */
-    public java.lang.Integer getCpu(java.lang.Integer cpu) {
+    public java.lang.Integer getCpu() {
         return cpu;
     }
 
     /**
      * Number of GB of memory to configure the server with (1-128)
      */
-    public java.lang.Integer getMemoryGB(java.lang.Integer memoryGB) {
+    public java.lang.Integer getMemoryGB() {
         return memoryGB;
     }
 
     /**
      * Whether to create standard or hyperscale server
      */
-    public java.lang.Integer getType(java.lang.Integer type) {
+    public java.lang.Integer getType() {
         return type;
     }
 

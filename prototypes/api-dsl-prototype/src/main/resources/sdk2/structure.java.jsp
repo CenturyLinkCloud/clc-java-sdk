@@ -20,7 +20,7 @@ public class ${structure.name} {
     /**
      * ${field.description}
      */
-    public ${Types.classOf(field.type).name} get${field.name.capitalize()}(${Types.classOf(field.type).name} ${field.name}) {
+    public ${Types.classOf(field.type).name} get${field.name.capitalize()}() {
         return ${field.name};
     }
     <% } %>
