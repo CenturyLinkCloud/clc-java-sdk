@@ -7,6 +7,9 @@ import javax.ws.rs.core.MediaType;
 public class ServerService {
 
     <% for (curMethod in endpoints) { %>
+    /**
+     * ${curMethod.description}
+     */
     public ${curMethod.response.specification().name} ${curMethod.endpointName}(${curMethod.request.specification().name} request) {
         return
             ClientBuilder.newBuilder().build()

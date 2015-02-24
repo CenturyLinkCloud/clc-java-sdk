@@ -19,9 +19,9 @@ public class ServerService {
         return
             endpoint("create")
                 .desc(
-                        " Creates a new server. Calls to this operation must include a token acquired",
-                        " from the authentication endpoint. See the Login API for information on acquiring",
-                        " this token."
+                    " Creates a new server. Calls to this operation must include a token acquired",
+                    " from the authentication endpoint. See the Login API for information on acquiring",
+                    " this token."
                 )
 //                .url("https://api.tier3.com/v2/servers/{accountAlias}")
                 .url("http://localhost:8080/server")
