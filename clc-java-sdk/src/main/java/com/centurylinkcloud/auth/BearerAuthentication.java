@@ -35,13 +35,19 @@ public class BearerAuthentication implements ClientRequestFilter {
     }
 
     private ClcToken requestNewToken() {
-        LoginResponse result = ClientBuilder.newBuilder()
-                .build()
-                .target("https://api.tier3.com/v2/authentication/login")
-                .request()
-                .post(entity(credentials, MediaType.APPLICATION_JSON_TYPE))
-                .readEntity(LoginResponse.class);
-
-        return new ClcToken(result.bearerToken());
+//        LoginResponse result = ClientBuilder.newBuilder()
+//                .build()
+//                .target("https://api.tier3.com/v2/authentication/login")
+//                .request()
+//                .post(entity(credentials, MediaType.APPLICATION_JSON_TYPE))
+//                .readEntity(LoginResponse.class);
+//
+//        return new ClcToken(result.bearerToken());
+        return new ClcToken(
+            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBpLXRpZXIzIiwiYXVkIjoidXJuOn" +
+            "RpZXIzLXVzZXJzIiwibmJmIjoxNDI1MzIwOTgwLCJleHAiOjE0MjY1MzA1ODAsInVuaXF1ZV9uYW1lIjoiZHJvYmVueWEua" +
+            "Wx5YSIsInVybjp0aWVyMzphY2NvdW50LWFsaWFzIjoiQUxUUiIsInVybjp0aWVyMzpsb2NhdGlvbi1hbGlhcyI6IlZBMSJ9.-" +
+            "IrEzM-LZLtGBW6DxhrZOP4YcoXlLRcNtaSSLLufrp0"
+        );
     }
 }

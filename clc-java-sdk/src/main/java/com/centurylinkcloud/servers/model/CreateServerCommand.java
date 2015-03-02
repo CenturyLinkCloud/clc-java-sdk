@@ -13,7 +13,7 @@ public class CreateServerCommand {
 
     private Integer memoryGB;
 
-    private Integer type;
+    private String type;
 
 
 
@@ -60,7 +60,7 @@ public class CreateServerCommand {
     /**
      * Whether to create standard or hyperscale server
      */
-    public CreateServerCommand type(Integer type) {
+    public CreateServerCommand type(String type) {
         this.type = type;
         return this;
     }
@@ -105,7 +105,7 @@ public class CreateServerCommand {
     /**
      * Whether to create standard or hyperscale server
      */
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 

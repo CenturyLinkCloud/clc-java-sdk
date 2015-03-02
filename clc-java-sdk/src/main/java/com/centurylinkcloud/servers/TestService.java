@@ -11,11 +11,11 @@ public class TestService {
         System.out.println(
             new ServerClient()
                 .create("myServer", new CreateServerCommand()
-                    .cpu(10)
+                    .cpu(1)
                     .groupId("A5")
-                    .memoryGB(10)
+                    .memoryGB(1)
                     .name("server1")
-                    .type(5)
+                    .type("standard")
                     .sourceServerId("server0")
                 )
         );
