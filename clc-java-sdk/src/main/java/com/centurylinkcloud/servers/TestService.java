@@ -18,7 +18,6 @@ public class TestService {
                     .type(5)
                     .sourceServerId("server0")
                 )
-                .getName()
         );
     }
 

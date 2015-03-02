@@ -1,5 +1,6 @@
 package com.centurylinkcloud.servers;
 
+import com.centurylinkcloud.auth.BearerAuthentication;
 import com.centurylinkcloud.servers.model.CreateServerCommand;
 import com.centurylinkcloud.servers.model.CreateServerResult;
 
@@ -18,17 +19,17 @@ public class ServerClient {
      * from the authentication endpoint. See the Login API for information on acquiring
      * this token.
      */
-    public CreateServerResult create(String alias, CreateServerCommand request) {
+    public String create(String alias, CreateServerCommand request) {
         return
             ClientBuilder.newBuilder().build()
+                .register(new BearerAuthentication("sergey.b", "QG0*0!jBcUfNPZ(["))
                 .target("https://api.tier3.com/v2/servers/{accountAlias}")
                     .resolveTemplate("accountAlias", alias)
 
                 .request().post(
                     entity(request, MediaType.APPLICATION_JSON_TYPE)
                 )
-
-                .readEntity(CreateServerResult.class);
+                .readEntity(String.class);
     }
 
 }
