@@ -7,11 +7,11 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 /**
  * @author ilya.drabenia
  */
-public class ClcToken {
+public class AuthToken {
     private final String value;
     private final Date receivedAt;
 
-    public ClcToken(String value) {
+    public AuthToken(String value) {
         this.value = value;
         this.receivedAt = now();
     }
