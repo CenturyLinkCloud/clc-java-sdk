@@ -1,8 +1,7 @@
-package com.centurylinkcloud.servers;
+package com.centurylinkcloud.servers.client;
 
 import com.centurylinkcloud.auth.BearerAuthentication;
-import com.centurylinkcloud.servers.model.CreateServerCommand;
-import com.centurylinkcloud.servers.model.CreateServerResult;
+import com.centurylinkcloud.servers.client.model.CreateServerCommand;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;

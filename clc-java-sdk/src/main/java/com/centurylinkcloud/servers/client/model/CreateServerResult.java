@@ -1,4 +1,4 @@
-package com.centurylinkcloud.servers.model;
+package com.centurylinkcloud.servers.client.model;
 
 public class CreateServerResult {
     private String name;

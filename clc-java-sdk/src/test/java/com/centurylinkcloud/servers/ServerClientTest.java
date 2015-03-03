@@ -1,6 +1,7 @@
 package com.centurylinkcloud.servers;
 
-import com.centurylinkcloud.servers.model.CreateServerCommand;
+import com.centurylinkcloud.servers.client.model.CreateServerCommand;
+import com.centurylinkcloud.servers.client.ServerClient;
 import org.junit.Test;
 
 /**

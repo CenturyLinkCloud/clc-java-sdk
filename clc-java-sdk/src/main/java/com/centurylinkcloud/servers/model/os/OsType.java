@@ -6,6 +6,7 @@ package com.centurylinkcloud.servers.model.os;
 public enum OsType {
     CENTOS,
     RHEL,
+    DEBIAN,
     WINDOWS,
     UBUNTU
 }
