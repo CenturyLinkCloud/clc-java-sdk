@@ -5,7 +5,7 @@ package com.centurylinkcloud.servers.service;
  */
 public class TemplateService {
 
-    public void createServer() {
+    public void loadTemplatesByDataCenter(String dataCenterId) {
 
     }
 

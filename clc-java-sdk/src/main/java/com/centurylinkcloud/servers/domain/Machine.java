@@ -1,4 +1,4 @@
-package com.centurylinkcloud.servers.model;
+package com.centurylinkcloud.servers.domain;
 
 /**
  * @author ilya.drabenia
@@ -15,11 +15,21 @@ public class Machine {
         this.cpuCount = cpuCount;
     }
 
+    public Machine cpuCount(Integer cpuCount) {
+        setCpuCount(cpuCount);
+        return this;
+    }
+
     public Integer getRam() {
         return ram;
     }
 
     public void setRam(Integer ram) {
         this.ram = ram;
+    }
+
+    public Machine ram(Integer ram) {
+        setRam(ram);
+        return this;
     }
 }

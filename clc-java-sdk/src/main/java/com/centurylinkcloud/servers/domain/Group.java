@@ -1,4 +1,4 @@
-package com.centurylinkcloud.servers.model;
+package com.centurylinkcloud.servers.domain;
 
 /**
  * @author ilya.drabenia
@@ -21,5 +21,10 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Group name(String name) {
+        setName(name);
+        return this;
     }
 }

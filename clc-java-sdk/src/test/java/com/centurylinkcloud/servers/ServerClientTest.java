@@ -1,6 +1,6 @@
 package com.centurylinkcloud.servers;
 
-import com.centurylinkcloud.servers.client.model.CreateServerCommand;
+import com.centurylinkcloud.servers.client.domain.CreateServerCommand;
 import com.centurylinkcloud.servers.client.ServerClient;
 import org.junit.Test;
 
@@ -21,6 +21,21 @@ public class ServerClientTest {
                     .type("standard")
                     .sourceServerId("CENTOS-6-64-TEMPLATE")
                 )
+        );
+    }
+
+    @Test
+    public void getDataCenterTest() {
+        System.out.println(
+            new ServerClient()
+                .getDataCenter("ALTR", "DE1").getGroup().getId()
+        );
+    }
+
+    @Test
+    public void getGroupsTest() {
+        System.out.println(
+            new ServerClient().getGroups("ALTR", "de1-35501").getGroups()
         );
     }
 
