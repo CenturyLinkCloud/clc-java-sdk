@@ -10,13 +10,13 @@ public class TestService {
     public static void main(String... args) {
         System.out.println(
             new ServerClient()
-                .create("myServer", new CreateServerCommand()
+                .create("ALTR", new CreateServerCommand()
                     .cpu(1)
-                    .groupId("A5")
+                    .groupId("de1-57241")
                     .memoryGB(1)
-                    .name("server1")
+                    .name("ALTR1")
                     .type("standard")
-                    .sourceServerId("server0")
+                    .sourceServerId("CENTOS-6-64-TEMPLATE")
                 )
         );
     }
