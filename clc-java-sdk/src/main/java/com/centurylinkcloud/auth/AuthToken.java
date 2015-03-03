@@ -16,11 +16,11 @@ public class AuthToken {
         this.receivedAt = now();
     }
 
-    public String value() {
+    public String getValue() {
         return value;
     }
 
-    public Date receivedAt() {
+    public Date getReceivedAt() {
         return receivedAt;
     }
 

@@ -1,13 +1,15 @@
 package com.centurylinkcloud.servers;
 
 import com.centurylinkcloud.servers.model.CreateServerCommand;
+import org.junit.Test;
 
 /**
  * @author ilya.drabenia
  */
-public class TestService {
+public class ServerClientTest {
 
-    public static void main(String... args) {
+    @Test
+    public void createServerTest() {
         System.out.println(
             new ServerClient()
                 .create("ALTR", new CreateServerCommand()

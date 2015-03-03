@@ -28,23 +28,23 @@ public class LoginResponse {
         this.bearerToken = bearerToken;
     }
 
-    public String username() {
+    public String getUsername() {
         return userName;
     }
 
-    public String accountAlias() {
+    public String getAccountAlias() {
         return accountAlias;
     }
 
-    public String locationAlias() {
+    public String getLocationAlias() {
         return locationAlias;
     }
 
-    public List<String> roles() {
+    public List<String> getRoles() {
         return roles;
     }
 
-    public String bearerToken() {
+    public String getBearerToken() {
         return bearerToken;
     }
 }

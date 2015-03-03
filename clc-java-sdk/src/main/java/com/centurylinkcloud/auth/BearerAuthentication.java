@@ -39,7 +39,7 @@ public class BearerAuthentication implements ClientRequestFilter {
 //                .post(entity(credentials, MediaType.APPLICATION_JSON_TYPE))
 //                .readEntity(LoginResponse.class);
 //
-//        return new ClcToken(result.bearerToken());
+//        return new ClcToken(result.getBearerToken());
         return new AuthToken(
             "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBpLXRpZXIzIiwiYXVkIjoidXJuOn" +
             "RpZXIzLXVzZXJzIiwibmJmIjoxNDI1MzIwOTgwLCJleHAiOjE0MjY1MzA1ODAsInVuaXF1ZV9uYW1lIjoiZHJvYmVueWEua" +
