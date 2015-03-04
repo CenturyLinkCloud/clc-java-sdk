@@ -3,7 +3,7 @@ package com.centurylinkcloud.servers.client;
 import com.centurylinkcloud.auth.BearerAuthentication;
 import com.centurylinkcloud.servers.client.domain.CreateServerCommand;
 import com.centurylinkcloud.servers.client.domain.GetDataCenterResult;
-import com.centurylinkcloud.servers.client.domain.deployable.capabilities.GetDeploymentCapabilitiesResult;
+import com.centurylinkcloud.servers.client.domain.deployment.capabilities.GetDeploymentCapabilitiesResult;
 import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
 
 import javax.ws.rs.client.ClientBuilder;

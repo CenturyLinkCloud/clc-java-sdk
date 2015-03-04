@@ -2,8 +2,7 @@ package com.centurylinkcloud.servers.service;
 
 import com.centurylinkcloud.servers.client.ServerClient;
 import com.centurylinkcloud.servers.client.domain.CreateServerCommand;
-import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
-import com.centurylinkcloud.servers.domain.InstanceType;
+import com.centurylinkcloud.servers.domain.ServerType;
 import com.centurylinkcloud.servers.domain.Server;
 import com.google.inject.Inject;
 
@@ -34,7 +33,7 @@ public class ServerService {
                         .resolve(alias, newServer.getGroup())
                         .getId()
                 )
-                .type(InstanceType.STANDARD.getCode())
+                .type(ServerType.STANDARD.getCode())
                 .sourceServerId(
                     templateService
                         .resolve(alias, newServer.getGroup().getDatacenter(), newServer.getTemplate())

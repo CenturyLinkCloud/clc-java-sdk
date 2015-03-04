@@ -3,13 +3,13 @@ package com.centurylinkcloud.servers.domain;
 /**
  * @author ilya.drabenia
  */
-public enum InstanceType {
+public enum ServerType {
     STANDARD("standard"),
     HYPERSCALE("hyperscale");
 
     private String code;
 
-    private InstanceType(String code) {
+    private ServerType(String code) {
         this.code = code;
     }
 

@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.centurylinkcloud.servers.domain.InstanceType.STANDARD;
+import static com.centurylinkcloud.servers.domain.ServerType.STANDARD;
 import static com.centurylinkcloud.servers.domain.datacenter.DataCenters.DE_FRANKFURT;
 import static com.centurylinkcloud.servers.domain.os.CpuArchitecture.x86_64;
 import static com.centurylinkcloud.servers.domain.os.OsType.CENTOS;
@@ -38,19 +38,19 @@ public class ServerServiceTest {
             .type(STANDARD)
 
             .group(new Group()
-                .datacenter(DE_FRANKFURT)
-                .name("Group3")
+                    .datacenter(DE_FRANKFURT)
+                    .name("Group3")
             )
 
             .machine(new Machine()
-                .cpuCount(1)
-                .ram(2)
+                    .cpuCount(1)
+                    .ram(2)
             )
 
             .template(new Template().os(new OperatingSystem()
-                .type(CENTOS)
-                .version("6")
-                .architecture(x86_64)
+                    .type(CENTOS)
+                    .version("6")
+                    .architecture(x86_64)
             ))
         );
     }

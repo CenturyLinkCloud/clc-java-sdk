@@ -5,7 +5,7 @@ package com.centurylinkcloud.servers.domain;
  */
 public class Server {
     private String name;
-    private InstanceType type;
+    private ServerType type;
     private Group group;
     private Template template;
     private Machine machine;
@@ -23,15 +23,15 @@ public class Server {
         return this;
     }
 
-    public InstanceType getType() {
+    public ServerType getType() {
         return type;
     }
 
-    public void setType(InstanceType type) {
+    public void setType(ServerType type) {
         this.type = type;
     }
 
-    public Server type(InstanceType type) {
+    public Server type(ServerType type) {
         setType(type);
         return this;
     }
