@@ -4,16 +4,22 @@ package com.centurylinkcloud.servers.domain.os;
  * @author ilya.drabenia
  */
 public class OperatingSystem {
-    private OsType type;
+    private String type;
     private CpuArchitecture architecture;
+    private String edition;
     private String version;
 
-    public OperatingSystem type(OsType type) {
+    public OperatingSystem type(String type) {
         this.type = type;
         return this;
     }
 
-    public OsType getType() {
+    public OperatingSystem type(OsType type) {
+        this.type = type.getCode();
+        return this;
+    }
+
+    public String getType() {
         return type;
     }
 
@@ -33,5 +39,18 @@ public class OperatingSystem {
 
     public String getVersion() {
         return version;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public OperatingSystem edition(String edition) {
+        setEdition(edition);
+        return this;
     }
 }

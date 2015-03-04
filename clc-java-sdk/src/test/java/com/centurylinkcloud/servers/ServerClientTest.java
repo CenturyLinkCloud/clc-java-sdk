@@ -39,4 +39,13 @@ public class ServerClientTest {
         );
     }
 
+    @Test
+    public void getDeploymentCapabilitiesTest() {
+        System.out.println(
+            new ServerClient()
+                .getDataCenterDeploymentCapabilities("ALTR", "DE1")
+                .getTemplates().get(3).getDescription()
+        );
+    }
+
 }

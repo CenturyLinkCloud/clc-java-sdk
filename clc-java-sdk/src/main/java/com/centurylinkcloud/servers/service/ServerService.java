@@ -35,7 +35,11 @@ public class ServerService {
                         .getId()
                 )
                 .type(InstanceType.STANDARD.getCode())
-                .sourceServerId(newServer.getTemplate().getName())
+                .sourceServerId(
+                    templateService
+                        .resolve(alias, newServer.getGroup().getDatacenter(), newServer.getTemplate())
+                        .getName()
+                )
             );
     }
 

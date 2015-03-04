@@ -3,6 +3,7 @@ package com.centurylinkcloud.servers.client;
 import com.centurylinkcloud.auth.BearerAuthentication;
 import com.centurylinkcloud.servers.client.domain.CreateServerCommand;
 import com.centurylinkcloud.servers.client.domain.GetDataCenterResult;
+import com.centurylinkcloud.servers.client.domain.deployable.capabilities.GetDeploymentCapabilitiesResult;
 import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
 
 import javax.ws.rs.client.ClientBuilder;
@@ -52,6 +53,16 @@ public class ServerClient {
                 .resolveTemplate("accountAlias", alias)
                 .resolveTemplate("rootGroupId", rootGroupId)
                 .request().get(GetGroupResult.class);
+    }
+
+    public GetDeploymentCapabilitiesResult getDataCenterDeploymentCapabilities(String alias, String dataCenterId) {
+        return
+            ClientBuilder.newBuilder().build()
+                .register(new BearerAuthentication("sergey.b", "QG0*0!jBcUfNPZ(["))
+                .target("https://api.tier3.com/v2/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
+                .resolveTemplate("accountAlias", alias)
+                .resolveTemplate("dataCenterId", dataCenterId)
+                .request().get(GetDeploymentCapabilitiesResult.class);
     }
 
 }

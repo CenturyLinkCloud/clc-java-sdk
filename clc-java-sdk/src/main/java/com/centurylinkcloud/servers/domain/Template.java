@@ -1,11 +1,13 @@
 package com.centurylinkcloud.servers.domain;
 
+import com.centurylinkcloud.servers.domain.os.OperatingSystem;
+
 /**
  * @author ilya.drabenia
  */
 public class Template {
     private String name;
-    private String osType;
+    private OperatingSystem os;
 
     public Template name(String name) {
         this.name = name;
@@ -16,12 +18,12 @@ public class Template {
         return name;
     }
 
-    public Template osType(String osType) {
-        this.osType = osType;
+    public Template os(OperatingSystem osType) {
+        this.os = osType;
         return this;
     }
 
-    public String getOsType() {
-        return osType;
+    public OperatingSystem getOs() {
+        return os;
     }
 }
