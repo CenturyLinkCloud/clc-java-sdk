@@ -21,7 +21,9 @@ public class ServerServiceTest {
 
     @Before
     public void setUp() {
-        Guice.createInjector(new ServersModule()).injectMembers(this);
+        Guice
+            .createInjector(new ServersModule())
+            .injectMembers(this);
     }
 
     @Test
