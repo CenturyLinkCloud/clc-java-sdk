@@ -1,7 +1,12 @@
 package com.centurylinkcloud.servers.service;
 
+import com.centurylinkcloud.servers.config.ServersModule;
 import com.centurylinkcloud.servers.domain.*;
 import com.centurylinkcloud.servers.domain.datacenter.DataCenters;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import org.junit.Before;
 import org.junit.Test;
 
 import static com.centurylinkcloud.servers.domain.InstanceType.STANDARD;
@@ -10,7 +15,14 @@ import static com.centurylinkcloud.servers.domain.InstanceType.STANDARD;
  * @author ilya.drabenia
  */
 public class ServerServiceTest {
-    private ServerService serverService = new ServerService();
+
+    @Inject
+    private ServerService serverService;
+
+    @Before
+    public void setUp() {
+        Guice.createInjector(new ServersModule()).injectMembers(this);
+    }
 
     @Test
     public void testCreate() throws Exception {

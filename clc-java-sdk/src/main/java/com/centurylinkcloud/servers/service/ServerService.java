@@ -5,15 +5,22 @@ import com.centurylinkcloud.servers.client.domain.CreateServerCommand;
 import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
 import com.centurylinkcloud.servers.domain.InstanceType;
 import com.centurylinkcloud.servers.domain.Server;
+import com.google.inject.Inject;
 
 /**
  * @author ilya.drabenia
  */
 public class ServerService {
-    private GroupService groupService = new GroupService();
-    private TemplateService templateService = new TemplateService();
+    private final GroupService groupService;
+    private final TemplateService templateService;
+    private final ServerClient client;
 
-    private ServerClient client = new ServerClient();
+    @Inject
+    public ServerService(GroupService groupService, TemplateService templateService, ServerClient client) {
+        this.groupService = groupService;
+        this.templateService = templateService;
+        this.client = client;
+    }
 
     public void create(String alias, Server newServer) {
         client
@@ -29,7 +36,7 @@ public class ServerService {
                 )
                 .type(InstanceType.STANDARD.getCode())
                 .sourceServerId(newServer.getTemplate().getName())
-        );
+            );
     }
 
 }
