@@ -1,6 +1,7 @@
 package com.centurylinkcloud.servers.service;
 
 import com.centurylinkcloud.servers.domain.*;
+import com.centurylinkcloud.servers.domain.datacenter.DataCenters;
 import org.junit.Test;
 
 import static com.centurylinkcloud.servers.domain.InstanceType.STANDARD;
@@ -17,6 +18,7 @@ public class ServerServiceTest {
             .name("ALTRS1")
             .type(STANDARD)
             .group(new Group()
+                .datacenter(DataCenters.DE_FRANKFURT)
                 .name("Group3")
             )
             .machine(new Machine()

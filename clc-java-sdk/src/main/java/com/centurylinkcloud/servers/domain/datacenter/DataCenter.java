@@ -1,7 +1,8 @@
-package com.centurylinkcloud.servers.domain;
+package com.centurylinkcloud.servers.domain.datacenter;
 
 /**
  * @author ilya.drabenia
  */
 public class DataCenter {
+
 }

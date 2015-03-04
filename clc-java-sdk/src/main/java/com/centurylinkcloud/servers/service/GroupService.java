@@ -11,12 +11,25 @@ public class GroupService {
     private ServerClient client = new ServerClient();
 
     public Group resolve(String alias, Group group) {
-        String rootGroupId = client.getDataCenter(alias, "DE1").getGroup().getId();
+        String rootGroupId = client
+                .getDataCenter(alias, group.getDatacenter())
+                .getGroup()
+                .getId();
+
         GetGroupResult groups = client.getGroups(alias, rootGroupId);
-        Group curGroup = new Group();
-        curGroup.setId(groups.findGroupByName(group.getName()).getId());
-        curGroup.setName(groups.findGroupByName(group.getName()).getName());
-        return curGroup;
+
+        return new Group()
+            .id(
+                getMatechedGroup(groups, group).getId()
+            )
+            .name(
+                getMatechedGroup(groups, group).getName()
+            );
+    }
+
+    private com.centurylinkcloud.servers.client.domain.group.Group getMatechedGroup(GetGroupResult groups, Group group) {
+        return groups
+            .findGroupByName(group.getName());
     }
 
 }
