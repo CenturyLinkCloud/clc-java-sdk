@@ -53,7 +53,9 @@ public class ServerServiceTest {
                     .version("6")
                     .architecture(x86_64)
                 ))
-            );
+            )
+            .waitUntilComplete()
+            .getResult();
 
         System.out.println(serverService.delete(newServer));
     }

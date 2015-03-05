@@ -1,6 +1,7 @@
 package com.centurylinkcloud.servers.client;
 
 import com.centurylinkcloud.auth.BearerAuthentication;
+import com.centurylinkcloud.servers.client.domain.GetStatusResult;
 import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResult;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
 import com.centurylinkcloud.servers.client.domain.GetDataCenterResult;
@@ -60,6 +61,14 @@ public class ServerClient {
             client("/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
                 .resolveTemplate("dataCenterId", dataCenterId)
                 .request().get(GetDeploymentCapabilitiesResult.class);
+    }
+
+    public GetStatusResult getJobStatus(String jobId) {
+        return
+            client("/operations/{accountAlias}/status/{statusId}")
+                .resolveTemplate("statusId", jobId)
+                .request()
+                .get(GetStatusResult.class);
     }
 
     private WebTarget client(String target) {

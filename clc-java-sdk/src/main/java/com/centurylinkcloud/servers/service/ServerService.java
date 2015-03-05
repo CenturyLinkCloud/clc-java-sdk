@@ -3,6 +3,7 @@ package com.centurylinkcloud.servers.service;
 import com.centurylinkcloud.servers.client.ServerClient;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerResult;
+import com.centurylinkcloud.servers.domain.Response;
 import com.centurylinkcloud.servers.domain.ServerType;
 import com.centurylinkcloud.servers.domain.Server;
 import com.google.inject.Inject;
@@ -22,7 +23,7 @@ public class ServerService {
         this.client = client;
     }
 
-    public Server create(Server newServer) {
+    public Response<Server> create(Server newServer) {
         CreateServerResult response = client
             .create(new CreateServerCommand()
                 .name(newServer.getName())
@@ -42,8 +43,11 @@ public class ServerService {
                 )
             );
 
-        return newServer
-            .id(response.findServerId());
+        return new Response<>(
+            newServer.id(response.findServerId()),
+            response.findStatusId(),
+            client
+        );
     }
 
     public Server delete(Server server) {
