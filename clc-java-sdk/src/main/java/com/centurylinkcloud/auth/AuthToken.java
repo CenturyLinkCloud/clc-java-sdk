@@ -2,6 +2,7 @@ package com.centurylinkcloud.auth;
 
 import java.util.Date;
 
+import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
@@ -25,7 +26,7 @@ public class AuthToken {
     }
 
     public boolean isExpired() {
-        return now().getTime() - receivedAt.getTime() > MINUTES.toMicros(10);
+        return now().getTime() - receivedAt.getTime() > DAYS.toMicros(10);
     }
 
     public String toHeaderString() {

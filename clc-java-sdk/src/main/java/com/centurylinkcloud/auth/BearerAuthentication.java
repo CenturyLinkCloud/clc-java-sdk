@@ -17,11 +17,15 @@ import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
  */
 public class BearerAuthentication implements ClientRequestFilter {
     private final Credentials credentials;
-    private volatile AuthToken token;
-    private static volatile String accountAlias = "ALTR";
+    private static volatile AuthToken token;
+    private static volatile String accountAlias;
 
     public BearerAuthentication(String username, String password) {
         credentials = new Credentials(username, password);
+
+        if (token == null || token.isExpired()) {
+            token = requestNewToken();
+        }
     }
 
     @Override
@@ -43,13 +47,8 @@ public class BearerAuthentication implements ClientRequestFilter {
                 .post(entity(credentials, MediaType.APPLICATION_JSON_TYPE))
                 .readEntity(LoginResponse.class);
 
+        accountAlias = result.getAccountAlias();
         return new AuthToken(result.getBearerToken());
-//        return new AuthToken(
-//            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBpLXRpZXIzIiwiYXVkIjoidXJuOn" +
-//            "RpZXIzLXVzZXJzIiwibmJmIjoxNDI1MzIwOTgwLCJleHAiOjE0MjY1MzA1ODAsInVuaXF1ZV9uYW1lIjoiZHJvYmVueWEua" +
-//            "Wx5YSIsInVybjp0aWVyMzphY2NvdW50LWFsaWFzIjoiQUxUUiIsInVybjp0aWVyMzpsb2NhdGlvbi1hbGlhcyI6IlZBMSJ9.-" +
-//            "IrEzM-LZLtGBW6DxhrZOP4YcoXlLRcNtaSSLLufrp0"
-//        );
     }
 
     public static String getAccountAlias() {
