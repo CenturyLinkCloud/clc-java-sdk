@@ -1,7 +1,8 @@
 package com.centurylinkcloud.servers.service;
 
 import com.centurylinkcloud.servers.client.ServerClient;
-import com.centurylinkcloud.servers.client.domain.CreateServerCommand;
+import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
+import com.centurylinkcloud.servers.client.domain.server.CreateServerResult;
 import com.centurylinkcloud.servers.domain.ServerType;
 import com.centurylinkcloud.servers.domain.Server;
 import com.google.inject.Inject;
@@ -21,25 +22,33 @@ public class ServerService {
         this.client = client;
     }
 
-    public void create(String alias, Server newServer) {
-        client
-            .create(alias, new CreateServerCommand()
+    public Server create(Server newServer) {
+        CreateServerResult response = client
+            .create(new CreateServerCommand()
                 .name(newServer.getName())
                 .sourceServerId(newServer.getTemplate().getName())
                 .cpu(newServer.getMachine().getCpuCount())
                 .memoryGB(newServer.getMachine().getRam())
                 .groupId(
                     groupService
-                        .resolve(alias, newServer.getGroup())
+                        .resolve(newServer.getGroup())
                         .getId()
                 )
                 .type(ServerType.STANDARD.getCode())
                 .sourceServerId(
                     templateService
-                        .resolve(alias, newServer.getGroup().getDatacenter(), newServer.getTemplate())
+                        .resolve(newServer.getGroup().getDatacenter(), newServer.getTemplate())
                         .getName()
                 )
             );
+
+        return newServer
+            .id(response.findServerId());
+    }
+
+    public Server delete(Server server) {
+        client.delete(server.getId());
+        return server;
     }
 
 }

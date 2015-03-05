@@ -15,6 +15,7 @@ import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 public class BearerAuthentication implements ClientRequestFilter {
     private final Credentials credentials;
     private volatile AuthToken token;
+    private static volatile String accountAlias = "ALTR";
 
     public BearerAuthentication(String username, String password) {
         credentials = new Credentials(username, password);
@@ -46,5 +47,9 @@ public class BearerAuthentication implements ClientRequestFilter {
             "Wx5YSIsInVybjp0aWVyMzphY2NvdW50LWFsaWFzIjoiQUxUUiIsInVybjp0aWVyMzpsb2NhdGlvbi1hbGlhcyI6IlZBMSJ9.-" +
             "IrEzM-LZLtGBW6DxhrZOP4YcoXlLRcNtaSSLLufrp0"
         );
+    }
+
+    public static String getAccountAlias() {
+        return accountAlias;
     }
 }

@@ -1,6 +1,6 @@
 package com.centurylinkcloud.servers;
 
-import com.centurylinkcloud.servers.client.domain.CreateServerCommand;
+import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
 import com.centurylinkcloud.servers.client.ServerClient;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ public class ServerClientTest {
     public void createServerTest() {
         System.out.println(
             new ServerClient()
-                .create("ALTR", new CreateServerCommand()
+                .create(new CreateServerCommand()
                     .cpu(1)
                     .groupId("de1-57241")
                     .memoryGB(1)
@@ -28,14 +28,14 @@ public class ServerClientTest {
     public void getDataCenterTest() {
         System.out.println(
             new ServerClient()
-                .getDataCenter("ALTR", "DE1").getGroup().getId()
+                .getDataCenter("DE1").getGroup().getId()
         );
     }
 
     @Test
     public void getGroupsTest() {
         System.out.println(
-            new ServerClient().getGroups("ALTR", "de1-35501").getGroups()
+            new ServerClient().getGroups("de1-35501").getGroups()
         );
     }
 
@@ -43,7 +43,7 @@ public class ServerClientTest {
     public void getDeploymentCapabilitiesTest() {
         System.out.println(
             new ServerClient()
-                .getDataCenterDeploymentCapabilities("ALTR", "DE1")
+                .getDataCenterDeploymentCapabilities("DE1")
                 .getTemplates().get(3).getDescription()
         );
     }

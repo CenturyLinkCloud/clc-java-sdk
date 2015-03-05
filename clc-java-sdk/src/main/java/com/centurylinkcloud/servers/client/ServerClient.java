@@ -1,12 +1,14 @@
 package com.centurylinkcloud.servers.client;
 
 import com.centurylinkcloud.auth.BearerAuthentication;
-import com.centurylinkcloud.servers.client.domain.CreateServerCommand;
+import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResult;
+import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
 import com.centurylinkcloud.servers.client.domain.GetDataCenterResult;
-import com.centurylinkcloud.servers.client.domain.deployment.capabilities.GetDeploymentCapabilitiesResult;
 import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
+import com.centurylinkcloud.servers.client.domain.server.CreateServerResult;
 
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import static javax.ws.rs.client.Entity.entity;
@@ -21,48 +23,52 @@ public class ServerClient {
      * from the authentication endpoint. See the Login API for information on acquiring
      * this token.
      */
-    public String create(String alias, CreateServerCommand request) {
+    public CreateServerResult create(CreateServerCommand request) {
         return
-            ClientBuilder.newBuilder().build()
-                .register(new BearerAuthentication("sergey.b", "QG0*0!jBcUfNPZ(["))
-                .target("https://api.tier3.com/v2/servers/{accountAlias}")
-                    .resolveTemplate("accountAlias", alias)
-
+            client("/servers/{accountAlias}")
                 .request().post(
                     entity(request, MediaType.APPLICATION_JSON_TYPE)
                 )
-                .readEntity(String.class);
+                .readEntity(CreateServerResult.class);
     }
 
-    public GetDataCenterResult getDataCenter(String alias, String dataCenterId) {
+    public String delete(String serverId) {
         return
-            ClientBuilder.newBuilder().build()
-                .register(new BearerAuthentication("sergey.b", "QG0*0!jBcUfNPZ(["))
-                .target("https://api.tier3.com/v2/datacenters/{accountAlias}/{dataCenterId}")
+            client("/servers/{accountAlias}/{serverId}")
+                .resolveTemplate("serverId", serverId)
+                .request()
+                .delete(String.class);
+    }
+
+    public GetDataCenterResult getDataCenter(String dataCenterId) {
+        return
+            client("/datacenters/{accountAlias}/{dataCenterId}")
                 .queryParam("groupLinks", true)
-                .resolveTemplate("accountAlias", alias)
                 .resolveTemplate("dataCenterId", dataCenterId)
                 .request().get(GetDataCenterResult.class);
     }
 
-    public GetGroupResult getGroups(String alias, String rootGroupId) {
+    public GetGroupResult getGroups(String rootGroupId) {
         return
-            ClientBuilder.newBuilder().build()
-                .register(new BearerAuthentication("sergey.b", "QG0*0!jBcUfNPZ(["))
-                .target("https://api.tier3.com/v2/groups/{accountAlias}/{rootGroupId}")
-                .resolveTemplate("accountAlias", alias)
+            client("/groups/{accountAlias}/{rootGroupId}")
                 .resolveTemplate("rootGroupId", rootGroupId)
                 .request().get(GetGroupResult.class);
     }
 
-    public GetDeploymentCapabilitiesResult getDataCenterDeploymentCapabilities(String alias, String dataCenterId) {
+    public GetDeploymentCapabilitiesResult getDataCenterDeploymentCapabilities(String dataCenterId) {
         return
-            ClientBuilder.newBuilder().build()
-                .register(new BearerAuthentication("sergey.b", "QG0*0!jBcUfNPZ(["))
-                .target("https://api.tier3.com/v2/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
-                .resolveTemplate("accountAlias", alias)
+            client("/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
                 .resolveTemplate("dataCenterId", dataCenterId)
                 .request().get(GetDeploymentCapabilitiesResult.class);
     }
 
+    private WebTarget client(String target) {
+        return
+            ClientBuilder
+                .newBuilder()
+                    .register(new BearerAuthentication("sergey.b", "QG0*0!jBcUfNPZ(["))
+                .build()
+                .target("https://api.tier3.com/v2" + target)
+                .resolveTemplate("accountAlias", BearerAuthentication.getAccountAlias());
+    }
 }

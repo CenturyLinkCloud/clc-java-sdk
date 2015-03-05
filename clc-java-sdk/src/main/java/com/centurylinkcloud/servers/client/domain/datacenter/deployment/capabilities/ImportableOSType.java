@@ -1,4 +1,4 @@
-package com.centurylinkcloud.servers.client.domain.deployment.capabilities;
+package com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities;
 
 import java.util.HashMap;
 import java.util.Map;

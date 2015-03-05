@@ -33,26 +33,29 @@ public class ServerServiceTest {
 
     @Test
     public void testCreate() throws Exception {
-        serverService.create("ALTR", new Server()
-            .name("ALTRS1")
-            .type(STANDARD)
+        Server newServer =
+            serverService.create(new Server()
+                .name("ALTRS1")
+                .type(STANDARD)
 
-            .group(new Group()
+                .group(new Group()
                     .datacenter(DE_FRANKFURT)
                     .name("Group3")
-            )
+                )
 
-            .machine(new Machine()
+                .machine(new Machine()
                     .cpuCount(1)
                     .ram(2)
-            )
+                )
 
-            .template(new Template().os(new OperatingSystem()
+                .template(new Template().os(new OperatingSystem()
                     .type(CENTOS)
                     .version("6")
                     .architecture(x86_64)
-            ))
-        );
+                ))
+            );
+
+        System.out.println(serverService.delete(newServer));
     }
 
 }

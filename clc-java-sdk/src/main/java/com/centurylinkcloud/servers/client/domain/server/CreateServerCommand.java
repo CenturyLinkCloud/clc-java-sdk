@@ -1,4 +1,4 @@
-package com.centurylinkcloud.servers.client.domain;
+package com.centurylinkcloud.servers.client.domain.server;
 
 public class CreateServerCommand {
 

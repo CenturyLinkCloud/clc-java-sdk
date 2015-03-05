@@ -16,12 +16,12 @@ public class TemplateService {
         this.serversClient = serversClient;
     }
 
-    public Template resolve(String alias, String dataCenterId, Template template) {
+    public Template resolve(String dataCenterId, Template template) {
         return
             template
                 .name(
                     serversClient
-                        .getDataCenterDeploymentCapabilities(alias, dataCenterId)
+                        .getDataCenterDeploymentCapabilities(dataCenterId)
                         .findByOsType(template.getOs())
                         .getName()
                 );

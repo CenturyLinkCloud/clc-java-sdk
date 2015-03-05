@@ -16,13 +16,13 @@ public class GroupService {
         this.client = client;
     }
 
-    public Group resolve(String alias, Group group) {
+    public Group resolve(Group group) {
         String rootGroupId = client
-                .getDataCenter(alias, group.getDatacenter())
+                .getDataCenter(group.getDatacenter())
                 .getGroup()
                 .getId();
 
-        GetGroupResult groups = client.getGroups(alias, rootGroupId);
+        GetGroupResult groups = client.getGroups(rootGroupId);
 
         return new Group()
             .id(

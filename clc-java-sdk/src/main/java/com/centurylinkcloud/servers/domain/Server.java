@@ -4,11 +4,25 @@ package com.centurylinkcloud.servers.domain;
  * @author ilya.drabenia
  */
 public class Server {
+    private String id;
     private String name;
     private ServerType type;
     private Group group;
     private Template template;
     private Machine machine;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Server id(String id) {
+        setId(id);
+        return this;
+    }
 
     public String getName() {
         return name;
