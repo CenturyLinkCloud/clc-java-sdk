@@ -1,4 +1,4 @@
-package com.centurylinkcloud.servers.client.domain.group;
+package com.centurylinkcloud.servers.client.domain;
 
 import java.util.HashMap;
 import java.util.Map;

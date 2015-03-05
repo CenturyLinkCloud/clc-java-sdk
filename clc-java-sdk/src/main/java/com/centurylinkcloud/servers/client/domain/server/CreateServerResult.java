@@ -32,7 +32,7 @@ public class CreateServerResult {
         return links;
     }
 
-    public String findServerId() {
+    public String findServerUuid() {
         for (Link curLink : links) {
             if (curLink.getRel().equals("self")) {
                 return curLink.getId();

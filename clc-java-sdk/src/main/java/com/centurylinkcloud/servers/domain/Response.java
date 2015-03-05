@@ -20,14 +20,18 @@ public class Response<T> {
 
     public Response<T> waitUntilComplete() {
         for (;;) {
-            String status = serverClient.getJobStatus(statusId).getStatus();
+            String status = serverClient
+                    .getJobStatus(statusId)
+                    .getStatus();
 
             switch (status) {
                 case "succeeded":
                     return this;
+
                 case "failed":
                 case "unknown":
                     throw new RuntimeException("Operation Execution Failed");
+
                 default:
                     try {
                         Thread.sleep(400L);

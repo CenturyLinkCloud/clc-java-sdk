@@ -7,6 +7,7 @@ import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
 import com.centurylinkcloud.servers.client.domain.GetDataCenterResult;
 import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerResult;
+import com.centurylinkcloud.servers.client.domain.server.GetServerResult;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -39,6 +40,14 @@ public class ServerClient {
                 .resolveTemplate("serverId", serverId)
                 .request()
                 .delete(String.class);
+    }
+
+    public GetServerResult findServerByUuid(String uuid) {
+        return
+            client("/servers/{accountAlias}/{serverId}?uuid=true")
+                .resolveTemplate("serverId", uuid)
+                .request()
+                .get(GetServerResult.class);
     }
 
     public GetDataCenterResult getDataCenter(String dataCenterId) {
@@ -75,7 +84,7 @@ public class ServerClient {
         return
             ClientBuilder
                 .newBuilder()
-                    .register(new BearerAuthentication("sergey.b", "QG0*0!jBcUfNPZ(["))
+                    .register(new BearerAuthentication("idrabenia", "RenVortEr9"))
                 .build()
                 .target("https://api.tier3.com/v2" + target)
                 .resolveTemplate("accountAlias", BearerAuthentication.getAccountAlias());

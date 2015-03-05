@@ -1,9 +1,12 @@
 package com.centurylinkcloud.auth;
 
 import com.centurylinkcloud.auth.model.Credentials;
+import com.centurylinkcloud.auth.model.LoginResponse;
 
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
 import static javax.ws.rs.client.Entity.entity;
@@ -33,20 +36,20 @@ public class BearerAuthentication implements ClientRequestFilter {
     }
 
     private AuthToken requestNewToken() {
-//        LoginResponse result = ClientBuilder.newBuilder()
-//                .build()
-//                .target("https://api.tier3.com/v2/authentication/login")
-//                .request()
-//                .post(entity(credentials, MediaType.APPLICATION_JSON_TYPE))
-//                .readEntity(LoginResponse.class);
-//
-//        return new ClcToken(result.getBearerToken());
-        return new AuthToken(
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBpLXRpZXIzIiwiYXVkIjoidXJuOn" +
-            "RpZXIzLXVzZXJzIiwibmJmIjoxNDI1MzIwOTgwLCJleHAiOjE0MjY1MzA1ODAsInVuaXF1ZV9uYW1lIjoiZHJvYmVueWEua" +
-            "Wx5YSIsInVybjp0aWVyMzphY2NvdW50LWFsaWFzIjoiQUxUUiIsInVybjp0aWVyMzpsb2NhdGlvbi1hbGlhcyI6IlZBMSJ9.-" +
-            "IrEzM-LZLtGBW6DxhrZOP4YcoXlLRcNtaSSLLufrp0"
-        );
+        LoginResponse result = ClientBuilder.newBuilder()
+                .build()
+                .target("https://api.tier3.com/v2/authentication/login")
+                .request()
+                .post(entity(credentials, MediaType.APPLICATION_JSON_TYPE))
+                .readEntity(LoginResponse.class);
+
+        return new AuthToken(result.getBearerToken());
+//        return new AuthToken(
+//            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1cm46YXBpLXRpZXIzIiwiYXVkIjoidXJuOn" +
+//            "RpZXIzLXVzZXJzIiwibmJmIjoxNDI1MzIwOTgwLCJleHAiOjE0MjY1MzA1ODAsInVuaXF1ZV9uYW1lIjoiZHJvYmVueWEua" +
+//            "Wx5YSIsInVybjp0aWVyMzphY2NvdW50LWFsaWFzIjoiQUxUUiIsInVybjp0aWVyMzpsb2NhdGlvbi1hbGlhcyI6IlZBMSJ9.-" +
+//            "IrEzM-LZLtGBW6DxhrZOP4YcoXlLRcNtaSSLLufrp0"
+//        );
     }
 
     public static String getAccountAlias() {

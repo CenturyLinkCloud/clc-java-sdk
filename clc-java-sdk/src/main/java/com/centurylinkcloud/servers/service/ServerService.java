@@ -3,6 +3,7 @@ package com.centurylinkcloud.servers.service;
 import com.centurylinkcloud.servers.client.ServerClient;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerResult;
+import com.centurylinkcloud.servers.client.domain.server.GetServerResult;
 import com.centurylinkcloud.servers.domain.Response;
 import com.centurylinkcloud.servers.domain.ServerType;
 import com.centurylinkcloud.servers.domain.Server;
@@ -43,8 +44,11 @@ public class ServerService {
                 )
             );
 
+        GetServerResult serverInfo = client
+            .findServerByUuid(response.findServerUuid());
+
         return new Response<>(
-            newServer.id(response.findServerId()),
+            newServer.id(serverInfo.getId()),
             response.findStatusId(),
             client
         );

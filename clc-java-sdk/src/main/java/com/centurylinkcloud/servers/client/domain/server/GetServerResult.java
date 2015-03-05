@@ -1,4 +1,4 @@
-package com.centurylinkcloud.servers.client.domain.group;
+package com.centurylinkcloud.servers.client.domain.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
+import com.centurylinkcloud.servers.client.domain.Link;
 import com.centurylinkcloud.servers.client.domain.ChangeInfo;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -20,16 +21,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "id",
         "name",
         "description",
+        "groupId",
+        "isTemplate",
         "locationId",
-        "type",
+        "osType",
+        "os",
         "status",
-        "serversCount",
-        "groups",
-        "links",
+        "details",
+        "type",
+        "storageType",
         "changeInfo",
-        "customFields"
+        "links"
 })
-public class GetGroupResult {
+public class GetServerResult {
 
     @JsonProperty("id")
     private String id;
@@ -37,22 +41,28 @@ public class GetGroupResult {
     private String name;
     @JsonProperty("description")
     private String description;
+    @JsonProperty("groupId")
+    private String groupId;
+    @JsonProperty("isTemplate")
+    private Boolean isTemplate;
     @JsonProperty("locationId")
     private String locationId;
-    @JsonProperty("type")
-    private String type;
+    @JsonProperty("osType")
+    private String osType;
+    @JsonProperty("os")
+    private String os;
     @JsonProperty("status")
     private String status;
-    @JsonProperty("serversCount")
-    private Integer serversCount;
-    @JsonProperty("groups")
-    private List<Group> groups = new ArrayList<Group>();
-    @JsonProperty("links")
-    private List<Link> links = new ArrayList<Link>();
+    @JsonProperty("details")
+    private Details details;
+    @JsonProperty("type")
+    private String type;
+    @JsonProperty("storageType")
+    private String storageType;
     @JsonProperty("changeInfo")
     private ChangeInfo changeInfo;
-    @JsonProperty("customFields")
-    private List<Object> customFields = new ArrayList<Object>();
+    @JsonProperty("links")
+    private List<Link> links = new ArrayList<Link>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -119,6 +129,46 @@ public class GetGroupResult {
     /**
      *
      * @return
+     * The groupId
+     */
+    @JsonProperty("groupId")
+    public String getGroupId() {
+        return groupId;
+    }
+
+    /**
+     *
+     * @param groupId
+     * The groupId
+     */
+    @JsonProperty("groupId")
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    /**
+     *
+     * @return
+     * The isTemplate
+     */
+    @JsonProperty("isTemplate")
+    public Boolean getIsTemplate() {
+        return isTemplate;
+    }
+
+    /**
+     *
+     * @param isTemplate
+     * The isTemplate
+     */
+    @JsonProperty("isTemplate")
+    public void setIsTemplate(Boolean isTemplate) {
+        this.isTemplate = isTemplate;
+    }
+
+    /**
+     *
+     * @return
      * The locationId
      */
     @JsonProperty("locationId")
@@ -139,21 +189,41 @@ public class GetGroupResult {
     /**
      *
      * @return
-     * The type
+     * The osType
      */
-    @JsonProperty("type")
-    public String getType() {
-        return type;
+    @JsonProperty("osType")
+    public String getOsType() {
+        return osType;
     }
 
     /**
      *
-     * @param type
-     * The type
+     * @param osType
+     * The osType
      */
-    @JsonProperty("type")
-    public void setType(String type) {
-        this.type = type;
+    @JsonProperty("osType")
+    public void setOsType(String osType) {
+        this.osType = osType;
+    }
+
+    /**
+     *
+     * @return
+     * The os
+     */
+    @JsonProperty("os")
+    public String getOs() {
+        return os;
+    }
+
+    /**
+     *
+     * @param os
+     * The os
+     */
+    @JsonProperty("os")
+    public void setOs(String os) {
+        this.os = os;
     }
 
     /**
@@ -179,61 +249,61 @@ public class GetGroupResult {
     /**
      *
      * @return
-     * The serversCount
+     * The details
      */
-    @JsonProperty("serversCount")
-    public Integer getServersCount() {
-        return serversCount;
+    @JsonProperty("details")
+    public Details getDetails() {
+        return details;
     }
 
     /**
      *
-     * @param serversCount
-     * The serversCount
+     * @param details
+     * The details
      */
-    @JsonProperty("serversCount")
-    public void setServersCount(Integer serversCount) {
-        this.serversCount = serversCount;
-    }
-
-    /**
-     *
-     * @return
-     * The groups
-     */
-    @JsonProperty("groups")
-    public List<Group> getGroups() {
-        return groups;
-    }
-
-    /**
-     *
-     * @param groups
-     * The groups
-     */
-    @JsonProperty("groups")
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
+    @JsonProperty("details")
+    public void setDetails(Details details) {
+        this.details = details;
     }
 
     /**
      *
      * @return
-     * The links
+     * The type
      */
-    @JsonProperty("links")
-    public List<Link> getLinks() {
-        return links;
+    @JsonProperty("type")
+    public String getType() {
+        return type;
     }
 
     /**
      *
-     * @param links
-     * The links
+     * @param type
+     * The type
      */
-    @JsonProperty("links")
-    public void setLinks(List<Link> links) {
-        this.links = links;
+    @JsonProperty("type")
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     *
+     * @return
+     * The storageType
+     */
+    @JsonProperty("storageType")
+    public String getStorageType() {
+        return storageType;
+    }
+
+    /**
+     *
+     * @param storageType
+     * The storageType
+     */
+    @JsonProperty("storageType")
+    public void setStorageType(String storageType) {
+        this.storageType = storageType;
     }
 
     /**
@@ -259,21 +329,21 @@ public class GetGroupResult {
     /**
      *
      * @return
-     * The customFields
+     * The links
      */
-    @JsonProperty("customFields")
-    public List<Object> getCustomFields() {
-        return customFields;
+    @JsonProperty("links")
+    public List<Link> getLinks() {
+        return links;
     }
 
     /**
      *
-     * @param customFields
-     * The customFields
+     * @param links
+     * The links
      */
-    @JsonProperty("customFields")
-    public void setCustomFields(List<Object> customFields) {
-        this.customFields = customFields;
+    @JsonProperty("links")
+    public void setLinks(List<Link> links) {
+        this.links = links;
     }
 
     @JsonAnyGetter
@@ -284,23 +354,6 @@ public class GetGroupResult {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
-    }
-
-    public Group findGroupByName(String name) {
-        return findGroupByName(groups, name);
-    }
-
-    public Group findGroupByName(List<Group> groups, String name) {
-        for (Group curGroup : groups) {
-            if (curGroup.getName().equals(name)) {
-                return curGroup;
-            } else if (curGroup.getGroups().size() > 0
-                    && findGroupByName(curGroup.getGroups(), name) != null) {
-                return findGroupByName(curGroup.getGroups(), name);
-            }
-        }
-
-        return null;
     }
 
 }
