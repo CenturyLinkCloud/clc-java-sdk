@@ -1,4 +1,4 @@
-package com.centurylinkcloud.core.client;
+package com.centurylinkcloud.core.client.errors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -8,24 +8,30 @@ import javax.ws.rs.client.ClientResponseFilter;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static java.util.Arrays.asList;
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.OK;
 
 /**
  * @author ilya.drabenia
  */
-public class ErrorResponseFilter implements ClientResponseFilter {
+public class ErrorProcessingFilter implements ClientResponseFilter {
 
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
-        if (responseContext.getStatusInfo() != OK && responseContext.getStatusInfo() != CREATED) {
+        if (!isResponseSuccess(responseContext)) {
             InputStream entityStream = responseContext.getEntityStream();
             Response response = objectMapper().readValue(entityStream, Response.class);
 
             if (response.getMessage() != null) {
-                throw new IllegalStateException(response.getMessage());
+                throw new ClcServiceException(response.getMessage());
             }
         }
+    }
+
+    private boolean isResponseSuccess(ClientResponseContext responseContext) {
+        return asList(OK, CREATED, ACCEPTED).contains(responseContext.getStatusInfo());
     }
 
     private ObjectMapper objectMapper() {

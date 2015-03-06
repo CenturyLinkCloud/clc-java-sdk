@@ -1,6 +1,5 @@
 package com.centurylinkcloud.core.auth.client.domain;
 
-import com.centurylinkcloud.core.client.ImmutableResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 /**
  * @author ilya.drabenia
  */
-public class LoginResponse extends ImmutableResponse {
+public class LoginResponse {
     private final String userName;
     private final String accountAlias;
     private final String locationAlias;
@@ -20,11 +19,8 @@ public class LoginResponse extends ImmutableResponse {
             @JsonProperty("accountAlias") String accountAlias,
             @JsonProperty("locationAlias") String locationAlias,
             @JsonProperty("roles") List<String> roles,
-            @JsonProperty("bearerToken") String bearerToken,
-            @JsonProperty("message") String message
+            @JsonProperty("bearerToken") String bearerToken
     ) {
-        super(message);
-
         this.userName = userName;
         this.accountAlias = accountAlias;
         this.locationAlias = locationAlias;

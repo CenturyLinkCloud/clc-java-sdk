@@ -1,6 +1,7 @@
 package com.centurylinkcloud.servers.client;
 
 import com.centurylinkcloud.core.auth.domain.BearerAuthentication;
+import com.centurylinkcloud.core.client.errors.ErrorProcessingFilter;
 import com.centurylinkcloud.servers.client.domain.GetDataCenterResponse;
 import com.centurylinkcloud.servers.client.domain.GetStatusResponse;
 import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
@@ -93,6 +94,7 @@ public class ServerClient {
             ClientBuilder
                 .newBuilder()
                     .register(authentication)
+                    .register(new ErrorProcessingFilter())
                 .build()
                 .target(CLC_API_URL + target)
                 .resolveTemplate("accountAlias", authentication.getAccountAlias());
