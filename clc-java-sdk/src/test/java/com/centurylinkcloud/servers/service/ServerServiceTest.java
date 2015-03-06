@@ -15,6 +15,7 @@ import static com.centurylinkcloud.servers.domain.ServerType.STANDARD;
 import static com.centurylinkcloud.servers.domain.datacenter.DataCenters.DE_FRANKFURT;
 import static com.centurylinkcloud.servers.domain.os.CpuArchitecture.x86_64;
 import static com.centurylinkcloud.servers.domain.os.OsType.CENTOS;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author ilya.drabenia
@@ -22,7 +23,7 @@ import static com.centurylinkcloud.servers.domain.os.OsType.CENTOS;
 public class ServerServiceTest {
 
     @Inject
-    private ServerService serverService;
+    ServerService serverService;
 
     @Before
     public void setUp() {
@@ -54,10 +55,17 @@ public class ServerServiceTest {
                     .architecture(x86_64)
                 ))
             )
+
             .waitUntilComplete()
             .getResult();
 
-        System.out.println(serverService.delete(newServer));
+        assert !isNullOrEmpty(newServer.getId());
+
+        cleanUpCreatedResources(newServer);
+    }
+
+    void cleanUpCreatedResources(Server newServer) {
+        serverService.delete(newServer);
     }
 
 }

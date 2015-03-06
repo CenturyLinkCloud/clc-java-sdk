@@ -1,51 +1,58 @@
 package com.centurylinkcloud.servers;
 
-import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
+import com.centurylinkcloud.servers.client.domain.GetDataCenterResult;
 import com.centurylinkcloud.servers.client.ServerClient;
+import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResult;
+import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
+import com.centurylinkcloud.servers.config.ServersModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import org.junit.Before;
 import org.junit.Test;
+
+import static com.centurylinkcloud.servers.domain.datacenter.DataCenters.DE_FRANKFURT;
 
 /**
  * @author ilya.drabenia
  */
 public class ServerClientTest {
 
-    @Test
-    public void createServerTest() {
-        System.out.println(
-            new ServerClient()
-                .create(new CreateServerCommand()
-                    .cpu(1)
-                    .groupId("de1-57241")
-                    .memoryGB(1)
-                    .name("ALTR1")
-                    .type("standard")
-                    .sourceServerId("CENTOS-6-64-TEMPLATE")
-                )
-        );
+    @Inject
+    private ServerClient client;
+
+    @Before
+    public void injectDependencies() {
+        Guice
+            .createInjector(new ServersModule())
+            .injectMembers(this);
     }
 
     @Test
     public void getDataCenterTest() {
-        System.out.println(
-            new ServerClient()
-                .getDataCenter("DE1").getGroup().getId()
-        );
+        GetDataCenterResult result = client.getDataCenter(DE_FRANKFURT.getId());
+
+        assert result.getId() != null;
     }
 
     @Test
     public void getGroupsTest() {
-        System.out.println(
-            new ServerClient().getGroups("de1-35501").getGroups()
-        );
+        String rootGroupId = client
+            .getDataCenter(DE_FRANKFURT.getId())
+            .getGroup()
+            .getId();
+
+        GetGroupResult groupResult = client.getGroup(rootGroupId);
+
+        assert groupResult.getId() != null;
+        assert groupResult.findGroupByName("Archive") != null;
     }
 
     @Test
     public void getDeploymentCapabilitiesTest() {
-        System.out.println(
-            new ServerClient()
-                .getDataCenterDeploymentCapabilities("DE1")
-                .getTemplates().get(3).getDescription()
-        );
+        GetDeploymentCapabilitiesResult deployment =
+                client.getDataCenterDeploymentCapabilities(DE_FRANKFURT.getId());
+
+        assert deployment.getTemplates().size() > 0;
     }
 
 }

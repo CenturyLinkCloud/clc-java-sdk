@@ -22,7 +22,7 @@ public class GroupService {
                 .getGroup()
                 .getId();
 
-        GetGroupResult groups = client.getGroups(rootGroupId);
+        GetGroupResult groups = client.getGroup(rootGroupId);
 
         return new Group()
             .id(

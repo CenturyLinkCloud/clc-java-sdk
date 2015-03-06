@@ -58,7 +58,7 @@ public class ServerClient {
                 .request().get(GetDataCenterResult.class);
     }
 
-    public GetGroupResult getGroups(String rootGroupId) {
+    public GetGroupResult getGroup(String rootGroupId) {
         return
             client("/groups/{accountAlias}/{rootGroupId}")
                 .resolveTemplate("rootGroupId", rootGroupId)
