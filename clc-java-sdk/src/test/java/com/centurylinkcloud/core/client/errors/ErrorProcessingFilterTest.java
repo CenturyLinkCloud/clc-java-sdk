@@ -16,8 +16,11 @@ public class ErrorProcessingFilterTest {
     public void testIncorrectLogin() throws Throwable {
         try {
             Guice
-                .createInjector(new AuthModule(new StaticCredentialsProvider("12345", "456789")))
+                .createInjector(
+                    new AuthModule(new StaticCredentialsProvider("12345", "456789"))
+                )
                 .getInstance(BearerAuthentication.class);
+
         } catch (ProvisionException exception) {
             throw
                 exception
