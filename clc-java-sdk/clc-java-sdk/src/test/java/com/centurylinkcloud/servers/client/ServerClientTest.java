@@ -1,16 +1,10 @@
 package com.centurylinkcloud.servers.client;
 
-import com.centurylinkcloud.core.auth.config.AuthModule;
-import com.centurylinkcloud.core.auth.domain.credentials.StaticCredentialsProvider;
 import com.centurylinkcloud.servers.AbstractServersSdkTest;
 import com.centurylinkcloud.servers.client.domain.GetDataCenterResponse;
-import com.centurylinkcloud.servers.client.ServerClient;
 import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
 import com.centurylinkcloud.servers.client.domain.group.GetGroupResponse;
-import com.centurylinkcloud.servers.config.ServersModule;
-import com.google.inject.Guice;
 import com.google.inject.Inject;
-import org.junit.Before;
 import org.junit.Test;
 
 import static com.centurylinkcloud.servers.domain.datacenter.DataCenters.DE_FRANKFURT;

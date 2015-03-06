@@ -1,1 +1,3 @@
+include 'app', 'client'
+
 rootProject.name = 'clc-java-sample'
