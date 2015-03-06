@@ -2,6 +2,7 @@ package com.centurylinkcloud.core.auth.client;
 
 import com.centurylinkcloud.core.auth.client.domain.LoginRequest;
 import com.centurylinkcloud.core.auth.client.domain.LoginResponse;
+import com.centurylinkcloud.core.client.ErrorResponseFilter;
 
 import javax.ws.rs.client.ClientBuilder;
 
@@ -16,7 +17,10 @@ public class LoginClient {
 
     public LoginResponse login(LoginRequest credentials) {
         return
-            ClientBuilder.newBuilder().build()
+            ClientBuilder
+                .newBuilder()
+                    .register(new ErrorResponseFilter())
+                .build()
                 .target(CLC_API_URL + "/authentication/login")
                 .request().post(
                     entity(credentials, APPLICATION_JSON_TYPE)
