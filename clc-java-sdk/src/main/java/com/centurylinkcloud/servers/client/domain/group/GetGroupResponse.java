@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "changeInfo",
         "customFields"
 })
-public class GetGroupResult {
+public class GetGroupResponse {
 
     @JsonProperty("id")
     private String id;

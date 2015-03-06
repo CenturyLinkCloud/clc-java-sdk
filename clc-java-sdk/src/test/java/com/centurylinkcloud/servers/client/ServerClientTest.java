@@ -1,9 +1,12 @@
-package com.centurylinkcloud.servers;
+package com.centurylinkcloud.servers.client;
 
-import com.centurylinkcloud.servers.client.domain.GetDataCenterResult;
+import com.centurylinkcloud.core.auth.config.AuthModule;
+import com.centurylinkcloud.core.auth.domain.credentials.StaticCredentialsProvider;
+import com.centurylinkcloud.servers.AbstractServersSdkTest;
+import com.centurylinkcloud.servers.client.domain.GetDataCenterResponse;
 import com.centurylinkcloud.servers.client.ServerClient;
-import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResult;
-import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
+import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
+import com.centurylinkcloud.servers.client.domain.group.GetGroupResponse;
 import com.centurylinkcloud.servers.config.ServersModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -15,21 +18,14 @@ import static com.centurylinkcloud.servers.domain.datacenter.DataCenters.DE_FRAN
 /**
  * @author ilya.drabenia
  */
-public class ServerClientTest {
+public class ServerClientTest extends AbstractServersSdkTest {
 
     @Inject
     private ServerClient client;
 
-    @Before
-    public void injectDependencies() {
-        Guice
-            .createInjector(new ServersModule())
-            .injectMembers(this);
-    }
-
     @Test
     public void getDataCenterTest() {
-        GetDataCenterResult result = client.getDataCenter(DE_FRANKFURT.getId());
+        GetDataCenterResponse result = client.getDataCenter(DE_FRANKFURT.getId());
 
         assert result.getId() != null;
     }
@@ -41,7 +37,7 @@ public class ServerClientTest {
             .getGroup()
             .getId();
 
-        GetGroupResult groupResult = client.getGroup(rootGroupId);
+        GetGroupResponse groupResult = client.getGroup(rootGroupId);
 
         assert groupResult.getId() != null;
         assert groupResult.findGroupByName("Archive") != null;
@@ -49,7 +45,7 @@ public class ServerClientTest {
 
     @Test
     public void getDeploymentCapabilitiesTest() {
-        GetDeploymentCapabilitiesResult deployment =
+        GetDeploymentCapabilitiesResponse deployment =
                 client.getDataCenterDeploymentCapabilities(DE_FRANKFURT.getId());
 
         assert deployment.getTemplates().size() > 0;

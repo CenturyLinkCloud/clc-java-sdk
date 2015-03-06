@@ -1,38 +1,45 @@
 package com.centurylinkcloud.servers.client;
 
-import com.centurylinkcloud.common.auth.BearerAuthentication;
-import com.centurylinkcloud.servers.client.domain.GetStatusResult;
-import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResult;
+import com.centurylinkcloud.core.auth.domain.BearerAuthentication;
+import com.centurylinkcloud.servers.client.domain.GetDataCenterResponse;
+import com.centurylinkcloud.servers.client.domain.GetStatusResponse;
+import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
+import com.centurylinkcloud.servers.client.domain.group.GetGroupResponse;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
-import com.centurylinkcloud.servers.client.domain.GetDataCenterResult;
-import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
-import com.centurylinkcloud.servers.client.domain.server.CreateServerResult;
+import com.centurylinkcloud.servers.client.domain.server.CreateServerResponse;
 import com.centurylinkcloud.servers.client.domain.server.GetServerResult;
+import com.google.inject.Inject;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import static com.centurylinkcloud.common.ClcApiConstants.CLC_API_URL;
+import static com.centurylinkcloud.core.client.ClcApiConstants.CLC_API_URL;
 import static javax.ws.rs.client.Entity.entity;
 
 /**
  * @author ilya.drabenia
  */
 public class ServerClient {
+    private final BearerAuthentication authentication;
+
+    @Inject
+    public ServerClient(BearerAuthentication authFilter) {
+        this.authentication = authFilter;
+    }
 
     /**
      * Creates a new server. Calls to this operation must include a token acquired
      * from the authentication endpoint. See the Login API for information on acquiring
      * this token.
      */
-    public CreateServerResult create(CreateServerCommand request) {
+    public CreateServerResponse create(CreateServerCommand request) {
         return
             client("/servers/{accountAlias}")
                 .request().post(
                     entity(request, MediaType.APPLICATION_JSON_TYPE)
                 )
-                .readEntity(CreateServerResult.class);
+                .readEntity(CreateServerResponse.class);
     }
 
     public String delete(String serverId) {
@@ -51,43 +58,43 @@ public class ServerClient {
                 .get(GetServerResult.class);
     }
 
-    public GetDataCenterResult getDataCenter(String dataCenterId) {
+    public GetDataCenterResponse getDataCenter(String dataCenterId) {
         return
             client("/datacenters/{accountAlias}/{dataCenterId}")
                 .queryParam("groupLinks", true)
                 .resolveTemplate("dataCenterId", dataCenterId)
-                .request().get(GetDataCenterResult.class);
+                .request().get(GetDataCenterResponse.class);
     }
 
-    public GetGroupResult getGroup(String rootGroupId) {
+    public GetGroupResponse getGroup(String rootGroupId) {
         return
             client("/groups/{accountAlias}/{rootGroupId}")
                 .resolveTemplate("rootGroupId", rootGroupId)
-                .request().get(GetGroupResult.class);
+                .request().get(GetGroupResponse.class);
     }
 
-    public GetDeploymentCapabilitiesResult getDataCenterDeploymentCapabilities(String dataCenterId) {
+    public GetDeploymentCapabilitiesResponse getDataCenterDeploymentCapabilities(String dataCenterId) {
         return
             client("/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
                 .resolveTemplate("dataCenterId", dataCenterId)
-                .request().get(GetDeploymentCapabilitiesResult.class);
+                .request().get(GetDeploymentCapabilitiesResponse.class);
     }
 
-    public GetStatusResult getJobStatus(String jobId) {
+    public GetStatusResponse getJobStatus(String jobId) {
         return
             client("/operations/{accountAlias}/status/{statusId}")
                 .resolveTemplate("statusId", jobId)
                 .request()
-                .get(GetStatusResult.class);
+                .get(GetStatusResponse.class);
     }
 
     private WebTarget client(String target) {
         return
             ClientBuilder
                 .newBuilder()
-                    .register(new BearerAuthentication("idrabenia", "RenVortEr9"))
+                    .register(authentication)
                 .build()
                 .target(CLC_API_URL + target)
-                .resolveTemplate("accountAlias", BearerAuthentication.getAccountAlias());
+                .resolveTemplate("accountAlias", authentication.getAccountAlias());
     }
 }

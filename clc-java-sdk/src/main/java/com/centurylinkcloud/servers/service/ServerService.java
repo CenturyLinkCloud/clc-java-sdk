@@ -2,7 +2,7 @@ package com.centurylinkcloud.servers.service;
 
 import com.centurylinkcloud.servers.client.ServerClient;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
-import com.centurylinkcloud.servers.client.domain.server.CreateServerResult;
+import com.centurylinkcloud.servers.client.domain.server.CreateServerResponse;
 import com.centurylinkcloud.servers.client.domain.server.GetServerResult;
 import com.centurylinkcloud.servers.domain.Response;
 import com.centurylinkcloud.servers.domain.ServerType;
@@ -25,7 +25,7 @@ public class ServerService {
     }
 
     public Response<Server> create(Server newServer) {
-        CreateServerResult response = client
+        CreateServerResponse response = client
             .create(new CreateServerCommand()
                 .name(newServer.getName())
                 .sourceServerId(newServer.getTemplate().getName())

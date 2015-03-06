@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateServerResult {
+public class CreateServerResponse {
     private final String server;
     private final Boolean isQueued;
     private final List<Link> links;
 
-    public CreateServerResult(
+    public CreateServerResponse(
             @JsonProperty("server") String server,
             @JsonProperty("isQueued") Boolean queued,
             @JsonProperty("links") List<Link> links) {

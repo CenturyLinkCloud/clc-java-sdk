@@ -1,6 +1,4 @@
-package com.centurylinkcloud.common.auth.model;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.centurylinkcloud.core.auth.domain.credentials;
 
 /**
  * @author ilya.drabenia
@@ -14,13 +12,11 @@ public class Credentials {
         this.password = password;
     }
 
-    @JsonProperty("username")
-    public String username() {
+    public String getUsername() {
         return username;
     }
 
-    @JsonProperty("password")
-    public String password() {
+    public String getPassword() {
         return password;
     }
 }

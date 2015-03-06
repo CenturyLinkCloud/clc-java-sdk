@@ -1,4 +1,4 @@
-package com.centurylinkcloud.common.auth;
+package com.centurylinkcloud.core.auth.domain;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.centurylinkcloud.common;
+package com.centurylinkcloud.core.client;
 
 /**
  * @author ilya.drabenia

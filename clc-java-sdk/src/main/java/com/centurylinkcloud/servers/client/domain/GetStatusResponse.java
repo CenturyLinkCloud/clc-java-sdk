@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author ilya.drabenia
  */
-public class GetStatusResult {
+public class GetStatusResponse {
     private final String status;
 
-    public GetStatusResult(@JsonProperty("status") String status) {
+    public GetStatusResponse(@JsonProperty("status") String status) {
         this.status = status;
     }
 

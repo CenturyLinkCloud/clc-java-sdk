@@ -1,5 +1,6 @@
 package com.centurylinkcloud.servers.service;
 
+import com.centurylinkcloud.servers.AbstractServersSdkTest;
 import com.centurylinkcloud.servers.config.ServersModule;
 import com.centurylinkcloud.servers.domain.Group;
 import com.centurylinkcloud.servers.domain.Machine;
@@ -20,17 +21,10 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author ilya.drabenia
  */
-public class ServerServiceTest {
+public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Inject
     ServerService serverService;
-
-    @Before
-    public void setUp() {
-        Guice
-            .createInjector(new ServersModule())
-            .injectMembers(this);
-    }
 
     @Test
     public void testCreate() throws Exception {

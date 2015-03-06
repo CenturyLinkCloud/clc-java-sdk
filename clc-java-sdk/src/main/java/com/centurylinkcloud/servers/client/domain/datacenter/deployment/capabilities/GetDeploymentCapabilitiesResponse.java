@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "templates",
         "importableOSTypes"
 })
-public class GetDeploymentCapabilitiesResult {
+public class GetDeploymentCapabilitiesResponse {
 
     @JsonProperty("dataCenterEnabled")
     private Boolean dataCenterEnabled;

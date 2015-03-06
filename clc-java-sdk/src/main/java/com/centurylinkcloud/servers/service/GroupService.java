@@ -1,7 +1,7 @@
 package com.centurylinkcloud.servers.service;
 
 import com.centurylinkcloud.servers.client.ServerClient;
-import com.centurylinkcloud.servers.client.domain.group.GetGroupResult;
+import com.centurylinkcloud.servers.client.domain.group.GetGroupResponse;
 import com.centurylinkcloud.servers.domain.Group;
 import com.google.inject.Inject;
 
@@ -22,7 +22,7 @@ public class GroupService {
                 .getGroup()
                 .getId();
 
-        GetGroupResult groups = client.getGroup(rootGroupId);
+        GetGroupResponse groups = client.getGroup(rootGroupId);
 
         return new Group()
             .id(
@@ -33,7 +33,7 @@ public class GroupService {
             );
     }
 
-    private com.centurylinkcloud.servers.client.domain.group.Group getMatechedGroup(GetGroupResult groups, Group group) {
+    private com.centurylinkcloud.servers.client.domain.group.Group getMatechedGroup(GetGroupResponse groups, Group group) {
         return groups
             .findGroupByName(group.getName());
     }

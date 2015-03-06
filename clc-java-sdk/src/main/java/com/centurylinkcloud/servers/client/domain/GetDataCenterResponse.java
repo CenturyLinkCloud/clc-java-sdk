@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "name",
     "links"
 })
-public class GetDataCenterResult {
+public class GetDataCenterResponse {
 
     @JsonProperty("id")
     private String id;
