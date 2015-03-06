@@ -1,4 +1,4 @@
-package com.centurylinkcloud.auth.model;
+package com.centurylinkcloud.common.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

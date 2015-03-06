@@ -1,7 +1,8 @@
-package com.centurylinkcloud.auth;
+package com.centurylinkcloud.common.auth;
 
-import com.centurylinkcloud.auth.model.Credentials;
-import com.centurylinkcloud.auth.model.LoginResponse;
+import com.centurylinkcloud.common.ClcApiConstants;
+import com.centurylinkcloud.common.auth.model.Credentials;
+import com.centurylinkcloud.common.auth.model.LoginResponse;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestContext;
@@ -9,6 +10,7 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
+import static com.centurylinkcloud.common.ClcApiConstants.CLC_API_URL;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 
@@ -17,6 +19,7 @@ import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
  */
 public class BearerAuthentication implements ClientRequestFilter {
     private final Credentials credentials;
+
     private static volatile AuthToken token;
     private static volatile String accountAlias;
 
@@ -42,7 +45,7 @@ public class BearerAuthentication implements ClientRequestFilter {
     private AuthToken requestNewToken() {
         LoginResponse result = ClientBuilder.newBuilder()
                 .build()
-                .target("https://api.tier3.com/v2/authentication/login")
+                .target(CLC_API_URL + "/authentication/login")
                 .request()
                 .post(entity(credentials, MediaType.APPLICATION_JSON_TYPE))
                 .readEntity(LoginResponse.class);

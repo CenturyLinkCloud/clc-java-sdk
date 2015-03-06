@@ -1,6 +1,6 @@
 package com.centurylinkcloud.servers.client;
 
-import com.centurylinkcloud.auth.BearerAuthentication;
+import com.centurylinkcloud.common.auth.BearerAuthentication;
 import com.centurylinkcloud.servers.client.domain.GetStatusResult;
 import com.centurylinkcloud.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResult;
 import com.centurylinkcloud.servers.client.domain.server.CreateServerCommand;
@@ -13,6 +13,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
+import static com.centurylinkcloud.common.ClcApiConstants.CLC_API_URL;
 import static javax.ws.rs.client.Entity.entity;
 
 /**
@@ -86,7 +87,7 @@ public class ServerClient {
                 .newBuilder()
                     .register(new BearerAuthentication("idrabenia", "RenVortEr9"))
                 .build()
-                .target("https://api.tier3.com/v2" + target)
+                .target(CLC_API_URL + target)
                 .resolveTemplate("accountAlias", BearerAuthentication.getAccountAlias());
     }
 }

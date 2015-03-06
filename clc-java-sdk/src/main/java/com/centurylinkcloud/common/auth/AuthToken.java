@@ -1,9 +1,8 @@
-package com.centurylinkcloud.auth;
+package com.centurylinkcloud.common.auth;
 
 import java.util.Date;
 
 import static java.util.concurrent.TimeUnit.DAYS;
-import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
  * @author ilya.drabenia
