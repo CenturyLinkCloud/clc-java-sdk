@@ -7,6 +7,6 @@ include 'services:webservice'
 
 rootProject.name = 'clc-java-sdk'
 
-include 'clc-java-sdk'
-include 'clc-java-sample:app'
-include 'clc-java-sample:client'
+include 'sdk'
+include 'sample:app'
+include 'sample:client'
