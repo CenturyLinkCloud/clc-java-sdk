@@ -2,7 +2,12 @@
   "name": "clc-java-sdk.sample.client",
   "version": "0.1.0",
   "devDependencies": {
+    "browserify": "^9.0.3",
     "gulp": "^3.8.11",
-    "gulp-react": "^3.0.0"
+    "gulp-react": "^3.0.0",
+    "gulp-streamify": "0.0.5",
+    "reactify": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^2.4.0"
   }
 }
