@@ -2,13 +2,7 @@
 let { Model, Collection } = Backbone;
 
 
-export class DataCenter extends Model {
-
-    defaults() {
-        return { id: null, name: null };
-    }
-
-}
+export class DataCenter extends Model { }
 
 export class DataCenterList extends Collection {
 

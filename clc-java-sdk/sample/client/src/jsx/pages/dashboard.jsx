@@ -7,7 +7,10 @@ export class DashboardPage extends React.Component {
     constructor() {
         this.state = { dataCenterList: new DataCenterList() };
 
-        this.state.dataCenterList.fetch({success: () => this.onStateChanged()});
+        this
+            .state
+            .dataCenterList
+            .fetch({ success: () => this.onStateChanged() });
     }
 
     onStateChanged() {
@@ -27,7 +30,9 @@ export class DashboardPage extends React.Component {
                     <tbody>
                         {this.state.dataCenterList.map(item =>
                             <tr>
-                                <td>{item.get('id')}</td>
+                                <td>
+                                    <a href={`#/${item.get('id')}/server/new`}>{item.get('id')}</a>
+                                </td>
                                 <td>{item.get('name')}</td>
                             </tr>
                         )}
