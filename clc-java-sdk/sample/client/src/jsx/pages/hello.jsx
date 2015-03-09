@@ -1,7 +1,7 @@
 
 
 function A () {
-
+    this.value = 'Hello, World!!!';
 }
 
 
