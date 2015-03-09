@@ -6,31 +6,41 @@ var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var reactify = require('reactify');
+var es6ify = require("es6ify")
 var streamify = require('gulp-streamify');
 var sass = require('gulp-sass');
 
-var toDist = gulp.dest('dist');
-var toAppStatic = gulp.dest('../app/src/main/resources/static');
+function toDist() {
+    return gulp.dest('dist')
+}
+
+function toAppStatic() {
+    return gulp.dest('../app/src/main/resources/static');
+}
 
 gulp.task('buildJs', function () {
-    browserify({ entries: ['./src/jsx/app.jsx'], transform: [reactify]})
+    browserify()
+        .add(es6ify.runtime)
+        .transform(reactify)
+        .transform(es6ify.configure(/.jsx/))
+        .require(require.resolve('./src/jsx/app.jsx'), { entry: true })
         .bundle()
         .pipe(source('app.js'))
-        .pipe(toDist)
-        .pipe(toAppStatic);
+        .pipe(toDist())
+        .pipe(toAppStatic());
 });
 
 gulp.task('buildCss', function () {
     gulp.src('src/scss/sample.scss')
         .pipe(sass())
-        .pipe(toDist)
-        .pipe(toAppStatic);
+        .pipe(toDist())
+        .pipe(toAppStatic());
 });
 
 gulp.task('buildHtml', function () {
     gulp.src('src/index.html')
-        .pipe(toDist)
-        .pipe(toAppStatic);
+        .pipe(toDist())
+        .pipe(toAppStatic());
 });
 
 gulp.task('default', ['buildJs', 'buildCss', 'buildHtml']);
