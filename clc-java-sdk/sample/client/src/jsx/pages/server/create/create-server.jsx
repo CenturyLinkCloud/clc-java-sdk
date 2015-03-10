@@ -8,8 +8,9 @@ export class CreateServerPage extends React.Component {
         return this._reactInternalInstance._context.getCurrentParams();
     }
 
-    submitForm() {
+    submitForm(model) {
         console.log('Submitting Form...');
+        console.dir(model);
     }
 
     render () {

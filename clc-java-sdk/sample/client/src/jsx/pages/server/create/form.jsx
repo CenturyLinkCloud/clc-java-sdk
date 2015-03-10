@@ -8,16 +8,26 @@ export class Form extends React.Component {
         super(args);
 
         this.state = {};
+
+        _.bindAll(this, 'onSubmit', 'render');
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+
+        this.props.onSubmit(this.state);
     }
 
     render () {
         return (
-            <form onSubmit={this.props.onSubmit}>
+            <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                     <label for="nameField">Name</label>
-                    <input type="email" className="form-control" id="nameField" placeholder="Server Name..."
+                    <input type="text" className="form-control" id="nameField" placeholder="Server Name..."
                         valueLink={this.linkState('name')} />
                 </div>
+
+                <button type="submit" className="btn btn-default">Submit</button>
             </form>
         );
     }
