@@ -24,6 +24,10 @@ gulp.task('buildJs', function () {
         .transform(reactify)
         .transform(es6ify.configure(/.jsx/))
         .require(require.resolve('./src/jsx/app.jsx'), { entry: true })
+        .on('error', function(err) {
+            console.log(err.message);
+            this.end();
+        })
         .bundle()
         .pipe(source('app.js'))
         .pipe(toDist())

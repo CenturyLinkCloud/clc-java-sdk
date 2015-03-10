@@ -1,7 +1,7 @@
 let Router = ReactRouter;
 let { Route, DefaultRoute } = Router;
 import { DashboardPage } from './pages/dashboard.jsx';
-import { CreateServerPage } from './pages/create-server.jsx';
+import { CreateServerPage } from './pages/server/create/create-server.jsx';
 import { Body } from './components/body.jsx';
 
 
