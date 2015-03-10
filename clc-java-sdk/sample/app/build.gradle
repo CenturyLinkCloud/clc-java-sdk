@@ -22,6 +22,8 @@ repositories {
 }
 
 dependencies {
+    compile project(':sdk')
+
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
