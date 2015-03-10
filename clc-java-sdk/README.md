@@ -1,6 +1,6 @@
 
 
-# Project Structure
+## Project Structure
 
 * clc-java-sdk - module that contains all projects related to CLC Java SDK
     * sample - module that contains sample application
