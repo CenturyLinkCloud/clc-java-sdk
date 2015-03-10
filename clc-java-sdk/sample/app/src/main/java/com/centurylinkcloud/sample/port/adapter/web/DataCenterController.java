@@ -21,7 +21,9 @@ public class DataCenterController {
     @RequestMapping(method = GET)
     List<DataCenter> findAll() {
 
-        new ClcSdk(new StaticCredentialsProvider("idrabenia", "RenVortEr9"))
+        new ClcSdk(
+                new StaticCredentialsProvider("idrabenia", "RenVortEr9")
+            )
             .serverService();
 
         return Arrays.asList(
