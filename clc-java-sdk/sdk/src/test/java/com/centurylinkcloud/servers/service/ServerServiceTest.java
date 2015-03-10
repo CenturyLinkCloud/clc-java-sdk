@@ -50,7 +50,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 ))
             )
 
-//            .waitUntilComplete()
+            .waitUntilComplete()
             .getResult();
 
         assert !isNullOrEmpty(newServer.getId());
