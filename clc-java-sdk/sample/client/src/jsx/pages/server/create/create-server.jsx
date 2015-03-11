@@ -21,12 +21,12 @@ export class CreateServerPage extends React.Component {
 
     render () {
         return (
-            <div className="row">
-                <div className="col-md-12">
-                    <div className="panel panel-default">
-                        <div className="panel-heading">Create Server</div>
+            <div className="panel panel-default">
+                <div className="panel-heading">Create Server</div>
 
-                        <div className="panel-body">
+                <div className="panel-body">
+                    <div className="row">
+                        <div className="col-md-6 col-md-offset-3">
                             <Form onSubmit={this.submitForm} />
                         </div>
                     </div>

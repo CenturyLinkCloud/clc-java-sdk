@@ -7,9 +7,13 @@ export class Form extends React.Component {
     constructor (args) {
         super(args);
 
-        this.state = {};
+        this.state = Form.initialState();
 
         _.bindAll(this, 'onSubmit', 'render', 'onCancel');
+    }
+
+    static initialState() {
+        return { type: 'standard' };
     }
 
     onSubmit(e) {
@@ -19,7 +23,7 @@ export class Form extends React.Component {
     }
 
     onCancel() {
-        this.setState(this.state = { });
+        this.setState(this.state = Form.initialState());
     }
 
     render () {
@@ -29,6 +33,15 @@ export class Form extends React.Component {
                     <label htmlFor="nameField">Name</label>
                     <input type="text" className="form-control" id="nameField" placeholder="Server Name..."
                         valueLink={this.linkState('name')} />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="typeField">Type</label>
+                    <select className="form-control" id="typeField" placeholder="Instance Type..."
+                        valueLink={this.linkState('type')}>
+                        <option value="standard">Standard</option>
+                        <option value="hyperscale">Hyperscale</option>
+                    </select>
                 </div>
 
                 <div className="form-group">
@@ -43,10 +56,12 @@ export class Form extends React.Component {
                         valueLink={this.linkState('ram')} />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <button type="button" style={{marginLeft: 3}} className="btn btn-default" onClick={this.onCancel}>
-                    Cancel
-                </button>
+                <div className="pull-right">
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="button" style={{marginLeft: 3}} className="btn btn-default" onClick={this.onCancel}>
+                        Cancel
+                    </button>
+                </div>
             </form>
         );
     }
