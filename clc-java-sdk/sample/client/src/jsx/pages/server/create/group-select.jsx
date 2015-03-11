@@ -20,6 +20,7 @@ export default class GroupSelect extends React.Component {
             <div className="form-group">
                 <label htmlFor="groupField">Group</label>
                 <select className="form-control" id="groupField" valueLink={this.linkState('group')}>
+                    <option>&lt;Select&gt;</option>
                     {this.state.groups.map((i) =>
                         <option value={i.get('id')}>{i.get('name')}</option>
                     )}

@@ -315,9 +315,9 @@ public class GetGroupResponse extends Group {
         return groups;
     }
 
-    private List<Group> getSubGroups(Group curGroup) {
+    private List<Group> getSubGroups(final Group curGroup) {
         if (curGroup.getGroups() == null || curGroup.getGroups().isEmpty()) {
-            return new ArrayList<>();
+            return new ArrayList<Group>() {{ add(curGroup); }};
         }
 
         List<Group> result = new ArrayList<>();
