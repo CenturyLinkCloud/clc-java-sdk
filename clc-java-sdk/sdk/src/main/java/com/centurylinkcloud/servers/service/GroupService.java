@@ -21,6 +21,10 @@ public class GroupService {
     }
 
     public Group resolve(Group group) {
+        if (group.getId() != null) {
+            return group;
+        }
+
         String rootGroupId = client
                 .getDataCenter(group.getDatacenter())
                 .getGroup()

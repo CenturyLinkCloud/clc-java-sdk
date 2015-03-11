@@ -21,6 +21,14 @@ public class TemplateService {
     }
 
     public Template resolve(String dataCenterId, Template template) {
+        if (template.getName() != null) {
+            return template;
+        } else {
+            return resolveByOs(dataCenterId, template);
+        }
+    }
+
+    public Template resolveByOs(String dataCenterId, Template template) {
         return
             template
                 .name(

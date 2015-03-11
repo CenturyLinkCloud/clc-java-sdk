@@ -15,6 +15,11 @@ export default class GroupSelect extends React.Component {
         _.bindAll(this, 'render');
     }
 
+    setState (args) {
+        this.props.model.group = args && args.group;
+        super.setState(args);
+    }
+
     render () {
         return (
             <div className="form-group">

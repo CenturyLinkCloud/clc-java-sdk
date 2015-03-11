@@ -15,6 +15,11 @@ export default class TemplateSelect extends React.Component {
         _.bindAll(this, 'render');
     }
 
+    setState (args) {
+        this.props.model.template = args && args.template;
+        super.setState(args);
+    }
+
     render () {
         return (
             <div className="form-group">

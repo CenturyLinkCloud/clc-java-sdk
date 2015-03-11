@@ -1,9 +1,6 @@
 package com.centurylinkcloud.sample.port.adapter.web.beans;
 
-import com.centurylinkcloud.servers.domain.Group;
-import com.centurylinkcloud.servers.domain.Machine;
-import com.centurylinkcloud.servers.domain.Server;
-import com.centurylinkcloud.servers.domain.ServerType;
+import com.centurylinkcloud.servers.domain.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -13,7 +10,8 @@ public class ServerBean {
     @JsonIgnore
     private Server server = new Server()
         .machine(new Machine())
-        .group(new Group());
+        .group(new Group())
+        .template(new Template());
 
     public ServerBean(Server server) {
         this.server = server;
@@ -63,11 +61,11 @@ public class ServerBean {
     }
 
     public String getGroup() {
-        return server.getGroup().getName();
+        return server.getGroup().getId();
     }
 
     public void setGroup(String group) {
-        server.getGroup().setName(group);
+        server.getGroup().setId(group);
     }
 
     public String getDataCenter() {
@@ -84,5 +82,13 @@ public class ServerBean {
 
     public void setServer(Server server) {
         this.server = server;
+    }
+
+    public String getTemplate() {
+        return server.getTemplate().getName();
+    }
+
+    public void setTemplate(String template) {
+        server.getTemplate().name(template);
     }
 }
