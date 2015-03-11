@@ -1,6 +1,7 @@
 
 import reactMixin from 'react-mixin';
 import GroupSelect from './group-select.jsx';
+import TemplateSelect from './template-select.jsx';
 
 
 export class Form extends React.Component {
@@ -57,6 +58,8 @@ export class Form extends React.Component {
                     <input type="text" className="form-control" id="ramField" placeholder="RAM (GB)..."
                         valueLink={this.linkState('ram')} />
                 </div>
+
+                <TemplateSelect model={this.state} />
 
                 <div className="pull-right">
                     <button type="submit" className="btn btn-primary">Submit</button>

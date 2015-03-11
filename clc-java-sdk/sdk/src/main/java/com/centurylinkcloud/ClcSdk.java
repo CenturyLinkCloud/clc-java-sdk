@@ -5,6 +5,7 @@ import com.centurylinkcloud.core.auth.domain.credentials.CredentialsProvider;
 import com.centurylinkcloud.servers.config.ServersModule;
 import com.centurylinkcloud.servers.service.GroupService;
 import com.centurylinkcloud.servers.service.ServerService;
+import com.centurylinkcloud.servers.service.TemplateService;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 
@@ -17,6 +18,9 @@ public class ClcSdk {
 
     @Inject
     GroupService groupService;
+
+    @Inject
+    TemplateService templateService;
 
     public ClcSdk(CredentialsProvider credentialsProvider) {
         Guice
@@ -33,5 +37,9 @@ public class ClcSdk {
 
     public GroupService groupService() {
         return groupService;
+    }
+
+    public TemplateService templateService() {
+        return templateService;
     }
 }

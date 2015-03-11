@@ -1,7 +1,7 @@
 package com.centurylinkcloud.sample.port.adapter.web;
 
 import com.centurylinkcloud.sample.domain.SdkRegistry;
-import com.centurylinkcloud.servers.domain.Group;
+import com.centurylinkcloud.servers.domain.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,17 +15,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * @author ilya.drabenia
  */
 @RestController
-@RequestMapping("/datacenter/{dataCenter}/group")
-public class GroupController {
+@RequestMapping("/datacenter/{dataCenter}/template")
+public class TemplateController {
 
     @Autowired
     SdkRegistry sdkRegistry;
 
     @RequestMapping(method = GET)
-    public List<Group> findAll(@PathVariable("dataCenter") String dataCenter) {
+    public List<Template> findByDataCenter(@PathVariable("dataCenter") String dataCenter) {
         return
             sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
-                .groupService()
+                .templateService()
                 .findByDataCenter(dataCenter);
     }
 

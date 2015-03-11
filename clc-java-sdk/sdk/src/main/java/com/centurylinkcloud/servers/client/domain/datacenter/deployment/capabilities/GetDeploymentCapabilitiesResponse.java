@@ -38,7 +38,7 @@ public class GetDeploymentCapabilitiesResponse {
     @JsonProperty("deployableNetworks")
     private List<DeployableNetwork> deployableNetworks = new ArrayList<DeployableNetwork>();
     @JsonProperty("templates")
-    private List<Template> templates = new ArrayList<Template>();
+    private List<TemplateResponse> templates = new ArrayList<TemplateResponse>();
     @JsonProperty("importableOSTypes")
     private List<ImportableOSType> importableOSTypes = new ArrayList<ImportableOSType>();
     @JsonIgnore
@@ -150,7 +150,7 @@ public class GetDeploymentCapabilitiesResponse {
      * The templates
      */
     @JsonProperty("templates")
-    public List<Template> getTemplates() {
+    public List<TemplateResponse> getTemplates() {
         return templates;
     }
 
@@ -160,7 +160,7 @@ public class GetDeploymentCapabilitiesResponse {
      * The templates
      */
     @JsonProperty("templates")
-    public void setTemplates(List<Template> templates) {
+    public void setTemplates(List<TemplateResponse> templates) {
         this.templates = templates;
     }
 
@@ -194,8 +194,8 @@ public class GetDeploymentCapabilitiesResponse {
         this.additionalProperties.put(name, value);
     }
 
-    public Template findByOsType(OperatingSystem operatingSystem) {
-        for (Template curTemplate : this.getTemplates()) {
+    public TemplateResponse findByOsType(OperatingSystem operatingSystem) {
+        for (TemplateResponse curTemplate : this.getTemplates()) {
             if (templateHasOs(curTemplate, operatingSystem)) {
                 return curTemplate;
             }
@@ -204,7 +204,7 @@ public class GetDeploymentCapabilitiesResponse {
         return null;
     }
 
-    private boolean templateHasOs(Template curTemplate, OperatingSystem operatingSystem) {
+    private boolean templateHasOs(TemplateResponse curTemplate, OperatingSystem operatingSystem) {
         return osTypeContains(
             curTemplate,
             operatingSystem.getType(),
@@ -214,7 +214,7 @@ public class GetDeploymentCapabilitiesResponse {
         );
     }
 
-    private boolean osTypeContains(Template curTemplate, String... values) {
+    private boolean osTypeContains(TemplateResponse curTemplate, String... values) {
         for (String curValue : values) {
             if (curValue != null && !curTemplate.getOsType().contains(curValue)) {
                 return false;

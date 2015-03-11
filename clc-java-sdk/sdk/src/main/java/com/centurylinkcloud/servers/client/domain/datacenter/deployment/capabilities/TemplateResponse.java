@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "reservedDrivePaths",
         "drivePathLength"
 })
-public class Template {
+public class TemplateResponse {
 
     @JsonProperty("name")
     private String name;

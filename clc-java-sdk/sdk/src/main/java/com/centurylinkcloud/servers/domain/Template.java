@@ -7,6 +7,7 @@ import com.centurylinkcloud.servers.domain.os.OperatingSystem;
  */
 public class Template {
     private String name;
+    private String description;
     private OperatingSystem os;
 
     public Template name(String name) {
@@ -25,5 +26,18 @@ public class Template {
 
     public OperatingSystem getOs() {
         return os;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Template description(String description) {
+        setDescription(description);
+        return this;
     }
 }

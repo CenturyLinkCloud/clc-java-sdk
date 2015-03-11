@@ -1,4 +1,4 @@
-package com.centurylinkcloud.sample.application;
+package com.centurylinkcloud.sample.domain;
 
 import com.centurylinkcloud.ClcSdk;
 import com.centurylinkcloud.core.auth.domain.credentials.StaticCredentialsProvider;
