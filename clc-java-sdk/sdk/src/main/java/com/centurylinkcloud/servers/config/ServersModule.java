@@ -1,6 +1,7 @@
 package com.centurylinkcloud.servers.config;
 
 import com.centurylinkcloud.servers.client.ServerClient;
+import com.centurylinkcloud.servers.service.GroupConverter;
 import com.centurylinkcloud.servers.service.GroupService;
 import com.centurylinkcloud.servers.service.ServerService;
 import com.centurylinkcloud.servers.service.TemplateService;
@@ -16,6 +17,7 @@ public class ServersModule extends AbstractModule {
         bind(ServerClient.class);
 
         bind(ServerService.class);
+        bind(GroupConverter.class);
         bind(GroupService.class);
         bind(TemplateService.class);
     }

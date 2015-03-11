@@ -5,15 +5,19 @@ import com.centurylinkcloud.servers.client.domain.group.GetGroupResponse;
 import com.centurylinkcloud.servers.domain.Group;
 import com.google.inject.Inject;
 
+import java.util.List;
+
 /**
  * @author ilya.drabenia
  */
 public class GroupService {
     private final ServerClient client;
+    private final GroupConverter converter;
 
     @Inject
-    public GroupService(ServerClient client) {
+    public GroupService(ServerClient client, GroupConverter converter) {
         this.client = client;
+        this.converter = converter;
     }
 
     public Group resolve(Group group) {
@@ -26,14 +30,25 @@ public class GroupService {
 
         return new Group()
             .id(
-                getMatechedGroup(groups, group).getId()
+                getMatchedGroup(groups, group).getId()
             )
             .name(
-                getMatechedGroup(groups, group).getName()
+                getMatchedGroup(groups, group).getName()
             );
     }
 
-    private com.centurylinkcloud.servers.client.domain.group.Group getMatechedGroup(GetGroupResponse groups, Group group) {
+    public List<Group> findByDataCenter(String dataCenter) {
+        String rootGroupId = client
+                .getDataCenter(dataCenter)
+                .getGroup()
+                .getId();
+
+        GetGroupResponse result = client.getGroup(rootGroupId);
+
+        return converter.newGroupList(dataCenter, result.getAllGroups());
+    }
+
+    private com.centurylinkcloud.servers.client.domain.group.Group getMatchedGroup(GetGroupResponse groups, Group group) {
         return groups
             .findGroupByName(group.getName());
     }

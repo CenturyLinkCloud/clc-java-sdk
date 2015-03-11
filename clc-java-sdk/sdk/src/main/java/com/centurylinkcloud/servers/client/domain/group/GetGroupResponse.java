@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "changeInfo",
         "customFields"
 })
-public class GetGroupResponse {
+public class GetGroupResponse extends Group {
 
     @JsonProperty("id")
     private String id;
@@ -301,6 +301,33 @@ public class GetGroupResponse {
         }
 
         return null;
+    }
+
+    public List<Group> getAllGroups() {
+        List<Group> groups = new ArrayList<>();
+
+        groups.add(this);
+
+        for (Group curGroup : this.getGroups()) {
+            groups.addAll(getSubGroups(curGroup));
+        }
+
+        return groups;
+    }
+
+    private List<Group> getSubGroups(Group curGroup) {
+        if (curGroup.getGroups() == null || curGroup.getGroups().isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<Group> result = new ArrayList<>();
+
+        result.addAll(curGroup.getGroups());
+        for (Group group : curGroup.getGroups()) {
+            result.addAll(getSubGroups(group));
+        }
+
+        return result;
     }
 
 }

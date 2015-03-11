@@ -27,7 +27,7 @@ export class CreateServerPage extends React.Component {
                 <div className="panel-body">
                     <div className="row">
                         <div className="col-md-6 col-md-offset-3">
-                            <Form onSubmit={this.submitForm} />
+                            <Form onSubmit={this.submitForm} dataCenter={this.params().dataCenter} />
                         </div>
                     </div>
                 </div>

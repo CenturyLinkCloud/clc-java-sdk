@@ -1,5 +1,6 @@
 
 import reactMixin from 'react-mixin';
+import GroupSelect from './group-select.jsx';
 
 
 export class Form extends React.Component {
@@ -7,13 +8,13 @@ export class Form extends React.Component {
     constructor (args) {
         super(args);
 
-        this.state = Form.initialState();
+        this.state = this.initialState();
 
         _.bindAll(this, 'onSubmit', 'render', 'onCancel');
     }
 
-    static initialState() {
-        return { type: 'standard' };
+    initialState(dataCenter) {
+        return { type: 'standard', dataCenter: this.props.dataCenter };
     }
 
     onSubmit(e) {
@@ -23,7 +24,7 @@ export class Form extends React.Component {
     }
 
     onCancel() {
-        this.setState(this.state = Form.initialState());
+        this.setState(this.state = this.initialState());
     }
 
     render () {
@@ -37,12 +38,13 @@ export class Form extends React.Component {
 
                 <div className="form-group">
                     <label htmlFor="typeField">Type</label>
-                    <select className="form-control" id="typeField" placeholder="Instance Type..."
-                        valueLink={this.linkState('type')}>
+                    <select className="form-control" id="typeField" valueLink={this.linkState('type')}>
                         <option value="standard">Standard</option>
                         <option value="hyperscale">Hyperscale</option>
                     </select>
                 </div>
+
+                <GroupSelect model={this.state} />
 
                 <div className="form-group">
                     <label htmlFor="cpuField">CPU Count</label>
