@@ -1,6 +1,6 @@
 
-let Router = ReactRouter;
 import { Form } from "./form.jsx";
+import { Server } from './../../../model/server.jsx';
 
 export class CreateServerPage extends React.Component {
 
@@ -16,7 +16,7 @@ export class CreateServerPage extends React.Component {
 
     submitForm(model) {
         console.log('Submitting Form...');
-        console.dir(model);
+        new Server(model).save();
     }
 
     render () {

@@ -3,11 +3,11 @@ package com.centurylinkcloud.sample.port.adapter.web.beans;
 /**
  * @author ilya.drabenia
  */
-public class DataCenter {
+public class DataCenterBean {
     private String id;
     private String name;
 
-    public DataCenter(String id, String name) {
+    public DataCenterBean(String id, String name) {
         this.id = id;
         this.name = name;
     }

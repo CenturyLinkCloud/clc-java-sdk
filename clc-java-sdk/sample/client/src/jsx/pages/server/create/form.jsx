@@ -15,7 +15,7 @@ export class Form extends React.Component {
     }
 
     initialState(dataCenter) {
-        return { type: 'standard', dataCenter: this.props.dataCenter };
+        return { type: 'STANDARD', dataCenter: this.props.dataCenter };
     }
 
     onSubmit(e) {
@@ -40,8 +40,8 @@ export class Form extends React.Component {
                 <div className="form-group">
                     <label htmlFor="typeField">Type</label>
                     <select className="form-control" id="typeField" valueLink={this.linkState('type')}>
-                        <option value="standard">Standard</option>
-                        <option value="hyperscale">Hyperscale</option>
+                        <option value="STANDARD">Standard</option>
+                        <option value="HYPERSCALE">Hyperscale</option>
                     </select>
                 </div>
 
