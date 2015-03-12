@@ -2,7 +2,6 @@ package com.centurylinkcloud.sample.port.adapter.web;
 
 import com.centurylinkcloud.sample.domain.SdkRegistry;
 import com.centurylinkcloud.sample.port.adapter.web.beans.ServerBean;
-import com.centurylinkcloud.servers.domain.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

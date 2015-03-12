@@ -20,12 +20,6 @@ public class DataCenterController {
 
     @RequestMapping(method = GET)
     List<DataCenterBean> findAll() {
-
-        new ClcSdk(
-                new StaticCredentialsProvider("idrabenia", "RenVortEr9")
-            )
-            .serverService();
-
         return Arrays.asList(
             new DataCenterBean("DE1", "DE1 - Germany (Frankfurt)"),
             new DataCenterBean("GB1", "GB1 - Great Britain (Portsmouth)"),

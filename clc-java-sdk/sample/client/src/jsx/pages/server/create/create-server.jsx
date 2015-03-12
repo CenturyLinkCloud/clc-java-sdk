@@ -1,22 +1,33 @@
 
+import reactMixin from 'react-mixin';
+let { Router, Navigation } = ReactRouter;
 import { Form } from "./form.jsx";
 import { Server } from './../../../model/server.jsx';
+
 
 export class CreateServerPage extends React.Component {
 
     constructor (args) {
         super(args);
 
-        _.bindAll(this, 'render', 'submitForm');
+        _.bindAll(this, 'render', 'submitForm', 'getContext', 'transitionToRoute');
+    }
+
+    getContext() {
+        return this._reactInternalInstance._context;
     }
 
     params() {
-        return this._reactInternalInstance._context.getCurrentParams();
+        return this.getContext().getCurrentParams();
+    }
+
+    transitionToRoute (to, params, query) {
+        this.getContext().transitionTo(to, params, query);
     }
 
     submitForm(model) {
-        console.log('Submitting Form...');
         new Server(model).save();
+        this.transitionToRoute('dashboard');
     }
 
     render () {
@@ -36,4 +47,6 @@ export class CreateServerPage extends React.Component {
     }
 
 }
+
+reactMixin(CreateServerPage.prototype, Navigation);
 

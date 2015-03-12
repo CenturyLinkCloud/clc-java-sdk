@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static java.util.Arrays.asList;
-import static javax.ws.rs.core.Response.Status.ACCEPTED;
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.*;
 
 /**
  * @author ilya.drabenia
