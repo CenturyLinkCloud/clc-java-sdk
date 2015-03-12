@@ -6,9 +6,10 @@ var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var reactify = require('reactify');
-var es6ify = require("es6ify")
+var es6ify = require("es6ify");
 var streamify = require('gulp-streamify');
 var sass = require('gulp-sass');
+var mold = require('mold-source-map');
 
 function toDist() {
     return gulp.dest('dist')
@@ -19,7 +20,7 @@ function toAppStatic() {
 }
 
 gulp.task('buildJs', function () {
-    browserify()
+    browserify({ debug: true })
         .add(es6ify.runtime)
         .transform(reactify)
         .transform(es6ify.configure(/.jsx/))
@@ -28,6 +29,7 @@ gulp.task('buildJs', function () {
             console.log(err.message);
         })
         .bundle()
+        .pipe(mold.transformSourcesRelativeTo('./src/jsx/app.jsx'))
         .pipe(source('app.js'))
         .pipe(toDist())
         .pipe(toAppStatic());

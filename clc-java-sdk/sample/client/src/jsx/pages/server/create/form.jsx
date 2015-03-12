@@ -14,7 +14,7 @@ export class Form extends React.Component {
         _.bindAll(this, 'onSubmit', 'render', 'onCancel');
     }
 
-    initialState(dataCenter) {
+    initialState() {
         return { type: 'STANDARD', dataCenter: this.props.dataCenter };
     }
 
