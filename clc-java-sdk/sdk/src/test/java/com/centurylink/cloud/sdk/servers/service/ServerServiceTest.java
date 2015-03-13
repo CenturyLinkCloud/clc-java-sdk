@@ -8,7 +8,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 import com.google.inject.Inject;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
@@ -19,6 +19,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author ilya.drabenia
  */
+@Test(groups = "LongRunning")
 public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Inject

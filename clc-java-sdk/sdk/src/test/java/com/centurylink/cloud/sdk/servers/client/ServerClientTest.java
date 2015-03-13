@@ -5,7 +5,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.GetDataCenterResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.google.inject.Inject;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
 

@@ -17,6 +17,14 @@ repositories {
     jcenter()
 }
 
+test {
+    useTestNG() {
+        excludeGroups 'LongRunning'
+    }
+
+    maxParallelForks = 8
+}
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
     // The production code uses the SLF4J logging API at compile time
@@ -33,5 +41,5 @@ dependencies {
     // TestNG is also supported by the Gradle Test task. Just change the
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
-    testCompile 'junit:junit:4.11'
+    testCompile 'org.testng:testng:6.8.21'
 }
