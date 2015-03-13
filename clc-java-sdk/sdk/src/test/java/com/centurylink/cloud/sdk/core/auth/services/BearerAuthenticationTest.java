@@ -13,8 +13,8 @@ import static org.mockito.Mockito.when;
 public class BearerAuthenticationTest {
 
     BearerAuthentication auth = new BearerAuthentication(
-            new StaticCredentialsProvider("idrabenia", "RenVortEr9"),
-            new LoginClient()
+        new StaticCredentialsProvider("idrabenia", "RenVortEr9"),
+        new LoginClient()
     );
 
     private ClientRequestContext stubRequestContext() {
