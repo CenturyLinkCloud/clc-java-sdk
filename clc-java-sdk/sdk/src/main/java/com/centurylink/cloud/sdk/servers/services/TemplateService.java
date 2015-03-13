@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.google.inject.Inject;
@@ -43,6 +44,14 @@ public class TemplateService {
         return converter.templateListFrom(
             serversClient
                 .getDataCenterDeploymentCapabilities(dataCenter)
+                .getTemplates()
+        );
+    }
+
+    public List<Template> findByDataCenter(DataCenters dataCenter) {
+        return converter.templateListFrom(
+            serversClient
+                .getDataCenterDeploymentCapabilities(dataCenter.getId())
                 .getTemplates()
         );
     }
