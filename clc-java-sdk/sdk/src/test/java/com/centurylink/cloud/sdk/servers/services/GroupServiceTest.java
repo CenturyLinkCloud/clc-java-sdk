@@ -1,12 +1,23 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters;
+import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
-public class GroupServiceTest {
+import java.util.List;
+
+public class GroupServiceTest extends AbstractServersSdkTest {
+
+    @Inject
+    private GroupService groupService;
 
     @Test
     public void testFindGroupsByDataCenter() {
+        List<Group> groups = groupService.findByDataCenter(DataCenters.DE_FRANKFURT.getId());
 
+        assert groups.size() > 0;
     }
 
 }
