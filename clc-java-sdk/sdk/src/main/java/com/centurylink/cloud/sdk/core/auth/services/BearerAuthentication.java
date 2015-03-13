@@ -1,10 +1,12 @@
-package com.centurylink.cloud.sdk.core.auth.domain;
+package com.centurylink.cloud.sdk.core.auth.services;
 
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginRequest;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
-import com.centurylink.cloud.sdk.core.auth.domain.credentials.Credentials;
-import com.centurylink.cloud.sdk.core.auth.domain.credentials.CredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.AuthToken;
+import com.centurylink.cloud.sdk.core.auth.services.domain.SessionCredentials;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.Credentials;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.google.inject.Inject;
 
 import javax.ws.rs.client.ClientRequestContext;

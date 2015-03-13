@@ -1,8 +1,8 @@
 package com.centurylink.cloud.sdk.core.client.errors;
 
-import com.centurylink.cloud.sdk.core.auth.config.AuthModule;
-import com.centurylink.cloud.sdk.core.auth.domain.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.auth.domain.credentials.StaticCredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
 import com.google.inject.Guice;
 import com.google.inject.ProvisionException;
 import org.junit.Test;

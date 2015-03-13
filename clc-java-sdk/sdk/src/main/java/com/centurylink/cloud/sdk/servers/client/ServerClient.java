@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client;
 
-import com.centurylink.cloud.sdk.core.auth.domain.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.errors.ErrorProcessingFilter;
 import com.centurylink.cloud.sdk.servers.client.domain.GetDataCenterResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;

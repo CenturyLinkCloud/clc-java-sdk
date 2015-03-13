@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.auth.domain.credentials;
+package com.centurylink.cloud.sdk.core.auth.services.domain.credentials;
 
 /**
  * @author ilya.drabenia

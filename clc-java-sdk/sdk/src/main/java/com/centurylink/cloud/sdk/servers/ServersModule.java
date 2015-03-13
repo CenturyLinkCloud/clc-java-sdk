@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.config;
+package com.centurylink.cloud.sdk.servers;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.services.*;

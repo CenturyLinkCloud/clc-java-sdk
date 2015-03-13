@@ -1,8 +1,8 @@
-package com.centurylink.cloud.sdk.core.auth.config;
+package com.centurylink.cloud.sdk.core.auth;
 
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
-import com.centurylink.cloud.sdk.core.auth.domain.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.auth.domain.credentials.CredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
