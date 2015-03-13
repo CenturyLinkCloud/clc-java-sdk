@@ -1,7 +1,8 @@
-package com.centurylink.cloud.sdk.servers.service;
+package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.domain.Template;
+import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.google.inject.Inject;
 
 import java.util.List;

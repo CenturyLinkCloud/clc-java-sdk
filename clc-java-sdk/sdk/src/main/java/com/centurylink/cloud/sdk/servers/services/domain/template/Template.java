@@ -1,6 +1,6 @@
-package com.centurylink.cloud.sdk.servers.domain;
+package com.centurylink.cloud.sdk.servers.services.domain.template;
 
-import com.centurylink.cloud.sdk.servers.domain.os.OperatingSystem;
+import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 
 /**
  * @author ilya.drabenia

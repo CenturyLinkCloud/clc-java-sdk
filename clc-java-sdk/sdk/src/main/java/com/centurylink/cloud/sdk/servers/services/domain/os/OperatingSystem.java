@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.domain.os;
+package com.centurylink.cloud.sdk.servers.services.domain.os;
 
 /**
  * @author ilya.drabenia

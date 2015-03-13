@@ -1,4 +1,7 @@
-package com.centurylink.cloud.sdk.servers.domain;
+package com.centurylink.cloud.sdk.servers.services.domain;
+
+import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 
 /**
  * @author ilya.drabenia

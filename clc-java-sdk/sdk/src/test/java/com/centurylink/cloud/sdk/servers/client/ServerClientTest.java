@@ -7,7 +7,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.google.inject.Inject;
 import org.junit.Test;
 
-import static com.centurylink.cloud.sdk.servers.domain.datacenter.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
 
 /**
  * @author ilya.drabenia

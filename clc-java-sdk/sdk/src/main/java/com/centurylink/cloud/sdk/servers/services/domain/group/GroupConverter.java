@@ -1,6 +1,6 @@
-package com.centurylink.cloud.sdk.servers.service;
+package com.centurylink.cloud.sdk.servers.services.domain.group;
 
-import com.centurylink.cloud.sdk.servers.domain.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 
 import java.util.ArrayList;
 import java.util.List;

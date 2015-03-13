@@ -1,6 +1,6 @@
-package com.centurylink.cloud.sdk.servers.domain;
+package com.centurylink.cloud.sdk.servers.services.domain.group;
 
-import com.centurylink.cloud.sdk.servers.domain.datacenter.DataCenters;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters;
 
 /**
  * @author ilya.drabenia

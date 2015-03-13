@@ -1,12 +1,12 @@
-package com.centurylink.cloud.sdk.servers.service;
+package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.GetServerResult;
-import com.centurylink.cloud.sdk.servers.domain.Response;
-import com.centurylink.cloud.sdk.servers.domain.ServerType;
-import com.centurylink.cloud.sdk.servers.domain.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.Response;
+import com.centurylink.cloud.sdk.servers.services.domain.ServerType;
+import com.centurylink.cloud.sdk.servers.services.domain.Server;
 import com.google.inject.Inject;
 
 /**

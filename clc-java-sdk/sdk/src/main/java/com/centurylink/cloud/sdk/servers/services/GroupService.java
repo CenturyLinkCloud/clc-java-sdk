@@ -1,8 +1,9 @@
-package com.centurylink.cloud.sdk.servers.service;
+package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
-import com.centurylink.cloud.sdk.servers.domain.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.google.inject.Inject;
 
 import java.util.List;

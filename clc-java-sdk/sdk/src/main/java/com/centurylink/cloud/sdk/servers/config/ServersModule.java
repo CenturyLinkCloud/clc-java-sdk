@@ -1,7 +1,9 @@
 package com.centurylink.cloud.sdk.servers.config;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.service.*;
+import com.centurylink.cloud.sdk.servers.services.*;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.google.inject.AbstractModule;
 
 /**

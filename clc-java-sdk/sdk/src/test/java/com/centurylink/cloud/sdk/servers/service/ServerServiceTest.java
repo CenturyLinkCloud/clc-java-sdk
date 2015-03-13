@@ -1,18 +1,19 @@
 package com.centurylink.cloud.sdk.servers.service;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.domain.Group;
-import com.centurylink.cloud.sdk.servers.domain.Machine;
-import com.centurylink.cloud.sdk.servers.domain.Server;
-import com.centurylink.cloud.sdk.servers.domain.Template;
-import com.centurylink.cloud.sdk.servers.domain.os.OperatingSystem;
+import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.Machine;
+import com.centurylink.cloud.sdk.servers.services.domain.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 import com.google.inject.Inject;
 import org.junit.Test;
 
-import static com.centurylink.cloud.sdk.servers.domain.ServerType.STANDARD;
-import static com.centurylink.cloud.sdk.servers.domain.datacenter.DataCenters.DE_FRANKFURT;
-import static com.centurylink.cloud.sdk.servers.domain.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.domain.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.servers.services.domain.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
