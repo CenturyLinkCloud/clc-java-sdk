@@ -25,14 +25,14 @@ public class AuthToken {
     }
 
     public boolean isExpired() {
-        return now().getTime() - receivedAt.getTime() > DAYS.toMicros(10);
+        return now().getTime() - receivedAt.getTime() > DAYS.toMillis(10);
     }
 
     public String toHeaderString() {
         return "Bearer " + value;
     }
 
-    private Date now() {
+    Date now() {
         return new Date();
     }
 }

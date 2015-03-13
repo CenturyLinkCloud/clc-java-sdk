@@ -2,7 +2,6 @@ package com.centurylink.cloud.sdk.core.auth.client;
 
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginRequest;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
-import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ResponseProcessingException;
