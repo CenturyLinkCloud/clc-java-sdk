@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.core.auth.services;
 
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
 import org.testng.annotations.Test;
 
@@ -13,7 +14,7 @@ import static org.mockito.Mockito.when;
 public class BearerAuthenticationTest {
 
     BearerAuthentication auth = new BearerAuthentication(
-        new StaticCredentialsProvider("idrabenia", "RenVortEr9"),
+        new PropertiesFileCredentialsProvider(),
         new LoginClient()
     );
 
