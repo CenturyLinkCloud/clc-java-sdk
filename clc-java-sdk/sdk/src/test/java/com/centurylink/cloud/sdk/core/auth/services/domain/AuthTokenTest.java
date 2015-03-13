@@ -38,4 +38,11 @@ public class AuthTokenTest {
             );
     }
 
+    @Test
+    public void testToBearerHeader() {
+        AuthToken token = new AuthToken("token_value");
+
+        assert token.toHeaderString().equals("Bearer token_value");
+    }
+
 }
