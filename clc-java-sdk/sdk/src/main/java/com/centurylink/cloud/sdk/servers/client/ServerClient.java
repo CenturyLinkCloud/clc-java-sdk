@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.client.ClcApiConstants;
 import com.centurylink.cloud.sdk.core.client.errors.ErrorProcessingFilter;
 import com.centurylink.cloud.sdk.servers.client.domain.GetDataCenterResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
@@ -91,12 +92,10 @@ public class ServerClient {
 
     private WebTarget client(String target) {
         return
-            ClientBuilder
-                .newBuilder()
+            ClcApiConstants
+                .CLIENT
                     .register(authentication)
-                    .register(new ErrorProcessingFilter())
-                .build()
-                .target(CLC_API_URL + target)
-                .resolveTemplate("accountAlias", authentication.getAccountAlias());
+                    .target(CLC_API_URL + target)
+                    .resolveTemplate("accountAlias", authentication.getAccountAlias());
     }
 }
