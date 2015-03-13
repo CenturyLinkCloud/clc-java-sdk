@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.List;
 public class GroupConverter {
 
     public List<Group> newGroupList(String dataCenter,
-                                    List<com.centurylink.cloud.sdk.servers.client.domain.group.Group> groups) {
+                                    List<GroupResponse> groups) {
         List<Group> result = new ArrayList<>();
 
-        for (com.centurylink.cloud.sdk.servers.client.domain.group.Group curGroup : groups) {
+        for (GroupResponse curGroup : groups) {
             result.add(newGroup(dataCenter, curGroup));
         }
 
@@ -22,7 +22,7 @@ public class GroupConverter {
     }
 
     public Group newGroup(String dataCenter,
-                          com.centurylink.cloud.sdk.servers.client.domain.group.Group group) {
+                          GroupResponse group) {
         return
             new Group()
                 .id(group.getId())

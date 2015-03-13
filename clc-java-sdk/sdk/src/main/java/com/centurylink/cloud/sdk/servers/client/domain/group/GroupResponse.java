@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "changeInfo",
         "customFields"
 })
-public class Group {
+public class GroupResponse {
 
     @JsonProperty("id")
     private String id;
@@ -46,7 +46,7 @@ public class Group {
     @JsonProperty("serversCount")
     private Integer serversCount;
     @JsonProperty("groups")
-    private List<Group> groups = new ArrayList<Group>();
+    private List<GroupResponse> groups = new ArrayList<GroupResponse>();
     @JsonProperty("links")
     private List<Link> links = new ArrayList<Link>();
     @JsonProperty("changeInfo")
@@ -202,7 +202,7 @@ public class Group {
      * The groups
      */
     @JsonProperty("groups")
-    public List<Group> getGroups() {
+    public List<GroupResponse> getGroups() {
         return groups;
     }
 
@@ -212,7 +212,7 @@ public class Group {
      * The groups
      */
     @JsonProperty("groups")
-    public void setGroups(List<Group> groups) {
+    public void setGroups(List<GroupResponse> groups) {
         this.groups = groups;
     }
 

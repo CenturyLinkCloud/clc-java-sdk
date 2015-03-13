@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "changeInfo",
         "customFields"
 })
-public class GetGroupResponse extends Group {
+public class GetGroupResponse extends GroupResponse {
 
     @JsonProperty("id")
     private String id;
@@ -46,7 +46,7 @@ public class GetGroupResponse extends Group {
     @JsonProperty("serversCount")
     private Integer serversCount;
     @JsonProperty("groups")
-    private List<Group> groups = new ArrayList<Group>();
+    private List<GroupResponse> groups = new ArrayList<GroupResponse>();
     @JsonProperty("links")
     private List<Link> links = new ArrayList<Link>();
     @JsonProperty("changeInfo")
@@ -202,7 +202,7 @@ public class GetGroupResponse extends Group {
      * The groups
      */
     @JsonProperty("groups")
-    public List<Group> getGroups() {
+    public List<GroupResponse> getGroups() {
         return groups;
     }
 
@@ -212,7 +212,7 @@ public class GetGroupResponse extends Group {
      * The groups
      */
     @JsonProperty("groups")
-    public void setGroups(List<Group> groups) {
+    public void setGroups(List<GroupResponse> groups) {
         this.groups = groups;
     }
 
@@ -286,12 +286,12 @@ public class GetGroupResponse extends Group {
         this.additionalProperties.put(name, value);
     }
 
-    public Group findGroupByName(String name) {
+    public GroupResponse findGroupByName(String name) {
         return findGroupByName(groups, name);
     }
 
-    public Group findGroupByName(List<Group> groups, String name) {
-        for (Group curGroup : groups) {
+    public GroupResponse findGroupByName(List<GroupResponse> groups, String name) {
+        for (GroupResponse curGroup : groups) {
             if (curGroup.getName().equals(name)) {
                 return curGroup;
             } else if (curGroup.getGroups().size() > 0
@@ -303,27 +303,27 @@ public class GetGroupResponse extends Group {
         return null;
     }
 
-    public List<Group> getAllGroups() {
-        List<Group> groups = new ArrayList<>();
+    public List<GroupResponse> getAllGroups() {
+        List<GroupResponse> groups = new ArrayList<>();
 
         groups.add(this);
 
-        for (Group curGroup : this.getGroups()) {
+        for (GroupResponse curGroup : this.getGroups()) {
             groups.addAll(getSubGroups(curGroup));
         }
 
         return groups;
     }
 
-    private List<Group> getSubGroups(final Group curGroup) {
+    private List<GroupResponse> getSubGroups(final GroupResponse curGroup) {
         if (curGroup.getGroups() == null || curGroup.getGroups().isEmpty()) {
-            return new ArrayList<Group>() {{ add(curGroup); }};
+            return new ArrayList<GroupResponse>() {{ add(curGroup); }};
         }
 
-        List<Group> result = new ArrayList<>();
+        List<GroupResponse> result = new ArrayList<>();
 
         result.addAll(curGroup.getGroups());
-        for (Group group : curGroup.getGroups()) {
+        for (GroupResponse group : curGroup.getGroups()) {
             result.addAll(getSubGroups(group));
         }
 

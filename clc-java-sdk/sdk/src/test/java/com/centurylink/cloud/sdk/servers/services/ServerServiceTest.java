@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.service;
+package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.ServerService;

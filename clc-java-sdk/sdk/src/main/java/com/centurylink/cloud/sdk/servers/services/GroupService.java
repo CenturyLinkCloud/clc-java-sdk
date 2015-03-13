@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.google.inject.Inject;
@@ -53,7 +54,7 @@ public class GroupService {
         return converter.newGroupList(dataCenter, result.getAllGroups());
     }
 
-    private com.centurylink.cloud.sdk.servers.client.domain.group.Group getMatchedGroup(GetGroupResponse groups, Group group) {
+    private GroupResponse getMatchedGroup(GetGroupResponse groups, Group group) {
         return groups
             .findGroupByName(group.getName());
     }
