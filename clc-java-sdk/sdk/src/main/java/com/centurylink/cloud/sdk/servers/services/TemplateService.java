@@ -22,11 +22,11 @@ public class TemplateService {
         this.converter = converter;
     }
 
-    public Template resolveName(String dataCenterId, Template template) {
+    public Template resolveName(DataCenter dataCenterId, Template template) {
         if (template.getName() != null) {
             return template;
         } else {
-            return resolveByOs(dataCenterId, template);
+            return resolveByOs(dataCenterId.getId(), template);
         }
     }
 

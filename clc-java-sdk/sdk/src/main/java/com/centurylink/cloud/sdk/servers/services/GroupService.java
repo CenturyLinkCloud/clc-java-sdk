@@ -28,7 +28,7 @@ public class GroupService {
         }
 
         String rootGroupId = client
-                .getDataCenter(group.getDataCenter())
+                .getDataCenter(group.getDataCenter().getId())
                 .getGroup()
                 .getId();
 

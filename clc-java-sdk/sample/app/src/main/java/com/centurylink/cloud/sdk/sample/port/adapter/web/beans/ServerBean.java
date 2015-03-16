@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 
 import com.centurylink.cloud.sdk.servers.services.domain.*;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -71,11 +72,11 @@ public class ServerBean {
     }
 
     public String getDataCenter() {
-        return server.getGroup().getDataCenter();
+        return server.getGroup().getDataCenter().getId();
     }
 
     public void setDataCenter(String dataCenter) {
-        server.getGroup().setDataCenter(dataCenter);
+        server.getGroup().setDataCenter(new DataCenter(dataCenter));
     }
 
     public Server getServer() {

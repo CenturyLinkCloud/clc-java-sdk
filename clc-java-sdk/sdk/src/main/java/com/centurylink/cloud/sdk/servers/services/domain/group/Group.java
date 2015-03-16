@@ -7,7 +7,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
  */
 public class Group {
     private String id;
-    private String dataCenter;
+    private DataCenter dataCenter;
     private String name;
 
     public String getId() {
@@ -36,21 +36,16 @@ public class Group {
         return this;
     }
 
-    public String getDataCenter() {
+    public DataCenter getDataCenter() {
         return dataCenter;
     }
 
-    public void setDataCenter(String datacenter) {
+    public void setDataCenter(DataCenter datacenter) {
         this.dataCenter = datacenter;
     }
 
-    public Group dataCenter(String datacenter) {
-        setDataCenter(datacenter);
-        return this;
-    }
-
     public Group dataCenter(DataCenter datacenter) {
-        setDataCenter(datacenter.getId());
+        setDataCenter(datacenter);
         return this;
     }
 }

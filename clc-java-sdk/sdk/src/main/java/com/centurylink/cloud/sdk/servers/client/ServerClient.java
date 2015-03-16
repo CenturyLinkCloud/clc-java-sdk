@@ -100,8 +100,8 @@ public class ServerClient {
         return
             ClcApiConstants
                 .CLIENT_BUILDER
-                    .register(authentication)
                     .build()
+                    .register(authentication)
                     .target(CLC_API_URL + target)
                     .resolveTemplate("accountAlias", authentication.getAccountAlias());
     }
