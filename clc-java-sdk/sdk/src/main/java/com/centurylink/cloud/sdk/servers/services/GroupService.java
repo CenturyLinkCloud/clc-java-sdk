@@ -22,7 +22,7 @@ public class GroupService {
         this.converter = converter;
     }
 
-    public Group resolve(Group group) {
+    public Group resolveId(Group group) {
         if (group.getId() != null) {
             return group;
         }

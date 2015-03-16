@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.client.domain.GetDataCenterResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.google.inject.Inject;
@@ -12,7 +12,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataC
 /**
  * @author ilya.drabenia
  */
-public class ServerClientTest extends AbstractServersSdkTest {
+public class DataCenterClientTest extends AbstractServersSdkTest {
 
     @Inject
     private ServerClient client;
@@ -22,19 +22,6 @@ public class ServerClientTest extends AbstractServersSdkTest {
         GetDataCenterResponse result = client.getDataCenter(DE_FRANKFURT.getId());
 
         assert result.getId() != null;
-    }
-
-    @Test
-    public void getGroupsTest() {
-        String rootGroupId = client
-            .getDataCenter(DE_FRANKFURT.getId())
-            .getGroup()
-            .getId();
-
-        GetGroupResponse groupResult = client.getGroup(rootGroupId);
-
-        assert groupResult.getId() != null;
-        assert groupResult.findGroupByName("Archive") != null;
     }
 
     @Test

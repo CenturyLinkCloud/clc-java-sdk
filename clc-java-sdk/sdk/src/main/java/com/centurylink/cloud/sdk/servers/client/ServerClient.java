@@ -2,7 +2,8 @@ package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.ClcApiConstants;
-import com.centurylink.cloud.sdk.servers.client.domain.GetDataCenterResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
@@ -86,6 +87,13 @@ public class ServerClient {
                 .resolveTemplate("statusId", jobId)
                 .request()
                 .get(GetStatusResponse.class);
+    }
+
+    public GetDataCenterListResponse findAllDataCenters() {
+        return
+            client("/datacenters/{accountAlias}?groupLinks=true")
+                .request()
+                .get(GetDataCenterListResponse.class);
     }
 
     private WebTarget client(String target) {

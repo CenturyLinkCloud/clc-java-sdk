@@ -1,10 +1,12 @@
-package com.centurylink.cloud.sdk.servers.client.domain;
+package com.centurylink.cloud.sdk.servers.client.domain.datacenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
+
+import com.centurylink.cloud.sdk.servers.client.domain.Link;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -7,7 +7,10 @@ package com.centurylink.cloud.sdk.servers.services.domain.datacenter;
  */
 public class DataCenter {
     private String id;
-    private String description;
+    private String name;
+
+    public DataCenter() {
+    }
 
     public DataCenter(String id) {
         this.id = id;
@@ -17,12 +20,17 @@ public class DataCenter {
         return id;
     }
 
-    public String getDescription() {
-        return description;
+    public DataCenter id(String id) {
+        this.id = id;
+        return this;
     }
 
-    public DataCenter description(String description) {
-        this.description = description;
+    public String getName() {
+        return name;
+    }
+
+    public DataCenter name(String name) {
+        this.name = name;
         return this;
     }
 }

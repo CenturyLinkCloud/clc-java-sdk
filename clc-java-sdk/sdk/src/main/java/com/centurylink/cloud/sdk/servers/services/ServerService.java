@@ -33,13 +33,13 @@ public class ServerService {
                 .memoryGB(newServer.getMachine().getRam())
                 .groupId(
                     groupService
-                        .resolve(newServer.getGroup())
+                        .resolveId(newServer.getGroup())
                         .getId()
                 )
                 .type(ServerType.STANDARD.getCode())
                 .sourceServerId(
                     templateService
-                        .resolve(newServer.getGroup().getDataCenter(), newServer.getTemplate())
+                        .resolveName(newServer.getGroup().getDataCenter(), newServer.getTemplate())
                         .getName()
                 )
             );

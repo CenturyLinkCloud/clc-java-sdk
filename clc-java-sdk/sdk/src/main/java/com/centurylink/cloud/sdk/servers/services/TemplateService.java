@@ -22,7 +22,7 @@ public class TemplateService {
         this.converter = converter;
     }
 
-    public Template resolve(String dataCenterId, Template template) {
+    public Template resolveName(String dataCenterId, Template template) {
         if (template.getName() != null) {
             return template;
         } else {
