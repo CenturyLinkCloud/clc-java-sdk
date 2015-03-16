@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
@@ -48,7 +49,7 @@ public class TemplateService {
         );
     }
 
-    public List<Template> findByDataCenter(DataCenters dataCenter) {
+    public List<Template> findByDataCenter(DataCenter dataCenter) {
         return converter.templateListFrom(
             serversClient
                 .getDataCenterDeploymentCapabilities(dataCenter.getId())

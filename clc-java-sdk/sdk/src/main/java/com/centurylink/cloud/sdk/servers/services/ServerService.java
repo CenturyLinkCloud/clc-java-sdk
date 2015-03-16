@@ -39,7 +39,7 @@ public class ServerService {
                 .type(ServerType.STANDARD.getCode())
                 .sourceServerId(
                     templateService
-                        .resolve(newServer.getGroup().getDatacenter(), newServer.getTemplate())
+                        .resolve(newServer.getGroup().getDataCenter(), newServer.getTemplate())
                         .getName()
                 )
             );

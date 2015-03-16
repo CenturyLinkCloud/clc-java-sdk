@@ -33,7 +33,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 .type(STANDARD)
 
                 .group(new Group()
-                    .datacenter(DE_FRANKFURT)
+                    .dataCenter(DE_FRANKFURT)
                     .name("Group3")
                 )
 

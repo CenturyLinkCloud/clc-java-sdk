@@ -71,11 +71,11 @@ public class ServerBean {
     }
 
     public String getDataCenter() {
-        return server.getGroup().getDatacenter();
+        return server.getGroup().getDataCenter();
     }
 
     public void setDataCenter(String dataCenter) {
-        server.getGroup().setDatacenter(dataCenter);
+        server.getGroup().setDataCenter(dataCenter);
     }
 
     public Server getServer() {

@@ -27,7 +27,7 @@ public class GroupConverter {
             new Group()
                 .id(group.getId())
                 .name(group.getName())
-                .datacenter(dataCenter);
+                .dataCenter(dataCenter);
     }
 
 }
