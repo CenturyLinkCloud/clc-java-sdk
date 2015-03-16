@@ -2,7 +2,6 @@ package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.ClcApiConstants;
-import com.centurylink.cloud.sdk.core.client.errors.ErrorProcessingFilter;
 import com.centurylink.cloud.sdk.servers.client.domain.GetDataCenterResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
@@ -12,7 +11,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRespon
 import com.centurylink.cloud.sdk.servers.client.domain.server.GetServerResult;
 import com.google.inject.Inject;
 
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
@@ -93,8 +91,9 @@ public class ServerClient {
     private WebTarget client(String target) {
         return
             ClcApiConstants
-                .CLIENT
+                .CLIENT_BUILDER
                     .register(authentication)
+                    .build()
                     .target(CLC_API_URL + target)
                     .resolveTemplate("accountAlias", authentication.getAccountAlias());
     }

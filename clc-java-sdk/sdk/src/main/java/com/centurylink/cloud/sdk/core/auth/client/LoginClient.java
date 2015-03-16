@@ -16,7 +16,8 @@ public class LoginClient {
     public LoginResponse login(LoginRequest credentials) {
         return
             ClcApiConstants
-                .CLIENT
+                .CLIENT_BUILDER
+                .build()
                 .target(CLC_API_URL + "/authentication/login")
                 .request().post(
                     entity(credentials, APPLICATION_JSON_TYPE)
