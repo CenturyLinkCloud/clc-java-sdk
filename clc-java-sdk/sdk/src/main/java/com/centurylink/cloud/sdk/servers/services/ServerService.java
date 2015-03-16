@@ -16,22 +16,15 @@ public class ServerService {
     private final GroupService groupService;
     private final TemplateService templateService;
     private final ServerClient client;
-    private final DataCenterService dataCenterService;
 
     @Inject
-    public ServerService(GroupService groupService, TemplateService templateService, ServerClient client,
-                         DataCenterService dataCenterService) {
+    public ServerService(GroupService groupService, TemplateService templateService, ServerClient client) {
         this.groupService = groupService;
         this.templateService = templateService;
         this.client = client;
-        this.dataCenterService = dataCenterService;
     }
 
     public Response<Server> create(Server newServer) {
-        newServer.getGroup().dataCenter(
-            dataCenterService.resolveId(newServer.getGroup().getDataCenter())
-        );
-
         CreateServerResponse response = client
             .create(new CreateServerCommand()
                 .name(newServer.getName())

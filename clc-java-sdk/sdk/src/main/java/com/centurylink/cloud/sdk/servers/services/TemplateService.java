@@ -13,20 +13,26 @@ import java.util.List;
  * @author ilya.drabenia
  */
 public class TemplateService {
+    private final DataCenterService dataCenterService;
     private final ServerClient serversClient;
     private final TemplateConverter converter;
 
     @Inject
-    public TemplateService(ServerClient serversClient, TemplateConverter converter) {
+    public TemplateService(ServerClient serversClient, TemplateConverter converter, DataCenterService dataCenterService) {
         this.serversClient = serversClient;
         this.converter = converter;
+        this.dataCenterService = dataCenterService;
     }
 
-    public Template resolveName(DataCenter dataCenterId, Template template) {
+    public Template resolveName(DataCenter dataCenter, Template template) {
+
         if (template.getName() != null) {
             return template;
         } else {
-            return resolveByOs(dataCenterId.getId(), template);
+            return resolveByOs(
+                dataCenterService.resolveId(dataCenter).getId(),
+                template
+            );
         }
     }
 

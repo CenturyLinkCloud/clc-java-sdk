@@ -15,7 +15,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindGroupsByDataCenter() {
-        List<Group> groups = groupService.findByDataCenter(DataCenters.DE_FRANKFURT.getId());
+        List<Group> groups = groupService.findByDataCenter(DataCenters.DE_FRANKFURT);
 
         assert groups.size() > 0;
     }

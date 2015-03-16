@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
 import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ public class GroupController {
         return
             sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
                 .groupService()
-                .findByDataCenter(dataCenter);
+                .findByDataCenter(new DataCenter(dataCenter));
     }
 
 }
