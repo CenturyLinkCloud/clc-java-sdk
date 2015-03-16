@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
+import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.CA_VANCOUVER;
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
 
 /**
@@ -27,7 +28,7 @@ public class DataCenterClientTest extends AbstractServersSdkTest {
     @Test
     public void getDeploymentCapabilitiesTest() {
         GetDeploymentCapabilitiesResponse deployment =
-                client.getDataCenterDeploymentCapabilities(DE_FRANKFURT.getId());
+                client.getDataCenterDeploymentCapabilities(CA_VANCOUVER.getId());
 
         assert deployment.getTemplates().size() > 0;
     }
