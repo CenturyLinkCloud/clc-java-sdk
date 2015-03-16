@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.Server;
@@ -57,8 +58,42 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         cleanUpCreatedResources(newServer);
     }
 
+    @Test
+    public void testCreateWithDataCenterLookup() throws Exception {
+        Server newServer =
+            serverService.create(new Server()
+                .name("ALTRS1")
+                .type(STANDARD)
+
+                .group(new Group()
+                    .dataCenter(new DataCenter().name("FranKfUrt"))
+                    .name("Group3")
+                )
+
+                .machine(new Machine()
+                    .cpuCount(1)
+                    .ram(2)
+                )
+
+                .template(new Template().os(new OperatingSystem()
+                    .type(CENTOS)
+                    .version("6")
+                    .architecture(x86_64)
+                ))
+            )
+
+            .waitUntilComplete()
+            .getResult();
+
+        assert !isNullOrEmpty(newServer.getId());
+
+        cleanUpCreatedResources(newServer);
+    }
+
     void cleanUpCreatedResources(Server newServer) {
-        serverService.delete(newServer);
+        serverService
+            .delete(newServer)
+            .waitUntilComplete();
     }
 
 }

@@ -43,12 +43,12 @@ public class ServerClient {
                 .readEntity(CreateServerResponse.class);
     }
 
-    public String delete(String serverId) {
+    public CreateServerResponse delete(String serverId) {
         return
             client("/servers/{accountAlias}/{serverId}")
                 .resolveTemplate("serverId", serverId)
                 .request()
-                .delete(String.class);
+                .delete(CreateServerResponse.class);
     }
 
     public GetServerResult findServerByUuid(String uuid) {

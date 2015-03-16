@@ -54,9 +54,14 @@ public class ServerService {
         );
     }
 
-    public Server delete(Server server) {
-        client.delete(server.getId());
-        return server;
+    public Response<Server> delete(Server server) {
+        CreateServerResponse response = client.delete(server.getId());
+
+        return new Response<>(
+            server,
+            response.findStatusId(),
+            client
+        );
     }
 
 }
