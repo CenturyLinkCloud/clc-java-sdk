@@ -2,21 +2,23 @@ package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.ClcApiConstants;
+import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.GetServerResult;
+import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.google.inject.Inject;
 
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 
 import static com.centurylink.cloud.sdk.core.client.ClcApiConstants.CLC_API_URL;
 import static javax.ws.rs.client.Entity.entity;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 /**
  * @author ilya.drabenia
@@ -38,7 +40,7 @@ public class ServerClient {
         return
             client("/servers/{accountAlias}")
                 .request().post(
-                    entity(request, MediaType.APPLICATION_JSON_TYPE)
+                    entity(request, APPLICATION_JSON_TYPE)
                 )
                 .readEntity(CreateServerResponse.class);
     }
@@ -94,6 +96,14 @@ public class ServerClient {
             client("/datacenters/{accountAlias}?groupLinks=true")
                 .request()
                 .get(GetDataCenterListResponse.class);
+    }
+
+    public String convertToTemplate(CreateTemplateRequest request) {
+        return
+            client("/servers/altr/de1altrasdf01/convertToTemplate")
+                .request()
+                .post(entity(request, APPLICATION_JSON))
+                .readEntity(String.class);
     }
 
     private WebTarget client(String target) {
