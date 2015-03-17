@@ -15,6 +15,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS
  * @author ilya.drabenia
  */
 public class TestServerSupport {
+    public static final String PASSWORD = "1qa@WS3ed";
     private final ServerService serverService;
 
     public TestServerSupport(ServerService serverService) {
@@ -26,10 +27,11 @@ public class TestServerSupport {
             serverService.create(new Server()
                 .name("ALTRS1")
                 .type(STANDARD)
+                .password(PASSWORD)
 
                 .group(new Group()
                     .dataCenter(DE_FRANKFURT)
-                    .name("Group3")
+                    .name("Default Group")
                 )
 
                 .machine(new Machine()

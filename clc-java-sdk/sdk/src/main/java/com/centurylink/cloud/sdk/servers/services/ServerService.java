@@ -36,6 +36,7 @@ public class ServerService {
                 .sourceServerId(newServer.getTemplate().getName())
                 .cpu(newServer.getMachine().getCpuCount())
                 .memoryGB(newServer.getMachine().getRam())
+                .password(newServer.getPassword())
                 .groupId(
                     groupService
                         .resolveId(newServer.getGroup())
@@ -72,7 +73,7 @@ public class ServerService {
     public Response<Template> convertToTemplate(CreateTemplateCommand command) {
         CreateServerResponse response =
             client.convertToTemplate(new CreateTemplateRequest()
-                .serverId(command.getServer().getName())
+                .serverId(command.getServer().getId())
                 .description(command.getDescription())
                 .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
                 .password(command.getPassword())

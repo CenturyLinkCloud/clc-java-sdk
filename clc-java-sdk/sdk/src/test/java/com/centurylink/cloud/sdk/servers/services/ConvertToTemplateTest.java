@@ -27,6 +27,7 @@ public class ConvertToTemplateTest extends AbstractServersSdkTest {
                 .convertToTemplate(new CreateTemplateCommand()
                     .server(server)
                     .description("testTemplate")
+                    .password("1qa@WS3ed")
                     .visibility(PRIVATE)
                 )
                 .waitUntilComplete()

@@ -14,6 +14,8 @@ public class Server {
     private Template template;
     private Machine machine;
 
+    private String password;
+
     public String getId() {
         return id;
     }
@@ -89,6 +91,19 @@ public class Server {
 
     public Server machine(Machine machine) {
         setMachine(machine);
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Server password(String password) {
+        setPassword(password);
         return this;
     }
 }

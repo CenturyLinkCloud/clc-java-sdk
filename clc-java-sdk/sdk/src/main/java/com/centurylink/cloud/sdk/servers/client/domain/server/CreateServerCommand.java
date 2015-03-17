@@ -15,6 +15,8 @@ public class CreateServerCommand {
 
     private String type;
 
+    private String password;
+
 
 
     /**
@@ -107,6 +109,15 @@ public class CreateServerCommand {
      */
     public String getType() {
         return type;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public CreateServerCommand password(String password) {
+        this.password = password;
+        return this;
     }
 
 }

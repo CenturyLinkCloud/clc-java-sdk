@@ -1,6 +1,8 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
+import com.centurylink.cloud.sdk.servers.services.domain.Response;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
@@ -67,6 +69,16 @@ public class TemplateService {
             serversClient
                 .getDataCenterDeploymentCapabilities(dataCenter.getId())
                 .getTemplates()
+        );
+    }
+
+    public Response<Template> delete(Template template) {
+        CreateServerResponse response = serversClient.delete(template.getName());
+
+        return new Response<>(
+            template,
+            response.findStatusId(),
+            serversClient
         );
     }
 
