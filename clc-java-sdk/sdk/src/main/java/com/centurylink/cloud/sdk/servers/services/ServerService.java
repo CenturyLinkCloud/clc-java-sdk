@@ -4,10 +4,15 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.GetServerResult;
+import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
 import com.centurylink.cloud.sdk.servers.services.domain.ServerType;
 import com.centurylink.cloud.sdk.servers.services.domain.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
+
+import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 
 /**
  * @author ilya.drabenia
@@ -59,6 +64,24 @@ public class ServerService {
 
         return new Response<>(
             server,
+            response.findStatusId(),
+            client
+        );
+    }
+
+    public Response<Template> convertToTemplate(CreateTemplateCommand command) {
+        CreateServerResponse response =
+            client.convertToTemplate(new CreateTemplateRequest()
+                .serverId(command.getServer().getName())
+                .description(command.getDescription())
+                .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
+                .password(command.getPassword())
+            );
+
+        return new Response<>(
+            new Template()
+                .name(response.getServer())
+                .description(command.getDescription()),
             response.findStatusId(),
             client
         );

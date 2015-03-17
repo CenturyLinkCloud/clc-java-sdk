@@ -1,7 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template;
 
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.TemplateResponse;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 

@@ -194,6 +194,16 @@ public class GetDeploymentCapabilitiesResponse {
         this.additionalProperties.put(name, value);
     }
 
+    public TemplateResponse findByName(String description) {
+        for (TemplateResponse curTemplate : this.getTemplates()) {
+            if (curTemplate.getDescription().contains(description)) {
+                return curTemplate;
+            }
+        }
+
+        return null;
+    }
+
     public TemplateResponse findByOsType(OperatingSystem operatingSystem) {
         for (TemplateResponse curTemplate : this.getTemplates()) {
             if (templateHasOs(curTemplate, operatingSystem)) {

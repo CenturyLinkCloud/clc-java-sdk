@@ -98,12 +98,13 @@ public class ServerClient {
                 .get(GetDataCenterListResponse.class);
     }
 
-    public String convertToTemplate(CreateTemplateRequest request) {
+    public CreateServerResponse convertToTemplate(CreateTemplateRequest request) {
         return
-            client("/servers/altr/de1altrasdf01/convertToTemplate")
+            client("/servers/{accountAlias}/{serverId}/convertToTemplate")
+                .resolveTemplate("serverId", request.getServerId())
                 .request()
                 .post(entity(request, APPLICATION_JSON))
-                .readEntity(String.class);
+                .readEntity(CreateServerResponse.class);
     }
 
     private WebTarget client(String target) {
