@@ -11,8 +11,11 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerReques
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
+import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 
 import static com.centurylink.cloud.sdk.core.client.ClcApiConstants.CLC_API_URL;
@@ -43,6 +46,27 @@ public class ServerClient {
                     entity(request, APPLICATION_JSON_TYPE)
                 )
                 .readEntity(CreateServerResponse.class);
+    }
+
+    public ListenableFuture<CreateServerResponse> createAsync(CreateServerRequest request) {
+        final SettableFuture<CreateServerResponse> responseFuture = SettableFuture.create();
+
+        client("/servers/{accountAlias}")
+            .request()
+            .buildPost(entity(request, APPLICATION_JSON_TYPE))
+            .submit(new InvocationCallback<CreateServerResponse>() {
+                @Override
+                public void completed(CreateServerResponse o) {
+                    responseFuture.set(o);
+                }
+
+                @Override
+                public void failed(Throwable throwable) {
+                    responseFuture.setException(throwable);
+                }
+            });
+
+        return responseFuture;
     }
 
     public CreateServerResponse delete(String serverId) {

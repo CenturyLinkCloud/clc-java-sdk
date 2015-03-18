@@ -2,10 +2,9 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.Machine;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
@@ -109,6 +108,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     private Template createTemplateWithDescription(String description) {
         ServerMetadata templateServer = new TestServerSupport(serverService).createAnyServer();
+
         return serverService
             .convertToTemplate(new CreateTemplateCommand()
                 .server(templateServer.asRefById())
