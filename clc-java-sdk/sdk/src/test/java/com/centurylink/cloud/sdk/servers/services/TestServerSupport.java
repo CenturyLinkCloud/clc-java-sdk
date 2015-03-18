@@ -1,12 +1,15 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.services.domain.Machine;
-import com.centurylink.cloud.sdk.servers.services.domain.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 
-import static com.centurylink.cloud.sdk.servers.services.domain.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
@@ -22,16 +25,16 @@ public class TestServerSupport {
         this.serverService = serverService;
     }
 
-    public Server createAnyServer() {
+    public CreateServerCommand createAnyServer() {
         return
-            serverService.create(new Server()
+            serverService.create(new CreateServerCommand()
                 .name("ALTRS1")
                 .type(STANDARD)
                 .password(PASSWORD)
 
-                .group(new Group()
-                    .dataCenter(DE_FRANKFURT)
-                    .name("Default Group")
+                .group(Group.refByName()
+                    .dataCenter(DataCenter.refById(DE_FRANKFURT.getId()))
+                    .name(DEFAULT_GROUP)
                 )
 
                 .machine(new Machine()
@@ -50,7 +53,7 @@ public class TestServerSupport {
             .getResult();
     }
 
-    public void deleteServer(Server newServer) {
+    public void deleteServer(CreateServerCommand newServer) {
         serverService
             .delete(newServer)
             .waitUntilComplete();

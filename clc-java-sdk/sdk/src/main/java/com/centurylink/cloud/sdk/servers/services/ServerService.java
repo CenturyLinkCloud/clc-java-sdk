@@ -1,13 +1,13 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.GetServerResult;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
-import com.centurylink.cloud.sdk.servers.services.domain.ServerType;
-import com.centurylink.cloud.sdk.servers.services.domain.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
@@ -29,9 +29,9 @@ public class ServerService {
         this.client = client;
     }
 
-    public Response<Server> create(Server newServer) {
+    public Response<CreateServerCommand> create(CreateServerCommand newServer) {
         CreateServerResponse response = client
-            .create(new CreateServerCommand()
+            .create(new CreateServerRequest()
                 .name(newServer.getName())
                 .sourceServerId(newServer.getTemplate().getName())
                 .cpu(newServer.getMachine().getCpuCount())
@@ -39,7 +39,7 @@ public class ServerService {
                 .password(newServer.getPassword())
                 .groupId(
                     groupService
-                        .resolveId(newServer.getGroup())
+                        .resolveRef(newServer.getGroup())
                         .getId()
                 )
                 .type(ServerType.STANDARD.getCode())
@@ -60,7 +60,7 @@ public class ServerService {
         );
     }
 
-    public Response<Server> delete(Server server) {
+    public Response<CreateServerCommand> delete(CreateServerCommand server) {
         CreateServerResponse response = client.delete(server.getId());
 
         return new Response<>(

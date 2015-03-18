@@ -1,19 +1,20 @@
-package com.centurylink.cloud.sdk.servers.services.domain;
+package com.centurylink.cloud.sdk.servers.services.domain.server;
 
+import com.centurylink.cloud.sdk.servers.services.domain.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 
 /**
  * @author ilya.drabenia
  */
-public class Server {
+public class CreateServerCommand {
     private String id;
     private String name;
     private ServerType type;
-    private Group group;
+    private GroupRef group;
     private Template template;
     private Machine machine;
-
     private String password;
 
     public String getId() {
@@ -24,7 +25,7 @@ public class Server {
         this.id = id;
     }
 
-    public Server id(String id) {
+    public CreateServerCommand id(String id) {
         setId(id);
         return this;
     }
@@ -37,7 +38,7 @@ public class Server {
         this.name = name;
     }
 
-    public Server name(String name) {
+    public CreateServerCommand name(String name) {
         setName(name);
         return this;
     }
@@ -50,20 +51,20 @@ public class Server {
         this.type = type;
     }
 
-    public Server type(ServerType type) {
+    public CreateServerCommand type(ServerType type) {
         setType(type);
         return this;
     }
 
-    public Group getGroup() {
+    public GroupRef getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(GroupRef group) {
         this.group = group;
     }
 
-    public Server group(Group group) {
+    public CreateServerCommand group(GroupRef group) {
         setGroup(group);
         return this;
     }
@@ -76,7 +77,7 @@ public class Server {
         this.template = template;
     }
 
-    public Server template(Template template) {
+    public CreateServerCommand template(Template template) {
         setTemplate(template);
         return this;
     }
@@ -89,7 +90,7 @@ public class Server {
         this.machine = machine;
     }
 
-    public Server machine(Machine machine) {
+    public CreateServerCommand machine(Machine machine) {
         setMachine(machine);
         return this;
     }
@@ -102,7 +103,7 @@ public class Server {
         this.password = password;
     }
 
-    public Server password(String password) {
+    public CreateServerCommand password(String password) {
         setPassword(password);
         return this;
     }

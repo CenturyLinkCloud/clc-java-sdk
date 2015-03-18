@@ -21,7 +21,7 @@ public class BearerAuthenticationTest {
     private ClientRequestContext stubRequestContext() {
         ClientRequestContext context = mock(ClientRequestContext.class);
 
-        when(context.getHeaders()).thenReturn(new MultivaluedHashMap<>());
+        when(context.getHeaders()).thenReturn(new MultivaluedHashMap<String, Object>());
 
         return context;
     }

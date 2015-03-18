@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.services.domain.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
@@ -20,7 +20,7 @@ public class ConvertToTemplateTest extends AbstractServersSdkTest {
 
     @Test
     public void testConvertToTemplate() {
-        Server server = new TestServerSupport(serverService).createAnyServer();
+        CreateServerCommand server = new TestServerSupport(serverService).createAnyServer();
 
         Template template =
             serverService

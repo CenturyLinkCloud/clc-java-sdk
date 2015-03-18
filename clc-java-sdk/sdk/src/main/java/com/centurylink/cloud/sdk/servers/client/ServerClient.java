@@ -7,7 +7,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterL
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.GetServerResult;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
@@ -36,7 +36,7 @@ public class ServerClient {
      * from the authentication endpoint. See the Login API for information on acquiring
      * this token.
      */
-    public CreateServerResponse create(CreateServerCommand request) {
+    public CreateServerResponse create(CreateServerRequest request) {
         return
             client("/servers/{accountAlias}")
                 .request().post(

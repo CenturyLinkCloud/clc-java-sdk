@@ -2,16 +2,21 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters;
+import com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.Machine;
-import com.centurylink.cloud.sdk.servers.services.domain.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
-import static com.centurylink.cloud.sdk.servers.services.domain.ServerType.STANDARD;
+import javax.xml.crypto.Data;
+
+import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
@@ -31,14 +36,14 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     TemplateService templateService;
 
 
-    private Server anyServerConfig() {
-        return new Server()
+    private CreateServerCommand anyServerConfig() {
+        return new CreateServerCommand()
             .name("ALTRS1")
             .type(STANDARD)
 
-            .group(new Group()
-                .dataCenter(DE_FRANKFURT)
-                .name("Default Group")
+            .group(Group.refByName()
+                .name(DEFAULT_GROUP)
+                .dataCenter(DataCenter.refById(DE_FRANKFURT.getId()))
             )
 
             .machine(new Machine()
@@ -55,7 +60,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Test
     public void testCreate() throws Exception {
-        Server newServer =
+        CreateServerCommand newServer =
             serverService
                 .create(anyServerConfig())
                 .waitUntilComplete()
@@ -68,11 +73,11 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Test
     public void testCreateWithDataCenterLookup() throws Exception {
-        Server newServer =
+        CreateServerCommand newServer =
             serverService.create(anyServerConfig()
-                .group(new Group()
-                    .dataCenter(new DataCenter().name("FranKfUrt"))
-                    .name("Group3")
+                .group(Group.refByName()
+                    .name(DEFAULT_GROUP)
+                    .dataCenter(DataCenter.refByName("FranKfUrt"))
                 )
             )
             .waitUntilComplete()
@@ -87,7 +92,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     public void testCreateWithCustomTemplate() throws Exception {
         Template customTemplate = createTemplateWithDescription("template1");
 
-        Server testServer = serverService
+        CreateServerCommand testServer = serverService
             .create(anyServerConfig()
                 .template(new Template().description("template1"))
             )
@@ -101,7 +106,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     }
 
     private Template createTemplateWithDescription(String description) {
-        Server templateServer = new TestServerSupport(serverService).createAnyServer();
+        CreateServerCommand templateServer = new TestServerSupport(serverService).createAnyServer();
         return serverService
             .convertToTemplate(new CreateTemplateCommand()
                 .server(templateServer)
@@ -113,7 +118,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
             .getResult();
     }
 
-    void cleanUpCreatedResources(Server newServer) {
+    void cleanUpCreatedResources(CreateServerCommand newServer) {
         serverService
             .delete(newServer)
             .waitUntilComplete();

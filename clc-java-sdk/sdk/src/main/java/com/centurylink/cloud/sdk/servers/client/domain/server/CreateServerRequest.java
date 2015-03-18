@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
-public class CreateServerCommand {
+public class CreateServerRequest {
 
 
     private String name;
@@ -22,7 +22,7 @@ public class CreateServerCommand {
     /**
      * Name of the server to create. Alphanumeric characters and dashes only. Must be between 1-7 characters depending on the length of the account alias. (This name will be appended with a two digit number and prepended with the dataCenter code and account alias to make up the final server name.)
      */
-    public CreateServerCommand name(String name) {
+    public CreateServerRequest name(String name) {
         this.name = name;
         return this;
     }
@@ -30,7 +30,7 @@ public class CreateServerCommand {
     /**
      * ID of the parent group. Retrieved from query to parent group, or by looking at the URL on the UI pages in the Control Portal.
      */
-    public CreateServerCommand groupId(String groupId) {
+    public CreateServerRequest groupId(String groupId) {
         this.groupId = groupId;
         return this;
     }
@@ -38,7 +38,7 @@ public class CreateServerCommand {
     /**
      * ID of the server to use a source. May be the ID of a template, or when cloning, an existing server ID. The list of available templates for a given account in a data center can be retrieved from the Get Data Center Deployment Capabilities API operation.
      */
-    public CreateServerCommand sourceServerId(String sourceServerId) {
+    public CreateServerRequest sourceServerId(String sourceServerId) {
         this.sourceServerId = sourceServerId;
         return this;
     }
@@ -46,7 +46,7 @@ public class CreateServerCommand {
     /**
      * Number of processors to configure the server with (1-16)
      */
-    public CreateServerCommand cpu(Integer cpu) {
+    public CreateServerRequest cpu(Integer cpu) {
         this.cpu = cpu;
         return this;
     }
@@ -54,7 +54,7 @@ public class CreateServerCommand {
     /**
      * Number of GB of memory to configure the server with (1-128)
      */
-    public CreateServerCommand memoryGB(Integer memoryGB) {
+    public CreateServerRequest memoryGB(Integer memoryGB) {
         this.memoryGB = memoryGB;
         return this;
     }
@@ -62,7 +62,7 @@ public class CreateServerCommand {
     /**
      * Whether to create standard or hyperscale server
      */
-    public CreateServerCommand type(String type) {
+    public CreateServerRequest type(String type) {
         this.type = type;
         return this;
     }
@@ -115,7 +115,7 @@ public class CreateServerCommand {
         return password;
     }
 
-    public CreateServerCommand password(String password) {
+    public CreateServerRequest password(String password) {
         this.password = password;
         return this;
     }

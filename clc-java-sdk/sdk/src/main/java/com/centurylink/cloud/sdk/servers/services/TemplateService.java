@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.google.inject.Inject;
@@ -25,8 +26,8 @@ public class TemplateService {
         this.dataCenterService = dataCenterService;
     }
 
-    public Template resolveName(DataCenter dataCenter, Template template) {
-        String dataCenterId = dataCenterService.resolveId(dataCenter).getId();
+    public Template resolveName(DataCenterRef dataCenter, Template template) {
+        String dataCenterId = dataCenterService.resolveRef(dataCenter).getId();
 
         if (template.getName() != null) {
             return template;
@@ -39,7 +40,7 @@ public class TemplateService {
             );
         } else {
             return resolveByOs(
-                dataCenterService.resolveId(dataCenter).getId(),
+                dataCenterService.resolveRef(dataCenter).getId(),
                 template
             );
         }

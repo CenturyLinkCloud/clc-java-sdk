@@ -1,11 +1,16 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.NameGroupRef;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -25,27 +30,34 @@ public class GroupService {
         this.dataCenterService = dataCenterService;
     }
 
-    public Group resolveId(Group group) {
-        if (group.getId() != null) {
-            return group;
-        }
+    public Group resolveRef(GroupRef groupRef) {
+        if (groupRef.is(IdGroupRef.class)) {
+            GetGroupResponse response = client
+                .getGroup(groupRef.as(IdGroupRef.class).getId());
 
-        String rootGroupId = client
+            return new Group()
+                .id(response.getId())
+                .name(response.getName());
+        } else if (groupRef.is(NameGroupRef.class)) {
+            GroupResponse group = client
+                .getGroup(rootGroupId(groupRef.getDataCenter()))
+                .findGroupByName(groupRef.as(NameGroupRef.class).getName());
+
+            return new Group()
+                .id(group.getId())
+                .name(group.getName());
+        } else {
+            throw new ReferenceNotSupportedException(groupRef.getClass());
+        }
+    }
+
+    private String rootGroupId(DataCenterRef dataCenterRef) {
+        return client
             .getDataCenter(
-                    dataCenterService.resolveId(group.getDataCenter()).getId()
+                dataCenterService.resolveRef(dataCenterRef).getId()
             )
             .getGroup()
             .getId();
-
-        GetGroupResponse groups = client.getGroup(rootGroupId);
-
-        return new Group()
-            .id(
-                getMatchedGroup(groups, group).getId()
-            )
-            .name(
-                getMatchedGroup(groups, group).getName()
-            );
     }
 
     public List<Group> findByDataCenter(DataCenter dataCenter) {

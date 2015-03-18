@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template;
 
-import com.centurylink.cloud.sdk.servers.services.domain.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 
 /**
  * @author ilya.drabenia
@@ -8,7 +8,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.Server;
 public class CreateTemplateCommand {
     public enum Visibility { PRIVATE, PRIVATE_SHARED }
 
-    private Server server;
+    private CreateServerCommand server;
     private String description;
     private String password;
     private Visibility visibility;
@@ -16,15 +16,15 @@ public class CreateTemplateCommand {
     public CreateTemplateCommand() {
     }
 
-    public Server getServer() {
+    public CreateServerCommand getServer() {
         return server;
     }
 
-    public void setServer(Server server) {
+    public void setServer(CreateServerCommand server) {
         this.server = server;
     }
 
-    public CreateTemplateCommand server(Server server) {
+    public CreateTemplateCommand server(CreateServerCommand server) {
         setServer(server);
         return this;
     }

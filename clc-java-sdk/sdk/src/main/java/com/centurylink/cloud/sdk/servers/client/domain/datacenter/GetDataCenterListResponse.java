@@ -19,6 +19,16 @@ public class GetDataCenterListResponse extends ArrayList<GetDataCenterResponse> 
         super(c);
     }
 
+    public GetDataCenterResponse findById(String id) {
+        for (GetDataCenterResponse curResponse : this) {
+            if (curResponse.getId().equalsIgnoreCase(id)) {
+                return curResponse;
+            }
+        }
+
+        return null;
+    }
+
     public GetDataCenterResponse findWhereNameContains(String name) {
         String matchSubstring = name.toUpperCase();
 

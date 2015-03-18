@@ -2,7 +2,13 @@ package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 
 import com.centurylink.cloud.sdk.servers.services.domain.*;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.IdDataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.NameGroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,12 +17,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class ServerBean {
     @JsonIgnore
-    private Server server = new Server()
+    private CreateServerCommand server = new CreateServerCommand()
         .machine(new Machine())
-        .group(new Group())
+        .group(new IdGroupRef(null, null))
         .template(new Template());
 
-    public ServerBean(Server server) {
+    public ServerBean(CreateServerCommand server) {
         this.server = server;
     }
 
@@ -64,26 +70,31 @@ public class ServerBean {
     }
 
     public String getGroup() {
-        return server.getGroup().getId();
+        return server.getGroup().as(IdGroupRef.class).getId();
     }
 
     public void setGroup(String group) {
-        server.getGroup().setId(group);
+        server.getGroup().as(IdGroupRef.class).id(group);
     }
 
     public String getDataCenter() {
-        return server.getGroup().getDataCenter().getId();
+        return server
+            .getGroup().as(IdGroupRef.class)
+            .getDataCenter().as(IdDataCenterRef.class)
+            .getId();
     }
 
     public void setDataCenter(String dataCenter) {
-        server.getGroup().setDataCenter(new DataCenter(dataCenter));
+        server
+            .getGroup().as(IdGroupRef.class)
+            .dataCenter(DataCenter.refById(dataCenter));
     }
 
-    public Server getServer() {
+    public CreateServerCommand getServer() {
         return server;
     }
 
-    public void setServer(Server server) {
+    public void setServer(CreateServerCommand server) {
         this.server = server;
     }
 
