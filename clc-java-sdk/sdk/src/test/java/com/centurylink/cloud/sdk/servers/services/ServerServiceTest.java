@@ -43,7 +43,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
             .group(Group.refByName()
                 .name(DEFAULT_GROUP)
-                .dataCenter(DataCenter.refById(DE_FRANKFURT.getId()))
+                .dataCenter(DE_FRANKFURT)
             )
 
             .machine(new Machine()
