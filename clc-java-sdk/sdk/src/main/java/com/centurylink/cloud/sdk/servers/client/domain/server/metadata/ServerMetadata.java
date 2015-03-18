@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.client.domain.server;
+package com.centurylink.cloud.sdk.servers.client.domain.server.metadata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +8,8 @@ import javax.annotation.Generated;
 
 import com.centurylink.cloud.sdk.servers.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
+import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "changeInfo",
         "links"
 })
-public class GetServerResult {
+public class ServerMetadata {
 
     @JsonProperty("id")
     private String id;
@@ -354,6 +356,10 @@ public class GetServerResult {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    public IdServerRef asRefById() {
+        return new IdServerRef(this.getId());
     }
 
 }

@@ -27,7 +27,7 @@ public class GroupController {
         return
             sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
                 .groupService()
-                .findByDataCenter(new DataCenter(dataCenter));
+                .findByDataCenter(DataCenter.refById(dataCenter));
     }
 
 }

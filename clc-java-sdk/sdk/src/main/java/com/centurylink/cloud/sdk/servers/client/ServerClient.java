@@ -9,7 +9,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.cap
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.GetServerResult;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.google.inject.Inject;
 
@@ -53,12 +53,20 @@ public class ServerClient {
                 .delete(CreateServerResponse.class);
     }
 
-    public GetServerResult findServerByUuid(String uuid) {
+    public ServerMetadata findServerByUuid(String uuid) {
         return
             client("/servers/{accountAlias}/{serverId}?uuid=true")
                 .resolveTemplate("serverId", uuid)
                 .request()
-                .get(GetServerResult.class);
+                .get(ServerMetadata.class);
+    }
+
+    public ServerMetadata findServerById(String id) {
+        return
+            client("/servers/{accountAlias}/{serverId}")
+                .resolveTemplate("serverId", id)
+                .request()
+                .get(ServerMetadata.class);
     }
 
     public GetDataCenterResponse getDataCenter(String dataCenterId) {

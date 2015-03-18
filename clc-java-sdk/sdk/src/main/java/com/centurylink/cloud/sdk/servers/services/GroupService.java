@@ -4,7 +4,6 @@ import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupResponse;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
@@ -30,7 +29,7 @@ public class GroupService {
         this.dataCenterService = dataCenterService;
     }
 
-    public Group resolveRef(GroupRef groupRef) {
+    public Group findByRef(GroupRef groupRef) {
         if (groupRef.is(IdGroupRef.class)) {
             GetGroupResponse response = client
                 .getGroup(groupRef.as(IdGroupRef.class).getId());
@@ -54,7 +53,7 @@ public class GroupService {
     private String rootGroupId(DataCenterRef dataCenterRef) {
         return client
             .getDataCenter(
-                dataCenterService.resolveRef(dataCenterRef).getId()
+                dataCenterService.findByRef(dataCenterRef).getId()
             )
             .getGroup()
             .getId();
@@ -63,7 +62,7 @@ public class GroupService {
     public List<Group> findByDataCenter(DataCenterRef dataCenter) {
         String rootGroupId = client
             .getDataCenter(
-                dataCenterService.resolveRef(dataCenter).getId()
+                dataCenterService.findByRef(dataCenter).getId()
             )
             .getGroup()
             .getId();
@@ -71,7 +70,7 @@ public class GroupService {
         GetGroupResponse result = client.getGroup(rootGroupId);
 
         return converter.newGroupList(
-            dataCenterService.resolveRef(dataCenter).getId(),
+            dataCenterService.findByRef(dataCenter).getId(),
             result.getAllGroups()
         );
     }

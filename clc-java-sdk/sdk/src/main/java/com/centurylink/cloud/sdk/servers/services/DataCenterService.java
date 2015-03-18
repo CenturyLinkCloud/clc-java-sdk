@@ -40,7 +40,7 @@ public class DataCenterService {
         }
     }
 
-    public DataCenter resolveRef(DataCenterRef dataCenterRef) {
+    public DataCenter findByRef(DataCenterRef dataCenterRef) {
         GetDataCenterResponse result = null;
         if (dataCenterRef.is(IdDataCenterRef.class)) {
             result = serverClient

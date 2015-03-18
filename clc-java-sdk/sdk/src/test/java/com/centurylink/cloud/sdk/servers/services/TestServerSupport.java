@@ -1,11 +1,13 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
@@ -25,7 +27,7 @@ public class TestServerSupport {
         this.serverService = serverService;
     }
 
-    public CreateServerCommand createAnyServer() {
+    public ServerMetadata createAnyServer() {
         return
             serverService.create(new CreateServerCommand()
                 .name("ALTRS1")
@@ -53,7 +55,7 @@ public class TestServerSupport {
             .getResult();
     }
 
-    public void deleteServer(CreateServerCommand newServer) {
+    public void deleteServer(ServerRef newServer) {
         serverService
             .delete(newServer)
             .waitUntilComplete();

@@ -21,12 +21,12 @@ public class ServerController {
 
     @RequestMapping(method = POST)
     public ServerBean createServer(@RequestBody ServerBean serverBean) {
-        return new ServerBean(
-            sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
-                    .serverService()
-                    .create(serverBean.getServer())
-                    .getResult()
-        );
+        sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
+                .serverService()
+                .create(serverBean.getServer())
+                .getResult();
+
+        return serverBean;
     }
 
 }

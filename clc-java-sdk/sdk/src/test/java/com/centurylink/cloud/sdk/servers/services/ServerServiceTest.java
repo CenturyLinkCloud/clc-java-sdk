@@ -1,12 +1,14 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters;
 import com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
@@ -60,7 +62,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Test
     public void testCreate() throws Exception {
-        CreateServerCommand newServer =
+        ServerMetadata newServer =
             serverService
                 .create(anyServerConfig())
                 .waitUntilComplete()
@@ -68,12 +70,12 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
         assert !isNullOrEmpty(newServer.getId());
 
-        cleanUpCreatedResources(newServer);
+        cleanUpCreatedResources(newServer.asRefById());
     }
 
     @Test
     public void testCreateWithDataCenterLookup() throws Exception {
-        CreateServerCommand newServer =
+        ServerMetadata newServer =
             serverService.create(anyServerConfig()
                 .group(Group.refByName()
                     .name(DEFAULT_GROUP)
@@ -85,14 +87,14 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
         assert !isNullOrEmpty(newServer.getId());
 
-        cleanUpCreatedResources(newServer);
+        cleanUpCreatedResources(newServer.asRefById());
     }
 
     @Test
     public void testCreateWithCustomTemplate() throws Exception {
         Template customTemplate = createTemplateWithDescription("template1");
 
-        CreateServerCommand testServer = serverService
+        ServerMetadata testServer = serverService
             .create(anyServerConfig()
                 .template(new Template().description("template1"))
             )
@@ -101,15 +103,15 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
         assert testServer.getId() != null;
 
-        serverService.delete(testServer);
+        serverService.delete(testServer.asRefById());
         templateService.delete(customTemplate);
     }
 
     private Template createTemplateWithDescription(String description) {
-        CreateServerCommand templateServer = new TestServerSupport(serverService).createAnyServer();
+        ServerMetadata templateServer = new TestServerSupport(serverService).createAnyServer();
         return serverService
             .convertToTemplate(new CreateTemplateCommand()
-                .server(templateServer)
+                .server(templateServer.asRefById())
                 .visibility(PRIVATE)
                 .password(TestServerSupport.PASSWORD)
                 .description(description)
@@ -118,7 +120,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
             .getResult();
     }
 
-    void cleanUpCreatedResources(CreateServerCommand newServer) {
+    void cleanUpCreatedResources(ServerRef newServer) {
         serverService
             .delete(newServer)
             .waitUntilComplete();

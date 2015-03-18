@@ -3,11 +3,13 @@ package com.centurylink.cloud.sdk.servers.services;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.GetServerResult;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
@@ -29,7 +31,7 @@ public class ServerService {
         this.client = client;
     }
 
-    public Response<CreateServerCommand> create(CreateServerCommand newServer) {
+    public Response<ServerMetadata> create(CreateServerCommand newServer) {
         CreateServerResponse response = client
             .create(new CreateServerRequest()
                 .name(newServer.getName())
@@ -39,7 +41,7 @@ public class ServerService {
                 .password(newServer.getPassword())
                 .groupId(
                     groupService
-                        .resolveRef(newServer.getGroup())
+                        .findByRef(newServer.getGroup())
                         .getId()
                 )
                 .type(ServerType.STANDARD.getCode())
@@ -50,18 +52,18 @@ public class ServerService {
                 )
             );
 
-        GetServerResult serverInfo = client
+        ServerMetadata serverInfo = client
             .findServerByUuid(response.findServerUuid());
 
         return new Response<>(
-            newServer.id(serverInfo.getId()),
+            serverInfo,
             response.findStatusId(),
             client
         );
     }
 
-    public Response<CreateServerCommand> delete(CreateServerCommand server) {
-        CreateServerResponse response = client.delete(server.getId());
+    public Response<ServerRef> delete(ServerRef server) {
+        CreateServerResponse response = client.delete(server.as(IdServerRef.class).getId());
 
         return new Response<>(
             server,
@@ -70,10 +72,14 @@ public class ServerService {
         );
     }
 
+    public ServerMetadata findByRef(ServerRef serverRef) {
+        return client.findServerById(serverRef.as(IdServerRef.class).getId());
+    }
+
     public Response<Template> convertToTemplate(CreateTemplateCommand command) {
         CreateServerResponse response =
             client.convertToTemplate(new CreateTemplateRequest()
-                .serverId(command.getServer().getId())
+                .serverId(command.getServer().as(IdServerRef.class).getId())
                 .description(command.getDescription())
                 .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
                 .password(command.getPassword())
