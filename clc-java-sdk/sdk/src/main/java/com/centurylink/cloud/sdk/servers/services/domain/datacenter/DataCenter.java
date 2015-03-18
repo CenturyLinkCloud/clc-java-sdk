@@ -1,11 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.datacenter;
 
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.IdDataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.NameDataCenterRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.NameGroupRef;
 
 /**
  * Class represents CenturyLink data center in specified location

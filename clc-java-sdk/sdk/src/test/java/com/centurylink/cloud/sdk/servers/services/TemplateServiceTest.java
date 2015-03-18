@@ -16,7 +16,7 @@ public class TemplateServiceTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByDataCenter() {
-        List<Template> templates = templateService.findByDataCenter(DE_FRANKFURT);
+        List<Template> templates = templateService.findByDataCenter(DE_FRANKFURT.getId());
 
         assert templates.size() > 0;
     }

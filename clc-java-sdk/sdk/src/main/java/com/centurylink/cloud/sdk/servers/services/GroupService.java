@@ -60,10 +60,10 @@ public class GroupService {
             .getId();
     }
 
-    public List<Group> findByDataCenter(DataCenter dataCenter) {
+    public List<Group> findByDataCenter(DataCenterRef dataCenter) {
         String rootGroupId = client
             .getDataCenter(
-                dataCenterService.resolveId(dataCenter).getId()
+                dataCenterService.resolveRef(dataCenter).getId()
             )
             .getGroup()
             .getId();
@@ -71,7 +71,7 @@ public class GroupService {
         GetGroupResponse result = client.getGroup(rootGroupId);
 
         return converter.newGroupList(
-            dataCenterService.resolveId(dataCenter).getId(),
+            dataCenterService.resolveRef(dataCenter).getId(),
             result.getAllGroups()
         );
     }

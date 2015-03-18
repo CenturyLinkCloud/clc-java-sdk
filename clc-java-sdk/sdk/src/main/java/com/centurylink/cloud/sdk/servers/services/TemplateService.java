@@ -57,18 +57,21 @@ public class TemplateService {
                 );
     }
 
-    public List<Template> findByDataCenter(String dataCenter) {
+    public List<Template> findByDataCenter(String dataCenterId) {
         return converter.templateListFrom(
             serversClient
-                .getDataCenterDeploymentCapabilities(dataCenter)
+                .getDataCenterDeploymentCapabilities(dataCenterId)
                 .getTemplates()
         );
     }
 
-    public List<Template> findByDataCenter(DataCenter dataCenter) {
+    public List<Template> findByDataCenter(DataCenterRef dataCenter) {
+
         return converter.templateListFrom(
             serversClient
-                .getDataCenterDeploymentCapabilities(dataCenter.getId())
+                .getDataCenterDeploymentCapabilities(
+                    dataCenterService.resolveRef(dataCenter).getId()
+                )
                 .getTemplates()
         );
     }
