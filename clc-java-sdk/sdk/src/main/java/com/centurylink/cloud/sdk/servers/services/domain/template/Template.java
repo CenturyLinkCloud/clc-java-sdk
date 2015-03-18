@@ -1,6 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template;
 
 import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
 
 /**
  * @author ilya.drabenia
@@ -39,5 +42,17 @@ public class Template {
     public Template description(String description) {
         setDescription(description);
         return this;
+    }
+
+    public static NameTemplateRef refByName() {
+        return new NameTemplateRef(null, null);
+    }
+
+    public static OsTemplateRef refByOs() {
+        return new OsTemplateRef(null, null, null, null, null);
+    }
+
+    public static DescriptionTemplateRef refByDescription() {
+        return new DescriptionTemplateRef(null, null);
     }
 }

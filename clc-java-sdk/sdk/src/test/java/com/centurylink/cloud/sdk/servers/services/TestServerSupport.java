@@ -44,11 +44,11 @@ public class TestServerSupport {
                     .ram(2)
                 )
 
-                .template(new Template().os(new OperatingSystem()
+                .template(Template.refByOs()
                     .type(CENTOS)
                     .version("6")
                     .architecture(x86_64)
-                ))
+                )
             )
 
             .waitUntilComplete()

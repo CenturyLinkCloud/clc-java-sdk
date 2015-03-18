@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template;
 
-import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.TemplateResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.TemplateMetadata;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
@@ -12,23 +12,23 @@ import java.util.List;
  */
 public class TemplateConverter {
 
-    public List<Template> templateListFrom(List<TemplateResponse> srcTemplates) {
+    public List<Template> templateListFrom(List<TemplateMetadata> srcTemplates) {
         return new ArrayList<>(Collections2.transform(srcTemplates, toTemplate()));
     }
 
-    private Function<TemplateResponse, Template> toTemplate() {
+    private Function<TemplateMetadata, Template> toTemplate() {
         return
-            new Function<TemplateResponse, Template>() {
+            new Function<TemplateMetadata, Template>() {
 
                 @Override
-                public Template apply(TemplateResponse input) {
+                public Template apply(TemplateMetadata input) {
                     return templateFrom(input);
                 }
 
             };
     }
 
-    public Template templateFrom(TemplateResponse template) {
+    public Template templateFrom(TemplateMetadata template) {
         return
             new Template()
                 .name(template.getName())

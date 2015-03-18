@@ -2,26 +2,23 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters;
-import com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.Machine;
+import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
-import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
-import javax.xml.crypto.Data;
-
-import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.US_CENTRAL_SALT_LAKE_CITY;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
@@ -53,11 +50,12 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 .ram(2)
             )
 
-            .template(new Template().os(new OperatingSystem()
+            .template(Template.refByOs()
+                .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
                 .type(CENTOS)
                 .version("6")
                 .architecture(x86_64)
-            ));
+            );
     }
 
     @Test
@@ -96,7 +94,9 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
         ServerMetadata testServer = serverService
             .create(anyServerConfig()
-                .template(new Template().description("template1"))
+                .template(Template.refByDescription()
+                    .description("template1")
+                )
             )
             .waitUntilComplete()
             .getResult();

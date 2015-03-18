@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Generated;
 
 import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,7 +39,7 @@ public class GetDeploymentCapabilitiesResponse {
     @JsonProperty("deployableNetworks")
     private List<DeployableNetwork> deployableNetworks = new ArrayList<DeployableNetwork>();
     @JsonProperty("templates")
-    private List<TemplateResponse> templates = new ArrayList<TemplateResponse>();
+    private List<TemplateMetadata> templates = new ArrayList<TemplateMetadata>();
     @JsonProperty("importableOSTypes")
     private List<ImportableOSType> importableOSTypes = new ArrayList<ImportableOSType>();
     @JsonIgnore
@@ -150,7 +151,7 @@ public class GetDeploymentCapabilitiesResponse {
      * The templates
      */
     @JsonProperty("templates")
-    public List<TemplateResponse> getTemplates() {
+    public List<TemplateMetadata> getTemplates() {
         return templates;
     }
 
@@ -160,7 +161,7 @@ public class GetDeploymentCapabilitiesResponse {
      * The templates
      */
     @JsonProperty("templates")
-    public void setTemplates(List<TemplateResponse> templates) {
+    public void setTemplates(List<TemplateMetadata> templates) {
         this.templates = templates;
     }
 
@@ -194,8 +195,8 @@ public class GetDeploymentCapabilitiesResponse {
         this.additionalProperties.put(name, value);
     }
 
-    public TemplateResponse findByName(String description) {
-        for (TemplateResponse curTemplate : this.getTemplates()) {
+    public TemplateMetadata findByDescription(String description) {
+        for (TemplateMetadata curTemplate : this.getTemplates()) {
             if (curTemplate.getDescription().contains(description)) {
                 return curTemplate;
             }
@@ -204,8 +205,18 @@ public class GetDeploymentCapabilitiesResponse {
         return null;
     }
 
-    public TemplateResponse findByOsType(OperatingSystem operatingSystem) {
-        for (TemplateResponse curTemplate : this.getTemplates()) {
+    public TemplateMetadata findByName(String name) {
+        for (TemplateMetadata curTemplate : this.getTemplates()) {
+            if (curTemplate.getName().contains(name)) {
+                return curTemplate;
+            }
+        }
+
+        return null;
+    }
+
+    public TemplateMetadata findByOsType(OsTemplateRef operatingSystem) {
+        for (TemplateMetadata curTemplate : this.getTemplates()) {
             if (templateHasOs(curTemplate, operatingSystem)) {
                 return curTemplate;
             }
@@ -214,7 +225,7 @@ public class GetDeploymentCapabilitiesResponse {
         return null;
     }
 
-    private boolean templateHasOs(TemplateResponse curTemplate, OperatingSystem operatingSystem) {
+    private boolean templateHasOs(TemplateMetadata curTemplate, OsTemplateRef operatingSystem) {
         return osTypeContains(
             curTemplate,
             operatingSystem.getType(),
@@ -224,7 +235,7 @@ public class GetDeploymentCapabilitiesResponse {
         );
     }
 
-    private boolean osTypeContains(TemplateResponse curTemplate, String... values) {
+    private boolean osTypeContains(TemplateMetadata curTemplate, String... values) {
         for (String curValue : values) {
             if (curValue != null && !curTemplate.getOsType().contains(curValue)) {
                 return false;

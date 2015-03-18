@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
 
 /**
  * @author ilya.drabenia
@@ -13,7 +14,7 @@ public class CreateServerCommand {
     private String name;
     private ServerType type;
     private GroupRef group;
-    private Template template;
+    private TemplateRef template;
     private Machine machine;
     private String password;
 
@@ -69,15 +70,15 @@ public class CreateServerCommand {
         return this;
     }
 
-    public Template getTemplate() {
+    public TemplateRef getTemplate() {
         return template;
     }
 
-    public void setTemplate(Template template) {
+    public void setTemplate(TemplateRef template) {
         this.template = template;
     }
 
-    public CreateServerCommand template(Template template) {
+    public CreateServerCommand template(TemplateRef template) {
         setTemplate(template);
         return this;
     }

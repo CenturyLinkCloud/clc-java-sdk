@@ -1,11 +1,17 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
 import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -25,35 +31,28 @@ public class TemplateService {
         this.dataCenterService = dataCenterService;
     }
 
-    public Template resolveName(DataCenterRef dataCenter, Template template) {
-        String dataCenterId = dataCenterService.findByRef(dataCenter).getId();
-
-        if (template.getName() != null) {
-            return template;
-        } else if (template.getDescription() != null) {
-            return template.name(
-                serversClient
-                    .getDataCenterDeploymentCapabilities(dataCenterId)
-                    .findByName(template.getDescription())
-                    .getName()
-            );
-        } else {
-            return resolveByOs(
-                dataCenterService.findByRef(dataCenter).getId(),
-                template
-            );
-        }
-    }
-
-    public Template resolveByOs(String dataCenterId, Template template) {
-        return
-            template
-                .name(
-                    serversClient
-                        .getDataCenterDeploymentCapabilities(dataCenterId)
-                        .findByOsType(template.getOs())
-                        .getName()
+    public TemplateMetadata findByRef(TemplateRef template) {
+        GetDeploymentCapabilitiesResponse deploymentCapabilities =
+            serversClient
+                .getDataCenterDeploymentCapabilities(
+                    dataCenterService.findByRef(template.getDataCenter()).getId()
                 );
+
+        if (template.is(NameTemplateRef.class)) {
+            return
+                deploymentCapabilities
+                    .findByName(
+                        template.as(NameTemplateRef.class).getName()
+                    );
+        } else if (template.is(DescriptionTemplateRef.class)) {
+            return
+                deploymentCapabilities
+                    .findByDescription(
+                        template.as(DescriptionTemplateRef.class).getDescription()
+                    );
+        } else {
+            return deploymentCapabilities.findByOsType(template.as(OsTemplateRef.class));
+        }
     }
 
     public List<Template> findByDataCenter(String dataCenterId) {
@@ -65,7 +64,6 @@ public class TemplateService {
     }
 
     public List<Template> findByDataCenter(DataCenterRef dataCenter) {
-
         return converter.templateListFrom(
             serversClient
                 .getDataCenterDeploymentCapabilities(

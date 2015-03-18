@@ -35,7 +35,6 @@ public class ServerService {
         CreateServerResponse response = client
             .create(new CreateServerRequest()
                 .name(newServer.getName())
-                .sourceServerId(newServer.getTemplate().getName())
                 .cpu(newServer.getMachine().getCpuCount())
                 .memoryGB(newServer.getMachine().getRam())
                 .password(newServer.getPassword())
@@ -47,7 +46,7 @@ public class ServerService {
                 .type(ServerType.STANDARD.getCode())
                 .sourceServerId(
                     templateService
-                        .resolveName(newServer.getGroup().getDataCenter(), newServer.getTemplate())
+                        .findByRef(newServer.getTemplate())
                         .getName()
                 )
             );
