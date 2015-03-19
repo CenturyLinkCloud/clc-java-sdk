@@ -12,6 +12,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
+import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
@@ -32,30 +33,6 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Inject
     TemplateService templateService;
-
-
-    private CreateServerCommand anyServerConfig() {
-        return new CreateServerCommand()
-            .name("ALTRS1")
-            .type(STANDARD)
-
-            .group(Group.refByName()
-                .name(DEFAULT_GROUP)
-                .dataCenter(DE_FRANKFURT)
-            )
-
-            .machine(new Machine()
-                .cpuCount(1)
-                .ram(2)
-            )
-
-            .template(Template.refByOs()
-                .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
-                .type(CENTOS)
-                .version("6")
-                .architecture(x86_64)
-            );
-    }
 
     @Test
     public void testCreate() throws Exception {

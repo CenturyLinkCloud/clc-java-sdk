@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.ClcApiConstants;
+import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterResponse;
@@ -48,25 +49,25 @@ public class ServerClient {
                 .readEntity(CreateServerResponse.class);
     }
 
-    public ListenableFuture<CreateServerResponse> createAsync(CreateServerRequest request) {
-        final SettableFuture<CreateServerResponse> responseFuture = SettableFuture.create();
+    public SettableFuture<CreateServerResponse> createAsync(CreateServerRequest request) {
+        final InvocationFuture<CreateServerResponse> future = new InvocationFuture<CreateServerResponse>();
 
         client("/servers/{accountAlias}")
             .request()
-            .buildPost(entity(request, APPLICATION_JSON_TYPE))
-            .submit(new InvocationCallback<CreateServerResponse>() {
+            .async()
+            .post(entity(request, APPLICATION_JSON_TYPE), new InvocationCallback<CreateServerResponse>() {
                 @Override
-                public void completed(CreateServerResponse o) {
-                    responseFuture.set(o);
+                public void completed(CreateServerResponse createServerResponse) {
+                    future.toListenableFuture().set(createServerResponse);
                 }
 
                 @Override
                 public void failed(Throwable throwable) {
-                    responseFuture.setException(throwable);
+                    future.toListenableFuture().setException(throwable);
                 }
             });
 
-        return responseFuture;
+        return future.toListenableFuture();
     }
 
     public CreateServerResponse delete(String serverId) {
@@ -83,6 +84,28 @@ public class ServerClient {
                 .resolveTemplate("serverId", uuid)
                 .request()
                 .get(ServerMetadata.class);
+    }
+
+    public SettableFuture<ServerMetadata> findServerByUuidAsync(String uuid) {
+        final InvocationFuture<ServerMetadata> future = new InvocationFuture<>();
+
+        client("/servers/{accountAlias}/{serverId}?uuid=true")
+            .resolveTemplate("serverId", uuid)
+            .request()
+            .buildGet()
+            .submit(new InvocationCallback<ServerMetadata>() {
+                @Override
+                public void completed(ServerMetadata serverMetadata) {
+                    future.toListenableFuture().set(serverMetadata);
+                }
+
+                @Override
+                public void failed(Throwable throwable) {
+                    future.toListenableFuture().setException(throwable);
+                }
+            });
+
+        return future.toListenableFuture();
     }
 
     public ServerMetadata findServerById(String id) {

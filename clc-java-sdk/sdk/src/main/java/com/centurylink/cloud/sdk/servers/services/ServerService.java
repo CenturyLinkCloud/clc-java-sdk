@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.client.errors.ClcServiceException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
@@ -12,7 +13,12 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import com.google.common.base.Function;
+import com.google.common.util.concurrent.*;
 import com.google.inject.Inject;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RunnableFuture;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 
@@ -59,6 +65,51 @@ public class ServerService {
             response.findStatusId(),
             client
         );
+    }
+
+    public ListenableFuture<Response<ServerMetadata>> createAsync(CreateServerCommand newServer) {
+        final SettableFuture<CreateServerResponse> response = client
+            .createAsync(new CreateServerRequest()
+                .name(newServer.getName())
+                .cpu(newServer.getMachine().getCpuCount())
+                .memoryGB(newServer.getMachine().getRam())
+                .password(newServer.getPassword())
+                .groupId(
+                    groupService
+                        .findByRef(newServer.getGroup())
+                        .getId()
+                )
+                .type(ServerType.STANDARD.getCode())
+                .sourceServerId(
+                    templateService
+                        .findByRef(newServer.getTemplate())
+                        .getName()
+                )
+            );
+
+        ListenableFuture<ServerMetadata> metadata =
+            Futures.transform(response, new AsyncFunction<CreateServerResponse, ServerMetadata>() {
+                @Override
+                public ListenableFuture<ServerMetadata> apply(CreateServerResponse input) throws Exception {
+                    return client.findServerByUuidAsync(input.findServerUuid());
+                }
+            });
+
+        return
+            Futures.transform(metadata, new Function<ServerMetadata, Response<ServerMetadata>>() {
+                @Override
+                public Response<ServerMetadata> apply(ServerMetadata serverInfo) {
+                    try {
+                        return new Response<>(
+                            serverInfo,
+                            response.get().findStatusId(),
+                            client
+                        );
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new ClcServiceException(e);
+                    }
+                }
+            });
     }
 
     public Response<ServerRef> delete(ServerRef server) {

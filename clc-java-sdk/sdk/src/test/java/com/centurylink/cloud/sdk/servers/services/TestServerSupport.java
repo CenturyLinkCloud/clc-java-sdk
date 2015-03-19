@@ -9,6 +9,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
@@ -23,6 +24,29 @@ public class TestServerSupport {
 
     public TestServerSupport(ServerService serverService) {
         this.serverService = serverService;
+    }
+
+    public static CreateServerCommand anyServerConfig() {
+        return new CreateServerCommand()
+            .name("ALTRS1")
+            .type(STANDARD)
+
+            .group(Group.refByName()
+                .name(DEFAULT_GROUP)
+                .dataCenter(DE_FRANKFURT)
+            )
+
+            .machine(new Machine()
+                .cpuCount(1)
+                .ram(2)
+            )
+
+            .template(Template.refByOs()
+                .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
+                .type(CENTOS)
+                .version("6")
+                .architecture(x86_64)
+            );
     }
 
     public ServerMetadata createAnyServer() {

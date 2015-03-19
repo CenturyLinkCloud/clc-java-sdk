@@ -11,4 +11,7 @@ public class ClcServiceException extends ClcException {
         super(message);
     }
 
+    public ClcServiceException(Throwable cause) {
+        super(cause);
+    }
 }
