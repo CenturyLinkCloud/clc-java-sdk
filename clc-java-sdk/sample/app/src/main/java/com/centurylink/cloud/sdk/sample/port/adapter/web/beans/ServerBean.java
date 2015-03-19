@@ -7,6 +7,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerComm
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -17,7 +19,7 @@ public class ServerBean {
     private CreateServerCommand server = new CreateServerCommand()
         .machine(new Machine())
         .group(new IdGroupRef(null, null))
-        .template(new Template());
+        .template(new NameTemplateRef(null, null));
 
     public ServerBean(CreateServerCommand server) {
         this.server = server;
@@ -85,6 +87,10 @@ public class ServerBean {
         server
             .getGroup().as(IdGroupRef.class)
             .dataCenter(DataCenter.refById(dataCenter));
+
+        server
+            .getTemplate().as(NameTemplateRef.class)
+            .dataCenter(DataCenter.refById(dataCenter));
     }
 
     public CreateServerCommand getServer() {
@@ -96,10 +102,10 @@ public class ServerBean {
     }
 
     public String getTemplate() {
-        return server.getTemplate().getName();
+        return server.getTemplate().as(NameTemplateRef.class).getName();
     }
 
     public void setTemplate(String template) {
-        server.getTemplate().name(template);
+        server.getTemplate().as(NameTemplateRef.class).name(template);
     }
 }
