@@ -1,8 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
 public class CreateServerRequest {
-
-
     private String name;
 
     private String groupId;
@@ -16,6 +14,10 @@ public class CreateServerRequest {
     private String type;
 
     private String password;
+
+    private String primaryDns;
+
+    private String secondaryDns;
 
 
 
@@ -120,4 +122,29 @@ public class CreateServerRequest {
         return this;
     }
 
+    public String getPrimaryDns() {
+        return primaryDns;
+    }
+
+    public void setPrimaryDns(String primaryDns) {
+        this.primaryDns = primaryDns;
+    }
+
+    public CreateServerRequest primaryDns(String primaryDns) {
+        setPrimaryDns(primaryDns);
+        return this;
+    }
+
+    public String getSecondaryDns() {
+        return secondaryDns;
+    }
+
+    public void setSecondaryDns(String secondaryDns) {
+        this.secondaryDns = secondaryDns;
+    }
+
+    public CreateServerRequest secondaryDns(String secondaryDns) {
+        setSecondaryDns(secondaryDns);
+        return this;
+    }
 }

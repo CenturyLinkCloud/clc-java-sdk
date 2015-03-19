@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRespon
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
@@ -26,36 +27,18 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateT
  * @author ilya.drabenia
  */
 public class ServerService {
-    private final GroupService groupService;
-    private final TemplateService templateService;
+    private final ServerConverter serverConverter;
     private final ServerClient client;
 
     @Inject
-    public ServerService(GroupService groupService, TemplateService templateService, ServerClient client) {
-        this.groupService = groupService;
-        this.templateService = templateService;
+    public ServerService(ServerConverter serverConverter, ServerClient client) {
+        this.serverConverter = serverConverter;
         this.client = client;
     }
 
-    public Response<ServerMetadata> create(CreateServerCommand newServer) {
+    public Response<ServerMetadata> create(CreateServerCommand command) {
         CreateServerResponse response = client
-            .create(new CreateServerRequest()
-                .name(newServer.getName())
-                .cpu(newServer.getMachine().getCpuCount())
-                .memoryGB(newServer.getMachine().getRam())
-                .password(newServer.getPassword())
-                .groupId(
-                    groupService
-                        .findByRef(newServer.getGroup())
-                        .getId()
-                )
-                .type(ServerType.STANDARD.getCode())
-                .sourceServerId(
-                    templateService
-                        .findByRef(newServer.getTemplate())
-                        .getName()
-                )
-            );
+            .create(serverConverter.buildCreateServerRequest(command));
 
         ServerMetadata serverInfo = client
             .findServerByUuid(response.findServerUuid());
@@ -67,25 +50,12 @@ public class ServerService {
         );
     }
 
-    public ListenableFuture<Response<ServerMetadata>> createAsync(CreateServerCommand newServer) {
-        final SettableFuture<CreateServerResponse> response = client
-            .createAsync(new CreateServerRequest()
-                .name(newServer.getName())
-                .cpu(newServer.getMachine().getCpuCount())
-                .memoryGB(newServer.getMachine().getRam())
-                .password(newServer.getPassword())
-                .groupId(
-                    groupService
-                        .findByRef(newServer.getGroup())
-                        .getId()
-                )
-                .type(ServerType.STANDARD.getCode())
-                .sourceServerId(
-                    templateService
-                        .findByRef(newServer.getTemplate())
-                        .getName()
-                )
-            );
+    public ListenableFuture<Response<ServerMetadata>> createAsync(CreateServerCommand command) {
+        final SettableFuture<CreateServerResponse> response =
+            client
+                .createAsync(
+                    serverConverter.buildCreateServerRequest(command)
+                );
 
         ListenableFuture<ServerMetadata> metadata =
             Futures.transform(response, new AsyncFunction<CreateServerResponse, ServerMetadata>() {
