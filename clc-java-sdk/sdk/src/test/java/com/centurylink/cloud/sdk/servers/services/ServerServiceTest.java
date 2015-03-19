@@ -39,12 +39,10 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     public void testCreate() throws Exception {
         ServerMetadata newServer =
             serverService
-                .create(anyServerConfig()
-                    .network(new Network()
-                        .primaryDns("172.17.1.26")
-                        .secondaryDns("172.17.1.27")
-                    )
-                )
+                .create(anyServerConfig().network(new Network()
+                    .primaryDns("172.17.1.26")
+                    .secondaryDns("172.17.1.27")
+                ))
                 .waitUntilComplete()
                 .getResult();
 
