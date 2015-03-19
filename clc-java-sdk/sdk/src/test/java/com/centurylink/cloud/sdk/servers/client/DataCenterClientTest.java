@@ -1,9 +1,8 @@
 package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.client.domain.datacenter.GetDataCenterResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities.GetDeploymentCapabilitiesResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
+import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterResponse;
+import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.GetDeploymentCapabilitiesResponse;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 

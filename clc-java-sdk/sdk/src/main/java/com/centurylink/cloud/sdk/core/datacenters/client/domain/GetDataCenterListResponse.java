@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.client.domain.datacenter;
+package com.centurylink.cloud.sdk.core.datacenters.client.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;

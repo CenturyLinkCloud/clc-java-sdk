@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.client.domain.datacenter.deployment.capabilities;
+package com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
-import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
