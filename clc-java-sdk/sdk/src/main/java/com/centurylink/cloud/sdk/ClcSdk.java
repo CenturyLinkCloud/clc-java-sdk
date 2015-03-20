@@ -7,7 +7,6 @@ import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenter;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 

@@ -2,7 +2,7 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Network;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
@@ -12,8 +12,6 @@ import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
-import static com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenters.DE_FRANKFURT;
-import static com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenters.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static com.google.common.base.Strings.isNullOrEmpty;

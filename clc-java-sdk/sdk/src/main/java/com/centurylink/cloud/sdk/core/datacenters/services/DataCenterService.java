@@ -3,12 +3,11 @@ package com.centurylink.cloud.sdk.core.datacenters.services;
 import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.core.exceptions.ResourceNotFoundException;
-import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterResponse;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenter;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.DataCenterRef;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.IdDataCenterRef;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.NameDataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.IdDataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.NameDataCenterRef;
 import com.google.inject.Inject;
 
 /**
@@ -27,7 +26,7 @@ public class DataCenterService {
             return dataCenter;
         }
 
-        GetDataCenterResponse result = serverClient
+        DataCenterMetadata result = serverClient
             .findAllDataCenters()
             .findWhereNameContains(dataCenter.getName());
 
@@ -41,8 +40,8 @@ public class DataCenterService {
         }
     }
 
-    public DataCenter findByRef(DataCenterRef dataCenterRef) {
-        GetDataCenterResponse result = null;
+    public DataCenterMetadata findByRef(DataCenterRef dataCenterRef) {
+        DataCenterMetadata result = null;
         if (dataCenterRef.is(IdDataCenterRef.class)) {
             result = serverClient
                 .findAllDataCenters()
@@ -60,10 +59,7 @@ public class DataCenterService {
         }
 
         if (result != null) {
-            return
-                new DataCenter()
-                    .id(result.getId())
-                    .name(result.getName());
+            return result;
         } else {
             throw new ResourceNotFoundException("Data center not resolved");
         }

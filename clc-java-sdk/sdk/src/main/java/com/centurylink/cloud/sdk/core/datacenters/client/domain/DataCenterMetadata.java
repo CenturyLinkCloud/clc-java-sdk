@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "name",
     "links"
 })
-public class GetDataCenterResponse {
+public class DataCenterMetadata {
 
     @JsonProperty("id")
     private String id;

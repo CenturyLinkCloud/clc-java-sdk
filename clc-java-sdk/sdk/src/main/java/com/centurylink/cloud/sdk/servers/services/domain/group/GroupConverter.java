@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupResponse;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 
 import java.util.ArrayList;
 import java.util.List;

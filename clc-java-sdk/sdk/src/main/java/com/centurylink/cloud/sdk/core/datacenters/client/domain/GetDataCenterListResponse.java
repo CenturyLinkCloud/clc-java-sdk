@@ -6,7 +6,7 @@ import java.util.Collection;
 /**
  * @author ilya.drabenia
  */
-public class GetDataCenterListResponse extends ArrayList<GetDataCenterResponse> {
+public class GetDataCenterListResponse extends ArrayList<DataCenterMetadata> {
 
     public GetDataCenterListResponse(int initialCapacity) {
         super(initialCapacity);
@@ -15,12 +15,12 @@ public class GetDataCenterListResponse extends ArrayList<GetDataCenterResponse> 
     public GetDataCenterListResponse() {
     }
 
-    public GetDataCenterListResponse(Collection<? extends GetDataCenterResponse> c) {
+    public GetDataCenterListResponse(Collection<? extends DataCenterMetadata> c) {
         super(c);
     }
 
-    public GetDataCenterResponse findById(String id) {
-        for (GetDataCenterResponse curResponse : this) {
+    public DataCenterMetadata findById(String id) {
+        for (DataCenterMetadata curResponse : this) {
             if (curResponse.getId().equalsIgnoreCase(id)) {
                 return curResponse;
             }
@@ -29,10 +29,10 @@ public class GetDataCenterListResponse extends ArrayList<GetDataCenterResponse> 
         return null;
     }
 
-    public GetDataCenterResponse findWhereNameContains(String name) {
+    public DataCenterMetadata findWhereNameContains(String name) {
         String matchSubstring = name.toUpperCase();
 
-        for (GetDataCenterResponse curResponse : this) {
+        for (DataCenterMetadata curResponse : this) {
             String upperCaseName = curResponse.getName().toUpperCase();
             if (upperCaseName.contains(matchSubstring)) {
                 return curResponse;

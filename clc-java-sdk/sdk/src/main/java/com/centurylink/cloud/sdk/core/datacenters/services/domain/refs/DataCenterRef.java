@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs;
+package com.centurylink.cloud.sdk.core.datacenters.services.domain.refs;
 
 import com.centurylink.cloud.sdk.core.domain.BaseRef;
 

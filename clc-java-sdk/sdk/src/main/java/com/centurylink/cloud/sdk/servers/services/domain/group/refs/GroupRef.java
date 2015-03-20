@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
 import com.centurylink.cloud.sdk.core.domain.BaseRef;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 
 /**
  * @author ilya.drabenia

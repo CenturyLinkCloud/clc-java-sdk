@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.refs;
 
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture;
 import com.centurylink.cloud.sdk.servers.services.domain.os.OsType;
 

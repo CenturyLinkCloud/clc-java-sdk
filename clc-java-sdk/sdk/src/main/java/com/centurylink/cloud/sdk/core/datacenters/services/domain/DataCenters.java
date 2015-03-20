@@ -1,6 +1,6 @@
-package com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter;
+package com.centurylink.cloud.sdk.core.datacenters.services.domain;
 
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.IdDataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.IdDataCenterRef;
 
 /**
  * @author ilya.drabenia

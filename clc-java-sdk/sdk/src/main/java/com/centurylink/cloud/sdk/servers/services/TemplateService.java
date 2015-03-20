@@ -7,7 +7,7 @@ import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capac
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;

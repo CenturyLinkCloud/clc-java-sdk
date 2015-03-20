@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenters;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
