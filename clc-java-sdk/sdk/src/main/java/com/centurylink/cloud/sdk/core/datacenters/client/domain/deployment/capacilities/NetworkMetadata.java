@@ -13,12 +13,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-        "name",
-        "networkId",
-        "type",
-        "accountID"
+    "name",
+    "networkId",
+    "type",
+    "accountID"
 })
-public class DeployableNetwork {
+public class NetworkMetadata {
 
     @JsonProperty("name")
     private String name;

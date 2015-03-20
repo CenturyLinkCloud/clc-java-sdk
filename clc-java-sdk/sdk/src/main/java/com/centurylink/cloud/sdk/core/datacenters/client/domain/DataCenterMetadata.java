@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
-import com.centurylink.cloud.sdk.servers.client.domain.Link;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

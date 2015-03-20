@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
-import com.centurylink.cloud.sdk.servers.client.domain.Link;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;

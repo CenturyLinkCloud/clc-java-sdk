@@ -36,7 +36,7 @@ public class GetDeploymentCapabilitiesResponse {
     @JsonProperty("supportsSharedLoadBalancer")
     private Boolean supportsSharedLoadBalancer;
     @JsonProperty("deployableNetworks")
-    private List<DeployableNetwork> deployableNetworks = new ArrayList<DeployableNetwork>();
+    private List<NetworkMetadata> deployableNetworks = new ArrayList<NetworkMetadata>();
     @JsonProperty("templates")
     private List<TemplateMetadata> templates = new ArrayList<TemplateMetadata>();
     @JsonProperty("importableOSTypes")
@@ -130,7 +130,7 @@ public class GetDeploymentCapabilitiesResponse {
      * The deployableNetworks
      */
     @JsonProperty("deployableNetworks")
-    public List<DeployableNetwork> getDeployableNetworks() {
+    public List<NetworkMetadata> getDeployableNetworks() {
         return deployableNetworks;
     }
 
@@ -140,7 +140,7 @@ public class GetDeploymentCapabilitiesResponse {
      * The deployableNetworks
      */
     @JsonProperty("deployableNetworks")
-    public void setDeployableNetworks(List<DeployableNetwork> deployableNetworks) {
+    public void setDeployableNetworks(List<NetworkMetadata> deployableNetworks) {
         this.deployableNetworks = deployableNetworks;
     }
 
@@ -242,6 +242,16 @@ public class GetDeploymentCapabilitiesResponse {
         }
 
         return true;
+    }
+
+    public NetworkMetadata findNetworkById(String id) {
+        for (NetworkMetadata curNetwork : deployableNetworks) {
+            if (curNetwork.getNetworkId().equalsIgnoreCase(id)) {
+                return curNetwork;
+            }
+        }
+
+        return null;
     }
 
 }

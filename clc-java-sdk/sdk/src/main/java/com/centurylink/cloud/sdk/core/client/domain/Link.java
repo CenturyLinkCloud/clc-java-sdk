@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.client.domain;
+package com.centurylink.cloud.sdk.core.client.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
