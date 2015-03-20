@@ -1,15 +1,13 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.IdDataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.IdDataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Network;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**

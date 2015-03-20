@@ -1,7 +1,8 @@
 package com.centurylink.cloud.sdk.servers;
 
+import com.centurylink.cloud.sdk.core.datacenters.DataCentersModule;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.services.DataCenterService;
+import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
@@ -25,7 +26,8 @@ public class ServersModule extends AbstractModule {
         bind(GroupService.class);
         bind(TemplateConverter.class);
         bind(TemplateService.class);
-        bind(DataCenterService.class);
+
+        install(new DataCentersModule());
     }
 
 }

@@ -1,11 +1,13 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
+import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;
@@ -22,18 +24,21 @@ import java.util.List;
 public class TemplateService {
     private final DataCenterService dataCenterService;
     private final ServerClient serversClient;
+    private final DataCentersClient dataCentersClient;
     private final TemplateConverter converter;
 
     @Inject
-    public TemplateService(ServerClient serversClient, TemplateConverter converter, DataCenterService dataCenterService) {
-        this.serversClient = serversClient;
-        this.converter = converter;
+    public TemplateService(DataCenterService dataCenterService, ServerClient serversClient,
+                           DataCentersClient dataCentersClient, TemplateConverter converter) {
         this.dataCenterService = dataCenterService;
+        this.serversClient = serversClient;
+        this.dataCentersClient = dataCentersClient;
+        this.converter = converter;
     }
 
     public TemplateMetadata findByRef(TemplateRef template) {
         GetDeploymentCapabilitiesResponse deploymentCapabilities =
-            serversClient
+            dataCentersClient
                 .getDataCenterDeploymentCapabilities(
                     dataCenterService.findByRef(template.getDataCenter()).getId()
                 );
@@ -57,7 +62,7 @@ public class TemplateService {
 
     public List<Template> findByDataCenter(String dataCenterId) {
         return converter.templateListFrom(
-            serversClient
+            dataCentersClient
                 .getDataCenterDeploymentCapabilities(dataCenterId)
                 .getTemplates()
         );
@@ -65,7 +70,7 @@ public class TemplateService {
 
     public List<Template> findByDataCenter(DataCenterRef dataCenter) {
         return converter.templateListFrom(
-            serversClient
+            dataCentersClient
                 .getDataCenterDeploymentCapabilities(
                     dataCenterService.findByRef(dataCenter).getId()
                 )

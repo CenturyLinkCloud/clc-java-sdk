@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenters.DE_FRANKFURT;
 
 public class TemplateServiceTest extends AbstractServersSdkTest {
 

@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.NameGroupRef;
 

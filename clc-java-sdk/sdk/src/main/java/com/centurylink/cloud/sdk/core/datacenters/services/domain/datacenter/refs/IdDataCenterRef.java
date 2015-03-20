@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs;
+package com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs;
 
 /**
  * @author ilya.drabenia

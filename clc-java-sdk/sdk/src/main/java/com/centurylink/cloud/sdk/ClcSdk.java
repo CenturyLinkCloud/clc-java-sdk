@@ -3,11 +3,11 @@ package com.centurylink.cloud.sdk;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.servers.ServersModule;
-import com.centurylink.cloud.sdk.servers.services.DataCenterService;
+import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenter;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 

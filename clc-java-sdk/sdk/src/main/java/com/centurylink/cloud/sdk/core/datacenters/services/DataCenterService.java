@@ -1,23 +1,24 @@
-package com.centurylink.cloud.sdk.servers.services;
+package com.centurylink.cloud.sdk.core.datacenters.services;
 
+import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.core.exceptions.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterResponse;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.DataCenter;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.DataCenterRef;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.IdDataCenterRef;
-import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.NameDataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.DataCenter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.IdDataCenterRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.datacenter.refs.NameDataCenterRef;
 import com.google.inject.Inject;
 
 /**
  * @author ilya.drabenia
  */
 public class DataCenterService {
-    private final ServerClient serverClient;
+    private final DataCentersClient serverClient;
 
     @Inject
-    public DataCenterService(ServerClient serverClient) {
+    public DataCenterService(DataCentersClient serverClient) {
         this.serverClient = serverClient;
     }
 

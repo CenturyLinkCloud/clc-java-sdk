@@ -1,12 +1,9 @@
 package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.client.ClcApiConstants;
+import com.centurylink.cloud.sdk.core.client.ClcClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterResponse;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
@@ -16,9 +13,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
 import javax.ws.rs.client.InvocationCallback;
-import javax.ws.rs.client.WebTarget;
 
-import static com.centurylink.cloud.sdk.core.client.ClcApiConstants.CLC_API_URL;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
@@ -26,12 +21,11 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 /**
  * @author ilya.drabenia
  */
-public class ServerClient {
-    private final BearerAuthentication authentication;
+public class ServerClient extends ClcClient {
 
     @Inject
     public ServerClient(BearerAuthentication authFilter) {
-        this.authentication = authFilter;
+        super(authFilter);
     }
 
     /**
@@ -115,26 +109,11 @@ public class ServerClient {
                 .get(ServerMetadata.class);
     }
 
-    public GetDataCenterResponse getDataCenter(String dataCenterId) {
-        return
-            client("/datacenters/{accountAlias}/{dataCenterId}")
-                .queryParam("groupLinks", true)
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .request().get(GetDataCenterResponse.class);
-    }
-
     public GetGroupResponse getGroup(String rootGroupId) {
         return
             client("/groups/{accountAlias}/{rootGroupId}")
                 .resolveTemplate("rootGroupId", rootGroupId)
                 .request().get(GetGroupResponse.class);
-    }
-
-    public GetDeploymentCapabilitiesResponse getDataCenterDeploymentCapabilities(String dataCenterId) {
-        return
-            client("/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .request().get(GetDeploymentCapabilitiesResponse.class);
     }
 
     public GetStatusResponse getJobStatus(String jobId) {
@@ -143,13 +122,6 @@ public class ServerClient {
                 .resolveTemplate("statusId", jobId)
                 .request()
                 .get(GetStatusResponse.class);
-    }
-
-    public GetDataCenterListResponse findAllDataCenters() {
-        return
-            client("/datacenters/{accountAlias}?groupLinks=true")
-                .request()
-                .get(GetDataCenterListResponse.class);
     }
 
     public CreateServerResponse convertToTemplate(CreateTemplateRequest request) {
@@ -161,13 +133,4 @@ public class ServerClient {
                 .readEntity(CreateServerResponse.class);
     }
 
-    private WebTarget client(String target) {
-        return
-            ClcApiConstants
-                .CLIENT_BUILDER
-                    .build()
-                    .register(authentication)
-                    .target(CLC_API_URL + target)
-                    .resolveTemplate("accountAlias", authentication.getAccountAlias());
-    }
 }
