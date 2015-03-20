@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.datacenter.refs.IdDataC
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Network;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
@@ -18,6 +19,7 @@ public class ServerBean {
     @JsonIgnore
     private CreateServerCommand server = new CreateServerCommand()
         .machine(new Machine())
+        .network(new Network())
         .group(new IdGroupRef(null, null))
         .template(new NameTemplateRef(null, null));
 
@@ -73,7 +75,9 @@ public class ServerBean {
     }
 
     public void setGroup(String group) {
-        server.getGroup().as(IdGroupRef.class).id(group);
+        server.group(
+                server.getGroup().as(IdGroupRef.class).id(group)
+        );
     }
 
     public String getDataCenter() {
@@ -84,13 +88,17 @@ public class ServerBean {
     }
 
     public void setDataCenter(String dataCenter) {
-        server
-            .getGroup().as(IdGroupRef.class)
-            .dataCenter(DataCenter.refById(dataCenter));
+        server.group(
+                server
+                        .getGroup().as(IdGroupRef.class)
+                        .dataCenter(DataCenter.refById(dataCenter))
+        );
 
-        server
-            .getTemplate().as(NameTemplateRef.class)
-            .dataCenter(DataCenter.refById(dataCenter));
+        server.template(
+                server
+                        .getTemplate().as(NameTemplateRef.class)
+                        .dataCenter(DataCenter.refById(dataCenter))
+        );
     }
 
     public CreateServerCommand getServer() {
@@ -106,6 +114,8 @@ public class ServerBean {
     }
 
     public void setTemplate(String template) {
-        server.getTemplate().as(NameTemplateRef.class).name(template);
+        server.template(
+                server.getTemplate().as(NameTemplateRef.class).name(template)
+        );
     }
 }
