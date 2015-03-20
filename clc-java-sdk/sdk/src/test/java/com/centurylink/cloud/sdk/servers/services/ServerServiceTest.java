@@ -4,7 +4,7 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Network;
+import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
@@ -32,9 +32,9 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     public void testCreate() throws Exception {
         ServerMetadata newServer =
             serverService
-                .create(anyServerConfig().network(new Network()
-                                .primaryDns("172.17.1.26")
-                                .secondaryDns("172.17.1.27")
+                .create(anyServerConfig().network(new NetworkConfig()
+                    .primaryDns("172.17.1.26")
+                    .secondaryDns("172.17.1.27")
                 ))
                 .waitUntilComplete()
                 .getResult();

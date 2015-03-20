@@ -19,6 +19,8 @@ public class CreateServerRequest {
 
     private String secondaryDns;
 
+    private String networkId;
+
 
 
     /**
@@ -147,4 +149,18 @@ public class CreateServerRequest {
         setSecondaryDns(secondaryDns);
         return this;
     }
+
+    public String getNetworkId() {
+        return networkId;
+    }
+
+    public void setNetworkId(String networkId) {
+        this.networkId = networkId;
+    }
+
+    public CreateServerRequest networkId(String networkId) {
+        setNetworkId(networkId);
+        return this;
+    }
+
 }

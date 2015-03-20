@@ -5,7 +5,7 @@ import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.IdDataCen
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Network;
+import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,7 +17,7 @@ public class ServerBean {
     @JsonIgnore
     private CreateServerCommand server = new CreateServerCommand()
         .machine(new Machine())
-        .network(new Network())
+        .network(new NetworkConfig())
         .group(new IdGroupRef(null, null))
         .template(new NameTemplateRef(null, null));
 

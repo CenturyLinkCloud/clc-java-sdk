@@ -14,7 +14,7 @@ public class CreateServerCommand {
     private TemplateRef template;
     private Machine machine;
     private String password;
-    private Network network;
+    private NetworkConfig network;
 
     public String getId() {
         return id;
@@ -107,15 +107,15 @@ public class CreateServerCommand {
         return this;
     }
 
-    public Network getNetwork() {
+    public NetworkConfig getNetwork() {
         return network;
     }
 
-    public void setNetwork(Network network) {
+    public void setNetwork(NetworkConfig network) {
         this.network = network;
     }
 
-    public CreateServerCommand network(Network network) {
+    public CreateServerCommand network(NetworkConfig network) {
         setNetwork(network);
         return this;
     }

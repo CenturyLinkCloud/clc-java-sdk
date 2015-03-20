@@ -1,9 +1,12 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
+import com.centurylink.cloud.sdk.networks.services.domain.refs.NetworkRef;
+
 /**
  * @author ilya.drabenia
  */
-public class Network {
+public class NetworkConfig {
+    private NetworkRef network;
     private String primaryDns;
     private String secondaryDns;
 
@@ -15,7 +18,7 @@ public class Network {
         this.primaryDns = primaryDns;
     }
 
-    public Network primaryDns(String primaryDns) {
+    public NetworkConfig primaryDns(String primaryDns) {
         setPrimaryDns(primaryDns);
         return this;
     }
@@ -28,8 +31,21 @@ public class Network {
         this.secondaryDns = secondaryDns;
     }
 
-    public Network secondaryDns(String secondaryDns) {
+    public NetworkConfig secondaryDns(String secondaryDns) {
         setSecondaryDns(secondaryDns);
+        return this;
+    }
+
+    public NetworkRef getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(NetworkRef network) {
+        this.network = network;
+    }
+
+    public NetworkConfig network(NetworkRef network) {
+        setNetwork(network);
         return this;
     }
 }
