@@ -76,7 +76,7 @@ public class ServerBean {
 
     public void setGroup(String group) {
         server.group(
-                server.getGroup().as(IdGroupRef.class).id(group)
+            server.getGroup().as(IdGroupRef.class).id(group)
         );
     }
 
@@ -89,15 +89,15 @@ public class ServerBean {
 
     public void setDataCenter(String dataCenter) {
         server.group(
-                server
-                        .getGroup().as(IdGroupRef.class)
-                        .dataCenter(DataCenter.refById(dataCenter))
+            server
+                .getGroup().as(IdGroupRef.class)
+                .dataCenter(DataCenter.refById(dataCenter))
         );
 
         server.template(
-                server
-                        .getTemplate().as(NameTemplateRef.class)
-                        .dataCenter(DataCenter.refById(dataCenter))
+            server
+                .getTemplate().as(NameTemplateRef.class)
+                .dataCenter(DataCenter.refById(dataCenter))
         );
     }
 
@@ -115,7 +115,7 @@ public class ServerBean {
 
     public void setTemplate(String template) {
         server.template(
-                server.getTemplate().as(NameTemplateRef.class).name(template)
+            server.getTemplate().as(NameTemplateRef.class).name(template)
         );
     }
 }
