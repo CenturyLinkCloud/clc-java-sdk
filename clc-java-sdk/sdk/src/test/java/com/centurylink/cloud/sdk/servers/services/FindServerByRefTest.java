@@ -41,15 +41,19 @@ public class FindServerByRefTest extends AbstractServersSdkTest {
     
     @Test
     public void testFindServerByRef() {
-        when(serverClient.findServerById("de1altrserv1"))
-            .thenReturn(new ServerMetadata()
-                .id("de1altrserv1")
-                .name("serv1")
-            );
+        defineServer(new ServerMetadata()
+            .id("de1altrserv1")
+            .name("serv1")
+        );
 
         ServerMetadata server = serverService.findByRef(Server.refById("de1altrserv1"));
 
         assert server.getName().equals("serv1");
+    }
+
+    private void defineServer(ServerMetadata server) {
+        when(serverClient.findServerById(server.getId()))
+            .thenReturn(server);
     }
 
 }
