@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.client.ClcClient;
+import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
@@ -21,7 +21,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 /**
  * @author ilya.drabenia
  */
-public class ServerClient extends ClcClient {
+public class ServerClient extends BaseSdkClient {
 
     @Inject
     public ServerClient(BearerAuthentication authFilter) {

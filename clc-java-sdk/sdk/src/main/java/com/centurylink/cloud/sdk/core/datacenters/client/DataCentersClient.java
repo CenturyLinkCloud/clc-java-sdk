@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.core.datacenters.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.client.ClcClient;
+import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.GetDeploymentCapabilitiesResponse;
@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 /**
  * @author ilya.drabenia
  */
-public class DataCentersClient extends ClcClient {
+public class DataCentersClient extends BaseSdkClient {
 
     @Inject
     public DataCentersClient(BearerAuthentication authFilter) {
@@ -31,7 +31,6 @@ public class DataCentersClient extends ClcClient {
                 .resolveTemplate("dataCenterId", dataCenterId)
                 .request().get(DataCenterMetadata.class);
     }
-
 
     public GetDataCenterListResponse findAllDataCenters() {
         return

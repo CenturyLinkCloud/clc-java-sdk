@@ -12,10 +12,10 @@ import static com.centurylink.cloud.sdk.core.client.ClcApiConstants.CLC_API_URL;
 /**
  * @author ilya.drabenia
  */
-public class ClcClient {
+public class BaseSdkClient {
     protected final BearerAuthentication authentication;
 
-    public ClcClient(BearerAuthentication authFilter) {
+    public BaseSdkClient(BearerAuthentication authFilter) {
         this.authentication = authFilter;
     }
 
