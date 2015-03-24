@@ -13,11 +13,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
+import org.mockito.stubbing.OngoingStubbing;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -44,28 +42,35 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
 
     @Test
     public void testFindNetworksByDataCenter() {
-        when(dataCentersClient.getDataCenterDeploymentCapabilities(anyString()))
-            .thenReturn(new GetDeploymentCapabilitiesResponse()
-                .deployableNetworks(asList((NetworkMetadata)
-                    new NetworkMetadata()
-                            .name("first_network")
-                            .networkId("1"),
-                    new NetworkMetadata()
-                            .name("second_network")
-                            .networkId("2")
-                ))
-            );
-
-        when(dataCentersClient.findAllDataCenters())
-            .thenReturn(new GetDataCenterListResponse(
-                asList(new DataCenterMetadata("CA3", "Toronto_2")))
-            );
+        mockDataCenters();
+        mockNetworks(asList(
+            new NetworkMetadata()
+                    .name("first_network")
+                    .networkId("1"),
+            new NetworkMetadata()
+                    .name("second_network")
+                    .networkId("2")
+        ));
 
         List<NetworkMetadata> networks = networkService.findByDataCenter(DataCenters.CA_TORONTO_2);
 
         assert networks.size() == 2;
         assert networks.get(0).getName().equals("first_network");
         assert networks.get(1).getNetworkId().equals("2");
+    }
+
+    private OngoingStubbing<GetDeploymentCapabilitiesResponse> mockNetworks(List<NetworkMetadata> networks) {
+        return when(dataCentersClient.getDataCenterDeploymentCapabilities(anyString()))
+            .thenReturn(new GetDeploymentCapabilitiesResponse()
+                .deployableNetworks(networks)
+            );
+    }
+
+    private void mockDataCenters() {
+        when(dataCentersClient.findAllDataCenters())
+            .thenReturn(new GetDataCenterListResponse(
+                asList(new DataCenterMetadata("CA3", "Toronto_2")))
+            );
     }
 
 }
