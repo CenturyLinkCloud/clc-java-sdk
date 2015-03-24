@@ -10,7 +10,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
 import java.util.List;
