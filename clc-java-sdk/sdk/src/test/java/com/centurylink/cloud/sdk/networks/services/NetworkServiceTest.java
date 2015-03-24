@@ -45,11 +45,11 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
         mockDataCenters();
         mockNetworks(asList(
             new NetworkMetadata()
-                    .name("first_network")
-                    .networkId("1"),
+                .name("first_network")
+                .networkId("1"),
             new NetworkMetadata()
-                    .name("second_network")
-                    .networkId("2")
+                .name("second_network")
+                .networkId("2")
         ));
 
         List<NetworkMetadata> networks = networkService.findByDataCenter(DataCenters.CA_TORONTO_2);
