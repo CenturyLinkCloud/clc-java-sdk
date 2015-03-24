@@ -32,6 +32,15 @@ public class DataCenterMetadata {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    public DataCenterMetadata() {
+
+    }
+
+    public DataCenterMetadata(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     /**
      *
      * @return

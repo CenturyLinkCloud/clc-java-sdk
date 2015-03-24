@@ -144,6 +144,11 @@ public class GetDeploymentCapabilitiesResponse {
         this.deployableNetworks = deployableNetworks;
     }
 
+    public GetDeploymentCapabilitiesResponse deployableNetworks(List<NetworkMetadata> networks) {
+        setDeployableNetworks(networks);
+        return this;
+    }
+
     /**
      *
      * @return

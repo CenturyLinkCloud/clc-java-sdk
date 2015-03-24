@@ -51,6 +51,11 @@ public class NetworkMetadata {
         this.name = name;
     }
 
+    public NetworkMetadata name(String name) {
+        setName(name);
+        return this;
+    }
+
     /**
      *
      * @return
@@ -69,6 +74,11 @@ public class NetworkMetadata {
     @JsonProperty("networkId")
     public void setNetworkId(String networkId) {
         this.networkId = networkId;
+    }
+
+    public NetworkMetadata networkId(String networkId) {
+        setNetworkId(networkId);
+        return this;
     }
 
     /**
