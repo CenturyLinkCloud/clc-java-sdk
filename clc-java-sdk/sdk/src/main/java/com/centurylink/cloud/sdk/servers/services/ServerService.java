@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.client.errors.ClcServiceException;
+import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
@@ -18,6 +19,7 @@ import com.google.common.base.Function;
 import com.google.common.util.concurrent.*;
 import com.google.inject.Inject;
 
+import java.lang.ref.Reference;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 
@@ -93,7 +95,11 @@ public class ServerService {
     }
 
     public ServerMetadata findByRef(ServerRef serverRef) {
-        return client.findServerById(serverRef.as(IdServerRef.class).getId());
+        if (serverRef.is(IdServerRef.class)) {
+            return client.findServerById(serverRef.as(IdServerRef.class).getId());
+        } else {
+            throw new ReferenceNotSupportedException(serverRef.getClass());
+        }
     }
 
     public Response<Template> convertToTemplate(CreateTemplateCommand command) {

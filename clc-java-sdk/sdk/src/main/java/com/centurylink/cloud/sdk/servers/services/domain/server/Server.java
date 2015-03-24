@@ -1,5 +1,8 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+
 /**
  * @author ilya.drabenia
  */
@@ -46,5 +49,9 @@ public class Server {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public static ServerRef refById(String id) {
+        return new IdServerRef(id);
     }
 }

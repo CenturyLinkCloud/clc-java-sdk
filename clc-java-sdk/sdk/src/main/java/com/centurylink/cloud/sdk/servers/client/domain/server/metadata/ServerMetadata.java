@@ -88,6 +88,11 @@ public class ServerMetadata {
         this.id = id;
     }
 
+    public ServerMetadata id(String id) {
+        setId(id);
+        return this;
+    }
+
     /**
      *
      * @return
@@ -106,6 +111,11 @@ public class ServerMetadata {
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ServerMetadata name(String name) {
+        setName(name);
+        return this;
     }
 
     /**
