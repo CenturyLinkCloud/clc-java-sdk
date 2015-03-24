@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capac
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.NetworkMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters;
 import com.centurylink.cloud.sdk.networks.AbstractNetworksSdkTest;
+import com.centurylink.cloud.sdk.networks.NetworksModule;
 import com.centurylink.cloud.sdk.servers.ServersModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -32,7 +33,7 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
 
     @Override
     protected List<Module> modules() {
-        return list(new AuthModule(), Modules.override(new ServersModule()).with(new AbstractModule() {
+        return list(new AuthModule(), Modules.override(new NetworksModule()).with(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(DataCentersClient.class).toInstance(mock(DataCentersClient.class));
