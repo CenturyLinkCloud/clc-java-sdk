@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.server;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
 
+
 /**
  * @author ilya.drabenia
  */
