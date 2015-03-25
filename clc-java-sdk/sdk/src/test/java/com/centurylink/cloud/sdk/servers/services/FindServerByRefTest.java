@@ -9,11 +9,11 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Module;
-import com.google.inject.util.Modules;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.google.inject.util.Modules.override;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,10 +30,11 @@ public class FindServerByRefTest extends AbstractServersSdkTest {
 
     @Override
     protected List<Module> modules() {
-        return list(new AuthModule(), Modules.override(new ServersModule()).with(new AbstractModule() {
+        return list(new AuthModule(), override(new ServersModule()).with(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(ServerClient.class).toInstance(mock(ServerClient.class));
+                bind(ServerClient.class)
+                    .toInstance(mock(ServerClient.class));
             }
         }));
     }
