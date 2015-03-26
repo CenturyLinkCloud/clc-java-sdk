@@ -1,5 +1,8 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CreateServerRequest {
     private String name;
 
@@ -20,6 +23,8 @@ public class CreateServerRequest {
     private String secondaryDns;
 
     private String networkId;
+
+    private List<DiskRequest> additionalDisks = new ArrayList<>();
 
 
 
@@ -160,6 +165,19 @@ public class CreateServerRequest {
 
     public CreateServerRequest networkId(String networkId) {
         setNetworkId(networkId);
+        return this;
+    }
+
+    public List<DiskRequest> getAdditionalDisks() {
+        return additionalDisks;
+    }
+
+    public void setAdditionalDisks(List<DiskRequest> additionalDisks) {
+        this.additionalDisks = additionalDisks;
+    }
+
+    public CreateServerRequest additionalDisks(List<DiskRequest> disks) {
+        setAdditionalDisks(disks);
         return this;
     }
 

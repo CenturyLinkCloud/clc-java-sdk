@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 

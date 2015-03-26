@@ -1,11 +1,15 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author ilya.drabenia
  */
 public class Machine {
     private Integer cpuCount;
     private Integer ram;
+    private List<DiskConfig> disks = new ArrayList<>();
 
     public Integer getCpuCount() {
         return cpuCount;
@@ -30,6 +34,19 @@ public class Machine {
 
     public Machine ram(Integer ram) {
         setRam(ram);
+        return this;
+    }
+
+    public List<DiskConfig> getDisks() {
+        return disks;
+    }
+
+    public void setDisks(List<DiskConfig> disks) {
+        this.disks = disks;
+    }
+
+    public Machine disk(DiskConfig diskConfig) {
+        disks.add(diskConfig);
         return this;
     }
 }

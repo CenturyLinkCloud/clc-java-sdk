@@ -13,9 +13,9 @@ public class CreateServerCommand {
     private ServerType type;
     private GroupRef group;
     private TemplateRef template;
-    private Machine machine;
+    private Machine machine = new Machine();
     private String password;
-    private NetworkConfig network;
+    private NetworkConfig network = new NetworkConfig();
 
     public String getId() {
         return id;
