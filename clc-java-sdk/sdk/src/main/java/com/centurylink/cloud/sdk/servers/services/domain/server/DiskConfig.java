@@ -22,4 +22,28 @@ public class DiskConfig {
         this.path = path;
         return this;
     }
+
+    public DiskType getDiskType() {
+        return diskType;
+    }
+
+    public void setDiskType(DiskType diskType) {
+        this.diskType = diskType;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }

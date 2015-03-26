@@ -16,6 +16,11 @@ public class DiskRequest {
         this.path = path;
     }
 
+    public DiskRequest path(String path) {
+        setPath(path);
+        return this;
+    }
+
     public String getType() {
         return type;
     }
@@ -24,11 +29,21 @@ public class DiskRequest {
         this.type = type;
     }
 
+    public DiskRequest type(String type) {
+        setType(type);
+        return this;
+    }
+
     public Integer getSizeGB() {
         return sizeGB;
     }
 
     public void setSizeGB(Integer sizeGB) {
         this.sizeGB = sizeGB;
+    }
+
+    public DiskRequest sizeGB(Integer sizeGB) {
+        setSizeGB(sizeGB);
+        return this;
     }
 }

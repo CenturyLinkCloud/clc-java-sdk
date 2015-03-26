@@ -2,9 +2,13 @@ package com.centurylink.cloud.sdk.servers.services.domain.server;
 
 import com.centurylink.cloud.sdk.networks.services.NetworkService;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.google.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ilya.drabenia
@@ -27,6 +31,7 @@ public class ServerConverter {
                 .name(newServer.getName())
                 .cpu(newServer.getMachine().getCpuCount())
                 .memoryGB(newServer.getMachine().getRam())
+                .additionalDisks(buildDiskRequestList(newServer.getMachine().getDisks()))
                 .password(newServer.getPassword())
                 .groupId(
                     groupService
@@ -47,6 +52,24 @@ public class ServerConverter {
                             .findByRef(newServer.getNetwork().getNetwork())
                             .getNetworkId()
                 );
+    }
+
+    public DiskRequest buildDisk(DiskConfig diskConfig) {
+        return
+            new DiskRequest()
+                .type(diskConfig.getDiskType() == DiskType.RAW ? "raw" : "partitioned")
+                .path(diskConfig.getPath())
+                .sizeGB(diskConfig.getSize());
+    }
+
+    public List<DiskRequest> buildDiskRequestList(List<DiskConfig> disks) {
+        List<DiskRequest> requests = new ArrayList<>();
+
+        for (DiskConfig curDiskConfig : disks) {
+            requests.add(buildDisk(curDiskConfig));
+        }
+
+        return requests;
     }
 
 }
