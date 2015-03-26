@@ -19,7 +19,8 @@ public class ServerConverter {
     private final NetworkService networkService;
 
     @Inject
-    public ServerConverter(GroupService groupService, TemplateService templateService, NetworkService networkService) {
+    public ServerConverter(GroupService groupService, TemplateService templateService,
+                           NetworkService networkService) {
         this.groupService = groupService;
         this.templateService = templateService;
         this.networkService = networkService;

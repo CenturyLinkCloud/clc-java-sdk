@@ -4,6 +4,9 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
@@ -32,10 +35,20 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     public void testCreate() throws Exception {
         ServerMetadata newServer =
             serverService
-                .create(anyServerConfig().network(new NetworkConfig()
-                    .primaryDns("172.17.1.26")
-                    .secondaryDns("172.17.1.27")
-                ))
+                .create(anyServerConfig()
+                    .network(new NetworkConfig()
+                        .primaryDns("172.17.1.26")
+                        .secondaryDns("172.17.1.27")
+                    )
+                    .machine(new Machine()
+                        .cpuCount(1)
+                        .ram(3)
+                        .disk(new DiskConfig()
+                            .type(DiskType.RAW)
+                            .size(14)
+                        )
+                    )
+                )
                 .waitUntilComplete()
                 .getResult();
 
