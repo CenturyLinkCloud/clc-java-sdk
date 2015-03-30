@@ -9,18 +9,13 @@ import com.centurylink.cloud.sdk.servers.TestModule;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.Disk;
 import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.Response;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Module;
-import com.google.inject.matcher.Matchers;
 import com.google.inject.util.Modules;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -33,8 +28,6 @@ import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anySe
 import static com.centurylink.cloud.sdk.servers.services.domain.server.DiskType.PARTITIONED;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.DiskType.RAW;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**

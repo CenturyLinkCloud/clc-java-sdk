@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.core.auth.services;
 
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
+import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
 import org.testng.annotations.Test;
@@ -8,6 +9,7 @@ import org.testng.annotations.Test;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.core.MultivaluedHashMap;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -15,7 +17,7 @@ public class BearerAuthenticationTest {
 
     BearerAuthentication auth = new BearerAuthentication(
         new PropertiesFileCredentialsProvider(),
-        new LoginClient()
+        mock(LoginClient.class)
     );
 
     private ClientRequestContext stubRequestContext() {
@@ -28,11 +30,18 @@ public class BearerAuthenticationTest {
 
     @Test
     public void testBearerTokenFilter() throws Exception {
+        mockLogin();
         ClientRequestContext context = stubRequestContext();
 
         auth.filter(context);
 
         assert context.getHeaders().get("Authorization") != null;
+    }
+
+    private void mockLogin() {
+        when(auth.getLoginClient().login(any())).thenReturn(
+            new LoginResponse("idrabenia", "ALTR", "VA1", null, "BeArERtOkeN")
+        );
     }
 
 }

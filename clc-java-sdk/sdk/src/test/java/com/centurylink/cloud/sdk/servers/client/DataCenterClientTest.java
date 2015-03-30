@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client;
 
+import com.centurylink.cloud.sdk.core.TestGroups;
 import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
@@ -7,12 +8,14 @@ import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capac
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
+import static com.centurylink.cloud.sdk.core.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters.CA_VANCOUVER;
 import static com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters.DE_FRANKFURT;
 
 /**
  * @author ilya.drabenia
  */
+@Test(groups = INTEGRATION)
 public class DataCenterClientTest extends AbstractServersSdkTest {
 
     @Inject

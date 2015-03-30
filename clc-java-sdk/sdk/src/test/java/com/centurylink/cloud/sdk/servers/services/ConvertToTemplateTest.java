@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.TestGroups;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
@@ -8,12 +9,14 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
+import static com.centurylink.cloud.sdk.core.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.core.TestGroups.LONG_RUNNING;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 
 /**
  * @author ilya.drabenia
  */
-@Test(groups = {"LongRunning", "Integration"})
+@Test(groups = {LONG_RUNNING, INTEGRATION})
 public class ConvertToTemplateTest extends AbstractServersSdkTest {
 
     @Inject

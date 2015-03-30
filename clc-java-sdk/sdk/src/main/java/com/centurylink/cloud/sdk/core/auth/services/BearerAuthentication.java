@@ -28,8 +28,10 @@ public class BearerAuthentication implements ClientRequestFilter {
     public BearerAuthentication(CredentialsProvider credentialsProvider, LoginClient client) {
         this.credentialsProvider = credentialsProvider;
         this.client = client;
+    }
 
-        requestSessionCredentialsIfNeeded();
+    public LoginClient getLoginClient() {
+        return client;
     }
 
     private void requestSessionCredentialsIfNeeded() {

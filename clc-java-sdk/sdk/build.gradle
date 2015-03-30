@@ -19,7 +19,7 @@ repositories {
 
 test {
     useTestNG() {
-        excludeGroups 'LongRunning'
+        excludeGroups 'LongRunning'//, 'Integration'
     }
 
     maxParallelForks = 8

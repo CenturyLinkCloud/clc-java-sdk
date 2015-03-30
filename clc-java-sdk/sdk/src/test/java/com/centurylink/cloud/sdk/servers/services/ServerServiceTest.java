@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.TestGroups;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
@@ -14,6 +15,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
+import static com.centurylink.cloud.sdk.core.TestGroups.LONG_RUNNING;
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
@@ -22,7 +24,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author ilya.drabenia
  */
-@Test(groups = "LongRunning")
+@Test(groups = LONG_RUNNING)
 public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Inject

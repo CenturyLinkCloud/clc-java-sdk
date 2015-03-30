@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.core.auth.client;
 
+import com.centurylink.cloud.sdk.core.TestGroups;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginRequest;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.Credentials;
@@ -8,6 +9,9 @@ import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ResponseProcessingException;
 
+import static com.centurylink.cloud.sdk.core.TestGroups.INTEGRATION;
+
+@Test(groups = INTEGRATION)
 public class LoginClientTest {
 
     LoginClient client = new LoginClient();
