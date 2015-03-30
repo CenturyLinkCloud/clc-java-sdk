@@ -13,7 +13,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
     @Inject
     private GroupService groupService;
 
-    @Test
+    @Test(groups = "Integration")
     public void testFindGroupsByDataCenter() {
         List<Group> groups = groupService.findByDataCenter(DataCenters.DE_FRANKFURT);
 

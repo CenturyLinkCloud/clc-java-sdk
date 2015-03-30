@@ -13,7 +13,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateT
 /**
  * @author ilya.drabenia
  */
-@Test(groups = "LongRunning")
+@Test(groups = {"LongRunning", "Integration"})
 public class ConvertToTemplateTest extends AbstractServersSdkTest {
 
     @Inject
