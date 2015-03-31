@@ -1,9 +1,7 @@
 package com.centurylink.cloud.sdk.core.client;
 
-import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.errors.ErrorProcessingFilter;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
 /**

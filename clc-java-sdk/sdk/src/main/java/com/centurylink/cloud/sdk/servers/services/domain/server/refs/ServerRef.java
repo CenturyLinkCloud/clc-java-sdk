@@ -5,5 +5,5 @@ import com.centurylink.cloud.sdk.core.domain.BaseRef;
 /**
  * @author ilya.drabenia
  */
-public class ServerRef extends BaseRef {
+public class ServerRef implements BaseRef {
 }

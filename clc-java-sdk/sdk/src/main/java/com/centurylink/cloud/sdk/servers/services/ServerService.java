@@ -1,32 +1,26 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.client.errors.ClcServiceException;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
-import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
-import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.common.base.Function;
-import com.google.common.util.concurrent.*;
+import com.google.common.util.concurrent.AsyncFunction;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
-import java.lang.ref.Reference;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.RunnableFuture;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 
@@ -34,13 +28,11 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateT
  * @author ilya.drabenia
  */
 public class ServerService {
-    private final DataCenterService dataCenterService;
     private final ServerConverter serverConverter;
     private final ServerClient client;
 
     @Inject
-    public ServerService(DataCenterService dataCenterService, ServerConverter serverConverter, ServerClient client) {
-        this.dataCenterService = dataCenterService;
+    public ServerService(ServerConverter serverConverter, ServerClient client) {
         this.serverConverter = serverConverter;
         this.client = client;
     }

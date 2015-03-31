@@ -1,22 +1,20 @@
 package com.centurylink.cloud.sdk.core.datacenters.services;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.exceptions.ClcException;
-import com.centurylink.cloud.sdk.core.exceptions.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.IdDataCenterRef;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.NameDataCenterRef;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
+import com.centurylink.cloud.sdk.core.exceptions.ResourceNotFoundException;
 import com.google.inject.Inject;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter.whereIdIs;
 import static com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter.whereNameContains;
@@ -73,6 +71,13 @@ public class DataCenterService {
         } else {
             throw new ResourceNotFoundException("Data center not resolved");
         }
+    }
+
+    public List<DataCenterMetadata> findByRef(DataCenterRef... dataCenterRefs) {
+        return
+            Stream.of(dataCenterRefs)
+                .map(this::findByRef)
+                .collect(Collectors.toList());
     }
 
     public DataCenterMetadata findFirst(DataCenterFilter criteria) {

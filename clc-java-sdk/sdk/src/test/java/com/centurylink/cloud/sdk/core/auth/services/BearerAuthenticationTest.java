@@ -3,7 +3,6 @@ package com.centurylink.cloud.sdk.core.auth.services;
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ClientRequestContext;
@@ -23,7 +22,7 @@ public class BearerAuthenticationTest {
     private ClientRequestContext stubRequestContext() {
         ClientRequestContext context = mock(ClientRequestContext.class);
 
-        when(context.getHeaders()).thenReturn(new MultivaluedHashMap<String, Object>());
+        when(context.getHeaders()).thenReturn(new MultivaluedHashMap<>());
 
         return context;
     }

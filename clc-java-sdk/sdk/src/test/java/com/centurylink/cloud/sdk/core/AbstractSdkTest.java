@@ -3,7 +3,6 @@ package com.centurylink.cloud.sdk.core;
 import com.google.inject.Guice;
 import com.google.inject.Module;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 
 import java.util.List;
 

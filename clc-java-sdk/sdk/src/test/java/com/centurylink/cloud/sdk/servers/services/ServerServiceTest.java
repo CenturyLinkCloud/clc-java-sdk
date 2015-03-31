@@ -1,9 +1,8 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.TestGroups;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;

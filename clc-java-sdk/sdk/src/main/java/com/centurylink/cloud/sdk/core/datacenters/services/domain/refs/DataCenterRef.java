@@ -5,6 +5,6 @@ import com.centurylink.cloud.sdk.core.domain.BaseRef;
 /**
  * @author ilya.drabenia
  */
-public class DataCenterRef extends BaseRef {
+public class DataCenterRef implements BaseRef {
 
 }

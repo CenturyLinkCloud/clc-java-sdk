@@ -9,7 +9,6 @@ import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capac
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters;
 import com.centurylink.cloud.sdk.networks.AbstractNetworksSdkTest;
 import com.centurylink.cloud.sdk.networks.NetworksModule;
-import com.centurylink.cloud.sdk.servers.ServersModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Module;
@@ -21,7 +20,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class NetworkServiceTest extends AbstractNetworksSdkTest {
 

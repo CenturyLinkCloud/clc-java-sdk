@@ -1,21 +1,16 @@
 package com.centurylink.cloud.sdk.servers.client.domain.group;
 
+import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.fasterxml.jackson.annotation.*;
+
+import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.annotation.Generated;
-
-import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
-import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
@@ -306,8 +301,8 @@ public class GroupResponse {
         return
             Stream
                 .concat(
-                    getServers().stream(),
-                    getGroups().stream().flatMap(group -> group.getAllServers().stream())
+                        getServers().stream(),
+                        getGroups().stream().flatMap(group -> group.getAllServers().stream())
                 )
                 .collect(Collectors.toList());
     }

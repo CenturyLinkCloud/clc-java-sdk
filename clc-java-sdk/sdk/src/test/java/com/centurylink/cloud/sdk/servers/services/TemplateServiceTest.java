@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.TestGroups;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;

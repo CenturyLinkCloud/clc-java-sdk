@@ -5,13 +5,11 @@ import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
 import com.google.inject.Guice;
-import com.google.inject.ProvisionException;
-import org.mockito.Matchers;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ResponseProcessingException;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.any;
 
 /**
  * @author ilya.drabenia

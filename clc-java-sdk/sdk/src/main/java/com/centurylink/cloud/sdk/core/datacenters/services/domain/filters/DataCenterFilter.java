@@ -1,14 +1,8 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.filters;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 
-import java.util.Objects;
 import java.util.function.Predicate;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Ilya Drabenia
