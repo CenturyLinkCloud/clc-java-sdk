@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Generated;
 
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "groups",
         "links",
         "changeInfo",
-        "customFields"
+        "customFields",
+        "servers"
 })
 public class GroupResponse {
 
@@ -45,16 +49,18 @@ public class GroupResponse {
     private String status;
     @JsonProperty("serversCount")
     private Integer serversCount;
+    @JsonProperty
+    private List<ServerMetadata> servers = new ArrayList<>();
     @JsonProperty("groups")
-    private List<GroupResponse> groups = new ArrayList<GroupResponse>();
+    private List<GroupResponse> groups = new ArrayList<>();
     @JsonProperty("links")
-    private List<Link> links = new ArrayList<Link>();
+    private List<Link> links = new ArrayList<>();
     @JsonProperty("changeInfo")
     private ChangeInfo changeInfo;
     @JsonProperty("customFields")
-    private List<Object> customFields = new ArrayList<Object>();
+    private List<Object> customFields = new ArrayList<>();
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      *
@@ -286,4 +292,23 @@ public class GroupResponse {
         this.additionalProperties.put(name, value);
     }
 
+    @JsonProperty("servers")
+    public List<ServerMetadata> getServers() {
+        return servers;
+    }
+
+    @JsonProperty("servers")
+    public void setServers(List<ServerMetadata> servers) {
+        this.servers = servers;
+    }
+
+    public List<ServerMetadata> getAllServers() {
+        return
+            Stream
+                .concat(
+                    getServers().stream(),
+                    getGroups().stream().flatMap(group -> group.getAllServers().stream())
+                )
+                .collect(Collectors.toList());
+    }
 }

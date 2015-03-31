@@ -1,6 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.client.errors.ClcServiceException;
+import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
@@ -20,6 +23,8 @@ import com.google.common.util.concurrent.*;
 import com.google.inject.Inject;
 
 import java.lang.ref.Reference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
 
@@ -29,11 +34,13 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateT
  * @author ilya.drabenia
  */
 public class ServerService {
+    private final DataCenterService dataCenterService;
     private final ServerConverter serverConverter;
     private final ServerClient client;
 
     @Inject
-    public ServerService(ServerConverter serverConverter, ServerClient client) {
+    public ServerService(DataCenterService dataCenterService, ServerConverter serverConverter, ServerClient client) {
+        this.dataCenterService = dataCenterService;
         this.serverConverter = serverConverter;
         this.client = client;
     }
