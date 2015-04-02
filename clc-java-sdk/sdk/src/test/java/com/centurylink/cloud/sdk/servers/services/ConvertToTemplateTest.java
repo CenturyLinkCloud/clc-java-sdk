@@ -14,13 +14,13 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateT
 /**
  * @author ilya.drabenia
  */
-@Test(groups = {LONG_RUNNING, INTEGRATION}, enabled = false)
+@Test(groups = {LONG_RUNNING, INTEGRATION})
 public class ConvertToTemplateTest extends AbstractServersSdkTest {
 
     @Inject
     private ServerService serverService;
 
-    @Test
+    @Test(enabled = false)
     public void testConvertToTemplate() {
         ServerMetadata server = new TestServerSupport(serverService).createAnyServer();
 
