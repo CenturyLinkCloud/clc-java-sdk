@@ -75,7 +75,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         cleanUpCreatedResources(newServer.asRefById());
     }
 
-    @Test
+    @Test(enabled = false)
     public void testCreateWithCustomTemplate() throws Exception {
         Template customTemplate = createTemplateWithDescription("template1");
 

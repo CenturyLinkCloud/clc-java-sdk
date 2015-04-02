@@ -14,7 +14,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateT
 /**
  * @author ilya.drabenia
  */
-@Test(groups = {LONG_RUNNING, INTEGRATION})
+@Test(groups = {LONG_RUNNING, INTEGRATION}, enabled = false)
 public class ConvertToTemplateTest extends AbstractServersSdkTest {
 
     @Inject
