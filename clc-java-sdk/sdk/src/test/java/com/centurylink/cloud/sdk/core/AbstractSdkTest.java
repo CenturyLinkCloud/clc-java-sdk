@@ -13,7 +13,7 @@ import static java.util.Arrays.asList;
  */
 public abstract class AbstractSdkTest {
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void injectDependencies() {
         Guice
             .createInjector(modules())

@@ -20,9 +20,15 @@ repositories {
 test {
     useTestNG() {
         excludeGroups 'LongRunning'//, 'Integration'
+        parallel 'methods'
+        threadCount 25
     }
+}
 
-    maxParallelForks = 8
+task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
+    useTestNG() {
+        includeGroups 'LongRunning'
+    }
 }
 
 // In this section you declare the dependencies for your production and test code
