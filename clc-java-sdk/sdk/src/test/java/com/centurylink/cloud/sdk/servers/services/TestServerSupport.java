@@ -67,6 +67,7 @@ public class TestServerSupport {
                 )
 
                 .template(Template.refByOs()
+                    .dataCenter(DE_FRANKFURT)
                     .type(CENTOS)
                     .version("6")
                     .architecture(x86_64)
