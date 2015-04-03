@@ -1,10 +1,14 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.refs;
 
-import com.centurylink.cloud.sdk.core.domain.BaseRef;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCentersFilter;
+import com.centurylink.cloud.sdk.core.domain.Reference;
 
 /**
  * @author ilya.drabenia
  */
-public class DataCenterRef implements BaseRef {
+public abstract class DataCenterRef implements Reference {
+
+    @Override
+    public abstract DataCentersFilter asFilter();
 
 }

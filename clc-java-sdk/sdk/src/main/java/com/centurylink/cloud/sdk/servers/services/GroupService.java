@@ -5,7 +5,7 @@ import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
@@ -36,7 +36,7 @@ public class GroupService {
 
     public Group findByRef(GroupRef groupRef) {
         if (groupRef.is(IdGroupRef.class)) {
-            GetGroupResponse response = client
+            GroupMetadata response = client
                 .getGroup(groupRef.as(IdGroupRef.class).getId());
 
             return new Group()
@@ -72,7 +72,7 @@ public class GroupService {
             .getGroup()
             .getId();
 
-        GetGroupResponse result = client.getGroup(rootGroupId);
+        GroupMetadata result = client.getGroup(rootGroupId);
 
         return converter.newGroupList(
             dataCenterService.findByRef(dataCenter).getId(),
@@ -80,7 +80,7 @@ public class GroupService {
         );
     }
 
-    private GroupResponse getMatchedGroup(GetGroupResponse groups, Group group) {
+    private GroupResponse getMatchedGroup(GroupMetadata groups, Group group) {
         return groups
             .findGroupByName(group.getName());
     }

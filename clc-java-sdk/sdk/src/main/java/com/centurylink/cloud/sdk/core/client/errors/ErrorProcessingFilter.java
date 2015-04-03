@@ -23,7 +23,7 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
             Response response = objectMapper().readValue(entityStream, Response.class);
 
             if (response.getMessage() != null) {
-                throw new ClcServiceException(response.getMessage());
+                throw new ClcClientException(response.getMessage());
             }
         }
     }

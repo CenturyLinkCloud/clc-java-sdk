@@ -1,17 +1,22 @@
 package com.centurylink.cloud.sdk.core.datacenters.services;
 
 import com.centurylink.cloud.sdk.core.AbstractSdkTest;
+import com.centurylink.cloud.sdk.core.TestGroups;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.datacenters.DataCentersModule;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.IdDataCenterRef;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.core.TestGroups.INTEGRATION;
+
+@Test(groups = INTEGRATION)
 public class DataCenterServiceTest extends AbstractSdkTest {
 
     @Inject
@@ -43,8 +48,13 @@ public class DataCenterServiceTest extends AbstractSdkTest {
             DataCenters.CA_TORONTO_1
         );
 
-        assert dataCenters.get(0).getId().equalsIgnoreCase(DataCenters.DE_FRANKFURT.getId());
-        assert dataCenters.get(1).getId().equalsIgnoreCase(DataCenters.CA_TORONTO_1.getId());
+        assert verifyDataCenterById(dataCenters, 0, DataCenters.DE_FRANKFURT);
+        assert verifyDataCenterById(dataCenters, 1, DataCenters.CA_TORONTO_1);
+    }
+
+    public boolean verifyDataCenterById(List<DataCenterMetadata> dataCenters, int index,
+                                        IdDataCenterRef expectedDataCenter) {
+        return dataCenters.get(index).getId().equalsIgnoreCase(expectedDataCenter.getId());
     }
 
 }

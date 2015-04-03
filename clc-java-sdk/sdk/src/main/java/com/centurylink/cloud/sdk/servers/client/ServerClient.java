@@ -4,7 +4,7 @@ import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
@@ -109,11 +109,11 @@ public class ServerClient extends BaseSdkClient {
                 .get(ServerMetadata.class);
     }
 
-    public GetGroupResponse getGroup(String rootGroupId) {
+    public GroupMetadata getGroup(String rootGroupId) {
         return
             client("/groups/{accountAlias}/{rootGroupId}")
                 .resolveTemplate("rootGroupId", rootGroupId)
-                .request().get(GetGroupResponse.class);
+                .request().get(GroupMetadata.class);
     }
 
     public GetStatusResponse getJobStatus(String jobId) {

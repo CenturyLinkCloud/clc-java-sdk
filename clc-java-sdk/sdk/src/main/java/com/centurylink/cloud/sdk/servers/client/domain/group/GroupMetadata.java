@@ -24,7 +24,7 @@ import java.util.Map;
         "changeInfo",
         "customFields"
 })
-public class GetGroupResponse extends GroupResponse {
+public class GroupMetadata extends GroupResponse {
 
     @JsonProperty("id")
     private String id;

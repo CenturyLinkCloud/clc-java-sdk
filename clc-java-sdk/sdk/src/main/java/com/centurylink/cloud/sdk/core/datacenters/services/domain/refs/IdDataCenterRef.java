@@ -1,5 +1,7 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.refs;
 
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCentersFilter;
+
 /**
  * @author ilya.drabenia
  */
@@ -12,5 +14,10 @@ public class IdDataCenterRef extends DataCenterRef {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public DataCentersFilter asFilter() {
+        return DataCentersFilter.whereIdIs(id);
     }
 }

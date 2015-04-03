@@ -32,6 +32,7 @@ public class DataCentersClient extends BaseSdkClient {
                 .request().get(DataCenterMetadata.class);
     }
 
+    // TODO: need to implement memoization of this method with acceptable expiration time
     public GetDataCenterListResponse findAllDataCenters() {
         return
             client("/datacenters/{accountAlias}?groupLinks=true")

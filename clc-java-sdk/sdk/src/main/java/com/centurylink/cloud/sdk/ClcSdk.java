@@ -13,6 +13,8 @@ import com.google.inject.Inject;
 /**
  * @author ilya.drabenia
  */
+// TODO: 1. need to implement support of integration with Spring
+// TODO: 2. need to add network service to this root object
 public class ClcSdk {
     @Inject
     ServerService serverService;

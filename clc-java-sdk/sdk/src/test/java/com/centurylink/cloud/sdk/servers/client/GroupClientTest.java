@@ -2,7 +2,7 @@ package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GetGroupResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
@@ -28,7 +28,7 @@ public class GroupClientTest extends AbstractServersSdkTest {
                 .getGroup()
                 .getId();
 
-        GetGroupResponse groupResult = client.getGroup(rootGroupId);
+        GroupMetadata groupResult = client.getGroup(rootGroupId);
 
         assert groupResult.getId() != null;
         assert groupResult.findGroupByName("Archive") != null;

@@ -5,13 +5,13 @@ import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 /**
  * @author ilya.drabenia
  */
-public class ClcServiceException extends ClcException {
+public class ClcClientException extends ClcException {
 
-    public ClcServiceException(String message) {
+    public ClcClientException(String message) {
         super(message);
     }
 
-    public ClcServiceException(Throwable cause) {
+    public ClcClientException(Throwable cause) {
         super(cause);
     }
 }
