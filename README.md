@@ -14,5 +14,5 @@ CI Specification:
  Gradle Home  | /usr/local/gradle-2.1.1
  
 TODO items:
-    * configure continuous installation of web client
-    * move from pulling checking to GitHub repo webhooks
+* configure continuous installation of web client
+* move from pulling checking to GitHub repo webhooks
