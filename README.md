@@ -13,6 +13,6 @@ CI Specification:
  Jdk Home     | /usr/local/jdk1.8.0_40
  Gradle Home  | /usr/local/gradle-2.1.1
  
-***TODO items***
+***TODO items:***
 * configure continuous installation of web client
 * move from pulling checking to GitHub repo webhooks
