@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.client.errors;
+package com.centurylink.cloud.sdk.core.client;
 
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 

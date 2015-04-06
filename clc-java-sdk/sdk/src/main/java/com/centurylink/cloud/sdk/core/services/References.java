@@ -1,6 +1,4 @@
-package com.centurylink.cloud.sdk.core.domain;
-
-import com.centurylink.cloud.sdk.core.exceptions.ResourceNotFoundException;
+package com.centurylink.cloud.sdk.core.services;
 
 /**
  * @author Ilya Drabenia

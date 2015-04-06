@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.core.client.errors;
 
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.ws.rs.client.ClientRequestContext;

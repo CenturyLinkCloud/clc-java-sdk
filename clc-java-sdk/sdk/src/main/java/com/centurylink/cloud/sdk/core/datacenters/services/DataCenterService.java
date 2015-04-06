@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.domain.References.exceptionIfNotFound;
+import static com.centurylink.cloud.sdk.core.services.References.exceptionIfNotFound;
 import static com.google.common.collect.Iterables.getFirst;
 
 /**

@@ -1,18 +1,16 @@
 package com.centurylink.cloud.sdk.core.exceptions;
 
-import java.util.List;
-
-import static com.google.common.collect.Iterables.getLast;
-import static com.google.common.collect.Iterables.toArray;
 import static java.lang.String.format;
-import static java.util.Arrays.asList;
 
 /**
+ * Base CenturyLink Cloud SDK Exception
+ *
  * @author ilya.drabenia
  */
 public class ClcException extends RuntimeException {
 
     public ClcException() {
+
     }
 
     public ClcException(String format, Object... arguments) {

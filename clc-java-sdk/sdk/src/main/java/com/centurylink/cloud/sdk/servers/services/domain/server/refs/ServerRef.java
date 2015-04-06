@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server.refs;
 
-import com.centurylink.cloud.sdk.core.domain.Reference;
+import com.centurylink.cloud.sdk.core.services.Reference;
 
 /**
  * @author ilya.drabenia

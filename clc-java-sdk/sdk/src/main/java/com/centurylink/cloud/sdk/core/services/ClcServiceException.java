@@ -1,4 +1,6 @@
-package com.centurylink.cloud.sdk.core.exceptions;
+package com.centurylink.cloud.sdk.core.services;
+
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 
 /**
  * Base class for all service layer exceptions

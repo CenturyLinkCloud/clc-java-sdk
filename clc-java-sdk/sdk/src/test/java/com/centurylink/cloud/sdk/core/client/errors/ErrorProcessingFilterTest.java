@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.core.TestGroups;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.google.inject.Guice;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
