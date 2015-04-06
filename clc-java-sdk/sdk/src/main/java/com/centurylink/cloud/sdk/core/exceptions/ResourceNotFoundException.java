@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.core.exceptions;
 /**
  * @author ilya.drabenia
  */
-public class ResourceNotFoundException extends ClcException {
+public class ResourceNotFoundException extends ClcServiceException {
 
     public ResourceNotFoundException() {
     }

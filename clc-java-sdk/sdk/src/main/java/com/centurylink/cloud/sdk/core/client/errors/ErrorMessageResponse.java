@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author ilya.drabenia
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Response {
+public class ErrorMessageResponse {
     private String message;
 
-    public Response(@JsonProperty("message") String message) {
+    public ErrorMessageResponse(@JsonProperty("message") String message) {
         this.message = message;
     }
 

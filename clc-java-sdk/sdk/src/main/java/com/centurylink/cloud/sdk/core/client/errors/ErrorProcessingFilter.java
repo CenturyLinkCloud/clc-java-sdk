@@ -20,7 +20,7 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
         if (!isResponseSuccess(responseContext)) {
             InputStream entityStream = responseContext.getEntityStream();
-            Response response = objectMapper().readValue(entityStream, Response.class);
+            ErrorMessageResponse response = objectMapper().readValue(entityStream, ErrorMessageResponse.class);
 
             if (response.getMessage() != null) {
                 throw new ClcClientException(response.getMessage());
