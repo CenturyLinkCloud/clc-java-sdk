@@ -4,6 +4,7 @@ import java.util.List;
 
 import static com.google.common.collect.Iterables.getLast;
 import static com.google.common.collect.Iterables.toArray;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 /**
@@ -15,29 +16,15 @@ public class ClcException extends RuntimeException {
     }
 
     public ClcException(String format, Object... arguments) {
-        this(String.format(format, rejectLastThrowable(arguments)));
+        this(format(format, arguments));
 
         if (lastItem(arguments) instanceof Throwable) {
-            this.addSuppressed((Throwable) lastItem(arguments));
+            this.initCause((Throwable) lastItem(arguments));
         }
     }
 
     private Object lastItem(Object[] arguments) {
         return arguments[arguments.length - 1];
-    }
-
-    private static Object[] rejectLastThrowable(Object[] args) {
-        return toArray(
-            rejectLastThrowable(asList(args)), Object.class
-        );
-    }
-
-    private static List<?> rejectLastThrowable(List<?> args) {
-        if (getLast(args) instanceof Throwable) {
-            return args.subList(0, args.size() - 1);
-        } else {
-            return args;
-        }
     }
 
     public ClcException(String message) {
