@@ -37,6 +37,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         ServerMetadata newServer =
             serverService
                 .create(anyServerConfig()
+                    .name("TCRT")
                     .network(new NetworkConfig()
                         .primaryDns("172.17.1.26")
                         .secondaryDns("172.17.1.27")
@@ -62,6 +63,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     public void testCreateWithDataCenterLookup() throws Exception {
         ServerMetadata newServer =
             serverService.create(anyServerConfig()
+                .name("CDCL")
                 .group(Group.refByName()
                     .name(DEFAULT_GROUP)
                     .dataCenter(DataCenter.refByName("FranKfUrt"))

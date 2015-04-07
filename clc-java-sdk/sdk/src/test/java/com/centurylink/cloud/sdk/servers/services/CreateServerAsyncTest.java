@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMet
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.Inject;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
@@ -24,14 +25,14 @@ public class CreateServerAsyncTest extends AbstractServersSdkTest {
     @Test
     public void testCreateServerAsync() throws Exception {
         ListenableFuture<Response<ServerMetadata>> future =
-                serverService.createAsync(anyServerConfig());
+                serverService.createAsync(anyServerConfig().name("CSAC"));
 
         createServerResponse = future.get();
 
         assert createServerResponse.getResult().getId() != null;
     }
 
-    @AfterTest
+    @AfterMethod
     public void deleteTestServer() {
         createServerResponse
                 .waitUntilComplete();
