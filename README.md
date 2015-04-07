@@ -9,10 +9,10 @@ CI Specification:
  URL          | http://66.155.4.208:8080/
  Authentication | GitHub Account Credentials
  IP Address   | 66.155.4.208
- SSH Credentials | ci / 1qa@WS3ed
+ Ssh Credentials | ci / 1qa@WS3ed
  Jdk Home     | /usr/local/jdk1.8.0_40
  Gradle Home  | /usr/local/gradle-2.1.1
  
 ***TODO items:***
 * configure continuous installation of web client
-* move from pulling checking to GitHub repo webhooks
+* move from pulling changes tracking to GitHub repo webhooks
