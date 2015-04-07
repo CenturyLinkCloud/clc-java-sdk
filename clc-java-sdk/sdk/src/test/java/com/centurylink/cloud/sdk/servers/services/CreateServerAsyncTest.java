@@ -35,11 +35,11 @@ public class CreateServerAsyncTest extends AbstractServersSdkTest {
     @AfterMethod
     public void deleteTestServer() {
         createServerResponse
-                .waitUntilComplete();
+            .waitUntilComplete();
 
         serverService
-                .delete(createServerResponse.getResult().asRefById())
-                .waitUntilComplete();
+            .delete(createServerResponse.getResult().asRefById())
+            .waitUntilComplete();
     }
 
 }
