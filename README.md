@@ -1,4 +1,15 @@
 
+
+Project Structure
+--------------------
+
+* clc-java-sdk - module that contains all projects related to CLC Java SDK
+    * sample - module that contains sample application
+        * client - module contains web client of sample application
+        * app - module contains backend of sample application
+    * sdk - module that contains SDK library
+        
+
 Continuous Integration
 ----------------------
 
@@ -16,3 +27,9 @@ CI Specification:
 ***TODO items:***
 * configure continuous installation of web client
 * move from pulling changes tracking to GitHub repo webhooks
+
+Project Documentation
+---------------------
+* [Scope Description](https://docs.google.com/document/d/16_i2pxJk9bgP5fgwwkiKveqSAm0eAdgsnWBpdtIlTLY/edit)
+* [Business Scenarios](https://docs.google.com/document/d/10RTqkJ0tYmeV_S5nH0xcYcPIkXANp3mVEQOD-HGTM7E/edit?usp=sharing)
+* [Schedule](https://docs.google.com/spreadsheets/d/12M36PdDvlbovWbvaJ_HULh1pqF24VgQOQrYmGIlzO38/edit?usp=sharing)
