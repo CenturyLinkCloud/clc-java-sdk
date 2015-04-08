@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.core.client.errors;
 
-import com.centurylink.cloud.sdk.core.TestGroups;
+import com.centurylink.cloud.sdk.tests.TestGroups;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;

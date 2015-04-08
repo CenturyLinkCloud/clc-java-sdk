@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core;
+package com.centurylink.cloud.sdk.tests;
 
 /**
  * @author Ilya Drabenia

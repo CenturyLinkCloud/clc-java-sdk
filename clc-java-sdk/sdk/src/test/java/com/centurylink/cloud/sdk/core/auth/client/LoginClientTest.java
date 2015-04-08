@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ResponseProcessingException;
 
-import static com.centurylink.cloud.sdk.core.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
 @Test(groups = INTEGRATION)
 public class LoginClientTest {

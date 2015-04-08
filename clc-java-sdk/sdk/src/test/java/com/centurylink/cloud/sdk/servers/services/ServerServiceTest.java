@@ -14,7 +14,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
-import static com.centurylink.cloud.sdk.core.TestGroups.LONG_RUNNING;
+import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;

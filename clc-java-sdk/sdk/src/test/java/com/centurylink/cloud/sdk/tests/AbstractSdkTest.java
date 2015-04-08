@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core;
+package com.centurylink.cloud.sdk.tests;
 
 import com.centurylink.cloud.sdk.core.services.ClcServiceException;
 import com.centurylink.cloud.sdk.servers.TestModule;

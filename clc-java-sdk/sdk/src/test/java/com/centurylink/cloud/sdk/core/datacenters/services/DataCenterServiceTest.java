@@ -1,7 +1,6 @@
 package com.centurylink.cloud.sdk.core.datacenters.services;
 
-import com.centurylink.cloud.sdk.core.AbstractSdkTest;
-import com.centurylink.cloud.sdk.core.TestGroups;
+import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.datacenters.DataCentersModule;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
@@ -14,7 +13,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.core.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
 @Test(groups = INTEGRATION)
 public class DataCenterServiceTest extends AbstractSdkTest {

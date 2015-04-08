@@ -6,7 +6,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
-import static com.centurylink.cloud.sdk.core.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters.DE_FRANKFURT;
 
 /**

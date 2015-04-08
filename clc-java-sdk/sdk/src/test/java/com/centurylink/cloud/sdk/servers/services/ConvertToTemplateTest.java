@@ -7,8 +7,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
-import static com.centurylink.cloud.sdk.core.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.core.TestGroups.LONG_RUNNING;
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 
 /**

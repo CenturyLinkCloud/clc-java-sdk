@@ -42,6 +42,10 @@ public class DataCenterService {
         return getFirst(find(criteria.getPredicate()), null);
     }
 
+    public List<DataCenterMetadata> find(DataCentersFilter criteria) {
+        return find(criteria.getPredicate());
+    }
+
     public List<DataCenterMetadata> find(Predicate<DataCenterMetadata> predicate) {
         return
             serverClient
