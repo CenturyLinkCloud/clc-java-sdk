@@ -30,6 +30,7 @@ CI Specification:
 
 Project Documentation
 ---------------------
+* [Architecture Specification](https://docs.google.com/document/d/1aSlv1wPeGxo4w7nY-X8u3QX-0NmITAJoPLAHIB_70Cc/edit?usp=sharing)
 * [Scope Description](https://docs.google.com/document/d/16_i2pxJk9bgP5fgwwkiKveqSAm0eAdgsnWBpdtIlTLY/edit)
 * [Business Scenarios](https://docs.google.com/document/d/10RTqkJ0tYmeV_S5nH0xcYcPIkXANp3mVEQOD-HGTM7E/edit?usp=sharing)
 * [Schedule](https://docs.google.com/spreadsheets/d/12M36PdDvlbovWbvaJ_HULh1pqF24VgQOQrYmGIlzO38/edit?usp=sharing)
