@@ -291,6 +291,10 @@ public class GroupMetadata {
     }
 
     public GroupMetadata findGroupByName(List<GroupMetadata> groups, String name) {
+        if (getName().equals(name)) {
+            return this;
+        }
+
         for (GroupMetadata curGroup : groups) {
             if (curGroup.getName().equals(name)) {
                 return curGroup;

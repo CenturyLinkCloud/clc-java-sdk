@@ -35,7 +35,6 @@ public class GroupService {
     }
 
     public GroupMetadata findByRef(GroupRef groupRef) {
-
         if (groupRef.is(IdGroupRef.class)) {
             GroupMetadata response = client
                 .getGroup(groupRef.as(IdGroupRef.class).getId());
