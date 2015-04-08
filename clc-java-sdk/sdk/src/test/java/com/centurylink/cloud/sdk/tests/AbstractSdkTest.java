@@ -22,8 +22,6 @@ import static java.util.Arrays.asList;
  * @author ilya.drabenia
  */
 public abstract class AbstractSdkTest {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-
 
     @BeforeMethod(alwaysRun = true)
     public void injectDependencies() {
@@ -60,15 +58,6 @@ public abstract class AbstractSdkTest {
         try {
             f.setAccessible(true);
             return f.get(AbstractSdkTest.this);
-        } catch (IllegalAccessException e) {
-            throw new ClcServiceException("Could not access field value", e);
-        }
-    }
-
-    private void fieldValue(Field f, Object newValue) {
-        try {
-            f.setAccessible(true);
-            f.set(AbstractSdkTest.this, newValue);
         } catch (IllegalAccessException e) {
             throw new ClcServiceException("Could not access field value", e);
         }
