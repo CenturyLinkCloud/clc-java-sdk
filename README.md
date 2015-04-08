@@ -28,6 +28,7 @@ CI Specification:
 * configure continuous installation of web client
 * move from pulling changes tracking to GitHub repo webhooks
 
+
 Project Documentation
 ---------------------
 * [Architecture Specification](https://docs.google.com/document/d/1aSlv1wPeGxo4w7nY-X8u3QX-0NmITAJoPLAHIB_70Cc/edit?usp=sharing)
