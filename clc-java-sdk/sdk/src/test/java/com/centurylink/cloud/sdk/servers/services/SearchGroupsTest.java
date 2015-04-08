@@ -52,27 +52,24 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByNameRef() {
-        when(
-            dataCenterService.findByRef(DE_FRANKFURT)
-        )
-        .thenReturn(
+        when(dataCenterService.findByRef(DE_FRANKFURT)).thenReturn(
             new DataCenterMetadata("DE1", "Frankfurt")
         );
 
-        when(
-            dataCentersClient.getDataCenter("DE1")
-        )
-        .then(i -> construct(
-            new DataCenterMetadata(), dataCenter -> dataCenter.getLinks().add(construct(
-                new Link(), link -> {
-                    link.setId("1");
-                    link.setRel("group");
-                }
-            )))
+        when(dataCentersClient.getDataCenter("DE1"))
+        .then(i ->
+            new DataCenterMetadata() {{
+                getLinks().add(new Link() {{
+                    setRel("group");
+                    setId("rootGroupId");
+                }});
+            }}
         );
 
-        when(serverClient.getGroup("1")).thenReturn(
-            construct(new GroupMetadata(), l -> l.setName("Archive"))
+        when(serverClient.getGroup("rootGroupId")).thenReturn(
+            new GroupMetadata() {{
+               setName("Archive");
+            }}
         );
 
         GroupMetadata group = groupService.findByRef(Group.refByName()
