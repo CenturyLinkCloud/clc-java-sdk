@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import java.lang.reflect.Field;
@@ -59,6 +60,15 @@ public abstract class AbstractSdkTest {
         try {
             f.setAccessible(true);
             return f.get(AbstractSdkTest.this);
+        } catch (IllegalAccessException e) {
+            throw new ClcServiceException("Could not access field value", e);
+        }
+    }
+
+    private void fieldValue(Field f, Object newValue) {
+        try {
+            f.setAccessible(true);
+            f.set(AbstractSdkTest.this, newValue);
         } catch (IllegalAccessException e) {
             throw new ClcServiceException("Could not access field value", e);
         }
