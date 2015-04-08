@@ -15,7 +15,6 @@ import com.google.inject.Inject;
 import org.mockito.Mock;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters.DE_FRANKFURT;
@@ -42,7 +41,25 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByIdRef() {
-        when(serverClient.getGroup("1")).thenReturn(new GroupMetadata().id("1"));
+        when(dataCenterService.find(any(DataCentersFilter.class))).thenReturn(asList(
+                new DataCenterMetadata("DE1", "Frankfurt") {{
+                    getLinks().add(new Link() {{
+                        setRel("group");
+                        setId("rootGroupId");
+                    }});
+                }}
+        ));
+
+        when(serverClient.getGroup("rootGroupId")).thenReturn(
+                new GroupMetadata() {{
+                    setId("rootGroupId");
+                    setName("Root Group");
+                    getGroups().add(new GroupMetadata() {{
+                        setId("1");
+                        setName("Group1");
+                    }});
+                }}
+        );
 
         GroupMetadata group = groupService.findByRef(Group.refById()
             .dataCenter(DE_FRANKFURT)
@@ -54,18 +71,14 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByNameRef() {
-        when(dataCenterService.findByRef(DE_FRANKFURT)).thenReturn(
-            new DataCenterMetadata("DE1", "Frankfurt")
-        );
-
-        when(dataCentersClient.getDataCenter("DE1")).thenReturn(
-            new DataCenterMetadata() {{
+        when(dataCenterService.find(any(DataCentersFilter.class))).thenReturn(asList(
+            new DataCenterMetadata("DE1", "Frankfurt") {{
                 getLinks().add(new Link() {{
                     setRel("group");
                     setId("rootGroupId");
                 }});
             }}
-        );
+        ));
 
         when(serverClient.getGroup("rootGroupId")).thenReturn(
             new GroupMetadata() {{

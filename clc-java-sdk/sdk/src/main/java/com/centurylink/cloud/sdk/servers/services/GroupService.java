@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetada
 import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
+import com.centurylink.cloud.sdk.core.services.References;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupResponse;
@@ -15,13 +16,16 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.NameGroupRef;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.centurylink.cloud.sdk.core.services.References.exceptionIfNotFound;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.getFirst;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -43,20 +47,9 @@ public class GroupService {
     }
 
     public GroupMetadata findByRef(GroupRef groupRef) {
-        if (groupRef.is(IdGroupRef.class)) {
-            GroupMetadata response = client
-                .getGroup(groupRef.as(IdGroupRef.class).getId());
-
-            return response;
-        } else if (groupRef.is(NameGroupRef.class)) {
-            GroupMetadata group = client
-                .getGroup(rootGroupId(groupRef.getDataCenter()))
-                .findGroupByName(groupRef.as(NameGroupRef.class).getName());
-
-            return group;
-        } else {
-            throw new ReferenceNotSupportedException(groupRef.getClass());
-        }
+        return exceptionIfNotFound(
+            findFirst(groupRef.asFilter())
+        );
     }
 
     public List<GroupMetadata> find(GroupFilter criteria) {
@@ -80,13 +73,8 @@ public class GroupService {
                 .collect(toList());
     }
 
-    private String rootGroupId(DataCenterRef dataCenterRef) {
-        return dataCentersClient
-            .getDataCenter(
-                dataCenterService.findByRef(dataCenterRef).getId()
-            )
-            .getGroup()
-            .getId();
+    public GroupMetadata findFirst(GroupFilter criteria) {
+        return getFirst(find(criteria), null);
     }
 
     public List<Group> findByDataCenter(DataCenterRef dataCenter) {

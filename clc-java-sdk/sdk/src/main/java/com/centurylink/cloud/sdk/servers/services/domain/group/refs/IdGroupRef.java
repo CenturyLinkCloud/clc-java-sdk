@@ -30,6 +30,7 @@ public class IdGroupRef extends GroupRef {
 
     @Override
     public GroupFilter asFilter() {
+
         return super.asFilter()
             .filter(g -> g.getId().equals(checkNotNull(id)));
     }
