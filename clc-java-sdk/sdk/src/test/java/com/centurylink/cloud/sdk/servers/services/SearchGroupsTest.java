@@ -56,8 +56,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
             new DataCenterMetadata("DE1", "Frankfurt")
         );
 
-        when(dataCentersClient.getDataCenter("DE1"))
-        .then(i ->
+        when(dataCentersClient.getDataCenter("DE1")).thenReturn(
             new DataCenterMetadata() {{
                 getLinks().add(new Link() {{
                     setRel("group");
@@ -68,7 +67,10 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
         when(serverClient.getGroup("rootGroupId")).thenReturn(
             new GroupMetadata() {{
-               setName("Archive");
+                setName("Root Group");
+                getGroups().add(new GroupMetadata() {{
+                    setName("Archive");
+                }});
             }}
         );
 
