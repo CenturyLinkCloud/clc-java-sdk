@@ -8,7 +8,7 @@ Project Structure
         * client - module contains web client of sample application
         * app - module contains backend of sample application
     * sdk - module that contains SDK library
-        
+
 
 Continuous Integration
 ----------------------
