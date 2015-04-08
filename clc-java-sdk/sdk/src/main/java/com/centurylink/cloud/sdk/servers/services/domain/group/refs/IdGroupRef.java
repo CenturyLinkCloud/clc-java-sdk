@@ -1,6 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author ilya.drabenia
@@ -23,5 +26,11 @@ public class IdGroupRef extends GroupRef {
 
     public IdGroupRef dataCenter(DataCenterRef dataCenter) {
         return new IdGroupRef(dataCenter, id);
+    }
+
+    @Override
+    public GroupFilter asFilter() {
+        return super.asFilter()
+            .filter(g -> g.getId().equals(checkNotNull(id)));
     }
 }

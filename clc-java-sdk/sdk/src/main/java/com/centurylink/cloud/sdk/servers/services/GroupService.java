@@ -34,22 +34,19 @@ public class GroupService {
         this.dataCenterService = dataCenterService;
     }
 
-    public Group findByRef(GroupRef groupRef) {
+    public GroupMetadata findByRef(GroupRef groupRef) {
+
         if (groupRef.is(IdGroupRef.class)) {
             GroupMetadata response = client
                 .getGroup(groupRef.as(IdGroupRef.class).getId());
 
-            return new Group()
-                .id(response.getId())
-                .name(response.getName());
+            return response;
         } else if (groupRef.is(NameGroupRef.class)) {
-            GroupResponse group = client
+            GroupMetadata group = client
                 .getGroup(rootGroupId(groupRef.getDataCenter()))
                 .findGroupByName(groupRef.as(NameGroupRef.class).getName());
 
-            return new Group()
-                .id(group.getId())
-                .name(group.getName());
+            return group;
         } else {
             throw new ReferenceNotSupportedException(groupRef.getClass());
         }
@@ -80,7 +77,7 @@ public class GroupService {
         );
     }
 
-    private GroupResponse getMatchedGroup(GroupMetadata groups, Group group) {
+    private GroupMetadata getMatchedGroup(GroupMetadata groups, Group group) {
         return groups
             .findGroupByName(group.getName());
     }

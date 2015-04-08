@@ -24,7 +24,7 @@ import java.util.Map;
         "changeInfo",
         "customFields"
 })
-public class GroupMetadata extends GroupResponse {
+public class GroupMetadata {
 
     @JsonProperty("id")
     private String id;
@@ -41,7 +41,7 @@ public class GroupMetadata extends GroupResponse {
     @JsonProperty("serversCount")
     private Integer serversCount;
     @JsonProperty("groups")
-    private List<GroupResponse> groups = new ArrayList<GroupResponse>();
+    private List<GroupMetadata> groups = new ArrayList<GroupMetadata>();
     @JsonProperty("links")
     private List<Link> links = new ArrayList<Link>();
     @JsonProperty("changeInfo")
@@ -69,6 +69,11 @@ public class GroupMetadata extends GroupResponse {
     @JsonProperty("id")
     public void setId(String id) {
         this.id = id;
+    }
+
+    public GroupMetadata id(String id) {
+        setId(id);
+        return this;
     }
 
     /**
@@ -197,7 +202,7 @@ public class GroupMetadata extends GroupResponse {
      * The groups
      */
     @JsonProperty("groups")
-    public List<GroupResponse> getGroups() {
+    public List<GroupMetadata> getGroups() {
         return groups;
     }
 
@@ -207,7 +212,7 @@ public class GroupMetadata extends GroupResponse {
      * The groups
      */
     @JsonProperty("groups")
-    public void setGroups(List<GroupResponse> groups) {
+    public void setGroups(List<GroupMetadata> groups) {
         this.groups = groups;
     }
 
@@ -281,12 +286,12 @@ public class GroupMetadata extends GroupResponse {
         this.additionalProperties.put(name, value);
     }
 
-    public GroupResponse findGroupByName(String name) {
+    public GroupMetadata findGroupByName(String name) {
         return findGroupByName(groups, name);
     }
 
-    public GroupResponse findGroupByName(List<GroupResponse> groups, String name) {
-        for (GroupResponse curGroup : groups) {
+    public GroupMetadata findGroupByName(List<GroupMetadata> groups, String name) {
+        for (GroupMetadata curGroup : groups) {
             if (curGroup.getName().equals(name)) {
                 return curGroup;
             } else if (curGroup.getGroups().size() > 0
@@ -298,27 +303,27 @@ public class GroupMetadata extends GroupResponse {
         return null;
     }
 
-    public List<GroupResponse> getAllGroups() {
-        List<GroupResponse> groups = new ArrayList<>();
+    public List<GroupMetadata> getAllGroups() {
+        List<GroupMetadata> groups = new ArrayList<>();
 
         groups.add(this);
 
-        for (GroupResponse curGroup : this.getGroups()) {
+        for (GroupMetadata curGroup : this.getGroups()) {
             groups.addAll(getSubGroups(curGroup));
         }
 
         return groups;
     }
 
-    private List<GroupResponse> getSubGroups(final GroupResponse curGroup) {
+    private List<GroupMetadata> getSubGroups(final GroupMetadata curGroup) {
         if (curGroup.getGroups() == null || curGroup.getGroups().isEmpty()) {
-            return new ArrayList<GroupResponse>() {{ add(curGroup); }};
+            return new ArrayList<GroupMetadata>() {{ add(curGroup); }};
         }
 
-        List<GroupResponse> result = new ArrayList<>();
+        List<GroupMetadata> result = new ArrayList<>();
 
         result.addAll(curGroup.getGroups());
-        for (GroupResponse group : curGroup.getGroups()) {
+        for (GroupMetadata group : curGroup.getGroups()) {
             result.addAll(getSubGroups(group));
         }
 

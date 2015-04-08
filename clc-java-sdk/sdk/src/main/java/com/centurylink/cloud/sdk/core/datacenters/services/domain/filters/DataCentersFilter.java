@@ -27,8 +27,8 @@ public class DataCentersFilter {
         return predicate;
     }
 
-    public DataCentersFilter predicate(Predicate<DataCenterMetadata> predicate) {
-        this.predicate = predicate;
+    public DataCentersFilter filter(Predicate<DataCenterMetadata> predicate) {
+        this.predicate = (this.predicate == null) ? predicate : this.predicate.and(predicate);
         return this;
     }
 

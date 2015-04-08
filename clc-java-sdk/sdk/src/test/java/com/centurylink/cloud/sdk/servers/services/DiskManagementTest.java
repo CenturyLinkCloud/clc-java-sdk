@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.ServersModule;
 import com.centurylink.cloud.sdk.servers.TestModule;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
@@ -63,7 +64,7 @@ public class DiskManagementTest extends AbstractServersSdkTest {
     @Test
     public void testCreateServerWithDisksOperation() {
         when(templateService.findByRef(any())).thenReturn(new TemplateMetadata());
-        when(groupService.findByRef(any())).thenReturn(new Group());
+        when(groupService.findByRef(any())).thenReturn(new GroupMetadata());
         when(serverClient.findServerByUuid(any())).thenReturn(new ServerMetadata());
         when(serverClient.create(any()))
             .thenReturn(new CreateServerResponse(null, null, new ArrayList<Link>()));
