@@ -9,15 +9,15 @@ import static com.google.common.base.Strings.nullToEmpty;
  */
 public abstract class Filters {
 
-    public boolean equals(Object firstObject, Object secondObject) {
+    public static boolean equals(Object firstObject, Object secondObject) {
         return Objects.equals(firstObject, secondObject);
     }
 
-    public boolean equals(String string, String otherString) {
+    public static boolean equalsIgnoreCase(String string, String otherString) {
         return nullToEmpty(string).equalsIgnoreCase(otherString);
     }
 
-    public boolean containsIgnoreCase(String source, String substring) {
+    public static boolean containsIgnoreCase(String source, String substring) {
         String sourceInUpperCase = nullToEmpty(source).toUpperCase();
         String substringInUpperCase = nullToEmpty(substring).toUpperCase();
 

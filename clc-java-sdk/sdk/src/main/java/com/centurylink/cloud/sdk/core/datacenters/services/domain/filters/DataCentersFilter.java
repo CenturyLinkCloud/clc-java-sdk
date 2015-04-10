@@ -1,9 +1,13 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.filters;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.services.Filters;
 
 import java.util.List;
 import java.util.function.Predicate;
+
+import static com.centurylink.cloud.sdk.core.services.Filters.containsIgnoreCase;
+import static com.centurylink.cloud.sdk.core.services.Filters.equalsIgnoreCase;
 
 /**
  * @author Ilya Drabenia
@@ -36,16 +40,12 @@ public class DataCentersFilter {
         return (DataCentersFilter) predicate;
     }
 
-    public static boolean upperContains(String value, String substring) {
-        return value.toUpperCase().contains(substring.toUpperCase());
-    }
-
     public static DataCentersFilter whereNameContains(String name) {
-        return new DataCentersFilter(d -> name != null && upperContains(d.getName(), name));
+        return new DataCentersFilter(d -> containsIgnoreCase(d.getName(), name));
     }
 
     public static DataCentersFilter whereIdIs(String id) {
-        return new DataCentersFilter(d -> id != null && d.getId().equalsIgnoreCase(id));
+        return new DataCentersFilter(d -> equalsIgnoreCase(d.getId(), id));
     }
 
 }
