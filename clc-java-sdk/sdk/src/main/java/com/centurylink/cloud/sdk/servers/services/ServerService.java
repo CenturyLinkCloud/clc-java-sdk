@@ -20,6 +20,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
@@ -117,6 +119,32 @@ public class ServerService {
             response.findStatusId(),
             client
         );
+    }
+
+    public List<CreateServerResponse> powerOn(List<ServerRef> serverList) {
+        return client.powerOn(getIdListFromServerRefList(serverList));
+    }
+
+    public List<CreateServerResponse> powerOff(List<ServerRef> serverList) {
+        return client.powerOff(getIdListFromServerRefList(serverList));
+    }
+
+    public List<CreateServerResponse> startMaintenance(List<ServerRef> serverList) {
+        return client.startMaintenance(getIdListFromServerRefList(serverList));
+    }
+
+    public List<CreateServerResponse> stopMaintenance(List<ServerRef> serverList) {
+        return client.stopMaintenance(getIdListFromServerRefList(serverList));
+    }
+
+    private List<String> getIdListFromServerRefList(List<ServerRef> serverList) {
+        List<String> serverIdList = new ArrayList<>();
+
+        serverList.forEach(
+                server -> serverIdList.add(server.as(IdServerRef.class).getId())
+        );
+
+        return serverIdList;
     }
 
 }
