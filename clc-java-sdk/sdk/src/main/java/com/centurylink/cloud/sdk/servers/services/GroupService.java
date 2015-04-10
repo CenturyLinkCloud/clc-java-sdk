@@ -4,26 +4,17 @@ import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
-import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
-import com.centurylink.cloud.sdk.core.services.References;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.NameGroupRef;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.centurylink.cloud.sdk.core.services.References.exceptionIfNotFound;
+import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionIfNotFound;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getFirst;
 import static java.util.stream.Collectors.toList;
@@ -48,7 +39,7 @@ public class GroupService {
 
     public GroupMetadata findByRef(GroupRef groupRef) {
         return exceptionIfNotFound(
-            findFirst(groupRef.asFilter())
+                findFirst(groupRef.asFilter())
         );
     }
 

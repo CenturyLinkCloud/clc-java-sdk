@@ -1,4 +1,6 @@
-package com.centurylink.cloud.sdk.core.services;
+package com.centurylink.cloud.sdk.core.services.refs;
+
+import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 
 /**
  * @author Ilya Drabenia

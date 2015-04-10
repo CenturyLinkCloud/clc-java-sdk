@@ -118,7 +118,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
         );
 
         List<GroupMetadata> groups = groupService.find(new GroupFilter()
-            .dataCenter(DE_FRANKFURT)
+            .dataCenterIn(DE_FRANKFURT)
             .filter(g -> g.getName().contains("Group1"))
         );
 

@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
-import com.centurylink.cloud.sdk.core.services.Reference;
+import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 
 /**
@@ -21,6 +21,6 @@ public abstract class GroupRef implements Reference {
     @Override
     public GroupFilter asFilter() {
         return new GroupFilter()
-            .dataCenter(getDataCenter());
+            .dataCenterIn(getDataCenter());
     }
 }

@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.services;
+package com.centurylink.cloud.sdk.core.services.refs;
 
 /**
  * Class represent reference on existing resource.

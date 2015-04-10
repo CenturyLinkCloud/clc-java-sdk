@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
+
 /**
  * @author Ilya Drabenia
  */
@@ -20,12 +21,7 @@ public class GroupFilter {
     private List<DataCentersFilter> dataCenters = new ArrayList<>();
     private Predicate<GroupMetadata> groupFilter;
 
-    public GroupFilter dataCenter(DataCenterRef dataCenterRef) {
-        dataCenters.add(dataCenterRef.asFilter());
-        return this;
-    }
-
-    public GroupFilter dataCenters(DataCenterRef... dataCenters) {
+    public GroupFilter dataCenterIn(DataCenterRef... dataCenters) {
         this.dataCenters.addAll(
             Stream.of(checkNotNull(dataCenters))
                 .map(DataCenterRef::asFilter)

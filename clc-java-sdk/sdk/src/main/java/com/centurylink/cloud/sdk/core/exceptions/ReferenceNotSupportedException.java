@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.core.exceptions;
 
-import com.centurylink.cloud.sdk.core.services.Reference;
+import com.centurylink.cloud.sdk.core.services.refs.Reference;
 
 /**
  * @author ilya.drabenia
