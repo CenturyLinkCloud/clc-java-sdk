@@ -7,12 +7,15 @@ import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
 import javax.ws.rs.client.InvocationCallback;
+
+import java.util.List;
 
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -131,6 +134,38 @@ public class ServerClient extends BaseSdkClient {
                 .request()
                 .post(entity(request, APPLICATION_JSON))
                 .readEntity(CreateServerResponse.class);
+    }
+
+    public BaseServerListResponse powerOn(List<String> serverIdList) {
+        return
+            client("/operations/{accountAlias}/servers/powerOn")
+                .request()
+                .post(entity(serverIdList, APPLICATION_JSON))
+                .readEntity(BaseServerListResponse.class);
+    }
+
+    public BaseServerListResponse powerOff(List<String> serverIdList) {
+        return
+            client("/operations/{accountAlias}/servers/powerOff")
+                .request()
+                .post(entity(serverIdList, APPLICATION_JSON))
+                .readEntity(BaseServerListResponse.class);
+    }
+
+    public BaseServerListResponse startMaintenance(List<String> serverIdList) {
+        return
+            client("/operations/{accountAlias}/servers/startMaintenance")
+                .request()
+                .post(entity(serverIdList, APPLICATION_JSON))
+                .readEntity(BaseServerListResponse.class);
+    }
+
+    public BaseServerListResponse stopMaintenance(List<String> serverIdList) {
+        return
+            client("/operations/{accountAlias}/servers/stopMaintenance")
+                .request()
+                .post(entity(serverIdList, APPLICATION_JSON))
+                .readEntity(BaseServerListResponse.class);
     }
 
 }
