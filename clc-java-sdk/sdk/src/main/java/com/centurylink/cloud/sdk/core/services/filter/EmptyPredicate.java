@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.datacenters.services.domain.filters;
+package com.centurylink.cloud.sdk.core.services.filter;
 
 import java.util.function.Predicate;
 

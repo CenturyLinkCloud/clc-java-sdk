@@ -34,8 +34,6 @@ public class NameGroupRef extends GroupRef {
         checkNotNull(name, "Name must be not null");
 
         return super.asFilter()
-            .filter(
-                g -> g.getName().toUpperCase().contains(name.toUpperCase())
-            );
+            .nameContains(name);
     }
 }

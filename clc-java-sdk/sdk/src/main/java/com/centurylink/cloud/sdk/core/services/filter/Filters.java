@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.services;
+package com.centurylink.cloud.sdk.core.services.filter;
 
 import java.util.Objects;
 
@@ -18,10 +18,11 @@ public abstract class Filters {
     }
 
     public static boolean containsIgnoreCase(String source, String substring) {
-        String sourceInUpperCase = nullToEmpty(source).toUpperCase();
-        String substringInUpperCase = nullToEmpty(substring).toUpperCase();
+        return upperCase(source).contains(upperCase(substring));
+    }
 
-        return sourceInUpperCase.contains(substringInUpperCase);
+    private static String upperCase(String source) {
+        return nullToEmpty(source).toUpperCase();
     }
 
 }

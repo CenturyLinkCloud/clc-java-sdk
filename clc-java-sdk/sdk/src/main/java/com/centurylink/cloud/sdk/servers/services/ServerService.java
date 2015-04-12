@@ -86,7 +86,9 @@ public class ServerService {
     }
 
     public Response<ServerRef> delete(ServerRef server) {
-        CreateServerResponse response = client.delete(server.as(IdServerRef.class).getId());
+        CreateServerResponse response = client.delete(
+            findByRef(server).getId()
+        );
 
         return new Response<>(
             server,

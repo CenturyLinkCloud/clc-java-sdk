@@ -1,13 +1,12 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.filters;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.services.Filters;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.centurylink.cloud.sdk.core.services.Filters.containsIgnoreCase;
-import static com.centurylink.cloud.sdk.core.services.Filters.equalsIgnoreCase;
+import static com.centurylink.cloud.sdk.core.services.filter.Filters.containsIgnoreCase;
+import static com.centurylink.cloud.sdk.core.services.filter.Filters.equalsIgnoreCase;
 
 /**
  * @author Ilya Drabenia
