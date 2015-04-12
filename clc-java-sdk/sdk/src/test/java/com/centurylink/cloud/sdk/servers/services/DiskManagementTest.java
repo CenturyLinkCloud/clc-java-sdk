@@ -9,10 +9,9 @@ import com.centurylink.cloud.sdk.servers.TestModule;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.google.inject.Inject;
@@ -67,7 +66,7 @@ public class DiskManagementTest extends AbstractServersSdkTest {
         when(groupService.findByRef(any())).thenReturn(new GroupMetadata());
         when(serverClient.findServerByUuid(any())).thenReturn(new ServerMetadata());
         when(serverClient.create(any()))
-            .thenReturn(new CreateServerResponse(null, null, new ArrayList<Link>()));
+            .thenReturn(new BaseServerResponse(null, null, new ArrayList<Link>()));
 
         serverService.create(anyServerConfig()
             .machine(new Machine()

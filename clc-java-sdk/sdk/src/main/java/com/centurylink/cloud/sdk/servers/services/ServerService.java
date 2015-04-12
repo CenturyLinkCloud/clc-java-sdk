@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.services;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
@@ -40,7 +40,7 @@ public class ServerService {
     }
 
     public Response<ServerMetadata> create(CreateServerCommand command) {
-        CreateServerResponse response = client
+        BaseServerResponse response = client
             .create(serverConverter.buildCreateServerRequest(command));
 
         ServerMetadata serverInfo = client
@@ -54,16 +54,16 @@ public class ServerService {
     }
 
     public ListenableFuture<Response<ServerMetadata>> createAsync(CreateServerCommand command) {
-        final SettableFuture<CreateServerResponse> response =
+        final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
                     serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
-            Futures.transform(response, new AsyncFunction<CreateServerResponse, ServerMetadata>() {
+            Futures.transform(response, new AsyncFunction<BaseServerResponse, ServerMetadata>() {
                 @Override
-                public ListenableFuture<ServerMetadata> apply(CreateServerResponse input) throws Exception {
+                public ListenableFuture<ServerMetadata> apply(BaseServerResponse input) throws Exception {
                     return client.findServerByUuidAsync(input.findServerUuid());
                 }
             });
@@ -86,7 +86,7 @@ public class ServerService {
     }
 
     public Response<ServerRef> delete(ServerRef server) {
-        CreateServerResponse response = client.delete(
+        BaseServerResponse response = client.delete(
             findByRef(server).getId()
         );
 
@@ -106,7 +106,7 @@ public class ServerService {
     }
 
     public Response<Template> convertToTemplate(CreateTemplateCommand command) {
-        CreateServerResponse response =
+        BaseServerResponse response =
             client.convertToTemplate(new CreateTemplateRequest()
                 .serverId(command.getServer().as(IdServerRef.class).getId())
                 .description(command.getDescription())
@@ -123,19 +123,19 @@ public class ServerService {
         );
     }
 
-    public List<CreateServerResponse> powerOn(List<ServerRef> serverList) {
+    public List<BaseServerResponse> powerOn(List<ServerRef> serverList) {
         return client.powerOn(getIdListFromServerRefList(serverList));
     }
 
-    public List<CreateServerResponse> powerOff(List<ServerRef> serverList) {
+    public List<BaseServerResponse> powerOff(List<ServerRef> serverList) {
         return client.powerOff(getIdListFromServerRefList(serverList));
     }
 
-    public List<CreateServerResponse> startMaintenance(List<ServerRef> serverList) {
+    public List<BaseServerResponse> startMaintenance(List<ServerRef> serverList) {
         return client.startMaintenance(getIdListFromServerRefList(serverList));
     }
 
-    public List<CreateServerResponse> stopMaintenance(List<ServerRef> serverList) {
+    public List<BaseServerResponse> stopMaintenance(List<ServerRef> serverList) {
         return client.stopMaintenance(getIdListFromServerRefList(serverList));
     }
 
@@ -143,7 +143,7 @@ public class ServerService {
         List<String> serverIdList = new ArrayList<>();
 
         serverList.forEach(
-                server -> serverIdList.add(server.as(IdServerRef.class).getId())
+                server -> serverIdList.add(findByRef(server).getId())
         );
 
         return serverIdList;

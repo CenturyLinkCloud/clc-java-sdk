@@ -6,7 +6,7 @@ import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capac
 import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
@@ -79,7 +79,7 @@ public class TemplateService {
     }
 
     public Response<Template> delete(Template template) {
-        CreateServerResponse response = serversClient.delete(template.getName());
+        BaseServerResponse response = serversClient.delete(template.getName());
 
         return new Response<>(
             template,
