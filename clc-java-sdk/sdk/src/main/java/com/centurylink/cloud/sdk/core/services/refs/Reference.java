@@ -17,6 +17,11 @@ public interface Reference {
         return type == getClass();
     }
 
+    /**
+     * Method convert reference to filter object
+     *
+     * @return filter object
+     */
     Object asFilter();
 
 }
