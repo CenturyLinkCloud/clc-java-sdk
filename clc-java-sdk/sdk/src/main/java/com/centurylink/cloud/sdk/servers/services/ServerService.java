@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.Response;
+import com.centurylink.cloud.sdk.servers.services.domain.ResponseList;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
@@ -123,30 +124,44 @@ public class ServerService {
         );
     }
 
-    public List<BaseServerResponse> powerOn(List<ServerRef> serverList) {
-        return client.powerOn(getIdListFromServerRefList(serverList));
+    public ResponseList<BaseServerResponse> powerOn(List<ServerRef> serverList) {
+        return createPowerOperationsResponse(client.powerOn(getIdListFromServerRefList(serverList)));
     }
 
-    public List<BaseServerResponse> powerOff(List<ServerRef> serverList) {
-        return client.powerOff(getIdListFromServerRefList(serverList));
+    public ResponseList<BaseServerResponse> powerOff(List<ServerRef> serverList) {
+        return createPowerOperationsResponse(client.powerOff(getIdListFromServerRefList(serverList)));
     }
 
-    public List<BaseServerResponse> startMaintenance(List<ServerRef> serverList) {
-        return client.startMaintenance(getIdListFromServerRefList(serverList));
+    public ResponseList<BaseServerResponse> startMaintenance(List<ServerRef> serverList) {
+        return createPowerOperationsResponse(client.startMaintenance(getIdListFromServerRefList(serverList)));
     }
 
-    public List<BaseServerResponse> stopMaintenance(List<ServerRef> serverList) {
-        return client.stopMaintenance(getIdListFromServerRefList(serverList));
+    public ResponseList<BaseServerResponse> stopMaintenance(List<ServerRef> serverList) {
+        return createPowerOperationsResponse(client.stopMaintenance(getIdListFromServerRefList(serverList)));
     }
 
     private List<String> getIdListFromServerRefList(List<ServerRef> serverList) {
         List<String> serverIdList = new ArrayList<>();
 
-        serverList.forEach(
-                server -> serverIdList.add(findByRef(server).getId())
-        );
+        if (serverList != null) {
+            serverList.forEach(
+                    server -> serverIdList.add(findByRef(server).getId())
+            );
+        }
 
         return serverIdList;
+    }
+
+    private ResponseList<BaseServerResponse> createPowerOperationsResponse(List<BaseServerResponse> responseFromApi) {
+        List<String> statusIdList = new ArrayList<>();
+
+        if (responseFromApi != null) {
+            responseFromApi.forEach(
+                    response -> statusIdList.add(response.findStatusId())
+            );
+        }
+
+        return new ResponseList<>(responseFromApi, statusIdList, client);
     }
 
 }
