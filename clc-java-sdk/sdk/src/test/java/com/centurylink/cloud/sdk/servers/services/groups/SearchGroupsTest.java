@@ -4,7 +4,7 @@ import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCentersFilter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -41,7 +41,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByIdRef() {
-        when(dataCenterService.find(any(DataCentersFilter.class))).thenReturn(asList(
+        when(dataCenterService.find(any(DataCenterFilter.class))).thenReturn(asList(
                 new DataCenterMetadata("DE1", "Frankfurt") {{
                     getLinks().add(new Link() {{
                         setRel("group");
@@ -71,7 +71,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByNameRef() {
-        when(dataCenterService.find(any(DataCentersFilter.class))).thenReturn(asList(
+        when(dataCenterService.find(any(DataCenterFilter.class))).thenReturn(asList(
             new DataCenterMetadata("DE1", "Frankfurt") {{
                 getLinks().add(new Link() {{
                     setRel("group");
@@ -99,7 +99,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindGroupByName() {
-        when(dataCenterService.find(any(DataCentersFilter.class))).thenReturn(asList(
+        when(dataCenterService.find(any(DataCenterFilter.class))).thenReturn(asList(
             new DataCenterMetadata("DE1", "Frankfurt") {{
                 getLinks().add(new Link() {{
                     setRel("group");

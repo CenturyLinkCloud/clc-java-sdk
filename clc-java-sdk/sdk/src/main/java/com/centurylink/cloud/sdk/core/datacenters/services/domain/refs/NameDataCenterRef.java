@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.refs;
 
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCentersFilter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
 
 /**
  * @author ilya.drabenia
@@ -17,7 +17,7 @@ public class NameDataCenterRef extends DataCenterRef {
     }
 
     @Override
-    public DataCentersFilter asFilter() {
-        return DataCentersFilter.whereNameContains(name);
+    public DataCenterFilter asFilter() {
+        return new DataCenterFilter().nameContains(name);
     }
 }

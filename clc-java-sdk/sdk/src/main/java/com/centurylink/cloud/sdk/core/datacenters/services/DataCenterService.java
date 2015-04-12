@@ -2,7 +2,7 @@ package com.centurylink.cloud.sdk.core.datacenters.services;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCentersFilter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.google.inject.Inject;
 
@@ -38,11 +38,11 @@ public class DataCenterService {
                 .collect(Collectors.toList());
     }
 
-    public DataCenterMetadata findFirst(DataCentersFilter criteria) {
+    public DataCenterMetadata findFirst(DataCenterFilter criteria) {
         return getFirst(find(criteria.getPredicate()), null);
     }
 
-    public List<DataCenterMetadata> find(DataCentersFilter criteria) {
+    public List<DataCenterMetadata> find(DataCenterFilter criteria) {
         return find(criteria.getPredicate());
     }
 

@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.filters;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCentersFilter;
+import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.services.filter.EmptyPredicate;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
@@ -9,11 +9,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.*;
-import java.util.logging.Filter;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -25,7 +21,7 @@ import static java.util.stream.Collectors.toList;
  * @author Ilya Drabenia
  */
 public class GroupFilter {
-    private List<DataCentersFilter> dataCenters = new ArrayList<>();
+    private List<DataCenterFilter> dataCenters = new ArrayList<>();
     private Predicate<GroupMetadata> groupFilter = new EmptyPredicate<>();
 
     public GroupFilter dataCenterIn(DataCenterRef... dataCenters) {
@@ -39,11 +35,11 @@ public class GroupFilter {
     }
 
     public GroupFilter dataCenter(Predicate<DataCenterMetadata> predicate) {
-        this.dataCenters.add(new DataCentersFilter(checkNotNull(predicate)));
+        this.dataCenters.add(new DataCenterFilter(checkNotNull(predicate)));
         return this;
     }
 
-    public GroupFilter dataCenter(DataCentersFilter filter) {
+    public GroupFilter dataCenter(DataCenterFilter filter) {
         this.dataCenters.add(checkNotNull(filter));
         return this;
     }
@@ -80,7 +76,7 @@ public class GroupFilter {
         return this;
     }
 
-    public List<DataCentersFilter> getDataCenters() {
+    public List<DataCenterFilter> getDataCenters() {
         return dataCenters;
     }
 
