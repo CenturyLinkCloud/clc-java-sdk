@@ -70,7 +70,7 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
     private void mockDataCenters() {
         when(dataCentersClient.findAllDataCenters())
             .thenReturn(new GetDataCenterListResponse(
-                asList(new DataCenterMetadata("CA3", "Toronto_2")))
+                asList(new DataCenterMetadata("ca3", "Toronto_2")))
             );
     }
 

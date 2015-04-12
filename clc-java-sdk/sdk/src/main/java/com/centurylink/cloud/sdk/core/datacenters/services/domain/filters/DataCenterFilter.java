@@ -1,21 +1,19 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.filters;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.services.filter.EmptyPredicate;
+import com.centurylink.cloud.sdk.core.services.filter.ConstPredicate;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
 
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.containsIgnoreCase;
-import static com.centurylink.cloud.sdk.core.services.filter.Filters.equalsIgnoreCase;
 
 /**
  * @author Ilya Drabenia
  */
 public class DataCenterFilter {
-    private Predicate<DataCenterMetadata> predicate = new EmptyPredicate<>();
+    private Predicate<DataCenterMetadata> predicate = new ConstPredicate<>();
 
     public DataCenterFilter() {
     }
@@ -41,8 +39,8 @@ public class DataCenterFilter {
                 .map(id ->
                     (Predicate<DataCenterMetadata>) m -> Filters.equals(m.getId(), id)
                 )
-                .reduce(new EmptyPredicate<>(),
-                    (previousPredicate, item) -> previousPredicate.and(item)
+                .reduce(new ConstPredicate<>(false),
+                    (previousPredicate, item) -> previousPredicate.or(item)
                 );
 
         return this;

@@ -42,23 +42,23 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
     @Test
     public void testFindByIdRef() {
         when(dataCenterService.find(any(DataCenterFilter.class))).thenReturn(asList(
-                new DataCenterMetadata("DE1", "Frankfurt") {{
-                    getLinks().add(new Link() {{
-                        setRel("group");
-                        setId("rootGroupId");
-                    }});
-                }}
+            new DataCenterMetadata("DE1", "Frankfurt") {{
+                getLinks().add(new Link() {{
+                    setRel("group");
+                    setId("rootGroupId");
+                }});
+            }}
         ));
 
         when(serverClient.getGroup("rootGroupId")).thenReturn(
-                new GroupMetadata() {{
-                    setId("rootGroupId");
-                    setName("Root Group");
-                    getGroups().add(new GroupMetadata() {{
-                        setId("1");
-                        setName("Group1");
-                    }});
-                }}
+            new GroupMetadata() {{
+                setId("rootGroupId");
+                setName("Root Group");
+                getGroups().add(new GroupMetadata() {{
+                    setId("1");
+                    setName("Group1");
+                }});
+            }}
         );
 
         GroupMetadata group = groupService.findByRef(Group.refById()

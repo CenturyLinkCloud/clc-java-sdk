@@ -39,7 +39,7 @@ public class GroupService {
 
     public GroupMetadata findByRef(GroupRef groupRef) {
         return exceptionIfNotFound(
-                findFirst(groupRef.asFilter())
+            findFirst(groupRef.asFilter())
         );
     }
 
