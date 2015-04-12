@@ -6,7 +6,7 @@ import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
@@ -36,24 +36,24 @@ public class ServerClient extends BaseSdkClient {
      * from the authentication endpoint. See the Login API for information on acquiring
      * this token.
      */
-    public CreateServerResponse create(CreateServerRequest request) {
+    public BaseServerResponse create(CreateServerRequest request) {
         return
             client("/servers/{accountAlias}")
                 .request().post(
                     entity(request, APPLICATION_JSON_TYPE)
                 )
-                .readEntity(CreateServerResponse.class);
+                .readEntity(BaseServerResponse.class);
     }
 
-    public SettableFuture<CreateServerResponse> createAsync(CreateServerRequest request) {
-        final InvocationFuture<CreateServerResponse> future = new InvocationFuture<CreateServerResponse>();
+    public SettableFuture<BaseServerResponse> createAsync(CreateServerRequest request) {
+        final InvocationFuture<BaseServerResponse> future = new InvocationFuture<BaseServerResponse>();
 
         client("/servers/{accountAlias}")
             .request()
             .async()
-            .post(entity(request, APPLICATION_JSON_TYPE), new InvocationCallback<CreateServerResponse>() {
+            .post(entity(request, APPLICATION_JSON_TYPE), new InvocationCallback<BaseServerResponse>() {
                 @Override
-                public void completed(CreateServerResponse createServerResponse) {
+                public void completed(BaseServerResponse createServerResponse) {
                     future.toListenableFuture().set(createServerResponse);
                 }
 
@@ -66,12 +66,12 @@ public class ServerClient extends BaseSdkClient {
         return future.toListenableFuture();
     }
 
-    public CreateServerResponse delete(String serverId) {
+    public BaseServerResponse delete(String serverId) {
         return
             client("/servers/{accountAlias}/{serverId}")
                 .resolveTemplate("serverId", serverId)
                 .request()
-                .delete(CreateServerResponse.class);
+                .delete(BaseServerResponse.class);
     }
 
     public ServerMetadata findServerByUuid(String uuid) {
@@ -127,13 +127,13 @@ public class ServerClient extends BaseSdkClient {
                 .get(GetStatusResponse.class);
     }
 
-    public CreateServerResponse convertToTemplate(CreateTemplateRequest request) {
+    public BaseServerResponse convertToTemplate(CreateTemplateRequest request) {
         return
             client("/servers/{accountAlias}/{serverId}/convertToTemplate")
                 .resolveTemplate("serverId", request.getServerId())
                 .request()
                 .post(entity(request, APPLICATION_JSON))
-                .readEntity(CreateServerResponse.class);
+                .readEntity(BaseServerResponse.class);
     }
 
     public BaseServerListResponse powerOn(List<String> serverIdList) {
