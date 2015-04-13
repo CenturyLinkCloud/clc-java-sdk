@@ -3,10 +3,7 @@ package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.IdDataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
-import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
+import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -115,5 +112,13 @@ public class ServerBean {
         server.template(
             server.getTemplate().as(NameTemplateRef.class).name(template)
         );
+    }
+
+    public TimeToLive getTimeToLive() {
+        return server.getTimeToLive();
+    }
+
+    public void setTimeToLive(TimeToLive timeToLive) {
+
     }
 }

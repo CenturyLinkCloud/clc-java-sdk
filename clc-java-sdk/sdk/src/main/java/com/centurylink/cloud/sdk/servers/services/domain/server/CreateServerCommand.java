@@ -16,6 +16,7 @@ public class CreateServerCommand {
     private Machine machine = new Machine();
     private String password;
     private NetworkConfig network = new NetworkConfig();
+    private TimeToLive timeToLive = new TimeToLive();
 
     public String getId() {
         return id;
@@ -118,6 +119,19 @@ public class CreateServerCommand {
 
     public CreateServerCommand network(NetworkConfig network) {
         setNetwork(network);
+        return this;
+    }
+
+    public TimeToLive getTimeToLive() {
+        return timeToLive;
+    }
+
+    public void setTimeToLive(TimeToLive timeToLive) {
+        this.timeToLive = timeToLive;
+    }
+
+    public CreateServerCommand timeToLive(TimeToLive timeToLive) {
+        setTimeToLive(timeToLive);
         return this;
     }
 }

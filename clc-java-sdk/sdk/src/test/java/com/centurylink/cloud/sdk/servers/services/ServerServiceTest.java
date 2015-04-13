@@ -4,10 +4,7 @@ import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
-import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
@@ -108,6 +105,21 @@ public class ServerServiceTest extends AbstractServersSdkTest {
             )
             .waitUntilComplete()
             .getResult();
+    }
+
+    @Test
+    public void testCreateWithTimeToLive() throws Exception {
+        ServerMetadata newServer =
+                serverService.create(anyServerConfig()
+                                .name("CTTL")
+                                .timeToLive(new TimeToLive().date("2015-12-31").time("12:15").offset("+03:00"))
+                )
+                        .waitUntilComplete()
+                        .getResult();
+
+        assert !isNullOrEmpty(newServer.getId());
+
+        cleanUpCreatedResources(newServer.asRefById());
     }
 
     void cleanUpCreatedResources(ServerRef newServer) {
