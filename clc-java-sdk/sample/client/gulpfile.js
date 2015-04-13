@@ -50,6 +50,8 @@ gulp.task('buildHtml', function () {
 
 gulp.task('default', ['buildJs', 'buildCss', 'buildHtml']);
 
+gulp.task('build', ['buildJs', 'buildCss', 'buildHtml']);
+
 gulp.task('watch', function() {
     gulp.watch('src/jsx/**/*.jsx', ['buildJs']);
     gulp.watch('src/scss/**/*.scss', ['buildCss']);

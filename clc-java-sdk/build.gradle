@@ -1,5 +1,3 @@
-
-
 apply plugin: 'java'
 
 repositories {
@@ -8,4 +6,19 @@ repositories {
 
 dependencies {
 
+}
+
+task run {
+    description('Assemble application and run it on jetty.')
+    dependsOn(':sample:app:run')
+}
+
+task watch {
+    description('Run gulp watch for watching changes')
+    dependsOn('sample:client:gulp_watch')
+}
+
+task build {
+    description ('Assemble application.')
+    dependsOn(':sample:app:build')
 }

@@ -1,0 +1,11 @@
+plugins {
+    id "com.moowork.gulp" version "0.9"
+}
+
+apply plugin: 'com.moowork.gulp'
+
+// makes sure on each build that gulp is installed
+gulp_build.dependsOn 'installGulp'
+
+// processes your package.json before running gulp build
+gulp_build.dependsOn 'npmInstall'
