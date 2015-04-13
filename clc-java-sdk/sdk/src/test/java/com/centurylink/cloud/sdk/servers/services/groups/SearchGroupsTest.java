@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.groups;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
@@ -39,27 +40,40 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
     @Mock
     DataCentersClient dataCentersClient;
 
-    @Test
-    public void testFindByIdRef() {
+    private void mockFrankfurtDataCenterMetadata() {
         when(dataCenterService.find(any(DataCenterFilter.class))).thenReturn(asList(
-            new DataCenterMetadata("DE1", "Frankfurt") {{
+            new DataCenterMetadata("de1", "Frankfurt") {{
                 getLinks().add(new Link() {{
                     setRel("group");
                     setId("rootGroupId");
                 }});
             }}
         ));
+    }
 
+    private void mockFrankfurtDataCenterRootGroup() {
         when(serverClient.getGroup("rootGroupId")).thenReturn(
             new GroupMetadata() {{
                 setId("rootGroupId");
                 setName("Root Group");
-                getGroups().add(new GroupMetadata() {{
-                    setId("1");
-                    setName("Group1");
-                }});
+                getGroups().addAll(asList(
+                    new GroupMetadata() {{
+                        setId("1");
+                        setName("Group1");
+                    }},
+                    new GroupMetadata() {{
+                        setId("2");
+                        setName("Archive");
+                    }})
+                );
             }}
         );
+    }
+
+    @Test
+    public void testFindByIdRef() {
+        mockFrankfurtDataCenterMetadata();
+        mockFrankfurtDataCenterRootGroup();
 
         GroupMetadata group = groupService.findByRef(Group.refById()
             .dataCenter(DE_FRANKFURT)
@@ -71,23 +85,8 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByNameRef() {
-        when(dataCenterService.find(any(DataCenterFilter.class))).thenReturn(asList(
-            new DataCenterMetadata("DE1", "Frankfurt") {{
-                getLinks().add(new Link() {{
-                    setRel("group");
-                    setId("rootGroupId");
-                }});
-            }}
-        ));
-
-        when(serverClient.getGroup("rootGroupId")).thenReturn(
-            new GroupMetadata() {{
-                setName("Root Group");
-                getGroups().add(new GroupMetadata() {{
-                    setName("Archive");
-                }});
-            }}
-        );
+        mockFrankfurtDataCenterMetadata();
+        mockFrankfurtDataCenterRootGroup();
 
         GroupMetadata group = groupService.findByRef(Group.refByName()
             .dataCenter(DE_FRANKFURT)
@@ -99,27 +98,33 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindGroupByName() {
-        when(dataCenterService.find(any(DataCenterFilter.class))).thenReturn(asList(
-            new DataCenterMetadata("DE1", "Frankfurt") {{
+        mockFrankfurtDataCenterMetadata();
+        mockFrankfurtDataCenterRootGroup();
+
+        List<GroupMetadata> groups = groupService.find(new GroupFilter()
+            .dataCenterIn(DE_FRANKFURT)
+            .nameContains("Group1")
+        );
+
+        assert groups.get(0).getName().equals("Group1");
+    }
+
+    @Test
+    public void testFindGroupByNameInAllDataCenters() {
+        when(dataCentersClient.findAllDataCenters()).thenReturn(new GetDataCenterListResponse(asList(
+            new DataCenterMetadata("de1", "Frankfurt") {{
                 getLinks().add(new Link() {{
                     setRel("group");
                     setId("rootGroupId");
                 }});
-            }}
-        ));
-
-        when(serverClient.getGroup("rootGroupId")).thenReturn(
-            new GroupMetadata() {{
-                setName("Root Group");
-                getGroups().add(new GroupMetadata() {{
-                    setName("Group1");
-                }});
-            }}
+            }}))
         );
 
+        mockFrankfurtDataCenterMetadata();
+        mockFrankfurtDataCenterRootGroup();
+
         List<GroupMetadata> groups = groupService.find(new GroupFilter()
-            .dataCenterIn(DE_FRANKFURT)
-            .filter(g -> g.getName().contains("Group1"))
+            .nameContains("Group1")
         );
 
         assert groups.get(0).getName().equals("Group1");

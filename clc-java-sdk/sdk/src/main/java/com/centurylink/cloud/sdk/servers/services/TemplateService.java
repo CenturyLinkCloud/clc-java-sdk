@@ -7,7 +7,7 @@ import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.services.domain.Response;
+import com.centurylink.cloud.sdk.servers.services.domain.OperationFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;
@@ -78,10 +78,10 @@ public class TemplateService {
         );
     }
 
-    public Response<Template> delete(Template template) {
+    public OperationFuture<Template> delete(Template template) {
         BaseServerResponse response = serversClient.delete(template.getName());
 
-        return new Response<>(
+        return new OperationFuture<>(
             template,
             response.findStatusId(),
             serversClient

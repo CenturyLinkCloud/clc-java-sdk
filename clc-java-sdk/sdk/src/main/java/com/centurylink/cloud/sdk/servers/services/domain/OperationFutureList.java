@@ -4,24 +4,28 @@ import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.google.common.base.Throwables;
 
-/**
- * @author ilya.drabenia
- */
-public class Response<T> {
+import java.util.List;
+
+public class OperationFutureList<T> {
+
     public static final long STATUS_POLLING_DELAY = 400L;
 
     private final ServerClient serverClient;
-    private final String statusId;
+    private final List<String> statusIdList;
+    private final List<T> result;
 
-    private final T result;
-
-    public Response(T result, String statusId, ServerClient serverClient) {
+    public OperationFutureList(List<T> result, List<String> statusIdList, ServerClient serverClient) {
         this.serverClient = serverClient;
-        this.statusId = statusId;
+        this.statusIdList = statusIdList;
         this.result = result;
     }
 
-    public Response<T> waitUntilComplete() {
+    public OperationFutureList<T> waitUntilComplete() {
+        statusIdList.forEach(this::waitUntilCompleteSingleJob);
+        return this;
+    }
+
+    private void waitUntilCompleteSingleJob(String statusId) {
         for (;;) {
             String status = serverClient
                     .getJobStatus(statusId)
@@ -29,7 +33,7 @@ public class Response<T> {
 
             switch (status) {
                 case "succeeded":
-                    return this;
+                    return;
 
                 case "failed":
                 case "unknown":
@@ -45,13 +49,7 @@ public class Response<T> {
         }
     }
 
-    public static void waitUntilCompleteMultipleJobs(Response... asyncResponses) {
-        for (Response response : asyncResponses) {
-            response.waitUntilComplete();
-        }
-    }
-
-    public T getResult() {
+    public List<T> getResult() {
         return result;
     }
 }

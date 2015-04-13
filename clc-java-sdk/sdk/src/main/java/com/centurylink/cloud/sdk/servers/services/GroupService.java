@@ -13,6 +13,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.google.inject.Inject;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionIfNotFound;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -20,6 +21,8 @@ import static com.google.common.collect.Iterables.getFirst;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * Service provide operations for query and manipulate groups of servers
+ *
  * @author ilya.drabenia
  */
 public class GroupService {
@@ -44,28 +47,37 @@ public class GroupService {
     }
 
     public List<GroupMetadata> find(GroupFilter criteria) {
+        return findLazy(criteria).collect(toList());
+    }
+
+    public Stream<GroupMetadata> findLazy(GroupFilter criteria) {
         checkNotNull(criteria, "Criteria must be not null");
 
-        List<DataCenterMetadata> dataCenters;
+        Stream<DataCenterMetadata> dataCenters;
         if (criteria.getDataCenters().size() > 0) {
-            dataCenters = criteria
-                .getDataCenters().stream()
-                .flatMap(d -> dataCenterService.find(d).stream())
-                .collect(toList());
+            dataCenters =
+                criteria
+                    .getDataCenters().stream()
+                    .flatMap(d -> dataCenterService.find(d).stream());
         } else {
-            dataCenters = dataCentersClient.findAllDataCenters();
+            dataCenters =
+                dataCentersClient
+                    .findAllDataCenters()
+                    .stream();
         }
 
         return
-            dataCenters.stream()
+            dataCenters
                 .map(d -> client.getGroup(d.getGroup().getId()))
                 .flatMap(g -> g.getAllGroups().stream())
-                .filter(criteria.getGroupFilter())
-                .collect(toList());
+                .filter(criteria.getGroupFilter());
     }
 
     public GroupMetadata findFirst(GroupFilter criteria) {
-        return getFirst(find(criteria), null);
+        return getFirst(
+            findLazy(criteria).limit(1).collect(toList()),
+            null
+        );
     }
 
     public List<Group> findByDataCenter(DataCenterRef dataCenter) {
@@ -82,11 +94,6 @@ public class GroupService {
             dataCenterService.findByRef(dataCenter).getId(),
             result.getAllGroups()
         );
-    }
-
-    private GroupMetadata getMatchedGroup(GroupMetadata groups, Group group) {
-        return groups
-            .findGroupByName(group.getName());
     }
 
 }

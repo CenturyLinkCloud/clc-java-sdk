@@ -6,8 +6,8 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
-import com.centurylink.cloud.sdk.servers.services.domain.Response;
-import com.centurylink.cloud.sdk.servers.services.domain.ResponseList;
+import com.centurylink.cloud.sdk.servers.services.domain.OperationFuture;
+import com.centurylink.cloud.sdk.servers.services.domain.OperationFutureList;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
@@ -40,21 +40,21 @@ public class ServerService {
         this.client = client;
     }
 
-    public Response<ServerMetadata> create(CreateServerCommand command) {
+    public OperationFuture<ServerMetadata> create(CreateServerCommand command) {
         BaseServerResponse response = client
             .create(serverConverter.buildCreateServerRequest(command));
 
         ServerMetadata serverInfo = client
             .findServerByUuid(response.findServerUuid());
 
-        return new Response<>(
+        return new OperationFuture<>(
             serverInfo,
             response.findStatusId(),
             client
         );
     }
 
-    public ListenableFuture<Response<ServerMetadata>> createAsync(CreateServerCommand command) {
+    public ListenableFuture<OperationFuture<ServerMetadata>> createAsync(CreateServerCommand command) {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
@@ -70,11 +70,11 @@ public class ServerService {
             });
 
         return
-            Futures.transform(metadata, new Function<ServerMetadata, Response<ServerMetadata>>() {
+            Futures.transform(metadata, new Function<ServerMetadata, OperationFuture<ServerMetadata>>() {
                 @Override
-                public Response<ServerMetadata> apply(ServerMetadata serverInfo) {
+                public OperationFuture<ServerMetadata> apply(ServerMetadata serverInfo) {
                     try {
-                        return new Response<>(
+                        return new OperationFuture<>(
                             serverInfo,
                             response.get().findStatusId(),
                             client
@@ -86,12 +86,12 @@ public class ServerService {
             });
     }
 
-    public Response<ServerRef> delete(ServerRef server) {
+    public OperationFuture<ServerRef> delete(ServerRef server) {
         BaseServerResponse response = client.delete(
             findByRef(server).getId()
         );
 
-        return new Response<>(
+        return new OperationFuture<>(
             server,
             response.findStatusId(),
             client
@@ -106,7 +106,7 @@ public class ServerService {
         }
     }
 
-    public Response<Template> convertToTemplate(CreateTemplateCommand command) {
+    public OperationFuture<Template> convertToTemplate(CreateTemplateCommand command) {
         BaseServerResponse response =
             client.convertToTemplate(new CreateTemplateRequest()
                 .serverId(command.getServer().as(IdServerRef.class).getId())
@@ -115,7 +115,7 @@ public class ServerService {
                 .password(command.getPassword())
             );
 
-        return new Response<>(
+        return new OperationFuture<>(
             new Template()
                 .name(response.getServer())
                 .description(command.getDescription()),
@@ -124,19 +124,19 @@ public class ServerService {
         );
     }
 
-    public ResponseList<BaseServerResponse> powerOn(List<ServerRef> serverList) {
+    public OperationFutureList<BaseServerResponse> powerOn(List<ServerRef> serverList) {
         return createPowerOperationsResponse(client.powerOn(getIdListFromServerRefList(serverList)));
     }
 
-    public ResponseList<BaseServerResponse> powerOff(List<ServerRef> serverList) {
+    public OperationFutureList<BaseServerResponse> powerOff(List<ServerRef> serverList) {
         return createPowerOperationsResponse(client.powerOff(getIdListFromServerRefList(serverList)));
     }
 
-    public ResponseList<BaseServerResponse> startMaintenance(List<ServerRef> serverList) {
+    public OperationFutureList<BaseServerResponse> startMaintenance(List<ServerRef> serverList) {
         return createPowerOperationsResponse(client.startMaintenance(getIdListFromServerRefList(serverList)));
     }
 
-    public ResponseList<BaseServerResponse> stopMaintenance(List<ServerRef> serverList) {
+    public OperationFutureList<BaseServerResponse> stopMaintenance(List<ServerRef> serverList) {
         return createPowerOperationsResponse(client.stopMaintenance(getIdListFromServerRefList(serverList)));
     }
 
@@ -152,7 +152,7 @@ public class ServerService {
         return serverIdList;
     }
 
-    private ResponseList<BaseServerResponse> createPowerOperationsResponse(List<BaseServerResponse> responseFromApi) {
+    private OperationFutureList<BaseServerResponse> createPowerOperationsResponse(List<BaseServerResponse> responseFromApi) {
         List<String> statusIdList = new ArrayList<>();
 
         if (responseFromApi != null) {
@@ -161,7 +161,7 @@ public class ServerService {
             );
         }
 
-        return new ResponseList<>(responseFromApi, statusIdList, client);
+        return new OperationFutureList<>(responseFromApi, statusIdList, client);
     }
 
 }
