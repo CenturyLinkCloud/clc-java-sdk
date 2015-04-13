@@ -18,6 +18,8 @@ import static java.util.stream.Collectors.toList;
 
 
 /**
+ * Filter that used to specify needed server groups
+ *
  * @author Ilya Drabenia
  */
 public class GroupFilter {
