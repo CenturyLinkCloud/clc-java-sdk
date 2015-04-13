@@ -45,6 +45,12 @@ public class Response<T> {
         }
     }
 
+    public static void waitUntilCompleteMultipleJobs(Response... asyncResponses) {
+        for (Response response : asyncResponses) {
+            response.waitUntilComplete();
+        }
+    }
+
     public T getResult() {
         return result;
     }
