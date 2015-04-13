@@ -14,7 +14,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Inject
-    private GroupService groupService;
+    GroupService groupService;
 
     @Test(groups = INTEGRATION)
     public void testFindGroupsByDataCenter() {
