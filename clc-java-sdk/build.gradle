@@ -18,7 +18,4 @@ task watch {
     dependsOn('sample:client:gulp_watch')
 }
 
-task build {
-    description ('Assemble application.')
-    dependsOn(':sample:app:build')
-}
+build.dependsOn(':sample:app:build')
