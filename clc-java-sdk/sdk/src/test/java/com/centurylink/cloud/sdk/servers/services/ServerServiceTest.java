@@ -34,24 +34,24 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     @Test
     public void testCreate() throws Exception {
         ServerMetadata newServer =
-                serverService
-                        .create(anyServerConfig()
-                                        .name("TCRT")
-                                        .network(new NetworkConfig()
-                                                        .primaryDns("172.17.1.26")
-                                                        .secondaryDns("172.17.1.27")
-                                        )
-                                        .machine(new Machine()
-                                                        .cpuCount(1)
-                                                        .ram(3)
-                                                        .disk(new DiskConfig()
-                                                                        .type(DiskType.RAW)
-                                                                        .size(14)
-                                                        )
-                                        )
+            serverService
+                .create(anyServerConfig()
+                    .name("TCRT")
+                    .network(new NetworkConfig()
+                        .primaryDns("172.17.1.26")
+                        .secondaryDns("172.17.1.27")
+                    )
+                    .machine(new Machine()
+                        .cpuCount(1)
+                        .ram(3)
+                        .disk(new DiskConfig()
+                            .type(DiskType.RAW)
+                            .size(14)
                         )
-                        .waitUntilComplete()
-                        .getResult();
+                    )
+                )
+                .waitUntilComplete()
+                .getResult();
 
         assert !isNullOrEmpty(newServer.getId());
 
@@ -61,15 +61,15 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     @Test
     public void testCreateWithDataCenterLookup() throws Exception {
         ServerMetadata newServer =
-                serverService.create(anyServerConfig()
-                                .name("CDCL")
-                                .group(Group.refByName()
-                                                .name(DEFAULT_GROUP)
-                                                .dataCenter(DataCenter.refByName("FranKfUrt"))
-                                )
+            serverService.create(anyServerConfig()
+                .name("CDCL")
+                .group(Group.refByName()
+                    .name(DEFAULT_GROUP)
+                    .dataCenter(DataCenter.refByName("FranKfUrt"))
                 )
-                        .waitUntilComplete()
-                        .getResult();
+            )
+            .waitUntilComplete()
+            .getResult();
 
         assert !isNullOrEmpty(newServer.getId());
 
@@ -81,13 +81,13 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         Template customTemplate = createTemplateWithDescription("template1");
 
         ServerMetadata testServer = serverService
-                .create(anyServerConfig()
-                                .template(Template.refByDescription()
-                                                .description("template1")
-                                )
+            .create(anyServerConfig()
+                .template(Template.refByDescription()
+                    .description("template1")
                 )
-                .waitUntilComplete()
-                .getResult();
+            )
+            .waitUntilComplete()
+            .getResult();
 
         assert testServer.getId() != null;
 
@@ -99,14 +99,14 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         ServerMetadata templateServer = new TestServerSupport(serverService).createAnyServer();
 
         return serverService
-                .convertToTemplate(new CreateTemplateCommand()
-                                .server(templateServer.asRefById())
-                                .visibility(PRIVATE)
-                                .password(TestServerSupport.PASSWORD)
-                                .description(description)
-                )
-                .waitUntilComplete()
-                .getResult();
+            .convertToTemplate(new CreateTemplateCommand()
+                .server(templateServer.asRefById())
+                .visibility(PRIVATE)
+                .password(TestServerSupport.PASSWORD)
+                .description(description)
+            )
+            .waitUntilComplete()
+            .getResult();
     }
 
     @Test
@@ -114,11 +114,11 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         ZonedDateTime tomorrow = ZonedDateTime.now().plusDays(1);
         ServerMetadata newServer =
                 serverService.create(anyServerConfig()
-                                .name("CTTL")
-                                .timeToLive(new TimeToLive(tomorrow))
+                    .name("CTTL")
+                    .timeToLive(new TimeToLive(tomorrow))
                 )
-                        .waitUntilComplete()
-                        .getResult();
+                .waitUntilComplete()
+                .getResult();
 
         assert !isNullOrEmpty(newServer.getId());
 
@@ -127,8 +127,8 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     void cleanUpCreatedResources(ServerRef newServer) {
         serverService
-                .delete(newServer)
-                .waitUntilComplete();
+            .delete(newServer)
+            .waitUntilComplete();
     }
 
 }
