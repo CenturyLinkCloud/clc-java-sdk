@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.group.filters;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.core.services.Predicates;
 import com.centurylink.cloud.sdk.core.services.filter.ConstPredicate;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
@@ -24,7 +25,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class GroupFilter {
     private List<DataCenterFilter> dataCenters = new ArrayList<>();
-    private Predicate<GroupMetadata> groupFilter = new ConstPredicate<>();
+    private Predicate<GroupMetadata> groupFilter = Predicates.alwaysTrue();
 
     public GroupFilter dataCenterIn(DataCenterRef... dataCenters) {
         this.dataCenters.addAll(
@@ -53,7 +54,7 @@ public class GroupFilter {
             Stream.of(ids)
                 .filter(id -> id != null)
                 .map(id -> (Predicate<GroupMetadata>) (m -> Filters.equals(m.getId(), id)))
-                .reduce(new ConstPredicate<>(false),
+                .reduce(Predicates.alwaysFalse(),
                     (previousResult, item) -> previousResult.or(item)
                 );
 

@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.filters;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.services.filter.ConstPredicate;
+import com.centurylink.cloud.sdk.core.services.Predicates;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
 
 import java.util.function.Predicate;
@@ -13,7 +13,7 @@ import static com.centurylink.cloud.sdk.core.services.filter.Filters.containsIgn
  * @author Ilya Drabenia
  */
 public class DataCenterFilter {
-    private Predicate<DataCenterMetadata> predicate = new ConstPredicate<>();
+    private Predicate<DataCenterMetadata> predicate = Predicates.alwaysTrue();
 
     public DataCenterFilter() {
     }
@@ -39,7 +39,7 @@ public class DataCenterFilter {
                 .map(id ->
                     (Predicate<DataCenterMetadata>) m -> Filters.equals(m.getId(), id)
                 )
-                .reduce(new ConstPredicate<>(false),
+                .reduce(Predicates.alwaysFalse(),
                     (previousPredicate, item) -> previousPredicate.or(item)
                 );
 
