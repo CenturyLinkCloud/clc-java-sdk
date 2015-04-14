@@ -65,8 +65,8 @@ public class TimeToLive {
         calendar.setTime(date);
 
         this.zonedDateTime = ZonedDateTime.ofInstant(
-                calendar.toInstant(),
-                ZoneId.of(calendar.getTimeZone().getID())
+            calendar.toInstant(),
+            ZoneId.of(calendar.getTimeZone().getID())
         );
     }
 
