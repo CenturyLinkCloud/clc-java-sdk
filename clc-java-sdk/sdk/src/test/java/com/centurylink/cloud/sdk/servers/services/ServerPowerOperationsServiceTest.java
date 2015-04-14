@@ -4,54 +4,53 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
-import static java.util.Arrays.asList;
 
 
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
 
-    private ServerMetadata server1;
+    private ServerMetadata server;
 
     @Inject
     ServerService serverService;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        server1 = createDefaultServerWithName(serverService, "ser-1");
-    }
-
     @AfterClass
     public void tearDown() {
-        cleanUpCreatedResources(serverService, server1.asRefById());
+        cleanUpCreatedResources(serverService, server.asRefById());
     }
 
-    public void testStartServerMaintenance() {
+    private ServerMetadata loadActualMetadata(ServerMetadata server) {
+        return serverService.findByRef(server.asRefById());
+    }
+
+    public void testPowerOff() {
+        server = createDefaultServerWithName(serverService, "pwrtst");
+
         serverService
-            .powerOn(server1.asRefById())
+            .powerOff(server.asRefById())
             .waitUntilComplete();
 
-        ServerMetadata server = serverService.findByRef(server1.asRefById());
-        assertNotNull(server);
-        assertNotNull(server.getDetails());
-        assertEquals(server.getDetails().getPowerState(), "started");
+        ServerMetadata resultServer = loadActualMetadata(this.server);
+        assertNotNull(resultServer);
+        assertNotNull(resultServer.getDetails());
+        assertEquals(resultServer.getDetails().getPowerState(), "stopped");
     }
 
     @Test
-    public void testStopServerMaintenance() {
-        testStartServerMaintenance();
+    public void testPowerOn() {
+        testPowerOff();
 
         serverService
-            .powerOff(server1.asRefById())
+            .powerOn(server.asRefById())
             .waitUntilComplete();
 
-        ServerMetadata server = serverService.findByRef(server1.asRefById());
+        ServerMetadata server = loadActualMetadata(this.server);
         assertNotNull(server);
         assertNotNull(server.getDetails());
-        assertNotNull(server.getDetails().getPowerState(), "stopped");
+        assertNotNull(server.getDetails().getPowerState(), "started");
     }
 }

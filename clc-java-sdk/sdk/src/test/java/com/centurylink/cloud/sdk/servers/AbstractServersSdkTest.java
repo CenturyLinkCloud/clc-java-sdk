@@ -21,7 +21,7 @@ public class AbstractServersSdkTest extends AbstractSdkTest {
         return list(new AuthModule(), new ServersModule());
     }
 
-    protected ServerMetadata createDefaultServerWithName(ServerService serverService, String name) throws Exception {
+    protected ServerMetadata createDefaultServerWithName(ServerService serverService, String name) {
         return serverService.create(anyServerConfig().name(name)).waitUntilComplete().getResult();
     }
 
