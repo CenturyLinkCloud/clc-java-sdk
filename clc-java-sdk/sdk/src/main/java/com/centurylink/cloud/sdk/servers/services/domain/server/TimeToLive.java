@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 /**
- * Class represent server expiration time
+ * Class that represents server expiration time
  *
  * @author Aliaksandr Krasitski
  */
@@ -21,7 +21,9 @@ public class TimeToLive {
     private final ZonedDateTime zonedDateTime;
 
     /**
-     * @param zonedDateTime is not null representation of expiration time
+     * Constructor that allow to provide server expiration time using {@link ZonedDateTime}
+     *
+     * @param zonedDateTime not null representation of expiration time
      */
     public TimeToLive(ZonedDateTime zonedDateTime) {
         checkNotNull(zonedDateTime);
@@ -30,10 +32,11 @@ public class TimeToLive {
     }
 
     /**
-     * Constructor that allow to describe server expiration time in ISO date format
+     * Constructor that allow to provide server expiration time as {@link String} in ISO date format
      *
-     * @param dateTime is ISO formatter string that contains server expiration date
+     * @param dateTime is not null ISO formatter string that contains server expiration date
      * @throws TimeToLiveParseException when application is not able to parse dateTime
+     * @throws NullPointerException
      */
     public TimeToLive(String dateTime) {
         checkNotNull(dateTime);
@@ -42,9 +45,9 @@ public class TimeToLive {
     }
 
     /**
-     * Constructor that allow to specify server expiration time as formatted date string
+     * Constructor that allow to provide server expiration time as formatted date {@link String}
      *
-     * @param dateTime is formatted string that contains date
+     * @param dateTime is not null formatted string that contains date
      * @param pattern is pattern which describe structure of dateTime parameter
      * @throws TimeToLiveParseException when application is not able to parse dateTime
      */
@@ -56,7 +59,9 @@ public class TimeToLive {
     }
 
     /**
-     * @param date
+     * Constructor that allow to provide server expiration time as {@link Date}
+     *
+     * @param date is not null value of server expiration time
      */
     public TimeToLive(Date date) {
         checkNotNull(date);
@@ -71,7 +76,9 @@ public class TimeToLive {
     }
 
     /**
-     * @param calendar
+     * Constructor that allow to provide server expiration time as {@link Calendar}
+     *
+     * @param calendar is not null value of server expiration time
      */
     public TimeToLive(Calendar calendar) {
         this(checkNotNull(calendar).getTime());
