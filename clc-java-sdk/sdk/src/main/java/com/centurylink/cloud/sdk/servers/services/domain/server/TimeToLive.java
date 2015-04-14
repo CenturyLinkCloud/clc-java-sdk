@@ -7,62 +7,100 @@ import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+
 /**
- * Created by aliaksandr.krasitski on 4/13/2015.
+ * Class represent server expiration time
+ *
+ * @author Aliaksandr Krasitski
  */
 public class TimeToLive {
-    private ZonedDateTime zonedDateTime;
+    private final ZonedDateTime zonedDateTime;
 
+    /**
+     * @param zonedDateTime is not null representation of expiration time
+     */
     public TimeToLive(ZonedDateTime zonedDateTime) {
-        this.zonedDateTime = zonedDateTime.withNano(0).withSecond(0);
+        checkNotNull(zonedDateTime, "DateTime must be not a null");
+
+        this.zonedDateTime = checkNotNull(zonedDateTime).withNano(0).withSecond(0);
     }
 
+    /**
+     * Constructor that allow to describe server expiration time in ISO date format
+     *
+     * @param dateTime is ISO formatter string that contains server expiration date
+     * @throws TimeToLiveParseException when application is not able to parse dateTime
+     */
     public TimeToLive(String dateTime) {
-        parse(dateTime);
+        checkNotNull(dateTime, "DateTime must be not a null");
+
+        zonedDateTime = parse(dateTime);
     }
 
+    /**
+     * Constructor that allow to specify server expiration time as formatted date string
+     *
+     * @param dateTime is formatted string that contains date
+     * @param pattern is pattern which describe structure of dateTime parameter
+     * @throws TimeToLiveParseException when application is not able to parse dateTime
+     */
     public TimeToLive(String dateTime, String pattern) {
-        parse(dateTime, pattern);
+        checkNotNull(dateTime, "DateTime must be not a null");
+        checkNotNull(pattern, "Pattern must be not a null");
+
+        zonedDateTime = parse(dateTime, pattern);
     }
 
+    /**
+     * @param date
+     */
     public TimeToLive(Date date) {
+        checkNotNull(date, "Date must be not a null");
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        this.zonedDateTime = ZonedDateTime.ofInstant(calendar.toInstant(), ZoneId.of(calendar.getTimeZone().getID()));
+
+        this.zonedDateTime = ZonedDateTime.ofInstant(
+            calendar.toInstant(),
+            ZoneId.of(calendar.getTimeZone().getID())
+        );
     }
 
+    /**
+     * @param calendar
+     */
     public TimeToLive(Calendar calendar) {
-        this(calendar.getTime());
+        this(
+            checkNotNull(calendar, "Date must be not a null").getTime()
+        );
     }
 
-    private TimeToLive parse(String dateTime) {
+    private ZonedDateTime parse(String dateTime) {
         //dateTime format is YYYY-MM-DDThh:mm+hh:mm
-        if (dateTime != null) {
-            try {
-                zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME).withNano(0).withSecond(0);
-            } catch (DateTimeParseException ex) {
-                throw new DateTimeParseException("dateTime should follow format: yyyy-MM-dd'T'HH:mmXXX", ex.getParsedString(), ex.getErrorIndex(), ex);
-            }
-        }
-
-        return this;
+        return parse(dateTime, ISO_DATE_TIME);
     }
 
-    private TimeToLive parse(String dateTime, String pattern) {
-        if (dateTime != null) {
-            try {
-                zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ofPattern(pattern)).withNano(0).withSecond(0);
-            } catch (DateTimeParseException ex) {
-                throw new DateTimeParseException("dateTime should follow format: "+ pattern, ex.getParsedString(), ex.getErrorIndex(), ex);
-            }
-        }
+    private ZonedDateTime parse(String dateTime, String pattern) {
+        return parse(dateTime, DateTimeFormatter.ofPattern(pattern));
+    }
 
-        return this;
+    private ZonedDateTime parse(String dateTime, DateTimeFormatter pattern) {
+        try {
+            return
+                ZonedDateTime
+                    .parse(dateTime, pattern)
+                    .withNano(0)
+                    .withSecond(0);
+        } catch (DateTimeParseException ex) {
+            throw new TimeToLiveParseException("DateTime should follow format %s", pattern, ex);
+        }
     }
 
     @Override
     public String toString() {
-        return zonedDateTime != null ? zonedDateTime.format(DateTimeFormatter.ISO_DATE_TIME): null;
+        return zonedDateTime != null ? zonedDateTime.format(ISO_DATE_TIME): null;
     }
 
     public String format() {
