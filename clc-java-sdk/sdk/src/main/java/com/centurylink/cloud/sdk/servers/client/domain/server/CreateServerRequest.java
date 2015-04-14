@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
-import java.time.ZonedDateTime;
+import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class CreateServerRequest {
 
     private List<DiskRequest> additionalDisks = new ArrayList<>();
 
-    private ZonedDateTime timeToLive;
+    private String ttl;
 
 
     /**
@@ -183,16 +184,18 @@ public class CreateServerRequest {
         return this;
     }
 
-    public ZonedDateTime getTimeToLive() {
-        return timeToLive;
+    public String getTtl() {
+        return ttl;
     }
 
-    public void setTimeToLive(ZonedDateTime timeToLive) {
-        this.timeToLive = timeToLive;
+    public void setTtl(String ttl) {
+        this.ttl = ttl;
     }
 
-    public CreateServerRequest timeToLive(ZonedDateTime timeToLive) {
-        setTimeToLive(timeToLive);
+    public CreateServerRequest timeToLive(TimeToLive timeToLive) {
+        if (timeToLive != null) {
+            setTtl(timeToLive.format());
+        }
         return this;
     }
 }

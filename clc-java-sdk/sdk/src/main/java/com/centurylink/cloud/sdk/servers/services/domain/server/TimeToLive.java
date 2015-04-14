@@ -1,86 +1,71 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by aliaksandr.krasitski on 4/13/2015.
  */
 public class TimeToLive {
-    private ZonedDateTime zonedDateTime = ZonedDateTime.now();
-    @JsonIgnore
-    private boolean isDefined = false;
+    private ZonedDateTime zonedDateTime;
 
-    public TimeToLive date(String date) {
-        //date format is YYYY-MM-DD
-        if (date != null && date.length() == 10) {
-            int year = Integer.parseInt(date.substring(0,3));
-            int month = Integer.parseInt(date.substring(5,7));
-            int day = Integer.parseInt(date.substring(9));
+    public TimeToLive(ZonedDateTime zonedDateTime) {
+        this.zonedDateTime = zonedDateTime.withNano(0).withSecond(0);
+    }
 
-            this.year(year)
-                .month(month)
-                .day(day);
+    public TimeToLive(String dateTime) {
+        parse(dateTime);
+    }
+
+    public TimeToLive(String dateTime, String pattern) {
+        parse(dateTime, pattern);
+    }
+
+    public TimeToLive(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        this.zonedDateTime = ZonedDateTime.ofInstant(calendar.toInstant(), ZoneId.of(calendar.getTimeZone().getID()));
+    }
+
+    public TimeToLive(Calendar calendar) {
+        this(calendar.getTime());
+    }
+
+    private TimeToLive parse(String dateTime) {
+        //dateTime format is YYYY-MM-DDThh:mm+hh:mm
+        if (dateTime != null) {
+            try {
+                zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME).withNano(0).withSecond(0);
+            } catch (DateTimeParseException ex) {
+                throw new DateTimeParseException("dateTime should follow format: yyyy-MM-dd'T'HH:mmXXX", ex.getParsedString(), ex.getErrorIndex(), ex);
+            }
         }
 
         return this;
     }
 
-    public TimeToLive time(String time) {
-        //time format is hh:mm
-        if (time != null && time.length() == 5) {
-            int hour = Integer.parseInt(time.substring(0,1));
-            int minute = Integer.parseInt(time.substring(3,4));
-
-            this.hour(hour)
-                .minute(minute);
+    private TimeToLive parse(String dateTime, String pattern) {
+        if (dateTime != null) {
+            try {
+                zonedDateTime = ZonedDateTime.parse(dateTime, DateTimeFormatter.ofPattern(pattern)).withNano(0).withSecond(0);
+            } catch (DateTimeParseException ex) {
+                throw new DateTimeParseException("dateTime should follow format: "+ pattern, ex.getParsedString(), ex.getErrorIndex(), ex);
+            }
         }
+
         return this;
     }
 
-    public TimeToLive year(int year) {
-        isDefined = true;
-        zonedDateTime.withYear(year);
-        return this;
+    @Override
+    public String toString() {
+        return zonedDateTime != null ? zonedDateTime.format(DateTimeFormatter.ISO_DATE_TIME): null;
     }
 
-    public TimeToLive month(int month) {
-        isDefined = true;
-        zonedDateTime.withMonth(month);
-        return this;
-    }
-
-    public TimeToLive day(int day) {
-        isDefined = true;
-        zonedDateTime.withDayOfMonth(day);
-        return this;
-    }
-
-    public TimeToLive hour(int hour) {
-        isDefined = true;
-        zonedDateTime.withHour(hour);
-        return this;
-    }
-
-    public TimeToLive minute(int minute) {
-        isDefined = true;
-        zonedDateTime.withMinute(minute);
-        return this;
-    }
-
-    public TimeToLive offset(String offset) {
-        isDefined = true;
-        zonedDateTime.withZoneSameLocal(ZoneOffset.of(offset));
-        return this;
-    }
-
-    public boolean isDefined() {
-        return isDefined;
-    }
-
-    public ZonedDateTime getZonedDateTime() {
-        return zonedDateTime;
+    public String format() {
+        return zonedDateTime != null ? zonedDateTime.toOffsetDateTime().toString(): null;
     }
 }

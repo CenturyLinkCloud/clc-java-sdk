@@ -53,8 +53,7 @@ public class ServerConverter {
                             .findByRef(newServer.getNetwork().getNetwork())
                             .getNetworkId()
                 )
-                .timeToLive(!newServer.getTimeToLive().isDefined() ? null :
-                            newServer.getTimeToLive().getZonedDateTime()
+                .timeToLive(newServer.getTimeToLive()
                 );
     }
 

@@ -16,7 +16,7 @@ public class CreateServerCommand {
     private Machine machine = new Machine();
     private String password;
     private NetworkConfig network = new NetworkConfig();
-    private TimeToLive timeToLive = new TimeToLive();
+    private TimeToLive timeToLive;
 
     public String getId() {
         return id;
