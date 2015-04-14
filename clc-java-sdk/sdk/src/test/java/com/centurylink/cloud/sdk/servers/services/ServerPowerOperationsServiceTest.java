@@ -15,7 +15,7 @@ import java.util.List;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
 @Test(groups = LONG_RUNNING)
-public class PowerServerOperationsServiceTest extends AbstractServersSdkTest {
+public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
 
     private ServerMetadata server1;
 
