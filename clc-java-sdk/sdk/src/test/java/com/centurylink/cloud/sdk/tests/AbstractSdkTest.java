@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import org.mockito.MockitoAnnotations;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import static java.util.Arrays.asList;
 /**
  * @author ilya.drabenia
  */
-public abstract class AbstractSdkTest {
+public abstract class AbstractSdkTest extends Assert {
 
     @BeforeMethod(alwaysRun = true)
     public void injectDependencies() {

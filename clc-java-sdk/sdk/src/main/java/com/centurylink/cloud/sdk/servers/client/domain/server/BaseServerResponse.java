@@ -42,9 +42,11 @@ public class BaseServerResponse {
     }
 
     public String findStatusId() {
-        for (Link curLink : links) {
-            if (curLink.getRel().equals("status")) {
-                return curLink.getId();
+        if (links != null) {
+            for (Link curLink : links) {
+                if (curLink.getRel().equals("status")) {
+                    return curLink.getId();
+                }
             }
         }
 

@@ -22,6 +22,10 @@ public class OperationFuture<T> {
     }
 
     public OperationFuture<T> waitUntilComplete() {
+        if (statusId == null) {
+            return this;
+        }
+
         for (;;) {
             String status = serverClient
                     .getJobStatus(statusId)

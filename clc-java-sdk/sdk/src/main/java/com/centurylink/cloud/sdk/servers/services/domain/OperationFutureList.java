@@ -26,6 +26,10 @@ public class OperationFutureList<T> {
     }
 
     private void waitUntilCompleteSingleJob(String statusId) {
+        if (statusId == null) {
+            return;
+        }
+
         for (;;) {
             String status = serverClient
                     .getJobStatus(statusId)

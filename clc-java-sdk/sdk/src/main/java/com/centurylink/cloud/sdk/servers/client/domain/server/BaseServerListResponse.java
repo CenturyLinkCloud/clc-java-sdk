@@ -5,6 +5,13 @@ import java.util.Collection;
 
 public class BaseServerListResponse extends ArrayList<BaseServerResponse> {
 
+    public BaseServerListResponse(int initialCapacity) {
+        super(initialCapacity);
+    }
+
+    public BaseServerListResponse() {
+    }
+
     public BaseServerListResponse(Collection<? extends BaseServerResponse> collection) {
         super(collection);
     }
