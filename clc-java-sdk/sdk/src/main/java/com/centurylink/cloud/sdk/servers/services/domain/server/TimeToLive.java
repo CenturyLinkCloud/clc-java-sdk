@@ -1,5 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
+import com.google.common.base.Preconditions;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,9 +24,9 @@ public class TimeToLive {
      * @param zonedDateTime is not null representation of expiration time
      */
     public TimeToLive(ZonedDateTime zonedDateTime) {
-        checkNotNull(zonedDateTime, "DateTime must be not a null");
+        checkNotNull(zonedDateTime);
 
-        this.zonedDateTime = checkNotNull(zonedDateTime).withNano(0).withSecond(0);
+        this.zonedDateTime = zonedDateTime.withNano(0).withSecond(0);
     }
 
     /**
@@ -34,7 +36,7 @@ public class TimeToLive {
      * @throws TimeToLiveParseException when application is not able to parse dateTime
      */
     public TimeToLive(String dateTime) {
-        checkNotNull(dateTime, "DateTime must be not a null");
+        checkNotNull(dateTime);
 
         zonedDateTime = parse(dateTime);
     }
@@ -47,8 +49,8 @@ public class TimeToLive {
      * @throws TimeToLiveParseException when application is not able to parse dateTime
      */
     public TimeToLive(String dateTime, String pattern) {
-        checkNotNull(dateTime, "DateTime must be not a null");
-        checkNotNull(pattern, "Pattern must be not a null");
+        checkNotNull(dateTime);
+        Preconditions.checkNotNull(pattern, "Time to live date pattern must be not a null");
 
         zonedDateTime = parse(dateTime, pattern);
     }
@@ -57,14 +59,14 @@ public class TimeToLive {
      * @param date
      */
     public TimeToLive(Date date) {
-        checkNotNull(date, "Date must be not a null");
+        checkNotNull(date);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
         this.zonedDateTime = ZonedDateTime.ofInstant(
-            calendar.toInstant(),
-            ZoneId.of(calendar.getTimeZone().getID())
+                calendar.toInstant(),
+                ZoneId.of(calendar.getTimeZone().getID())
         );
     }
 
@@ -72,9 +74,7 @@ public class TimeToLive {
      * @param calendar
      */
     public TimeToLive(Calendar calendar) {
-        this(
-            checkNotNull(calendar, "Date must be not a null").getTime()
-        );
+        this(checkNotNull(calendar).getTime());
     }
 
     private ZonedDateTime parse(String dateTime) {
@@ -96,6 +96,10 @@ public class TimeToLive {
         } catch (DateTimeParseException ex) {
             throw new TimeToLiveParseException("DateTime should follow format %s", pattern, ex);
         }
+    }
+
+    private static <T> T checkNotNull(T value) {
+        return Preconditions.checkNotNull(value, "Time to live date must be not a null");
     }
 
     @Override
