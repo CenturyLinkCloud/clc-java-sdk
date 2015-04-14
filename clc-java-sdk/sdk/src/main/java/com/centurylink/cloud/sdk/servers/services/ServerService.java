@@ -21,11 +21,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
+import static com.centurylink.cloud.sdk.core.services.Predicates.*;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author ilya.drabenia
@@ -124,44 +126,51 @@ public class ServerService {
         );
     }
 
-    public OperationFutureList<BaseServerResponse> powerOn(List<ServerRef> serverList) {
-        return createPowerOperationsResponse(client.powerOn(getIdListFromServerRefList(serverList)));
+    public OperationFutureList<BaseServerResponse> powerOn(ServerRef... serverRefs) {
+        return powerOperationResponse(
+            client.powerOn(ids(serverRefs))
+        );
     }
 
-    public OperationFutureList<BaseServerResponse> powerOff(List<ServerRef> serverList) {
-        return createPowerOperationsResponse(client.powerOff(getIdListFromServerRefList(serverList)));
+    public OperationFutureList<BaseServerResponse> powerOff(ServerRef... serverRefs) {
+        return powerOperationResponse(
+            client.powerOff(ids(serverRefs))
+        );
     }
 
-    public OperationFutureList<BaseServerResponse> startMaintenance(List<ServerRef> serverList) {
-        return createPowerOperationsResponse(client.startMaintenance(getIdListFromServerRefList(serverList)));
+    public OperationFutureList<BaseServerResponse> startMaintenance(ServerRef... serverRefs) {
+        return powerOperationResponse(
+            client.startMaintenance(ids(serverRefs))
+        );
     }
 
-    public OperationFutureList<BaseServerResponse> stopMaintenance(List<ServerRef> serverList) {
-        return createPowerOperationsResponse(client.stopMaintenance(getIdListFromServerRefList(serverList)));
+    public OperationFutureList<BaseServerResponse> stopMaintenance(ServerRef... serverRefs) {
+        return powerOperationResponse(
+            client.stopMaintenance(ids(serverRefs))
+        );
     }
 
-    private List<String> getIdListFromServerRefList(List<ServerRef> serverList) {
-        List<String> serverIdList = new ArrayList<>();
+    private List<String> ids(ServerRef... serverRefs) {
+        return
+            Stream
+                .of(serverRefs)
+                .filter(notNull())
+                .map(this::findByRef)
+                .map(ServerMetadata::getId)
+                .collect(toList());
+    }
 
-        if (serverList != null) {
-            serverList.forEach(
-                    server -> serverIdList.add(findByRef(server).getId())
+    private OperationFutureList<BaseServerResponse> powerOperationResponse(List<BaseServerResponse> apiResponse) {
+        return
+            new OperationFutureList<>(
+                apiResponse,
+                apiResponse
+                    .stream()
+                    .filter(notNull())
+                    .map(BaseServerResponse::findStatusId)
+                    .collect(toList()),
+                client
             );
-        }
-
-        return serverIdList;
-    }
-
-    private OperationFutureList<BaseServerResponse> createPowerOperationsResponse(List<BaseServerResponse> responseFromApi) {
-        List<String> statusIdList = new ArrayList<>();
-
-        if (responseFromApi != null) {
-            responseFromApi.forEach(
-                    response -> statusIdList.add(response.findStatusId())
-            );
-        }
-
-        return new OperationFutureList<>(responseFromApi, statusIdList, client);
     }
 
 }

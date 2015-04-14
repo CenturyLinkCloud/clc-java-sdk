@@ -52,7 +52,7 @@ public class TimeToLive {
      * @throws TimeToLiveParseException when application is not able to parse dateTime
      */
     public TimeToLive(String dateTime, String pattern) {
-        checkNotNull(dateTime);
+        TimeToLive.checkNotNull(dateTime);
         Preconditions.checkNotNull(pattern, "Time to live date pattern must be not a null");
 
         zonedDateTime = parse(dateTime, pattern);
