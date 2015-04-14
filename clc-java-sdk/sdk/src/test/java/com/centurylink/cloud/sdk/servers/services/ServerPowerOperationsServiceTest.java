@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterClass;
@@ -23,8 +24,22 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         cleanUpCreatedResources(serverService, server.asRefById());
     }
 
-    private ServerMetadata loadActualMetadata(ServerMetadata server) {
-        return serverService.findByRef(server.asRefById());
+    private Details loadServerDetails(ServerMetadata server) {
+        ServerMetadata metadata = serverService.findByRef(server.asRefById());
+
+        assertNotNull(metadata);
+        assertNotNull(metadata.getDetails());
+
+        return metadata.getDetails();
+    }
+
+    private void assertThat(ServerMetadata server, String status) {
+        assert loadServerDetails(server).getPowerState().equals(status);
+    }
+
+    private void assertThatMaintenanceFlagIs(ServerMetadata server, Boolean expectedResult) throws Exception {
+        Thread.sleep(3000L);
+        assert loadServerDetails(server).getInMaintenanceMode().equals(expectedResult);
     }
 
     public void testPowerOff() {
@@ -34,10 +49,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
             .powerOff(server.asRefById())
             .waitUntilComplete();
 
-        ServerMetadata resultServer = loadActualMetadata(this.server);
-        assertNotNull(resultServer);
-        assertNotNull(resultServer.getDetails());
-        assertEquals(resultServer.getDetails().getPowerState(), "stopped");
+        assertThat(server, "stopped");
     }
 
     @Test
@@ -48,9 +60,28 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
             .powerOn(server.asRefById())
             .waitUntilComplete();
 
-        ServerMetadata server = loadActualMetadata(this.server);
-        assertNotNull(server);
-        assertNotNull(server.getDetails());
-        assertNotNull(server.getDetails().getPowerState(), "started");
+        assertThat(server, "started");
     }
+
+    public void testStartMaintenance() throws Exception {
+        testPowerOn();
+
+        serverService
+            .startMaintenance(server.asRefById())
+            .waitUntilComplete();
+
+        assertThatMaintenanceFlagIs(server, true);
+    }
+
+
+    public void testStopMaintenance() throws Exception {
+        testStartMaintenance();
+
+        serverService
+            .stopMaintenance(server.asRefById())
+            .waitUntilComplete();
+
+        assertThatMaintenanceFlagIs(server, false);
+    }
+
 }
