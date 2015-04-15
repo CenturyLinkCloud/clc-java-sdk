@@ -13,9 +13,9 @@ task run {
     dependsOn(':sample:app:run')
 }
 
-task watch {
-    description('Run gulp watch for watching changes')
-    dependsOn('sample:client:gulp_watch')
+task clientBuild {
+    description('Assemble client part of sample application.')
+    dependsOn(':sample:client:gulp_build')
 }
 
 build.dependsOn(':sample:app:build')

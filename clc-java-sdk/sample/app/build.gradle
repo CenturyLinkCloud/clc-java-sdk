@@ -22,7 +22,6 @@ repositories {
 }
 
 build.dependsOn(':sample:client:gulp_build')
-run.dependsOn(':sample:client:gulp_build')
 
 dependencies {
     compile project(':sdk')
