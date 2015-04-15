@@ -6,6 +6,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import com.centurylink.cloud.sdk.tests.TestGroups;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -17,6 +18,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGro
 import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
 /**
  * @author Ilya Drabenia
@@ -30,7 +32,7 @@ public class SingleServerFixture {
         return server;
     }
 
-    @BeforeSuite(alwaysRun = true)
+    @BeforeSuite(groups = LONG_RUNNING)
     public void createServer() {
         server =
             new ClcSdk()
@@ -67,7 +69,7 @@ public class SingleServerFixture {
                 .asRefById();
     }
 
-    @AfterSuite(alwaysRun = true)
+    @AfterSuite(groups = LONG_RUNNING)
     public void deleteServer() {
         new ClcSdk()
             .serverService()

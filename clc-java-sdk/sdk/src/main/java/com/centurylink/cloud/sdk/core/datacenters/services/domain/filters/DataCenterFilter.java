@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.containsIgnoreCase;
 
 /**
+ * Criteria that used for select
+ *
  * @author Ilya Drabenia
  */
 public class DataCenterFilter {
