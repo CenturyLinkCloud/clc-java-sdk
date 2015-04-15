@@ -164,6 +164,10 @@ public class ServerClient extends BaseSdkClient {
         return sendPowerOperationRequest("reset", serverIdList);
     }
 
+    public BaseServerListResponse shutDown(List<String> serverIdList) {
+        return sendPowerOperationRequest("shutDown", serverIdList);
+    }
+
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
         return
             client("/operations/{accountAlias}/servers/" + operationName)

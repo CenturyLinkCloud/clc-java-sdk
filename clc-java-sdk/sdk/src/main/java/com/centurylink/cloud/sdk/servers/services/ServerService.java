@@ -168,6 +168,12 @@ public class ServerService {
         );
     }
 
+    public OperationFutureList<BaseServerResponse> shutDown(ServerRef... serverRefs) {
+        return powerOperationResponse(
+                client.shutDown(ids(serverRefs))
+        );
+    }
+
     private List<String> ids(ServerRef... serverRefs) {
         return
             Stream

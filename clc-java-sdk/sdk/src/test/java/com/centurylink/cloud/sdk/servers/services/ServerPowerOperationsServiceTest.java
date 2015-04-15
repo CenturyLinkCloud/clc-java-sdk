@@ -30,7 +30,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         return metadata.getDetails();
     }
 
-    private void assertThat(ServerRef server, String status) {
+    private void assertThatPowerStateHasStatus(ServerRef server, String status) {
         assert loadServerDetails(server).getPowerState().equals(status);
     }
 
@@ -45,7 +45,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
             .powerOff(server)
             .waitUntilComplete();
 
-        assertThat(server, "stopped");
+        assertThatPowerStateHasStatus(server, "stopped");
     }
 
     public void testPowerOn() {
@@ -55,7 +55,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
             .powerOn(server)
             .waitUntilComplete();
 
-        assertThat(server, "started");
+        assertThatPowerStateHasStatus(server, "started");
     }
 
     public void testStartMaintenance() throws Exception {
