@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.services.filter;
+package com.centurylink.cloud.sdk.core.services.predicates;
 
 import java.util.function.Predicate;
 
@@ -7,10 +7,6 @@ import java.util.function.Predicate;
  */
 public class ConstPredicate<T> implements Predicate<T> {
     private final boolean defaultValue;
-
-    public ConstPredicate() {
-        defaultValue = true;
-    }
 
     public ConstPredicate(boolean defaultValue) {
         this.defaultValue = defaultValue;

@@ -1,13 +1,14 @@
 package com.centurylink.cloud.sdk.core.datacenters.services.domain.filters;
 
 import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.services.Predicates;
+import com.centurylink.cloud.sdk.core.services.predicates.Predicates;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
 
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.containsIgnoreCase;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Criteria that used for specify needed data centers
@@ -32,10 +33,13 @@ public class DataCenterFilter {
      * Method allow to provide custom filter predicate
      *
      * @param predicate
-     * @return
+     * @return {@link DataCenterFilter}
      */
     public DataCenterFilter filter(Predicate<DataCenterMetadata> predicate) {
-        this.predicate = (this.predicate == null) ? predicate : this.predicate.and(predicate);
+        checkNotNull(predicate, "Predicate must be not a null");
+
+        this.predicate = this.predicate.and(predicate);
+
         return this;
     }
 

@@ -1,6 +1,4 @@
-package com.centurylink.cloud.sdk.core.services;
-
-import com.centurylink.cloud.sdk.core.services.filter.ConstPredicate;
+package com.centurylink.cloud.sdk.core.services.predicates;
 
 import java.util.function.Predicate;
 
