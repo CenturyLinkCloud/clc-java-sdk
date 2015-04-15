@@ -126,48 +126,88 @@ public class ServerService {
         );
     }
 
+    /**
+     * Power on a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
     public OperationFutureList<BaseServerResponse> powerOn(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.powerOn(ids(serverRefs))
         );
     }
 
+    /**
+     * Power off a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
     public OperationFutureList<BaseServerResponse> powerOff(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.powerOff(ids(serverRefs))
         );
     }
 
+    /**
+     * Start maintenance mode on a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
     public OperationFutureList<BaseServerResponse> startMaintenance(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.startMaintenance(ids(serverRefs))
         );
     }
 
+    /**
+     * Stop maintenance mode on a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
     public OperationFutureList<BaseServerResponse> stopMaintenance(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.stopMaintenance(ids(serverRefs))
         );
     }
 
+    /**
+     * Pause a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
     public OperationFutureList<BaseServerResponse> pause(ServerRef... serverRefs) {
         return powerOperationResponse(
                 client.pause(ids(serverRefs))
         );
     }
 
+    /**
+     * Reboot a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
     public OperationFutureList<BaseServerResponse> reboot(ServerRef... serverRefs) {
         return powerOperationResponse(
                 client.reboot(ids(serverRefs))
         );
     }
 
+    /**
+     * Reset a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
     public OperationFutureList<BaseServerResponse> reset(ServerRef... serverRefs) {
         return powerOperationResponse(
                 client.reset(ids(serverRefs))
         );
     }
 
+    /**
+     * Shut down a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
     public OperationFutureList<BaseServerResponse> shutDown(ServerRef... serverRefs) {
         return powerOperationResponse(
                 client.shutDown(ids(serverRefs))
