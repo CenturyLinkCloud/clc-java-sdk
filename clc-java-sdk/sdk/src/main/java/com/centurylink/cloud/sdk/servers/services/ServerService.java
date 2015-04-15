@@ -60,7 +60,7 @@ public class ServerService {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
-                    serverConverter.buildCreateServerRequest(command)
+                        serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
@@ -90,7 +90,7 @@ public class ServerService {
 
     public OperationFuture<ServerRef> delete(ServerRef server) {
         BaseServerResponse response = client.delete(
-            findByRef(server).getId()
+                findByRef(server).getId()
         );
 
         return new OperationFuture<>(
@@ -147,6 +147,24 @@ public class ServerService {
     public OperationFutureList<BaseServerResponse> stopMaintenance(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.stopMaintenance(ids(serverRefs))
+        );
+    }
+
+    public OperationFutureList<BaseServerResponse> pause(ServerRef... serverRefs) {
+        return powerOperationResponse(
+                client.pause(ids(serverRefs))
+        );
+    }
+
+    public OperationFutureList<BaseServerResponse> reboot(ServerRef... serverRefs) {
+        return powerOperationResponse(
+                client.reboot(ids(serverRefs))
+        );
+    }
+
+    public OperationFutureList<BaseServerResponse> reset(ServerRef... serverRefs) {
+        return powerOperationResponse(
+                client.reset(ids(serverRefs))
         );
     }
 
