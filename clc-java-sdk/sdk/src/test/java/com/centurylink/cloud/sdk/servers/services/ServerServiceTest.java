@@ -5,24 +5,32 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
+import static com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author ilya.drabenia
  */
-@Test(groups = LONG_RUNNING)
+@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Inject
@@ -33,47 +41,10 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Test
     public void testCreate() throws Exception {
-        ServerMetadata newServer =
-            serverService
-                .create(anyServerConfig()
-                    .name("TCRT")
-                    .network(new NetworkConfig()
-                        .primaryDns("172.17.1.26")
-                        .secondaryDns("172.17.1.27")
-                    )
-                    .machine(new Machine()
-                        .cpuCount(1)
-                        .ram(3)
-                        .disk(new DiskConfig()
-                            .type(DiskType.RAW)
-                            .size(14)
-                        )
-                    )
-                )
-                .waitUntilComplete()
-                .getResult();
+        ServerRef serverRef = SingleServerFixture.server();
 
-        assert !isNullOrEmpty(newServer.getId());
-
-        cleanUpCreatedResources(newServer.asRefById());
-    }
-
-    @Test
-    public void testCreateWithDataCenterLookup() throws Exception {
-        ServerMetadata newServer =
-            serverService.create(anyServerConfig()
-                .name("CDCL")
-                .group(Group.refByName()
-                    .name(DEFAULT_GROUP)
-                    .dataCenter(DataCenter.refByName("FranKfUrt"))
-                )
-            )
-            .waitUntilComplete()
-            .getResult();
-
-        assert !isNullOrEmpty(newServer.getId());
-
-        cleanUpCreatedResources(newServer.asRefById());
+        ServerMetadata server = serverService.findByRef(serverRef);
+        assert !isNullOrEmpty(server.getId());
     }
 
     @Test(enabled = false)
@@ -107,22 +78,6 @@ public class ServerServiceTest extends AbstractServersSdkTest {
             )
             .waitUntilComplete()
             .getResult();
-    }
-
-    @Test
-    public void testCreateWithTimeToLive() throws Exception {
-        ZonedDateTime tomorrow = ZonedDateTime.now().plusDays(1);
-        ServerMetadata newServer =
-                serverService.create(anyServerConfig()
-                    .name("CTTL")
-                    .timeToLive(new TimeToLive(tomorrow))
-                )
-                .waitUntilComplete()
-                .getResult();
-
-        assert !isNullOrEmpty(newServer.getId());
-
-        cleanUpCreatedResources(newServer.asRefById());
     }
 
     void cleanUpCreatedResources(ServerRef newServer) {

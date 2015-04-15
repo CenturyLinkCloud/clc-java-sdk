@@ -4,6 +4,8 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
@@ -15,18 +17,13 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
 
-    private ServerMetadata server;
+    private ServerRef server;
 
     @Inject
     ServerService serverService;
 
-    @AfterClass
-    public void tearDown() {
-        cleanUpCreatedResources(serverService, server.asRefById());
-    }
-
-    private Details loadServerDetails(ServerMetadata server) {
-        ServerMetadata metadata = serverService.findByRef(server.asRefById());
+    private Details loadServerDetails(ServerRef server) {
+        ServerMetadata metadata = serverService.findByRef(server);
 
         assertNotNull(metadata);
         assertNotNull(metadata.getDetails());
@@ -34,19 +31,19 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         return metadata.getDetails();
     }
 
-    private void assertThat(ServerMetadata server, String status) {
+    private void assertThat(ServerRef server, String status) {
         assert loadServerDetails(server).getPowerState().equals(status);
     }
 
-    private void assertThatMaintenanceFlagIs(ServerMetadata server, Boolean expectedResult) throws Exception {
+    private void assertThatMaintenanceFlagIs(ServerRef server, Boolean expectedResult) throws Exception {
         assert loadServerDetails(server).getInMaintenanceMode().equals(expectedResult);
     }
 
     public void testPowerOff() {
-        server = createDefaultServerWithName(serverService, "pwrtst");
+        server = SingleServerFixture.server();
 
         serverService
-            .powerOff(server.asRefById())
+            .powerOff(server)
             .waitUntilComplete();
 
         assertThat(server, "stopped");
@@ -56,7 +53,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         testPowerOff();
 
         serverService
-            .powerOn(server.asRefById())
+            .powerOn(server)
             .waitUntilComplete();
 
         assertThat(server, "started");
@@ -66,7 +63,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         testPowerOn();
 
         serverService
-            .startMaintenance(server.asRefById())
+            .startMaintenance(server)
             .waitUntilComplete();
 
         assertThatMaintenanceFlagIs(server, true);
@@ -77,7 +74,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         testStartMaintenance();
 
         serverService
-            .stopMaintenance(server.asRefById())
+            .stopMaintenance(server)
             .waitUntilComplete();
 
         assertThatMaintenanceFlagIs(server, false);

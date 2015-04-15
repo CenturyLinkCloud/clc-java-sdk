@@ -3,6 +3,8 @@ package com.centurylink.cloud.sdk.servers.services.domain.server;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
 
+import java.time.ZonedDateTime;
+
 
 /**
  * @author ilya.drabenia
@@ -132,6 +134,11 @@ public class CreateServerCommand {
 
     public CreateServerCommand timeToLive(TimeToLive timeToLive) {
         setTimeToLive(timeToLive);
+        return this;
+    }
+
+    public CreateServerCommand timeToLive(ZonedDateTime expirationTime) {
+        setTimeToLive(new TimeToLive(expirationTime));
         return this;
     }
 }

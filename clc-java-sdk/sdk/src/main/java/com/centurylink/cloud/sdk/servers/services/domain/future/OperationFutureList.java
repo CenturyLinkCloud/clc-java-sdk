@@ -1,43 +1,47 @@
-package com.centurylink.cloud.sdk.servers.services.domain;
+package com.centurylink.cloud.sdk.servers.services.domain.future;
 
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.google.common.base.Throwables;
 
-/**
- * @author ilya.drabenia
- */
-public class OperationFuture<T> {
+import java.util.List;
+
+public class OperationFutureList<T> {
+
     public static final long STATUS_POLLING_DELAY = 400L;
 
     private final ServerClient serverClient;
-    private final String statusId;
+    private final List<String> statusIdList;
+    private final List<T> result;
 
-    private final T result;
-
-    public OperationFuture(T result, String statusId, ServerClient serverClient) {
+    public OperationFutureList(List<T> result, List<String> statusIdList, ServerClient serverClient) {
         this.serverClient = serverClient;
-        this.statusId = statusId;
+        this.statusIdList = statusIdList;
         this.result = result;
     }
 
-    public OperationFuture<T> waitUntilComplete() {
+    public OperationFutureList<T> waitUntilComplete() {
+        statusIdList.forEach(this::waitUntilCompleteSingleJob);
+        return this;
+    }
+
+    private void waitUntilCompleteSingleJob(String statusId) {
         if (statusId == null) {
-            return this;
+            throw new OperationFailedException();
         }
 
         for (;;) {
             String status = serverClient
-                    .getJobStatus(statusId)
-                    .getStatus();
+                .getJobStatus(statusId)
+                .getStatus();
 
             switch (status) {
                 case "succeeded":
-                    return this;
+                    return;
 
                 case "failed":
                 case "unknown":
-                    throw new ClcException("Operation Execution Failed");
+                    throw new OperationFailedException();
 
                 default:
                     try {
@@ -49,13 +53,7 @@ public class OperationFuture<T> {
         }
     }
 
-    public static void waitUntilCompleteMultipleJobs(OperationFuture... asyncResponses) {
-        for (OperationFuture actionPromise : asyncResponses) {
-            actionPromise.waitUntilComplete();
-        }
-    }
-
-    public T getResult() {
+    public List<T> getResult() {
         return result;
     }
 }
