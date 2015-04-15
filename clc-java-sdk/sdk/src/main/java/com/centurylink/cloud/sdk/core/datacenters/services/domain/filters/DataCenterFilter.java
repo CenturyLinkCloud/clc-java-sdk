@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.containsIgnoreCase;
 
 /**
- * Criteria that used for select
+ * Criteria that used for specify needed data centers
  *
  * @author Ilya Drabenia
  */
@@ -28,11 +28,23 @@ public class DataCenterFilter {
         return predicate;
     }
 
+    /**
+     * Method allow to provide custom filter predicate
+     *
+     * @param predicate
+     * @return
+     */
     public DataCenterFilter filter(Predicate<DataCenterMetadata> predicate) {
         this.predicate = (this.predicate == null) ? predicate : this.predicate.and(predicate);
         return this;
     }
 
+    /**
+     * Method allow to filter data centers by IDs. Filtering is strong case sensitive.
+     *
+     * @param ids
+     * @return {@link DataCenterFilter}
+     */
     public DataCenterFilter idIn(String... ids) {
         this.predicate =
             Stream
@@ -48,6 +60,13 @@ public class DataCenterFilter {
         return this;
     }
 
+    /**
+     * Method allow to filter data centers by name.
+     * Filtering is case insensitive and occurs using substring search.
+     *
+     * @param name
+     * @return {@link DataCenterFilter}
+     */
     public DataCenterFilter nameContains(String name) {
         return new DataCenterFilter(d -> containsIgnoreCase(d.getName(), name));
     }
