@@ -3,6 +3,8 @@ package com.centurylink.cloud.sdk.core.datacenters.services.domain.refs;
 import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
 
 /**
+ * Class allow to specify unique data center by ID
+ *
  * @author ilya.drabenia
  */
 public class IdDataCenterRef extends DataCenterRef {

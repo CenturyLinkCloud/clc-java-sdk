@@ -6,7 +6,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
-import com.centurylink.cloud.sdk.tests.TestGroups;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -23,7 +22,6 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 /**
  * @author Ilya Drabenia
  */
-@Test(alwaysRun = true)
 public class SingleServerFixture {
 
     private static volatile ServerRef server;

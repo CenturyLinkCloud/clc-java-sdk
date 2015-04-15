@@ -6,6 +6,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilt
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * Reference that allow to find unique server group by it's ID and owned data center reference
+ *
  * @author ilya.drabenia
  */
 public class IdGroupRef extends GroupRef {
@@ -30,6 +32,8 @@ public class IdGroupRef extends GroupRef {
 
     @Override
     public GroupFilter asFilter() {
+        checkNotNull(id, "Group ID must be not null");
+
         return super.asFilter()
             .idIn(checkNotNull(id));
     }

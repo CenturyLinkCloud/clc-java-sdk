@@ -7,6 +7,8 @@ import com.google.common.base.Preconditions;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * Reference that allow to find group by owned data center and group name
+ *
  * @author ilya.drabenia
  */
 public class NameGroupRef extends GroupRef {
