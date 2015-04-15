@@ -7,18 +7,16 @@ import com.google.common.base.Throwables;
 import java.time.Duration;
 import java.util.function.Consumer;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * @author Ilya Drabenia
  */
-public class SimpleCompleteWaiting implements CompleteWaiting {
+public class SimpleExecutingJob implements ExecutingJob {
     public static final long STATUS_POLLING_DELAY = 400L;
 
     private final QueueClient queueClient;
     private final String statusId;
 
-    public SimpleCompleteWaiting(String statusId, QueueClient queueClient) {
+    public SimpleExecutingJob(String statusId, QueueClient queueClient) {
         this.queueClient = queueClient;
         this.statusId = statusId;
     }
@@ -60,11 +58,6 @@ public class SimpleCompleteWaiting implements CompleteWaiting {
     @Override
     public <T> void completeListener(Consumer<T> listener) {
 
-    }
-
-    @Override
-    public CompleteWaiting and(CompleteWaiting otherStrategy) {
-        return new CompositeCompleteWaiting(this, checkNotNull(otherStrategy));
     }
 
 }
