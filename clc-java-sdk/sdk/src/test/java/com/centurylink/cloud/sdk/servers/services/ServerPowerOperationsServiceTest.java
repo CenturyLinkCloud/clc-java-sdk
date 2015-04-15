@@ -39,7 +39,6 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
     }
 
     private void assertThatMaintenanceFlagIs(ServerMetadata server, Boolean expectedResult) throws Exception {
-        Thread.sleep(3000L);
         assert loadServerDetails(server).getInMaintenanceMode().equals(expectedResult);
     }
 
