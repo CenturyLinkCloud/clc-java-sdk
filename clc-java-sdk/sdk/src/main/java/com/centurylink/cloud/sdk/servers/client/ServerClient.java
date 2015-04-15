@@ -137,32 +137,36 @@ public class ServerClient extends BaseSdkClient {
     }
 
     public BaseServerListResponse powerOn(List<String> serverIdList) {
-        return
-            client("/operations/{accountAlias}/servers/powerOn")
-                .request()
-                .post(entity(serverIdList, APPLICATION_JSON))
-                .readEntity(BaseServerListResponse.class);
+        return sendPowerOperationRequest("powerOn", serverIdList);
     }
 
     public BaseServerListResponse powerOff(List<String> serverIdList) {
-        return
-            client("/operations/{accountAlias}/servers/powerOff")
-                .request()
-                .post(entity(serverIdList, APPLICATION_JSON))
-                .readEntity(BaseServerListResponse.class);
+        return sendPowerOperationRequest("powerOff", serverIdList);
     }
 
     public BaseServerListResponse startMaintenance(List<String> serverIdList) {
-        return
-            client("/operations/{accountAlias}/servers/startMaintenance")
-                .request()
-                .post(entity(serverIdList, APPLICATION_JSON))
-                .readEntity(BaseServerListResponse.class);
+        return sendPowerOperationRequest("startMaintenance", serverIdList);
     }
 
     public BaseServerListResponse stopMaintenance(List<String> serverIdList) {
+        return sendPowerOperationRequest("stopMaintenance", serverIdList);
+    }
+
+    public BaseServerListResponse pause(List<String> serverIdList) {
+        return sendPowerOperationRequest("pause", serverIdList);
+    }
+
+    public BaseServerListResponse reboot(List<String> serverIdList) {
+        return sendPowerOperationRequest("reboot", serverIdList);
+    }
+
+    public BaseServerListResponse reset(List<String> serverIdList) {
+        return sendPowerOperationRequest("reset", serverIdList);
+    }
+
+    private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
         return
-            client("/operations/{accountAlias}/servers/stopMaintenance")
+            client("/operations/{accountAlias}/servers/" + operationName)
                 .request()
                 .post(entity(serverIdList, APPLICATION_JSON))
                 .readEntity(BaseServerListResponse.class);
