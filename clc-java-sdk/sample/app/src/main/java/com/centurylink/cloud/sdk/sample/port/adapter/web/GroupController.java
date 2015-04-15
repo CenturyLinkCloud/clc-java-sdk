@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
 import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

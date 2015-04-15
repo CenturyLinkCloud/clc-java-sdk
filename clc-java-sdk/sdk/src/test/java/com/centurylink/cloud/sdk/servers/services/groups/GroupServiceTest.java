@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;

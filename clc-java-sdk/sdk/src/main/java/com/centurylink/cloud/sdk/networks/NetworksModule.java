@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.networks;
 
-import com.centurylink.cloud.sdk.core.datacenters.DataCentersModule;
+import com.centurylink.cloud.sdk.core.commons.CommonsModule;
 import com.centurylink.cloud.sdk.networks.client.NetworksClient;
 import com.centurylink.cloud.sdk.networks.services.NetworkService;
 import com.google.inject.AbstractModule;
@@ -12,7 +12,7 @@ public class NetworksModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new DataCentersModule());
+        install(new CommonsModule());
 
         bind(NetworksClient.class);
         bind(NetworkService.class);

@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenter;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.IdDataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.IdDataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;

@@ -1,11 +1,11 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
 import static java.util.Arrays.asList;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;

@@ -1,12 +1,12 @@
 package com.centurylink.cloud.sdk.networks.services;
 
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
-import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.GetDeploymentCapabilitiesResponse;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.NetworkMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.DataCenters;
+import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.GetDeploymentCapabilitiesResponse;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters;
 import com.centurylink.cloud.sdk.networks.AbstractNetworksSdkTest;
 import com.centurylink.cloud.sdk.networks.NetworksModule;
 import com.google.inject.AbstractModule;

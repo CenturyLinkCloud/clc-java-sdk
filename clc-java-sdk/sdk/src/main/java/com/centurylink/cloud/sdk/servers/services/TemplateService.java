@@ -1,13 +1,14 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.datacenters.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.GetDeploymentCapabilitiesResponse;
-import com.centurylink.cloud.sdk.core.datacenters.client.domain.deployment.capacilities.TemplateMetadata;
-import com.centurylink.cloud.sdk.core.datacenters.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.datacenters.services.domain.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
+import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.GetDeploymentCapabilitiesResponse;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.services.domain.future.OperationFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;
@@ -26,14 +27,17 @@ public class TemplateService {
     private final ServerClient serversClient;
     private final DataCentersClient dataCentersClient;
     private final TemplateConverter converter;
+    private final QueueClient queueClient;
 
     @Inject
     public TemplateService(DataCenterService dataCenterService, ServerClient serversClient,
-                           DataCentersClient dataCentersClient, TemplateConverter converter) {
+                           DataCentersClient dataCentersClient, TemplateConverter converter,
+                           QueueClient queueClient) {
         this.dataCenterService = dataCenterService;
         this.serversClient = serversClient;
         this.dataCentersClient = dataCentersClient;
         this.converter = converter;
+        this.queueClient = queueClient;
     }
 
     public TemplateMetadata findByRef(TemplateRef template) {
@@ -84,7 +88,7 @@ public class TemplateService {
         return new OperationFuture<>(
             template,
             response.findStatusId(),
-            serversClient
+            queueClient
         );
     }
 

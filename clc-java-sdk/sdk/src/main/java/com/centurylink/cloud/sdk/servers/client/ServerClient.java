@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
-import com.centurylink.cloud.sdk.servers.client.domain.GetStatusResponse;
+import com.centurylink.cloud.sdk.core.commons.client.domain.queue.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -117,14 +117,6 @@ public class ServerClient extends BaseSdkClient {
             client("/groups/{accountAlias}/{rootGroupId}")
                 .resolveTemplate("rootGroupId", rootGroupId)
                 .request().get(GroupMetadata.class);
-    }
-
-    public GetStatusResponse getJobStatus(String jobId) {
-        return
-            client("/operations/{accountAlias}/status/{statusId}")
-                .resolveTemplate("statusId", jobId)
-                .request()
-                .get(GetStatusResponse.class);
     }
 
     public BaseServerResponse convertToTemplate(CreateTemplateRequest request) {

@@ -1,13 +1,13 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
-import com.centurylink.cloud.sdk.servers.services.domain.future.OperationFuture;
-import com.centurylink.cloud.sdk.servers.services.domain.future.OperationFutureList;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
@@ -35,11 +35,13 @@ import static java.util.stream.Collectors.toList;
 public class ServerService {
     private final ServerConverter serverConverter;
     private final ServerClient client;
+    private final QueueClient queueClient;
 
     @Inject
-    public ServerService(ServerConverter serverConverter, ServerClient client) {
+    public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient) {
         this.serverConverter = serverConverter;
         this.client = client;
+        this.queueClient = queueClient;
     }
 
     public OperationFuture<ServerMetadata> create(CreateServerCommand command) {
@@ -52,7 +54,7 @@ public class ServerService {
         return new OperationFuture<>(
             serverInfo,
             response.findStatusId(),
-            client
+            queueClient
         );
     }
 
@@ -60,7 +62,7 @@ public class ServerService {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
-                        serverConverter.buildCreateServerRequest(command)
+                    serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
@@ -79,7 +81,7 @@ public class ServerService {
                         return new OperationFuture<>(
                             serverInfo,
                             response.get().findStatusId(),
-                            client
+                            queueClient
                         );
                     } catch (InterruptedException | ExecutionException e) {
                         throw new ClcClientException(e);
@@ -96,7 +98,7 @@ public class ServerService {
         return new OperationFuture<>(
             server,
             response.findStatusId(),
-            client
+            queueClient
         );
     }
 
@@ -122,7 +124,7 @@ public class ServerService {
                 .name(response.getServer())
                 .description(command.getDescription()),
             response.findStatusId(),
-            client
+            queueClient
         );
     }
 
@@ -131,7 +133,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFutureList<BaseServerResponse> powerOn(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> powerOn(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.powerOn(ids(serverRefs))
         );
@@ -142,7 +144,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFutureList<BaseServerResponse> powerOff(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> powerOff(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.powerOff(ids(serverRefs))
         );
@@ -153,7 +155,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFutureList<BaseServerResponse> startMaintenance(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.startMaintenance(ids(serverRefs))
         );
@@ -164,7 +166,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFutureList<BaseServerResponse> stopMaintenance(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.stopMaintenance(ids(serverRefs))
         );
@@ -175,9 +177,9 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFutureList<BaseServerResponse> pause(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> pause(ServerRef... serverRefs) {
         return powerOperationResponse(
-                client.pause(ids(serverRefs))
+            client.pause(ids(serverRefs))
         );
     }
 
@@ -186,9 +188,9 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFutureList<BaseServerResponse> reboot(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> reboot(ServerRef... serverRefs) {
         return powerOperationResponse(
-                client.reboot(ids(serverRefs))
+            client.reboot(ids(serverRefs))
         );
     }
 
@@ -197,9 +199,9 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFutureList<BaseServerResponse> reset(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> reset(ServerRef... serverRefs) {
         return powerOperationResponse(
-                client.reset(ids(serverRefs))
+            client.reset(ids(serverRefs))
         );
     }
 
@@ -208,9 +210,9 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFutureList<BaseServerResponse> shutDown(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> shutDown(ServerRef... serverRefs) {
         return powerOperationResponse(
-                client.shutDown(ids(serverRefs))
+            client.shutDown(ids(serverRefs))
         );
     }
 
@@ -224,16 +226,16 @@ public class ServerService {
                 .collect(toList());
     }
 
-    private OperationFutureList<BaseServerResponse> powerOperationResponse(List<BaseServerResponse> apiResponse) {
+    private OperationFuture<List<BaseServerResponse>> powerOperationResponse(List<BaseServerResponse> apiResponse) {
         return
-            new OperationFutureList<>(
+            new OperationFuture<>(
                 apiResponse,
                 apiResponse
                     .stream()
                     .filter(notNull())
                     .map(BaseServerResponse::findStatusId)
                     .collect(toList()),
-                client
+                queueClient
             );
     }
 
