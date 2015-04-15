@@ -19,9 +19,9 @@ public class DataCenterController {
     @RequestMapping(method = GET)
     List<DataCenterBean> findAll() {
         return Arrays.asList(
-            new DataCenterBean("DE1", "DE1 - Germany (Frankfurt)"),
-            new DataCenterBean("GB1", "GB1 - Great Britain (Portsmouth)"),
-            new DataCenterBean("IL1", "IL1 - US Central (Chicago)")
+            new DataCenterBean("de1", "DE1 - Germany (Frankfurt)"),
+            new DataCenterBean("gb1", "GB1 - Great Britain (Portsmouth)"),
+            new DataCenterBean("il1", "IL1 - US Central (Chicago)")
         );
     }
 

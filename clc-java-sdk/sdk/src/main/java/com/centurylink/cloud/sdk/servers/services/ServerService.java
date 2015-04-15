@@ -156,7 +156,7 @@ public class ServerService {
                 .of(serverRefs)
                 .filter(notNull())
                 .map(this::findByRef)
-                .map(ServerMetadata::getId)
+                .map(ServerMetadata::getName)
                 .collect(toList());
     }
 

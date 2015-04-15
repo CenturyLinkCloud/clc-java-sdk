@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.services;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
@@ -52,7 +53,6 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         assertThat(server, "stopped");
     }
 
-    @Test
     public void testPowerOn() {
         testPowerOff();
 
@@ -73,7 +73,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         assertThatMaintenanceFlagIs(server, true);
     }
 
-
+    @Test
     public void testStopMaintenance() throws Exception {
         testStartMaintenance();
 
