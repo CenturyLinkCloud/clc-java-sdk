@@ -14,7 +14,6 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
 
-@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
 
     private ServerRef server;
@@ -69,7 +68,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         assertThatMaintenanceFlagIs(server, true);
     }
 
-    @Test
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testStopMaintenance() throws Exception {
         testStartMaintenance();
 
