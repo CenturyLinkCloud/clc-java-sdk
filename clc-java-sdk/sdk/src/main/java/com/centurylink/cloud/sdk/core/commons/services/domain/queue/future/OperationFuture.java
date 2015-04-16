@@ -53,11 +53,7 @@ public class OperationFuture<T> {
     }
 
     public CompletableFuture<T> waitAsync() {
-        return future(waiting::waitAsync);
-    }
-
-    public CompletableFuture<T> waitAsync(Duration timeout) {
-        return future(futureHandler -> waiting.waitAsync(futureHandler, timeout));
+        return waiting.waitAsync().thenApply(i -> getResult());
     }
 
     private CompletableFuture<T> future(Consumer<BiConsumer<Void, ? extends Throwable>> listener) {

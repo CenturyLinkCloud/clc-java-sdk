@@ -6,6 +6,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.google.common.base.Throwables;
 
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.time.Instant;
 
@@ -72,12 +73,8 @@ public class SingleJobFuture implements JobFuture {
     }
 
     @Override
-    public void waitAsync(BiConsumer<Void, ? extends Throwable> listener) {
-
+    public CompletableFuture<Void> waitAsync() {
+        return null;
     }
 
-    @Override
-    public void waitAsync(BiConsumer<Void, ? extends Throwable> listener, Duration timeout) {
-
-    }
 }

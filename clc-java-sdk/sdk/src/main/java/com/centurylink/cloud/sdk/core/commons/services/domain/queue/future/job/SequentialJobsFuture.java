@@ -1,31 +1,36 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-import static com.centurylink.cloud.sdk.core.services.predicates.Predicates.notNull;
+import static java.util.Arrays.asList;
 
 /**
  * @author Ilya Drabenia
  */
 public class SequentialJobsFuture implements JobFuture {
-    private final List<Supplier<JobFuture>> jobs;
+    private final CompletableFuture<Void> future = null;
 
     @SafeVarargs
     public SequentialJobsFuture(Supplier<JobFuture>... jobs) {
-        this.jobs = Arrays.asList(jobs);
+        List<Supplier<JobFuture>> jobList = asList(jobs);
+
+//        future = jobList.stream()
+//            .reduce(jobList.get(0).get(), (CompletableFuture<Void> prev, Supplier<JobFuture> curItem) ->
+//                prev.thenApply(i -> {
+//                    try {
+//                        return curItem.get().waitAsync().get();
+//                    } catch (InterruptedException | ExecutionException e) {
+//                        throw new ClcServiceException(e);
+//                    }
+//                })
+//            );
     }
 
     @Override
     public void waitUntilComplete() {
-        jobs
-            .stream()
-            .filter(notNull())
-            .map(Supplier::get)
-            .forEach(JobFuture::waitUntilComplete);
     }
 
     @Override
@@ -34,12 +39,8 @@ public class SequentialJobsFuture implements JobFuture {
     }
 
     @Override
-    public void waitAsync(BiConsumer<Void, ? extends Throwable> listener) {
-
+    public CompletableFuture<Void> waitAsync() {
+        return null;
     }
 
-    @Override
-    public void waitAsync(BiConsumer<Void, ? extends Throwable> listener, Duration timeout) {
-
-    }
 }

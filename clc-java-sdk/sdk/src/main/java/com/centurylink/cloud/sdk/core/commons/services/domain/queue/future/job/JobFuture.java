@@ -16,8 +16,6 @@ public interface JobFuture {
 
     // TODO: need to think about type of first parameter
     // TODO: I think it may be response type of queue client
-    void waitAsync(BiConsumer<Void, ? extends Throwable> listener);
-
-    void waitAsync(BiConsumer<Void, ? extends Throwable> listener, Duration timeout);
+    CompletableFuture<Void> waitAsync();
 
 }
