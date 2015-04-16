@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -28,7 +29,12 @@ public class CompositeExecutingJob implements ExecutingJob {
     }
 
     @Override
-    public <T> void completeListener(Consumer<T> listener) {
+    public void waitAsync(BiConsumer<Void, ? extends Throwable> listener) {
+
+    }
+
+    @Override
+    public void waitAsync(BiConsumer<Void, ? extends Throwable> listener, Duration timeout) {
 
     }
 

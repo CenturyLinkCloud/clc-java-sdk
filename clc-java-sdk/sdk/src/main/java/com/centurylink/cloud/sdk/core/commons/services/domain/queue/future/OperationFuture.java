@@ -6,9 +6,10 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.C
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SimpleExecutingJob;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -49,6 +50,28 @@ public class OperationFuture<T> {
 
     public T getResult() {
         return result;
+    }
+
+    public CompletableFuture<T> waitAsync() {
+        return future(waiting::waitAsync);
+    }
+
+    public CompletableFuture<T> waitAsync(Duration timeout) {
+        return future(futureHandler -> waiting.waitAsync(futureHandler, timeout));
+    }
+
+    private CompletableFuture<T> future(Consumer<BiConsumer<Void, ? extends Throwable>> listener) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+
+        listener.accept((result, error) -> {
+            if (error == null) {
+                future.complete(getResult());
+            } else {
+                future.completeExceptionally(error);
+            }
+        });
+
+        return future;
     }
 
     public static OperationFuture<List<?>> from(OperationFuture<?>... futures) {

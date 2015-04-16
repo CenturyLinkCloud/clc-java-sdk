@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.google.common.base.Throwables;
 
 import java.time.Duration;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -56,8 +57,12 @@ public class SimpleExecutingJob implements ExecutingJob {
     }
 
     @Override
-    public <T> void completeListener(Consumer<T> listener) {
+    public void waitAsync(BiConsumer<Void, ? extends Throwable> listener) {
 
     }
 
+    @Override
+    public void waitAsync(BiConsumer<Void, ? extends Throwable> listener, Duration timeout) {
+
+    }
 }

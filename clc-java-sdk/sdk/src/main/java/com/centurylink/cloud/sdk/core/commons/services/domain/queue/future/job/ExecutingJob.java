@@ -1,6 +1,8 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -12,6 +14,10 @@ public interface ExecutingJob {
 
     void waitUntilComplete(Duration timeout);
 
-    <T> void completeListener(Consumer<T> listener);
+    // TODO: need to think about type of first parameter
+    // TODO: I think it may be response type of queue client
+    void waitAsync(BiConsumer<Void, ? extends Throwable> listener);
+
+    void waitAsync(BiConsumer<Void, ? extends Throwable> listener, Duration timeout);
 
 }
