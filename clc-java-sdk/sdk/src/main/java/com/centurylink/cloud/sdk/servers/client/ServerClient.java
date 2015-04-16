@@ -160,6 +160,10 @@ public class ServerClient extends BaseSdkClient {
         return sendPowerOperationRequest("shutDown", serverIdList);
     }
 
+    public BaseServerListResponse archive(List<String> serverIdList) {
+        return sendPowerOperationRequest("archive", serverIdList);
+    }
+
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
         return
             client("/operations/{accountAlias}/servers/" + operationName)

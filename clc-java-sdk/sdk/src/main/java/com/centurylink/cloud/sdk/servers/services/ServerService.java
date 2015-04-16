@@ -62,7 +62,7 @@ public class ServerService {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
-                    serverConverter.buildCreateServerRequest(command)
+                        serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
@@ -213,6 +213,17 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> shutDown(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.shutDown(ids(serverRefs))
+        );
+    }
+
+    /**
+     *  Archive a single server or group of servers
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> archive(ServerRef... serverRefs) {
+        return powerOperationResponse(
+            client.archive(ids(serverRefs))
         );
     }
 

@@ -18,21 +18,30 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    private Details loadServerDetails(ServerRef server) {
+    private ServerMetadata loadServerMetadata(ServerRef server) {
         ServerMetadata metadata = serverService.findByRef(server);
-
         assertNotNull(metadata);
+
+        return metadata;
+    }
+
+    private Details loadServerDetails(ServerRef server) {
+        ServerMetadata metadata = loadServerMetadata(server);
         assertNotNull(metadata.getDetails());
 
         return metadata.getDetails();
     }
 
-    private void assertThatPowerStateHasStatus(ServerRef server, String status) {
-        assert loadServerDetails(server).getPowerState().equals(status);
+    private void assertThatServerHasStatus(ServerRef server, String status) {
+        assertEquals(loadServerMetadata(server).getStatus(), status);
+    }
+
+    private void assertThatServerPowerStateHasStatus(ServerRef server, String status) {
+        assertEquals(loadServerDetails(server).getPowerState(), status);
     }
 
     private void assertThatMaintenanceFlagIs(ServerRef server, Boolean expectedResult) throws Exception {
-        assert loadServerDetails(server).getInMaintenanceMode().equals(expectedResult);
+        assertEquals(loadServerDetails(server).getInMaintenanceMode(), expectedResult);
     }
 
     private void powerOnServer() {
@@ -71,17 +80,23 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
+    private void archiveServer() {
+        serverService
+            .archive(server)
+            .waitUntilComplete();
+    }
+
     public void testPowerOff() {
         testShutDown();
         powerOffServer();
 
-        assertThatPowerStateHasStatus(server, "stopped");
+        assertThatServerPowerStateHasStatus(server, "stopped");
     }
 
     public void testPause() {
         pauseServer();
 
-        assertThatPowerStateHasStatus(server, "paused");
+        assertThatServerPowerStateHasStatus(server, "paused");
         powerOnServer();
     }
 
@@ -89,7 +104,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         testPause();
         shutDownServer();
 
-        assertThatPowerStateHasStatus(server, "stopped");
+        assertThatServerPowerStateHasStatus(server, "stopped");
         powerOnServer();
     }
 
@@ -97,7 +112,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         testPowerOff();
         powerOnServer();
 
-        assertThatPowerStateHasStatus(server, "started");
+        assertThatServerPowerStateHasStatus(server, "started");
     }
 
     public void testStartMaintenance() throws Exception {
@@ -107,13 +122,21 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         assertThatMaintenanceFlagIs(server, true);
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testStopMaintenance() throws Exception {
-        server = SingleServerFixture.server();
-
         testStartMaintenance();
         stopServerMaintenance();
 
         assertThatMaintenanceFlagIs(server, false);
+    }
+
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    public void testArchive() throws Exception {
+        server = SingleServerFixture.server();
+
+        testStopMaintenance();
+        assertThatServerHasStatus(server, "active");
+
+        archiveServer();
+        assertThatServerHasStatus(server, "archived");
     }
 }
