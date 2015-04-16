@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.networks.services.NetworkService;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
@@ -27,6 +28,7 @@ public class ServerConverter {
     }
 
     public CreateServerRequest buildCreateServerRequest(CreateServerCommand newServer) {
+        TemplateMetadata templateMetadata = templateService.findByRef(newServer.getTemplate());
         return
             new CreateServerRequest()
                 .name(newServer.getName())
@@ -40,11 +42,7 @@ public class ServerConverter {
                         .getId()
                 )
                 .type(ServerType.STANDARD.getCode())
-                .sourceServerId(
-                    templateService
-                        .findByRef(newServer.getTemplate())
-                        .getName()
-                )
+                .sourceServerId(templateMetadata.getName())
                 .primaryDns(newServer.getNetwork().getPrimaryDns())
                 .secondaryDns(newServer.getNetwork().getSecondaryDns())
                 .networkId(
@@ -53,8 +51,9 @@ public class ServerConverter {
                             .findByRef(newServer.getNetwork().getNetwork())
                             .getNetworkId()
                 )
-                .timeToLive(newServer.getTimeToLive()
-                );
+                .timeToLive(newServer.getTimeToLive())
+                .managedOS(newServer.isManagedOS(), templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE))
+                ;
     }
 
     public DiskRequest buildDisk(DiskConfig diskConfig) {

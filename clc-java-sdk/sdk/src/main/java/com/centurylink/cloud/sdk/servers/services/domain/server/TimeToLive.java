@@ -9,7 +9,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 /**
@@ -114,6 +113,11 @@ public class TimeToLive {
         return zonedDateTime != null ? zonedDateTime.format(ISO_DATE_TIME): null;
     }
 
+    /**
+     * Format {@link TimeToLive} into acceptable date-time format
+     *
+     * @return string representation of {@link TimeToLive}
+     */
     public String format() {
         return zonedDateTime != null ? zonedDateTime.toOffsetDateTime().toString(): null;
     }

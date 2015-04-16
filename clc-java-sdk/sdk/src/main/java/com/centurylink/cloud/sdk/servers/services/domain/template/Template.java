@@ -5,6 +5,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Descripti
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
 
+import java.util.List;
+
 /**
  * @author ilya.drabenia
  */
@@ -12,6 +14,7 @@ public class Template {
     private String name;
     private String description;
     private OperatingSystem os;
+    private List<String> capabilities;
 
     public Template name(String name) {
         this.name = name;
@@ -41,6 +44,19 @@ public class Template {
 
     public Template description(String description) {
         setDescription(description);
+        return this;
+    }
+
+    public List<String> getCapabilities() {
+        return capabilities;
+    }
+
+    public void setCapabilities(List<String> capabilities) {
+        this.capabilities = capabilities;
+    }
+
+    public Template capabilities(List<String> capabilities) {
+        setCapabilities(capabilities);
         return this;
     }
 

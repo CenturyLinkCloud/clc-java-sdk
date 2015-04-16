@@ -19,6 +19,7 @@ public class CreateServerCommand {
     private String password;
     private NetworkConfig network = new NetworkConfig();
     private TimeToLive timeToLive;
+    private boolean managedOS = false;
 
     public String getId() {
         return id;
@@ -139,6 +140,19 @@ public class CreateServerCommand {
 
     public CreateServerCommand timeToLive(ZonedDateTime expirationTime) {
         setTimeToLive(new TimeToLive(expirationTime));
+        return this;
+    }
+
+    public boolean isManagedOS() {
+        return managedOS;
+    }
+
+    public void setManagedOS(boolean managedOS) {
+        this.managedOS = managedOS;
+    }
+
+    public CreateServerCommand managedOS(boolean managedOS) {
+        setManagedOS(managedOS);
         return this;
     }
 }

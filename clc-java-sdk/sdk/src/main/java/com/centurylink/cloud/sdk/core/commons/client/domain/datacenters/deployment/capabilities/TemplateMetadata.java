@@ -37,6 +37,8 @@ public class TemplateMetadata {
     private Integer drivePathLength;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @JsonIgnore
+    public static final String MANAGED_OS_VALUE = "managedOS";
 
     /**
      *
@@ -186,6 +188,11 @@ public class TemplateMetadata {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    @JsonIgnore
+    public boolean hasCapability(String capability) {
+        return this.capabilities == null ? false : this.capabilities.indexOf(capability) > -1;
     }
 
 }

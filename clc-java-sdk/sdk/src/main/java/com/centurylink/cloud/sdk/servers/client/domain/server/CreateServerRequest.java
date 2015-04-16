@@ -30,6 +30,10 @@ public class CreateServerRequest {
 
     private String ttl;
 
+    private boolean isManagedOS;
+
+    private boolean isManagedBackup;
+
 
     /**
      * Name of the server to create. Alphanumeric characters and dashes only. Must be between 1-7 characters depending on the length of the account alias. (This name will be appended with a two digit number and prepended with the dataCenter code and account alias to make up the final server name.)
@@ -184,18 +188,32 @@ public class CreateServerRequest {
         return this;
     }
 
+    /**
+     * Time to Live the server
+     */
     public String getTtl() {
         return ttl;
     }
 
-    public void setTtl(String ttl) {
-        this.ttl = ttl;
-    }
-
+    /**
+     * Time to Live the server
+     */
     public CreateServerRequest timeToLive(TimeToLive timeToLive) {
         if (timeToLive != null) {
-            setTtl(timeToLive.format());
+            this.ttl = timeToLive.format();
         }
+        return this;
+    }
+
+    public boolean isManagedOS() {
+        return isManagedOS;
+    }
+
+    public CreateServerRequest managedOS(boolean isManagedOS, boolean hasTemplateCapability) {
+        if (isManagedOS && !hasTemplateCapability) {
+            throw new IllegalArgumentException("The template can't manage OS");
+        }
+        this.isManagedOS = isManagedOS;
         return this;
     }
 }

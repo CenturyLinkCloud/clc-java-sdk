@@ -32,7 +32,8 @@ public class TemplateConverter {
         return
             new Template()
                 .name(template.getName())
-                .description(template.getDescription());
+                .description(template.getDescription())
+                .capabilities(template.getCapabilities());
     }
 
 }
