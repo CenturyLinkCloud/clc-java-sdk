@@ -2,10 +2,13 @@ package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFailedException;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationTimeoutException;
 import com.google.common.base.Throwables;
 
 import java.time.Duration;
 import java.util.function.BiConsumer;
+import java.time.Instant;
+
 import java.util.function.Consumer;
 
 /**
@@ -24,11 +27,30 @@ public class SimpleExecutingJob implements ExecutingJob {
 
     @Override
     public void waitUntilComplete() {
+        doWaitUntilComplete(null);
+    }
+
+    @Override
+    public void waitUntilComplete(Duration timeout) {
+        doWaitUntilComplete(timeout);
+    }
+
+    private void doWaitUntilComplete(Duration timeout) {
         if (statusId == null) {
             throw new OperationFailedException();
         }
 
+        Instant timeLimit = null;
+
+        if (timeout != null) {
+            timeLimit = Instant.now().plusSeconds(timeout.getSeconds());
+        }
+
         for (;;) {
+            if (timeLimit != null && timeLimit.isBefore(Instant.now())) {
+                throw new OperationTimeoutException();
+            }
+
             String status = queueClient
                     .getJobStatus(statusId)
                     .getStatus();
@@ -49,11 +71,6 @@ public class SimpleExecutingJob implements ExecutingJob {
                     }
             }
         }
-    }
-
-    @Override
-    public void waitUntilComplete(Duration timeout) {
-        this.waitUntilComplete(); // TODO: need to implement this method properly
     }
 
     @Override
