@@ -1,13 +1,20 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
+import com.google.common.collect.Iterables;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
+import static com.google.common.collect.Iterables.toArray;
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Ilya Drabenia
@@ -35,7 +42,10 @@ public class ParallelJobsFuture implements JobFuture {
 
     @Override
     public CompletableFuture<Void> waitAsync() {
-        return null;
+        return CompletableFuture.allOf(toArray(
+            jobs.stream().map(JobFuture::waitAsync).collect(toList()),
+            CompletableFuture.class
+        ));
     }
 
     private void doWaitUntilComplete(Duration timeout) {
