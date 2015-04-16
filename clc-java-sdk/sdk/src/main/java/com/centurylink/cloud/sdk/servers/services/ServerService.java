@@ -1,14 +1,16 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.services.predicates.Predicates.*;
+import static com.centurylink.cloud.sdk.core.services.predicates.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static java.util.stream.Collectors.toList;
 
@@ -113,10 +115,10 @@ public class ServerService {
     public OperationFuture<Template> convertToTemplate(CreateTemplateCommand command) {
         BaseServerResponse response =
             client.convertToTemplate(new CreateTemplateRequest()
-                .serverId(command.getServer().as(IdServerRef.class).getId())
-                .description(command.getDescription())
-                .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
-                .password(command.getPassword())
+                            .serverId(command.getServer().as(IdServerRef.class).getId())
+                            .description(command.getDescription())
+                            .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
+                            .password(command.getPassword())
             );
 
         return new OperationFuture<>(
@@ -135,7 +137,7 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(ServerRef... serverRefs) {
         return powerOperationResponse(
-            client.powerOn(ids(serverRefs))
+                client.powerOn(ids(serverRefs))
         );
     }
 
@@ -246,6 +248,17 @@ public class ServerService {
                     .filter(notNull())
                     .map(BaseServerResponse::findStatusId)
                     .collect(toList()),
+                queueClient
+            );
+    }
+
+    public OperationFuture<Link> addPublicIp(String serverId, PublicIpAddressRequest publicIpAddressRequest) {
+        Link response = client.addPublicIp(serverId, publicIpAddressRequest);
+
+        return
+            new OperationFuture<>(
+                response,
+                response.getId(),
                 queueClient
             );
     }

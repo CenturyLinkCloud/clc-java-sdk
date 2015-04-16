@@ -3,18 +3,19 @@ package com.centurylink.cloud.sdk.servers.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
-import com.centurylink.cloud.sdk.core.commons.client.domain.queue.GetStatusResponse;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
+import com.centurylink.cloud.sdk.servers.services.domain.server.PublicIpAddressRequest;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
 import javax.ws.rs.client.InvocationCallback;
-
 import java.util.List;
 
 import static javax.ws.rs.client.Entity.entity;
@@ -172,4 +173,21 @@ public class ServerClient extends BaseSdkClient {
                 .readEntity(BaseServerListResponse.class);
     }
 
+    public Link addPublicIp(String serverId, PublicIpAddressRequest publicIpAddressRequest) {
+        return
+            client("/servers/{accountAlias}/{serverId}/publicIPAddresses")
+                .resolveTemplate("serverId", serverId)
+                .request()
+                .post(entity(publicIpAddressRequest, APPLICATION_JSON_TYPE))
+                .readEntity(Link.class);
+    }
+
+    public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
+        return
+                client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
+                        .resolveTemplate("serverId", serverId)
+                        .resolveTemplate("publicIp", publicIp)
+                        .request()
+                        .get(PublicIpAddressResponse.class);
+    }
 }
