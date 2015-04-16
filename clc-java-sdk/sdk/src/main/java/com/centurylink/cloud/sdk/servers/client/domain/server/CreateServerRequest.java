@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class CreateServerRequest {
 
     private String ttl;
 
+    @JsonProperty("isManagedOS")
     private boolean isManagedOS;
 
     private boolean isManagedBackup;
