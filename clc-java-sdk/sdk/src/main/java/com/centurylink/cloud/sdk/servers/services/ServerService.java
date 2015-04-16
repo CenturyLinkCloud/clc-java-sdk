@@ -92,7 +92,7 @@ public class ServerService {
 
     public OperationFuture<ServerRef> delete(ServerRef server) {
         BaseServerResponse response = client.delete(
-                findByRef(server).getId()
+            findByRef(server).getId()
         );
 
         return new OperationFuture<>(

@@ -151,8 +151,8 @@ public class CreateServerCommand {
         this.managedOS = managedOS;
     }
 
-    public CreateServerCommand managedOS(boolean managedOS) {
-        setManagedOS(managedOS);
+    public CreateServerCommand managedOs() {
+        setManagedOS(true);
         return this;
     }
 }

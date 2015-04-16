@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
@@ -9,7 +8,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
@@ -94,28 +92,25 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         cleanUpCreatedResources(newServer.asRefById());
     }
 
-    @Test
+    @Test(enabled = false) // blocked by https://github.com/CenturyLinkCloud/APIDocs/issues/4
     public void testCreateWithManagedOS() {
-        TemplateRef templateRef = Template.refByOs()
-                .dataCenter(DataCenters.US_EAST_STERLING)
-                .type(RHEL)
-                .edition("6")
-                .architecture(x86_64);
-
-        boolean managedOS = templateService.findByRef(templateRef)
-                .hasCapability(TemplateMetadata.MANAGED_OS_VALUE);
-
         ServerMetadata newServer =
-                serverService.create(anyServerConfig()
-                                .name("CMOS")
-                                .template(templateRef)
-                                .managedOS(managedOS)
-                                .group(Group.refByName()
-                                        .name(DEFAULT_GROUP)
-                                        .dataCenter(DataCenters.US_EAST_STERLING))
+            serverService.create(anyServerConfig()
+                .name("CMOS")
+                .template(Template.refByOs()
+                    .dataCenter(DataCenters.US_EAST_STERLING)
+                    .type(RHEL)
+                    .edition("6")
+                    .architecture(x86_64)
                 )
-                        .waitUntilComplete()
-                        .getResult();
+                .managedOs()
+                .group(Group.refByName()
+                    .name(DEFAULT_GROUP)
+                    .dataCenter(DataCenters.US_EAST_STERLING)
+                )
+            )
+            .waitUntilComplete()
+            .getResult();
 
         assert !isNullOrEmpty(newServer.getId());
 
