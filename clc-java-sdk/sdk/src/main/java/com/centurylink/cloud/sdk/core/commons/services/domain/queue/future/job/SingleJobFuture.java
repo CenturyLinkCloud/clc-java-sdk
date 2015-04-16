@@ -9,18 +9,16 @@ import java.time.Duration;
 import java.util.function.BiConsumer;
 import java.time.Instant;
 
-import java.util.function.Consumer;
-
 /**
  * @author Ilya Drabenia
  */
-public class SimpleExecutingJob implements ExecutingJob {
+public class SingleJobFuture implements JobFuture {
     public static final long STATUS_POLLING_DELAY = 400L;
 
     private final QueueClient queueClient;
     private final String statusId;
 
-    public SimpleExecutingJob(String statusId, QueueClient queueClient) {
+    public SingleJobFuture(String statusId, QueueClient queueClient) {
         this.queueClient = queueClient;
         this.statusId = statusId;
     }

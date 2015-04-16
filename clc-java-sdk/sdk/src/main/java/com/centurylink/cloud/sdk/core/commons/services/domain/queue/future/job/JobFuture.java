@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 /**
  * @author Ilya Drabenia
  */
-public interface ExecutingJob {
+public interface JobFuture {
 
     void waitUntilComplete();
 

@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ExecutingJob;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.CompositeExecutingJob;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SimpleExecutingJob;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
 
 import java.time.Duration;
 import java.util.List;
@@ -19,26 +19,26 @@ import static java.util.stream.Collectors.toList;
  * @author ilya.drabenia
  */
 public class OperationFuture<T> {
-    private final ExecutingJob waiting;
+    private final JobFuture waiting;
     private final T result;
 
     public OperationFuture(T result, String statusId, QueueClient queueClient) {
-        this(result, new SimpleExecutingJob(statusId, queueClient));
+        this(result, new SingleJobFuture(statusId, queueClient));
     }
 
     public OperationFuture(T result, List<String> statusIds, QueueClient queueClient) {
         this(
             result,
-            new CompositeExecutingJob(
+            new ParallelJobsFuture(
                 checkNotNull(statusIds)
                     .stream()
-                    .map(status -> new SimpleExecutingJob(status, queueClient))
+                    .map(status -> new SingleJobFuture(status, queueClient))
                     .collect(toList())
             )
         );
     }
 
-    public OperationFuture(T result, ExecutingJob waiting) {
+    public OperationFuture(T result, JobFuture waiting) {
         this.waiting = waiting;
         this.result = result;
     }
@@ -77,7 +77,7 @@ public class OperationFuture<T> {
     public static OperationFuture<List<?>> from(OperationFuture<?>... futures) {
         return new OperationFuture<>(
             Stream.of(futures).map(f -> f.getResult()).collect(toList()),
-            new CompositeExecutingJob(
+            new ParallelJobsFuture(
                 Stream.of(futures).map(f -> f.waiting).collect(toList())
             )
         );

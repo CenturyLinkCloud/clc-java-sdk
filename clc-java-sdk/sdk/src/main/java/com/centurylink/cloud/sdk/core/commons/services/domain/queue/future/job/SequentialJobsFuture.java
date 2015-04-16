@@ -1,29 +1,36 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import java.time.Duration;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static com.centurylink.cloud.sdk.core.services.predicates.Predicates.notNull;
 
 /**
  * @author Ilya Drabenia
  */
-public class CompositeExecutingJob implements ExecutingJob {
-    private final List<ExecutingJob> jobs;
+public class SequentialJobsFuture implements JobFuture {
+    private final List<Supplier<JobFuture>> jobs;
 
-    public CompositeExecutingJob(List<ExecutingJob> jobs) {
-        this.jobs = new ArrayList<>(jobs);
+    @SafeVarargs
+    public SequentialJobsFuture(Supplier<JobFuture>... jobs) {
+        this.jobs = Arrays.asList(jobs);
     }
 
     @Override
     public void waitUntilComplete() {
-        doWaitUntilComplete(null);
+        jobs
+            .stream()
+            .filter(notNull())
+            .map(Supplier::get)
+            .forEach(JobFuture::waitUntilComplete);
     }
 
     @Override
     public void waitUntilComplete(Duration timeout) {
-        doWaitUntilComplete(timeout);
+
     }
 
     @Override
@@ -35,11 +42,4 @@ public class CompositeExecutingJob implements ExecutingJob {
     public void waitAsync(BiConsumer<Void, ? extends Throwable> listener, Duration timeout) {
 
     }
-
-    private void doWaitUntilComplete(Duration timeout) {
-        jobs
-            .stream()
-            .forEach(job -> job.waitUntilComplete(timeout));
-    }
-
 }
