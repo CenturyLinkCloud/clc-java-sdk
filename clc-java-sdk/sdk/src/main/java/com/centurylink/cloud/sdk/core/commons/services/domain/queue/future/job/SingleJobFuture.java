@@ -2,12 +2,11 @@ package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFailedException;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationTimeoutException;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.ClcTimeoutException;
 import com.google.common.base.Throwables;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 import java.time.Instant;
 
 /**
@@ -47,7 +46,7 @@ public class SingleJobFuture implements JobFuture {
 
         for (;;) {
             if (timeLimit != null && timeLimit.isBefore(Instant.now())) {
-                throw new OperationTimeoutException();
+                throw new ClcTimeoutException();
             }
 
             String status = queueClient
