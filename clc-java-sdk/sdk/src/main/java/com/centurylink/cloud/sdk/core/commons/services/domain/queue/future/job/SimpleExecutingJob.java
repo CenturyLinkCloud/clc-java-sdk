@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.waiting;
+package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFailedException;

@@ -1,11 +1,15 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.waiting.ExecutingJob;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.waiting.CompositeExecutingJob;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.waiting.SimpleExecutingJob;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ExecutingJob;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.CompositeExecutingJob;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SimpleExecutingJob;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
@@ -46,4 +50,14 @@ public class OperationFuture<T> {
     public T getResult() {
         return result;
     }
+
+    public static OperationFuture<List<?>> from(OperationFuture<?>... futures) {
+        return new OperationFuture<>(
+            Stream.of(futures).map(f -> f.getResult()).collect(toList()),
+            new CompositeExecutingJob(
+                Stream.of(futures).map(f -> f.waiting).collect(toList())
+            )
+        );
+    }
+
 }

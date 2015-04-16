@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.waiting;
+package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import java.time.Duration;
 import java.util.ArrayList;
