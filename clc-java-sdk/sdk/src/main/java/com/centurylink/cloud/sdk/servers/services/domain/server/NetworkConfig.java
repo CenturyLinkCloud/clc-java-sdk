@@ -9,6 +9,7 @@ public class NetworkConfig {
     private NetworkRef network;
     private String primaryDns;
     private String secondaryDns;
+    private PublicIpAddressRequest publicIpAddressRequest;
 
     public String getPrimaryDns() {
         return primaryDns;
@@ -46,6 +47,19 @@ public class NetworkConfig {
 
     public NetworkConfig network(NetworkRef network) {
         setNetwork(network);
+        return this;
+    }
+
+    public PublicIpAddressRequest getPublicIpAddressRequest() {
+        return publicIpAddressRequest;
+    }
+
+    public void setPublicIpAddressRequest(PublicIpAddressRequest publicIpAddressRequest) {
+        this.publicIpAddressRequest = publicIpAddressRequest;
+    }
+
+    public NetworkConfig publicIpAddress(PublicIpAddressRequest publicIpAddressRequest) {
+        setPublicIpAddressRequest(publicIpAddressRequest);
         return this;
     }
 }
