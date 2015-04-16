@@ -2,16 +2,16 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLiveParseException;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 
 /**
  * @author Aliaksandr Krasitski
  */
-public class TimeToLiveTest {
+public class TimeToLiveTest extends Assert{
 
     @Test
     public void testConstructorDate() {
@@ -31,7 +31,6 @@ public class TimeToLiveTest {
     @Test(expectedExceptions = TimeToLiveParseException.class)
     public void testConstructorStringFail1() {
         new TimeToLive("2015-12-31");
-        new TimeToLive("2015-12-31T23:00");
     }
 
     @Test(expectedExceptions = TimeToLiveParseException.class)
@@ -41,7 +40,9 @@ public class TimeToLiveTest {
 
     @Test
     public void testConstructorString() {
-        new TimeToLive("2015-12-31T23:00+03:00");
+        String date = "2015-12-31T23:00+03:00";
+        TimeToLive ttl = new TimeToLive("2015-12-31T23:00+03:00");
+        assertEquals(date, ttl.format());
     }
 
     @Test
