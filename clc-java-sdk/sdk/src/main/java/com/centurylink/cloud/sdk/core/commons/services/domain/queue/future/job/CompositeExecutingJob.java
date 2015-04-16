@@ -18,14 +18,12 @@ public class CompositeExecutingJob implements ExecutingJob {
 
     @Override
     public void waitUntilComplete() {
-        jobs
-            .stream()
-            .forEach(ExecutingJob::waitUntilComplete);
+        doWaitUntilComplete(null);
     }
 
     @Override
     public void waitUntilComplete(Duration timeout) {
-        waitUntilComplete(); // TODO: implement this method properly
+        doWaitUntilComplete(timeout);
     }
 
     @Override
@@ -36,6 +34,12 @@ public class CompositeExecutingJob implements ExecutingJob {
     @Override
     public void waitAsync(BiConsumer<Void, ? extends Throwable> listener, Duration timeout) {
 
+    }
+
+    private void doWaitUntilComplete(Duration timeout) {
+        jobs
+            .stream()
+            .forEach(job -> job.waitUntilComplete(timeout));
     }
 
 }
