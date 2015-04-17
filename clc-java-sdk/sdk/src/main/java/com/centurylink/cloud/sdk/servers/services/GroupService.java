@@ -1,12 +1,16 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
+import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
@@ -75,8 +79,8 @@ public class GroupService {
 
     public GroupMetadata findFirst(GroupFilter criteria) {
         return getFirst(
-            findLazy(criteria).limit(1).collect(toList()),
-            null
+                findLazy(criteria).limit(1).collect(toList()),
+                null
         );
     }
 
@@ -91,9 +95,22 @@ public class GroupService {
         GroupMetadata result = client.getGroup(rootGroupId);
 
         return converter.newGroupList(
-            dataCenterService.findByRef(dataCenter).getId(),
-            result.getAllGroups()
+                dataCenterService.findByRef(dataCenter).getId(),
+                result.getAllGroups()
         );
+    }
+
+    public OperationFuture<GroupMetadata> create(GroupConfig groupConfig) {
+        GroupMetadata group = client.createGroup(groupConfig);
+
+        return new OperationFuture<>(
+                group,
+                new NoWaitingJobFuture()
+        );
+    }
+
+    public GroupMetadata get(String groupId) {
+        return client.getGroup(groupId);
     }
 
 }

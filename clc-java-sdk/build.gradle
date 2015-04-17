@@ -9,7 +9,7 @@ dependencies {
 }
 
 task run {
-    description('Assemble application and run it on jetty.')
+    description('Run it on jetty.')
     dependsOn(':sample:app:run')
 }
 

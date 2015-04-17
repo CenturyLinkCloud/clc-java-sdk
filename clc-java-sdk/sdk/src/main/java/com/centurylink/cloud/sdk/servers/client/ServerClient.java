@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -12,6 +13,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
@@ -118,6 +120,14 @@ public class ServerClient extends BaseSdkClient {
             client("/groups/{accountAlias}/{rootGroupId}")
                 .resolveTemplate("rootGroupId", rootGroupId)
                 .request().get(GroupMetadata.class);
+    }
+
+    public GroupMetadata createGroup(GroupConfig groupConfig) {
+        return
+            client("/groups/{accountAlias}")
+                .request()
+                .post(entity(groupConfig, APPLICATION_JSON_TYPE))
+                .readEntity(GroupMetadata.class);
     }
 
     public BaseServerResponse convertToTemplate(CreateTemplateRequest request) {
