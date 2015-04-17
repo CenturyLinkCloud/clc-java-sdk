@@ -22,7 +22,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 /**
  * @author Ilya Drabenia
  */
-@Test(groups = "1")
+@Test
 public class SingleServerFixture {
 
     private static volatile ServerRef server;
@@ -31,11 +31,7 @@ public class SingleServerFixture {
         return server;
     }
 
-    public void testNothing() {
-
-    }
-
-    @BeforeSuite(groups = {LONG_RUNNING, "1"})
+    @BeforeSuite(groups = LONG_RUNNING)
     public void createServer() {
         server =
             new ClcSdk()
@@ -72,7 +68,7 @@ public class SingleServerFixture {
                 .asRefById();
     }
 
-    @AfterSuite(groups = {LONG_RUNNING, "1"})
+    @AfterSuite(groups = LONG_RUNNING)
     public void deleteServer() {
         new ClcSdk()
             .serverService()
