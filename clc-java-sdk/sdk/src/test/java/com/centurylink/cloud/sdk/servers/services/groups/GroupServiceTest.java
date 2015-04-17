@@ -46,6 +46,8 @@ public class GroupServiceTest extends AbstractServersSdkTest {
         assertEquals(createdGroup.getId(), newGroup.getId());
         assertEquals(createdGroup.getName(), newGroup.getName());
         assertEquals(createdGroup.getDescription(), newGroup.getDescription());
+
+        groupService.delete(createdGroup.getId());
     }
 
 }

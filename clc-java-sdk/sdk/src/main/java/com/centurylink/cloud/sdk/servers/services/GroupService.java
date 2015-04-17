@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
@@ -111,6 +111,10 @@ public class GroupService {
 
     public GroupMetadata get(String groupId) {
         return client.getGroup(groupId);
+    }
+
+    public Link delete(String groupId) {
+        return client.deleteGroup(groupId);
     }
 
 }

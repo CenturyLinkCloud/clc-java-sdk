@@ -1,18 +1,19 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.centurylink.cloud.sdk.core.commons.services.domain.CustomField;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Aliaksandr Krasitski
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GroupConfig {
     private String name;
     private String description;
     private String parentGroupId;
-    private Map<String, String> customFields = new HashMap<>();
+    private List<CustomField> customFields;
 
     public String getName() {
         return name;
@@ -53,15 +54,15 @@ public class GroupConfig {
         return this;
     }
 
-    public Map<String, String> getCustomFields() {
+    public List<CustomField> getCustomFields() {
         return customFields;
     }
 
-    public void setCustomFields(Map<String, String> customFields) {
+    public void setCustomFields(List<CustomField> customFields) {
         this.customFields = customFields;
     }
 
-    public GroupConfig customFields(Map<String, String> customFields) {
+    public GroupConfig customFields(List<CustomField> customFields) {
         setCustomFields(customFields);
         return this;
     }

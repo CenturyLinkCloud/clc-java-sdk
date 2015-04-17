@@ -4,13 +4,8 @@ import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
@@ -130,6 +125,13 @@ public class ServerClient extends BaseSdkClient {
                 .readEntity(GroupMetadata.class);
     }
 
+    public Link deleteGroup(String groupId) {
+        return
+            client("/groups/{accountAlias}/{groupId}")
+                .resolveTemplate("groupId", groupId)
+                    .request().delete(Link.class);
+    }
+
     public BaseServerResponse convertToTemplate(CreateTemplateRequest request) {
         return
             client("/servers/{accountAlias}/{serverId}/convertToTemplate")
@@ -228,6 +230,5 @@ public class ServerClient extends BaseSdkClient {
                 .delete()
                 .readEntity(Link.class);
     }
-
 
 }
