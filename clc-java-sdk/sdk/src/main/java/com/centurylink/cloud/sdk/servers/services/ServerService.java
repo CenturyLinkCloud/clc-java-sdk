@@ -96,7 +96,7 @@ public class ServerService {
 
     public OperationFuture<ServerRef> delete(ServerRef server) {
         BaseServerResponse response = client.delete(
-                findByRef(server).getId()
+            findByRef(server).getId()
         );
 
         return new OperationFuture<>(
@@ -117,10 +117,10 @@ public class ServerService {
     public OperationFuture<Template> convertToTemplate(CreateTemplateCommand command) {
         BaseServerResponse response =
             client.convertToTemplate(new CreateTemplateRequest()
-                            .serverId(command.getServer().as(IdServerRef.class).getId())
-                            .description(command.getDescription())
-                            .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
-                            .password(command.getPassword())
+                .serverId(command.getServer().as(IdServerRef.class).getId())
+                .description(command.getDescription())
+                .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
+                .password(command.getPassword())
             );
 
         return new OperationFuture<>(
@@ -139,7 +139,7 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(ServerRef... serverRefs) {
         return powerOperationResponse(
-                client.powerOn(ids(serverRefs))
+            client.powerOn(ids(serverRefs))
         );
     }
 

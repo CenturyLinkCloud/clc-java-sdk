@@ -12,7 +12,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
+import static java.time.temporal.ChronoUnit.NANOS;
 import static java.util.Arrays.asList;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 /**
  * @author Ilya Drabenia
@@ -40,7 +42,7 @@ public class SequentialJobsFuture implements JobFuture {
     @Override
     public void waitUntilComplete(Duration timeout) {
         try {
-            future.get(timeout.get(ChronoUnit.NANOS), TimeUnit.NANOSECONDS);
+            future.get(timeout.get(NANOS), NANOSECONDS);
         } catch (InterruptedException | ExecutionException e) {
             throw new ClcServiceException(e);
         } catch (TimeoutException e) {

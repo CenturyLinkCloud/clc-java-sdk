@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
@@ -21,6 +22,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 /**
  * @author Ilya Drabenia
  */
+@Test(groups = "1")
 public class SingleServerFixture {
 
     private static volatile ServerRef server;
@@ -29,7 +31,11 @@ public class SingleServerFixture {
         return server;
     }
 
-    @BeforeSuite(groups = LONG_RUNNING)
+    public void testNothing() {
+
+    }
+
+    @BeforeSuite(groups = {LONG_RUNNING, "1"})
     public void createServer() {
         server =
             new ClcSdk()
@@ -66,7 +72,7 @@ public class SingleServerFixture {
                 .asRefById();
     }
 
-    @AfterSuite(groups = LONG_RUNNING)
+    @AfterSuite(groups = {LONG_RUNNING, "1"})
     public void deleteServer() {
         new ClcSdk()
             .serverService()
