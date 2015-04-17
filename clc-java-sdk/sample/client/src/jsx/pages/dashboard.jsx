@@ -25,15 +25,19 @@ export class DashboardPage extends React.Component {
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Show groups</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.dataCenterList.map(item =>
                             <tr>
                                 <td>
-                                    <a href={`#/${item.get('id')}/server/new`}>{item.get('id')}</a>
+                                    <a key={item.get('id')} href={`#/${item.get('id')}/server/new`}>{item.get('id')}</a>
                                 </td>
                                 <td>{item.get('name')}</td>
+                                <td>
+                                    <a key={item.get('id')} href={`#/${item.get('id')}/group`}>Group</a>
+                                </td>
                             </tr>
                         )}
                     </tbody>

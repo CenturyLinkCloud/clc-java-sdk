@@ -1,10 +1,13 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
 import com.centurylink.cloud.sdk.sample.port.adapter.web.beans.DataCenterBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -16,13 +19,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/datacenter")
 public class DataCenterController {
 
+    @Autowired
+    SdkRegistry sdkRegistry;
+
     @RequestMapping(method = GET)
     List<DataCenterBean> findAll() {
-        return Arrays.asList(
-            new DataCenterBean("de1", "DE1 - Germany (Frankfurt)"),
-            new DataCenterBean("gb1", "GB1 - Great Britain (Portsmouth)"),
-            new DataCenterBean("il1", "IL1 - US Central (Chicago)")
-        );
+        List<DataCenterMetadata> dataCenters = sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
+                .dataCenterService().findAll();
+
+        List<DataCenterBean> dataCenterBeans = new ArrayList<>(dataCenters.size());
+        dataCenters.forEach(dataCenter -> dataCenterBeans.add(new DataCenterBean(dataCenter.getId(), dataCenter.getName())));
+        return dataCenterBeans;
     }
 
 }

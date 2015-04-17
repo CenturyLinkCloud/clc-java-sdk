@@ -2,6 +2,7 @@ let Router = ReactRouter;
 let { Route, DefaultRoute } = Router;
 import { DashboardPage } from './pages/dashboard.jsx';
 import { CreateServerPage } from './pages/server/create/create-server.jsx';
+import { GroupListPage } from './pages/group/group-list.jsx';
 import { Body } from './components/body.jsx';
 
 
@@ -13,6 +14,7 @@ class App {
                 <DefaultRoute handler={DashboardPage} />
                 <Route name="dashboard" path="/dashboard" handler={DashboardPage} />
                 <Route name="createServer" path="/:dataCenter/server/new" handler={CreateServerPage} />
+                <Route name="groupList" path="/:dataCenter/group" handler={GroupListPage} />
             </Route>
         );
     }

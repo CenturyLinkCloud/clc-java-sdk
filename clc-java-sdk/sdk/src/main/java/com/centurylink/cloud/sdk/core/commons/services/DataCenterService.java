@@ -48,9 +48,12 @@ public class DataCenterService {
 
     public List<DataCenterMetadata> find(Predicate<DataCenterMetadata> predicate) {
         return
-            serverClient
-                .findAllDataCenters().stream()
+                findAll().stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
+    }
+
+    public List<DataCenterMetadata> findAll() {
+        return serverClient.findAllDataCenters();
     }
 }
