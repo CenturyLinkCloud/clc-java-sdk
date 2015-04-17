@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
@@ -227,6 +228,22 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> archive(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.archive(ids(serverRefs))
+        );
+    }
+
+    /**
+     *  Create snapshot of a single server or group of servers
+     * @param expirationDays expiration days (must be between 1 and 10)
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
+        return powerOperationResponse(
+            client.createSnapshot(
+                new CreateSnapshotRequest()
+                    .snapshotExpirationDays(expirationDays)
+                    .serverIds(ids(serverRefs))
+            )
         );
     }
 

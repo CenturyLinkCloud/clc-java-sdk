@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
@@ -162,6 +163,14 @@ public class ServerClient extends BaseSdkClient {
 
     public BaseServerListResponse archive(List<String> serverIdList) {
         return sendPowerOperationRequest("archive", serverIdList);
+    }
+
+    public BaseServerListResponse createSnapshot(CreateSnapshotRequest request) {
+        return
+            client("/operations/{accountAlias}/servers/createSnapshot")
+                .request()
+                .post(entity(request, APPLICATION_JSON))
+                .readEntity(BaseServerListResponse.class);
     }
 
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
