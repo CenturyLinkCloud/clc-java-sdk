@@ -30,7 +30,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
     ServerService serverService;
 
     @Test
-    public void addIpTest() {
+    public void testPublicIpTest() {
         ServerRef serverRef = SingleServerFixture.server();
         ServerMetadata server = serverService.findByRef(serverRef);
 
@@ -50,20 +50,14 @@ public class PublicIpTest extends AbstractServersSdkTest {
             .getResult();
 
         assert !isNullOrEmpty(response.getId());
-    }
-
-    @Test
-    public void getIpTest() {
-        ServerRef serverRef = SingleServerFixture.server();
-        ServerMetadata server = serverService.findByRef(serverRef);
 
         List<IpAddress> ipAddresses = server.getDetails().getIpAddresses();
         ipAddresses.parallelStream().forEach(
-            address -> {
-                if (address.getPublicIp() != null) {
-                    serverService.getPublicIp(server.getId(), address.getPublicIp());
+                address -> {
+                    if (address.getPublicIp() != null) {
+                        serverService.getPublicIp(server.getId(), address.getPublicIp());
+                    }
                 }
-            }
         );
     }
 

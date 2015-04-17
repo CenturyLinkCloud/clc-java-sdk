@@ -19,7 +19,6 @@ import javax.ws.rs.client.InvocationCallback;
 import java.util.List;
 
 import static javax.ws.rs.client.Entity.entity;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 /**
@@ -125,7 +124,7 @@ public class ServerClient extends BaseSdkClient {
             client("/servers/{accountAlias}/{serverId}/convertToTemplate")
                 .resolveTemplate("serverId", request.getServerId())
                 .request()
-                .post(entity(request, APPLICATION_JSON))
+                .post(entity(request, APPLICATION_JSON_TYPE))
                 .readEntity(BaseServerResponse.class);
     }
 
@@ -169,7 +168,7 @@ public class ServerClient extends BaseSdkClient {
         return
             client("/operations/{accountAlias}/servers/" + operationName)
                 .request()
-                .post(entity(serverIdList, APPLICATION_JSON))
+                .post(entity(serverIdList, APPLICATION_JSON_TYPE))
                 .readEntity(BaseServerListResponse.class);
     }
 
@@ -184,10 +183,32 @@ public class ServerClient extends BaseSdkClient {
 
     public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
         return
-                client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
-                        .resolveTemplate("serverId", serverId)
-                        .resolveTemplate("publicIp", publicIp)
-                        .request()
-                        .get(PublicIpAddressResponse.class);
+            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
+                .resolveTemplate("serverId", serverId)
+                .resolveTemplate("publicIp", publicIp)
+                .request()
+                .get(PublicIpAddressResponse.class);
     }
+
+    public Link updatePublicIp(String serverId, String publicIp, PublicIpAddressRequest publicIpAddressRequest) {
+        return
+            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
+                .resolveTemplate("serverId", serverId)
+                .resolveTemplate("publicIp", publicIp)
+                .request()
+                .put(entity(publicIpAddressRequest, APPLICATION_JSON_TYPE))
+                .readEntity(Link.class);
+    }
+
+    public Link removePublicIp(String serverId, String publicIp) {
+        return
+            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
+                .resolveTemplate("serverId", serverId)
+                .resolveTemplate("publicIp", publicIp)
+                .request()
+                .delete()
+                .readEntity(Link.class);
+    }
+
+
 }
