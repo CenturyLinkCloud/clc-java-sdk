@@ -169,7 +169,7 @@ public class ServerClient extends BaseSdkClient {
         return
             client("/operations/{accountAlias}/servers/createSnapshot")
                 .request()
-                .post(entity(request, APPLICATION_JSON))
+                .post(entity(request, APPLICATION_JSON_TYPE))
                 .readEntity(BaseServerListResponse.class);
     }
 
