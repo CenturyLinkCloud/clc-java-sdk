@@ -7,10 +7,11 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
-import com.centurylink.cloud.sdk.servers.services.domain.server.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
@@ -94,7 +95,7 @@ public class ServerService {
 
     public OperationFuture<ServerRef> delete(ServerRef server) {
         BaseServerResponse response = client.delete(
-            findByRef(server).getId()
+                findByRef(server).getId()
         );
 
         return new OperationFuture<>(
@@ -261,6 +262,10 @@ public class ServerService {
                 response.getId(),
                 queueClient
             );
+    }
+
+    public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
+        return client.getPublicIp(serverId, publicIp);
     }
 
 }

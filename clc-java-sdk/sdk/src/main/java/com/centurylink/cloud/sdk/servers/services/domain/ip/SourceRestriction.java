@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.services.domain.server;
+package com.centurylink.cloud.sdk.servers.services.domain.ip;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

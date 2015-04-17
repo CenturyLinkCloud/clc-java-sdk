@@ -11,7 +11,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerReques
 import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
-import com.centurylink.cloud.sdk.servers.services.domain.server.PublicIpAddressRequest;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 

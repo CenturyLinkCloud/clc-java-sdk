@@ -9,12 +9,15 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
+        "public",
         "internal"
 })
 public class IpAddress {
 
     @JsonProperty("internal")
     private String internal;
+    @JsonProperty("public")
+    private String publicIp;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -36,6 +39,26 @@ public class IpAddress {
     @JsonProperty("internal")
     public void setInternal(String internal) {
         this.internal = internal;
+    }
+
+    /**
+     *
+     * @return
+     * The public IP
+     */
+    @JsonProperty("public")
+    public String getPublicIp() {
+        return publicIp;
+    }
+
+    /**
+     *
+     * @param publicIp
+     * The public IP
+     */
+    @JsonProperty("public")
+    public void setPublicIp(String publicIp) {
+        this.publicIp = publicIp;
     }
 
     @JsonAnyGetter
