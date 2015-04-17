@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
+import com.centurylink.cloud.sdk.core.services.function.Functors;
 import com.google.common.collect.Iterables;
 
 import java.time.Duration;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.centurylink.cloud.sdk.core.services.function.Functors.map;
 import static com.google.common.collect.Iterables.toArray;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -43,7 +45,7 @@ public class ParallelJobsFuture implements JobFuture {
     @Override
     public CompletableFuture<Void> waitAsync() {
         return CompletableFuture.allOf(toArray(
-            jobs.stream().map(JobFuture::waitAsync).collect(toList()),
+            map(jobs, JobFuture::waitAsync),
             CompletableFuture.class
         ));
     }

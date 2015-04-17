@@ -2,7 +2,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.group.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.services.predicates.Predicates;
+import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;

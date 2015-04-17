@@ -4,11 +4,9 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.ClcTi
 import com.centurylink.cloud.sdk.core.services.ClcServiceException;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
