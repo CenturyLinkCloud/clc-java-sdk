@@ -4,9 +4,9 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCe
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PortConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.PortConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
