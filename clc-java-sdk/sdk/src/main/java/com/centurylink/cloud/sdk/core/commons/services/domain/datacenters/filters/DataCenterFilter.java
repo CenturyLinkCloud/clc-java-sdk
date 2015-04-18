@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.services.predicates.Predicates;
+import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
 
 import java.util.function.Predicate;

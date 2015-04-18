@@ -5,13 +5,11 @@ import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
-import com.centurylink.cloud.sdk.servers.services.domain.server.PublicIpAddressRequest;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
@@ -19,7 +17,6 @@ import javax.ws.rs.client.InvocationCallback;
 import java.util.List;
 
 import static javax.ws.rs.client.Entity.entity;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 /**
@@ -120,12 +117,27 @@ public class ServerClient extends BaseSdkClient {
                 .request().get(GroupMetadata.class);
     }
 
+    public GroupMetadata createGroup(GroupConfig groupConfig) {
+        return
+            client("/groups/{accountAlias}")
+                .request()
+                .post(entity(groupConfig, APPLICATION_JSON_TYPE))
+                .readEntity(GroupMetadata.class);
+    }
+
+    public Link deleteGroup(String groupId) {
+        return
+            client("/groups/{accountAlias}/{groupId}")
+                .resolveTemplate("groupId", groupId)
+                    .request().delete(Link.class);
+    }
+
     public BaseServerResponse convertToTemplate(CreateTemplateRequest request) {
         return
             client("/servers/{accountAlias}/{serverId}/convertToTemplate")
                 .resolveTemplate("serverId", request.getServerId())
                 .request()
-                .post(entity(request, APPLICATION_JSON))
+                .post(entity(request, APPLICATION_JSON_TYPE))
                 .readEntity(BaseServerResponse.class);
     }
 
@@ -165,11 +177,19 @@ public class ServerClient extends BaseSdkClient {
         return sendPowerOperationRequest("archive", serverIdList);
     }
 
+    public BaseServerListResponse createSnapshot(CreateSnapshotRequest request) {
+        return
+            client("/operations/{accountAlias}/servers/createSnapshot")
+                .request()
+                .post(entity(request, APPLICATION_JSON_TYPE))
+                .readEntity(BaseServerListResponse.class);
+    }
+
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
         return
             client("/operations/{accountAlias}/servers/" + operationName)
                 .request()
-                .post(entity(serverIdList, APPLICATION_JSON))
+                .post(entity(serverIdList, APPLICATION_JSON_TYPE))
                 .readEntity(BaseServerListResponse.class);
     }
 
@@ -184,10 +204,31 @@ public class ServerClient extends BaseSdkClient {
 
     public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
         return
-                client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
-                        .resolveTemplate("serverId", serverId)
-                        .resolveTemplate("publicIp", publicIp)
-                        .request()
-                        .get(PublicIpAddressResponse.class);
+            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
+                .resolveTemplate("serverId", serverId)
+                .resolveTemplate("publicIp", publicIp)
+                .request()
+                .get(PublicIpAddressResponse.class);
     }
+
+    public Link updatePublicIp(String serverId, String publicIp, PublicIpAddressRequest publicIpAddressRequest) {
+        return
+            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
+                .resolveTemplate("serverId", serverId)
+                .resolveTemplate("publicIp", publicIp)
+                .request()
+                .put(entity(publicIpAddressRequest, APPLICATION_JSON_TYPE))
+                .readEntity(Link.class);
+    }
+
+    public Link removePublicIp(String serverId, String publicIp) {
+        return
+            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
+                .resolveTemplate("serverId", serverId)
+                .resolveTemplate("publicIp", publicIp)
+                .request()
+                .delete()
+                .readEntity(Link.class);
+    }
+
 }

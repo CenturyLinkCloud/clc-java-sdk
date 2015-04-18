@@ -9,10 +9,12 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.S
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
-import com.centurylink.cloud.sdk.servers.services.domain.server.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
@@ -29,7 +31,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.services.predicates.Predicates.notNull;
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static java.util.stream.Collectors.toList;
 
@@ -246,6 +248,22 @@ public class ServerService {
         );
     }
 
+    /**
+     *  Create snapshot of a single server or group of servers
+     * @param expirationDays expiration days (must be between 1 and 10)
+     * @param serverRefs server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
+        return powerOperationResponse(
+            client.createSnapshot(
+                new CreateSnapshotRequest()
+                    .snapshotExpirationDays(expirationDays)
+                    .serverIds(ids(serverRefs))
+            )
+        );
+    }
+
     private List<String> ids(ServerRef... serverRefs) {
         return
             Stream
@@ -278,6 +296,10 @@ public class ServerService {
                 response.getId(),
                 queueClient
             );
+    }
+
+    public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
+        return client.getPublicIp(serverId, publicIp);
     }
 
 }

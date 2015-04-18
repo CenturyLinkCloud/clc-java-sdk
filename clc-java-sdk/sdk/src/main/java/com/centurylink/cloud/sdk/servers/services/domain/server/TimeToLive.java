@@ -71,7 +71,7 @@ public class TimeToLive {
         this.zonedDateTime = ZonedDateTime.ofInstant(
             calendar.toInstant(),
             ZoneId.of(calendar.getTimeZone().getID())
-        );
+        ).withNano(0).withSecond(0);
     }
 
     /**

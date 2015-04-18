@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
+import com.centurylink.cloud.sdk.core.services.function.Functors;
 
 import java.time.Duration;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static com.centurylink.cloud.sdk.core.services.function.Functors.map;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -72,10 +74,8 @@ public class OperationFuture<T> {
 
     public static OperationFuture<List<?>> from(OperationFuture<?>... futures) {
         return new OperationFuture<>(
-            Stream.of(futures).map(f -> f.getResult()).collect(toList()),
-            new ParallelJobsFuture(
-                Stream.of(futures).map(f -> f.waiting).collect(toList())
-            )
+            map(futures, f -> f.getResult()),
+            new ParallelJobsFuture(map(futures, f -> f.waiting))
         );
     }
 

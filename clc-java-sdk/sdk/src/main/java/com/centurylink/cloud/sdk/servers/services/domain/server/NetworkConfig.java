@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
 import com.centurylink.cloud.sdk.networks.services.domain.refs.NetworkRef;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 
 /**
  * @author ilya.drabenia

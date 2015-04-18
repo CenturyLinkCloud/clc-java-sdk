@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
@@ -21,6 +22,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 /**
  * @author Ilya Drabenia
  */
+@Test
 public class SingleServerFixture {
 
     private static volatile ServerRef server;

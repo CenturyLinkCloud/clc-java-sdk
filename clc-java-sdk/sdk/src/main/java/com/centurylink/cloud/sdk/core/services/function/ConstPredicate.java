@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.services.predicates;
+package com.centurylink.cloud.sdk.core.services.function;
 
 import java.util.function.Predicate;
 

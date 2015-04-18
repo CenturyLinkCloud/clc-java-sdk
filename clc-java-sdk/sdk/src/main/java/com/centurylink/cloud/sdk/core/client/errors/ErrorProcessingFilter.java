@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.core.client.errors;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.ws.rs.client.ClientRequestContext;
@@ -24,7 +25,7 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
             ErrorMessageResponse response = objectMapper().readValue(entityStream, ErrorMessageResponse.class);
 
             if (response.getMessage() != null) {
-                throw new ClcClientException(response.getMessage());
+                throw new ClcClientException(response.getMessage(), new ClcException(objectMapper().writeValueAsString(response.getModelState())));
             }
         }
     }
