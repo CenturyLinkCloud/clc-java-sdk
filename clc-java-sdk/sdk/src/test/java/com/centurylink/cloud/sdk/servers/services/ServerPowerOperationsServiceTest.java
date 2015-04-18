@@ -40,7 +40,7 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         assertEquals(loadServerDetails(server).getPowerState(), status);
     }
 
-    private void assertThatMaintenanceFlagIs(ServerRef server, Boolean expectedResult) throws Exception {
+    private void assertThatMaintenanceFlagIs(ServerRef server, Boolean expectedResult) {
         assertEquals(loadServerDetails(server).getInMaintenanceMode(), expectedResult);
     }
 
@@ -86,6 +86,12 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
+    private void createServerSnapshot() {
+        serverService
+            .createSnapshot(1, server)
+            .waitUntilComplete();
+    }
+
     public void testPowerOff() {
         testShutDown();
         powerOffServer();
@@ -115,25 +121,37 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         assertThatServerPowerStateHasStatus(server, "started");
     }
 
-    public void testStartMaintenance() throws Exception {
+    public void testStartMaintenance() {
         testPowerOn();
         startServerMaintenance();
 
         assertThatMaintenanceFlagIs(server, true);
     }
 
-    public void testStopMaintenance() throws Exception {
+    public void testStopMaintenance() {
         testStartMaintenance();
         stopServerMaintenance();
 
         assertThatMaintenanceFlagIs(server, false);
     }
 
+    public void testCreateSnapshot() {
+        testStopMaintenance();
+
+        Details serverDetails = loadServerDetails(server);
+        assertEquals(serverDetails.getSnapshots().size(), 0);
+
+        createServerSnapshot();
+
+        serverDetails = loadServerDetails(server);
+        assertEquals(serverDetails.getSnapshots().size(), 1);
+    }
+
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testArchive() throws Exception {
         server = SingleServerFixture.server();
 
-        testStopMaintenance();
+        testCreateSnapshot();
         assertThatServerHasStatus(server, "active");
 
         archiveServer();
