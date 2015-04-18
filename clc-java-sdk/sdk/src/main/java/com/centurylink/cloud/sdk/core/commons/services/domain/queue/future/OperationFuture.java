@@ -79,4 +79,8 @@ public class OperationFuture<T> {
         );
     }
 
+    public JobFuture jobFuture() {
+        return waiting;
+    }
+
 }

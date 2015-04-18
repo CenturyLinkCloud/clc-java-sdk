@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.core.client;
 
 import com.centurylink.cloud.sdk.core.client.errors.ErrorProcessingFilter;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 
 import javax.ws.rs.client.ClientBuilder;
 
@@ -11,7 +12,8 @@ public interface ClcApiConstants {
 
     static final String CLC_API_URL = "https://api.tier3.com/v2";
 
-    static final ClientBuilder CLIENT_BUILDER = ClientBuilder
+    static final ResteasyClientBuilder CLIENT_BUILDER =
+        (ResteasyClientBuilder) ClientBuilder
             .newBuilder()
             .register(new ErrorProcessingFilter());
 

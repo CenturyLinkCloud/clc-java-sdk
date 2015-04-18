@@ -4,6 +4,9 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCe
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.PortConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
@@ -13,6 +16,7 @@ import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
@@ -22,6 +26,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateT
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static java.util.Arrays.asList;
 
 /**
  * @author ilya.drabenia
@@ -43,7 +48,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         assert !isNullOrEmpty(server.getId());
     }
 
-    @Test(enabled = false)
+    @Test(enabled = false) // custom template endpoint is not documented yet
     public void testCreateWithCustomTemplate() throws Exception {
         Template customTemplate = createTemplateWithDescription("template1");
 
@@ -76,7 +81,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
             .getResult();
     }
 
-    @Test
+    @Test(enabled = false) // This functionality tested by single server fixture
     public void testCreateWithTimeToLive() throws Exception {
         ZonedDateTime tomorrow = ZonedDateTime.now().plusDays(1);
         ServerMetadata newServer =
@@ -86,6 +91,25 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 )
                 .waitUntilComplete()
                 .getResult();
+
+        assert !isNullOrEmpty(newServer.getId());
+
+        cleanUpCreatedResources(newServer.asRefById());
+    }
+
+    @Test
+    public void testCreateServerWithPublicIp() throws Exception {
+        ServerMetadata newServer =
+            serverService.create(anyServerConfig()
+                .name("CTTL")
+                .network(new NetworkConfig()
+                    .publicIpAddress(new PublicIpAddressRequest()
+                        .ports(asList(new PortConfig().port(8080)))
+                    )
+                )
+            )
+            .waitUntilComplete()
+            .getResult();
 
         assert !isNullOrEmpty(newServer.getId());
 

@@ -3,11 +3,14 @@ package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFailedException;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.ClcTimeoutException;
+import com.centurylink.cloud.sdk.core.services.SdkThreadPool;
 import com.google.common.base.Throwables;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.time.Instant;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author Ilya Drabenia
@@ -73,7 +76,18 @@ public class SingleJobFuture implements JobFuture {
 
     @Override
     public CompletableFuture<Void> waitAsync() {
-        return null;
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        SdkThreadPool.get().execute(() -> {
+            try {
+                waitUntilComplete();
+                future.complete(null);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+
+        return future;
     }
 
 }

@@ -12,9 +12,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-        "internalIPAddress",
-        "ports",
-        "sourceRestrictions"
+    "internalIPAddress",
+    "ports",
+    "sourceRestrictions"
 })
 public class PublicIpAddressRequest {
     private String internalIPAddress;
