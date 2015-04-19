@@ -38,7 +38,7 @@ export class GroupListPage extends React.Component {
     render () {
         return (
             <div className="starter-template">
-            <h2>Groups in Datacenter {this.params().dataCenter}</h2>
+                <h2>Groups in Datacenter {this.params().dataCenter}</h2>
                 <table className="table">
                     <thead>
                         <tr>
@@ -47,10 +47,10 @@ export class GroupListPage extends React.Component {
                     </thead>
                     <tbody>
                         {this.state.groups.map(item =>
-                        <tr>
-                            <td>{item.get('name')}</td>
-                        </tr>
-                    )}
+                            <tr>
+                                <td>{item.get('name')}</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
