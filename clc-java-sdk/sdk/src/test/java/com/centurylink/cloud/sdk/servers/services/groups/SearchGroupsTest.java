@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
 import static java.util.Arrays.asList;
@@ -50,7 +51,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
             }}))
         );
 
-        when(dataCenterService.find(any(DataCenterFilter.class))).thenReturn(asList(
+        when(dataCenterService.findLazy(any(DataCenterFilter.class))).thenReturn(Stream.of(
             new DataCenterMetadata("de1", "Frankfurt") {{
                 getLinks().add(new Link() {{
                     setRel("group");

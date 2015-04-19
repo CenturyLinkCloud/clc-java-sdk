@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
 
@@ -15,7 +16,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Ilya Drabenia
  */
-public class DataCenterFilter {
+public class DataCenterFilter implements Filter<DataCenterFilter> {
     private Predicate<DataCenterMetadata> predicate = Predicates.alwaysTrue();
 
     public DataCenterFilter() {
@@ -75,4 +76,21 @@ public class DataCenterFilter {
         return new DataCenterFilter(d -> containsIgnoreCase(d.getName(), name));
     }
 
+    @Override
+    public DataCenterFilter and(DataCenterFilter otherFilter) {
+        checkNotNull(otherFilter, "Other filter must be not a null");
+
+        return new DataCenterFilter(
+            getPredicate().and(otherFilter.getPredicate())
+        );
+    }
+
+    @Override
+    public DataCenterFilter or(DataCenterFilter otherFilter) {
+        checkNotNull(otherFilter, "Other filter must be not a null");
+
+        return new DataCenterFilter(
+            getPredicate().or(otherFilter.getPredicate())
+        );
+    }
 }

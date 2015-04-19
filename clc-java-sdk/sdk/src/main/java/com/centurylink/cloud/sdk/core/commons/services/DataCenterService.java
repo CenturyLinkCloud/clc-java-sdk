@@ -45,11 +45,16 @@ public class DataCenterService {
         return find(criteria.getPredicate());
     }
 
+    public Stream<DataCenterMetadata> findLazy(DataCenterFilter criteria) {
+        return findLazy(criteria.getPredicate());
+    }
+
     public List<DataCenterMetadata> find(Predicate<DataCenterMetadata> predicate) {
-        return
-            findAll().stream()
-                .filter(predicate)
-                .collect(Collectors.toList());
+        return findLazy(predicate).collect(Collectors.toList());
+    }
+
+    public Stream<DataCenterMetadata> findLazy(Predicate<DataCenterMetadata> predicate) {
+        return findAll().stream().filter(predicate);
     }
 
     public List<DataCenterMetadata> findAll() {

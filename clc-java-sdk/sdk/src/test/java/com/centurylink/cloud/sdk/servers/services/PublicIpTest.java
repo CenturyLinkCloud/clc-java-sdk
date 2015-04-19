@@ -21,7 +21,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
- * Created by aliaksandr.krasitski on 4/16/2015.
+ * @author aliaksandr krasitski
  */
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 public class PublicIpTest extends AbstractServersSdkTest {
@@ -34,31 +34,32 @@ public class PublicIpTest extends AbstractServersSdkTest {
         ServerRef serverRef = SingleServerFixture.server();
         ServerMetadata server = serverService.findByRef(serverRef);
 
-        Link response = serverService.addPublicIp(server.getId(),
+        Link response = serverService
+            .addPublicIp(server.getId(),
                 new PublicIpAddressRequest()
-                        .ports(Arrays.asList(
-                                new PortConfig()
-                                        .port(80)
-                                        .protocol(ProtocolType.TCP),
-                                new PortConfig()
-                                        .port(443)
-                                        .protocol(ProtocolType.TCP)
-                        ))
-                        .sourceRestrictions(Arrays.asList(new SourceRestriction().cidr("70.100.60.140/32")))
-        )
+                    .ports(Arrays.asList(
+                        new PortConfig()
+                            .port(80)
+                            .protocol(ProtocolType.TCP),
+                        new PortConfig()
+                            .port(443)
+                            .protocol(ProtocolType.TCP)
+                    ))
+                    .sourceRestrictions(Arrays.asList(
+                        new SourceRestriction().cidr("70.100.60.140/32")
+                    ))
+            )
             .waitUntilComplete()
             .getResult();
 
         assert !isNullOrEmpty(response.getId());
 
         List<IpAddress> ipAddresses = server.getDetails().getIpAddresses();
-        ipAddresses.parallelStream().forEach(
-                address -> {
-                    if (address.getPublicIp() != null) {
-                        serverService.getPublicIp(server.getId(), address.getPublicIp());
-                    }
-                }
-        );
+        ipAddresses.parallelStream().forEach(address -> {
+            if (address.getPublicIp() != null) {
+                serverService.getPublicIp(server.getId(), address.getPublicIp());
+            }
+        });
     }
 
 }

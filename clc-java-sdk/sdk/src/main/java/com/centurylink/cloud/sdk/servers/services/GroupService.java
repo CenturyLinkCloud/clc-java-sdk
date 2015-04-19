@@ -57,18 +57,9 @@ public class GroupService {
     public Stream<GroupMetadata> findLazy(GroupFilter criteria) {
         checkNotNull(criteria, "Criteria must be not null");
 
-        Stream<DataCenterMetadata> dataCenters;
-        if (criteria.getDataCenters().size() > 0) {
-            dataCenters =
-                criteria
-                    .getDataCenters().stream()
-                    .flatMap(d -> dataCenterService.find(d).stream());
-        } else {
-            dataCenters =
-                dataCentersClient
-                    .findAllDataCenters()
-                    .stream();
-        }
+        Stream<DataCenterMetadata> dataCenters =
+            dataCenterService
+                .findLazy(criteria.getDataCenterFilter());
 
         return
             dataCenters
@@ -79,8 +70,8 @@ public class GroupService {
 
     public GroupMetadata findFirst(GroupFilter criteria) {
         return getFirst(
-                findLazy(criteria).limit(1).collect(toList()),
-                null
+            findLazy(criteria).limit(1).collect(toList()),
+            null
         );
     }
 
