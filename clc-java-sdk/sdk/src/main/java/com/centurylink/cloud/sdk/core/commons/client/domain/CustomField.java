@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.core.commons.services.domain;
+package com.centurylink.cloud.sdk.core.commons.client.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
