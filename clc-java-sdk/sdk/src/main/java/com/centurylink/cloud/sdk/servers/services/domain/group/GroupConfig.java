@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.CustomField;
+import com.centurylink.cloud.sdk.core.commons.client.domain.CustomField;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;

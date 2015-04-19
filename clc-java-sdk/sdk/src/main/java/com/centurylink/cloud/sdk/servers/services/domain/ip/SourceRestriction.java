@@ -9,16 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class SourceRestriction {
     private String cidr;
 
-    public String getCidr() {
-        return cidr;
-    }
-
-    public void setCidr(String cidr) {
+    public SourceRestriction(String cidr) {
         this.cidr = cidr;
-    }
-
-    public SourceRestriction cidr(String cidr) {
-        setCidr(cidr);
-        return this;
     }
 }

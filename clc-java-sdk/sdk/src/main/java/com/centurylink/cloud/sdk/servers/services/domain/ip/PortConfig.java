@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import javax.annotation.Generated;
 
 /**
+ * The {@code PortConfig} class represents port configuration object.
+ * By default protocol type is TCP.
+ *
  * @author aliaksandr.krasitski
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,9 +19,20 @@ import javax.annotation.Generated;
         "portTo"
 })
 public class PortConfig {
-    private String protocol;
+    private String protocol = ProtocolType.TCP.name();
     private Integer port;
     private Integer portTo;
+
+    public static final PortConfig HTTPS = new PortConfig().port(443);
+    public static final PortConfig HTTP = new PortConfig().port(80);
+    public static final PortConfig SSH = new PortConfig().port(22);
+
+    public PortConfig() {
+    }
+
+    public PortConfig(Integer port) {
+        this.port = port;
+    }
 
     public String getProtocol() {
         return protocol;

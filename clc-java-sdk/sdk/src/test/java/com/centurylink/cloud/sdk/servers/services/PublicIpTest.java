@@ -37,17 +37,11 @@ public class PublicIpTest extends AbstractServersSdkTest {
         Link response = serverService
             .addPublicIp(server.getId(),
                 new PublicIpAddressRequest()
-                    .ports(Arrays.asList(
-                        new PortConfig()
-                            .port(80)
-                            .protocol(ProtocolType.TCP),
-                        new PortConfig()
-                            .port(443)
-                            .protocol(ProtocolType.TCP)
-                    ))
-                    .sourceRestrictions(Arrays.asList(
-                        new SourceRestriction().cidr("70.100.60.140/32")
-                    ))
+                    .ports(
+                        PortConfig.HTTPS,
+                        PortConfig.HTTP
+                    )
+                    .sourceRestrictions("70.100.60.140/32")
             )
             .waitUntilComplete()
             .getResult();

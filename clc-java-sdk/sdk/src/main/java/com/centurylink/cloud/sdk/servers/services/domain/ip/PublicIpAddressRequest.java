@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.annotation.Generated;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,8 +44,8 @@ public class PublicIpAddressRequest {
         this.ports = ports;
     }
 
-    public PublicIpAddressRequest ports(List<PortConfig> ports) {
-        setPorts(ports);
+    public PublicIpAddressRequest ports(PortConfig... ports) {
+        setPorts(Arrays.asList(ports));
         return this;
     }
 
@@ -64,8 +66,10 @@ public class PublicIpAddressRequest {
      * @param sourceRestrictions
      * @return PublicIp configuration
      */
-    public PublicIpAddressRequest sourceRestrictions(List<SourceRestriction> sourceRestrictions) {
-        setSourceRestrictions(sourceRestrictions);
+    public PublicIpAddressRequest sourceRestrictions(String... sourceRestrictions) {
+        List<SourceRestriction> restrictions = new ArrayList<>(sourceRestrictions.length);
+        Arrays.asList(sourceRestrictions).forEach(value -> restrictions.add(new SourceRestriction(value)));
+        setSourceRestrictions(restrictions);
         return this;
     }
 }

@@ -257,9 +257,9 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
         return powerOperationResponse(
             client.createSnapshot(
-                new CreateSnapshotRequest()
-                    .snapshotExpirationDays(expirationDays)
-                    .serverIds(ids(serverRefs))
+                    new CreateSnapshotRequest()
+                            .snapshotExpirationDays(expirationDays)
+                            .serverIds(ids(serverRefs))
             )
         );
     }
@@ -296,6 +296,10 @@ public class ServerService {
                 response.getId(),
                 queueClient
             );
+    }
+
+    public OperationFuture<Link> addPublicIp(ServerRef server, PublicIpAddressRequest publicIpAddressRequest) {
+        return addPublicIp(((IdServerRef)server).getId(), publicIpAddressRequest);
     }
 
     public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
