@@ -113,7 +113,7 @@ public class ServerService {
 
     public OperationFuture<ServerRef> delete(ServerRef server) {
         BaseServerResponse response = client.delete(
-            findByRef(server).getId()
+                findByRef(server).getId()
         );
 
         return new OperationFuture<>(
@@ -304,6 +304,17 @@ public class ServerService {
 
     public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
         return client.getPublicIp(serverId, publicIp);
+    }
+
+    public OperationFuture<Link> removePublicIp(String serverId, String publicIp) {
+        Link response = client.removePublicIp(serverId, publicIp);
+
+        return
+            new OperationFuture<>(
+                    response,
+                    response.getId(),
+                    queueClient
+            );
     }
 
 }

@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.services;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
+import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.ProtocolType;
@@ -32,10 +33,9 @@ public class PublicIpTest extends AbstractServersSdkTest {
     @Test
     public void testPublicIpTest() {
         ServerRef serverRef = SingleServerFixture.server();
-        ServerMetadata server = serverService.findByRef(serverRef);
 
         Link response = serverService
-            .addPublicIp(server.getId(),
+            .addPublicIp(serverRef,
                 new PublicIpAddressRequest()
                     .ports(
                         PortConfig.HTTPS,
@@ -48,12 +48,17 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
         assert !isNullOrEmpty(response.getId());
 
+        ServerMetadata server = serverService.findByRef(serverRef);
         List<IpAddress> ipAddresses = server.getDetails().getIpAddresses();
         ipAddresses.parallelStream().forEach(address -> {
             if (address.getPublicIp() != null) {
-                serverService.getPublicIp(server.getId(), address.getPublicIp());
+                PublicIpAddressResponse resp = serverService.getPublicIp(server.getId(), address.getPublicIp());
+                serverService.removePublicIp(server.getId(), address.getPublicIp());
             }
         });
+
+        List<IpAddress> initialIpAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
+        assertNotSame(ipAddresses.size(), initialIpAddresses.size());
     }
 
 }
