@@ -121,9 +121,7 @@ public class ServerService {
     }
 
     public OperationFuture<ServerRef> delete(ServerRef server) {
-        BaseServerResponse response = client.delete(
-                findByRef(server).getId()
-        );
+        BaseServerResponse response = client.delete(idByRef(server));
 
         return new OperationFuture<>(
             server,
@@ -140,6 +138,14 @@ public class ServerService {
             .findFirst().orElseThrow(() ->
                 new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
             );
+    }
+
+    String idByRef(ServerRef ref) {
+        if (ref.is(IdServerRef.class)) {
+            return ref.as(IdServerRef.class).getId();
+        } else {
+            return findByRef(ref).getId();
+        }
     }
 
     public Stream<ServerMetadata> findLazy(ServerFilter serverFilter) {
@@ -303,8 +309,8 @@ public class ServerService {
             Stream
                 .of(serverRefs)
                 .filter(notNull())
-                .map(this::findByRef)
-                .map(ServerMetadata::getName)
+                .map(this::idByRef)
+                .map(String::toUpperCase)
                 .collect(toList());
     }
 
