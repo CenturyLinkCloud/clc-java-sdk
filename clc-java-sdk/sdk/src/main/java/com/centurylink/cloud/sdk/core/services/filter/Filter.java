@@ -1,5 +1,10 @@
 package com.centurylink.cloud.sdk.core.services.filter;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+
 /**
  * @author Ilya Drabenia
  */
@@ -11,17 +16,27 @@ public interface Filter<T extends Filter<T>> {
 
     @SafeVarargs
     static <T extends Filter<T>> T and(T... filters) {
-        return Filters.reduce(
-            (obj, otherObj) -> obj.and(otherObj),
-            filters
-        );
+        return and(asList(filters));
     }
 
     @SafeVarargs
     static <T extends Filter<T>> T or(T... filters) {
+        return and(asList(filters));
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T extends Filter<T>> T and(List<T> filters) {
         return Filters.reduce(
-            (obj, otherObj) -> obj.or(otherObj),
-            filters
+            filters,
+            (obj, otherObj) -> obj.and(otherObj)
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T extends Filter<T>> T or(List<T> filters) {
+        return Filters.reduce(
+            filters,
+            (obj, otherObj) -> obj.or(otherObj)
         );
     }
 

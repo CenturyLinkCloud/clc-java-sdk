@@ -65,7 +65,7 @@ public class GroupService {
             dataCenters
                 .map(d -> client.getGroup(d.getGroup().getId()))
                 .flatMap(g -> g.getAllGroups().stream())
-                .filter(criteria.getGroupFilter());
+                .filter(criteria.getPredicate());
     }
 
     public GroupMetadata findFirst(GroupFilter criteria) {

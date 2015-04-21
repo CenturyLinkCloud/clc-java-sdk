@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.ip;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Created by aliaksandr.krasitski on 4/16/2015.
+ * @author Aliaksandr Krasitski
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SourceRestriction {

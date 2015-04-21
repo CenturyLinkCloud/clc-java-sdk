@@ -3,12 +3,12 @@ package com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filte
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
-import com.centurylink.cloud.sdk.core.services.filter.Filters;
 
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.services.filter.Filters.containsIgnoreCase;
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.containsIgnoreCase;
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.in;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -36,7 +36,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @param predicate
      * @return {@link DataCenterFilter}
      */
-    public DataCenterFilter filter(Predicate<DataCenterMetadata> predicate) {
+    public DataCenterFilter where(Predicate<DataCenterMetadata> predicate) {
         checkNotNull(predicate, "Predicate must be not a null");
 
         this.predicate = this.predicate.and(predicate);
@@ -51,16 +51,9 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter idIn(String... ids) {
-        this.predicate =
-            Stream
-                .of(ids)
-                .filter(id -> id != null)
-                .map(id ->
-                    (Predicate<DataCenterMetadata>) m -> Filters.equals(m.getId(), id)
-                )
-                .reduce(Predicates.alwaysFalse(),
-                    (previousPredicate, item) -> previousPredicate.or(item)
-                );
+        this.predicate = this.predicate.and(combine(
+            DataCenterMetadata::getId, in(ids)
+        ));
 
         return this;
     }
@@ -73,7 +66,13 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter nameContains(String name) {
-        return new DataCenterFilter(d -> containsIgnoreCase(d.getName(), name));
+        checkNotNull(name, "Name must be not a null");
+
+        predicate = predicate.and(combine(
+            DataCenterMetadata::getName, containsIgnoreCase(name)
+        ));
+
+        return this;
     }
 
     @Override

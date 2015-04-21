@@ -4,7 +4,6 @@ import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
-import com.centurylink.cloud.sdk.core.services.function.Functors;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.services.function.Functors.map;
+import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
 import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionIfNotFound;
 import static com.google.common.collect.Iterables.getFirst;
 

@@ -10,7 +10,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author Ilya Drabenia
  */
-public abstract class Functors {
+public abstract class Streams {
 
     public static <S, T> List<T> map(List<S> source, Function<S, T> mapper) {
         checkNotNull(source, "Source list must be not a null");

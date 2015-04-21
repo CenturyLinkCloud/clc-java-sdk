@@ -3,26 +3,35 @@ package com.centurylink.cloud.sdk.servers.services.domain.server.filters;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.filter.Filters;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
+import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.in;
+import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author Ilya Drabenia
  */
-public class ServerFilter {
-    private final GroupFilter groupFilters = new GroupFilter();
-    private final Predicate<ServerMetadata> predicate = Predicates.alwaysTrue();
+public class ServerFilter implements Filter<ServerFilter> {
+    private GroupFilter groupFilter = new GroupFilter(Predicates.alwaysTrue());
+    private Predicate<ServerMetadata> predicate = Predicates.alwaysTrue();
+
+    public ServerFilter() {
+    }
+
+    public ServerFilter(Predicate<ServerMetadata> predicate) {
+        this.predicate = predicate;
+    }
 
     /**
      * Method allow to restrict target groups using data centers in which this groups exists.
@@ -31,6 +40,7 @@ public class ServerFilter {
      * @return {@link GroupFilter}
      */
     public ServerFilter dataCenterIn(DataCenterRef... dataCenters) {
+        groupFilter.dataCenterIn(dataCenters);
 
         return this;
     }
@@ -41,7 +51,9 @@ public class ServerFilter {
      * @param predicate is not null filtering predicate
      * @return {@link GroupFilter}
      */
-    public ServerFilter dataCenter(Predicate<DataCenterMetadata> predicate) {
+    public ServerFilter dataCenterWhere(Predicate<DataCenterMetadata> predicate) {
+        groupFilter.dataCenterWhere(predicate);
+
         return this;
     }
 
@@ -51,7 +63,9 @@ public class ServerFilter {
      * @param filter is not null data center filter
      * @return {@link GroupFilter}
      */
-    public ServerFilter dataCenter(DataCenterFilter filter) {
+    public ServerFilter dataCenterWhere(DataCenterFilter filter) {
+        groupFilter.dataCenterWhere(filter);
+
         return this;
     }
 
@@ -61,8 +75,9 @@ public class ServerFilter {
      * @param ids is not null list of group IDs
      * @return {@link GroupFilter}
      */
-    public ServerFilter idIn(String... ids) {
-        checkNotNull(ids, "List of ids must be not a null");
+    public ServerFilter groupIdIn(String... ids) {
+        groupFilter.idIn(ids);
+
         return this;
     }
 
@@ -73,8 +88,8 @@ public class ServerFilter {
      * @param subString is not null name of target group
      * @return {@link GroupFilter}
      */
-    public ServerFilter nameContains(String subString) {
-        checkNotNull(subString, "Name match criteria must be not a null");
+    public ServerFilter groupNameContains(String subString) {
+        groupFilter.nameContains(subString);
 
         return this;
     }
@@ -85,11 +100,59 @@ public class ServerFilter {
      * @param filter is not null group filtering predicate
      * @return {@link GroupFilter}
      */
-    public ServerFilter filter(Predicate<GroupMetadata> filter) {
-        checkNotNull(filter, "Filter predicate must be not a null");
+    public ServerFilter groupWhere(Predicate<GroupMetadata> filter) {
+        groupFilter.where(filter);
 
         return this;
     }
 
+    public ServerFilter groupWhere(GroupFilter filter) {
+        groupFilter = groupFilter.and(filter);
 
+        return this;
+    }
+
+    public ServerFilter groupsIn(GroupRef... groups) {
+        groupFilter = groupFilter.and(Filter.or(
+            map(groups, GroupRef::asFilter)
+        ));
+
+        return this;
+    }
+
+    public ServerFilter where(Predicate<ServerMetadata> filter) {
+        predicate = predicate.and(filter);
+
+        return this;
+    }
+
+    public ServerFilter idIn(String... ids) {
+        predicate = predicate.and(combine(
+            ServerMetadata::getId, in(ids)
+        ));
+
+        return this;
+    }
+
+    @Override
+    public ServerFilter and(ServerFilter otherFilter) {
+        return new ServerFilter()
+            .groupWhere(
+                groupFilter.and(otherFilter.groupFilter)
+            )
+            .where(
+                predicate.and((otherFilter.predicate))
+            );
+    }
+
+    @Override
+    public ServerFilter or(ServerFilter otherFilter) {
+        return new ServerFilter()
+            .groupWhere(
+                groupFilter.or(otherFilter.groupFilter)
+            )
+            .where(
+                predicate.or(otherFilter.predicate)
+            );
+    }
 }

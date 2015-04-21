@@ -16,7 +16,6 @@ import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
@@ -26,7 +25,6 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateT
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.util.Arrays.asList;
 
 /**
  * @author ilya.drabenia
