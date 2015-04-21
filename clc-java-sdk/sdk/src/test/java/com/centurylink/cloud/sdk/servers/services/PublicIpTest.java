@@ -29,8 +29,6 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
     @Test
     public void testPublicIpTest() {
-        SingleServerFixture f = new SingleServerFixture();
-        f.createServer();
         ServerRef serverRef = SingleServerFixture.server();
 
         Link response = serverService
