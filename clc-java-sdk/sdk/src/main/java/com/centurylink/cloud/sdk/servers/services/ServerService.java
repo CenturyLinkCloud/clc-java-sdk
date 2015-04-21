@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.S
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
@@ -16,6 +17,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTem
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
@@ -28,8 +30,10 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
 import java.util.List;
+import java.util.Spliterators;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
@@ -40,14 +44,17 @@ import static java.util.stream.Collectors.toList;
  */
 public class ServerService {
     private final ServerConverter serverConverter;
+    private final GroupService groupService;
     private final ServerClient client;
     private final QueueClient queueClient;
 
     @Inject
-    public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient) {
+    public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient,
+                         GroupService groupService) {
         this.serverConverter = serverConverter;
         this.client = client;
         this.queueClient = queueClient;
+        this.groupService = groupService;
     }
 
     public OperationFuture<ServerMetadata> create(CreateServerCommand command) {
@@ -129,6 +136,18 @@ public class ServerService {
         } else {
             throw new ReferenceNotSupportedException(serverRef.getClass());
         }
+    }
+
+    public Stream<ServerMetadata> findLazy(ServerFilter serverFilter) {
+        return
+            groupService
+                .findLazy(serverFilter.getGroupFilter())
+                .flatMap(group -> group.getAllServers().stream())
+                .filter(serverFilter.getPredicate());
+    }
+
+    public List<ServerMetadata> find(ServerFilter serverFilter) {
+        return findLazy(serverFilter).collect(toList());
     }
 
     public OperationFuture<Template> convertToTemplate(CreateTemplateCommand command) {
@@ -311,9 +330,9 @@ public class ServerService {
 
         return
             new OperationFuture<>(
-                    response,
-                    response.getId(),
-                    queueClient
+                response,
+                response.getId(),
+                queueClient
             );
     }
 

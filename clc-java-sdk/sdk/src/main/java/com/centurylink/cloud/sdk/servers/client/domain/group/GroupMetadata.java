@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.client.domain.group;
 
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.annotation.Generated;
@@ -8,21 +9,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-        "id",
-        "name",
-        "description",
-        "locationId",
-        "type",
-        "status",
-        "serversCount",
-        "groups",
-        "links",
-        "changeInfo",
-        "customFields"
+    "id",
+    "name",
+    "description",
+    "locationId",
+    "type",
+    "status",
+    "serversCount",
+    "groups",
+    "links",
+    "changeInfo",
+    "customFields"
 })
 public class GroupMetadata {
 
@@ -42,6 +48,8 @@ public class GroupMetadata {
     private Integer serversCount;
     @JsonProperty("groups")
     private List<GroupMetadata> groups = new ArrayList<GroupMetadata>();
+    @JsonProperty("servers")
+    private List<ServerMetadata> servers = new ArrayList<>();
     @JsonProperty("links")
     private List<Link> links = new ArrayList<Link>();
     @JsonProperty("changeInfo")
@@ -216,6 +224,16 @@ public class GroupMetadata {
         this.groups = groups;
     }
 
+    @JsonProperty("servers")
+    public List<ServerMetadata> getServers() {
+        return servers;
+    }
+
+    @JsonProperty("servers")
+    public void setServers(List<ServerMetadata> servers) {
+        this.servers = servers;
+    }
+
     /**
      *
      * @return
@@ -332,6 +350,21 @@ public class GroupMetadata {
         }
 
         return result;
+    }
+
+    public List<ServerMetadata> getAllServers() {
+        return
+            concat(
+                getServers()
+                    .stream(),
+
+                getGroups()
+                    .stream()
+                    .flatMap(group ->
+                        group.getAllServers().stream()
+                    )
+            )
+            .collect(toList());
     }
 
 }

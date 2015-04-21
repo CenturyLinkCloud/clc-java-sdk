@@ -155,4 +155,12 @@ public class ServerFilter implements Filter<ServerFilter> {
                 predicate.or(otherFilter.predicate)
             );
     }
+
+    public GroupFilter getGroupFilter() {
+        return groupFilter;
+    }
+
+    public Predicate<ServerMetadata> getPredicate() {
+        return predicate;
+    }
 }
