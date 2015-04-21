@@ -13,8 +13,10 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
@@ -92,7 +94,7 @@ public class ServerService {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
-                    serverConverter.buildCreateServerRequest(command)
+                        serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
@@ -136,7 +138,7 @@ public class ServerService {
                 serverRef.asFilter()
             )
             .findFirst().orElseThrow(() ->
-                new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
+                            new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
             );
     }
 
@@ -195,7 +197,7 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(ServerRef... serverRefs) {
         return powerOperationResponse(
-            client.powerOn(ids(serverRefs))
+                client.powerOn(ids(serverRefs))
         );
     }
 
@@ -289,7 +291,6 @@ public class ServerService {
 
     /**
      * Create snapshot of a single server or group of servers
-     *
      * @param expirationDays expiration days (must be between 1 and 10)
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
@@ -304,6 +305,24 @@ public class ServerService {
         );
     }
 
+    /**
+     * Restore a given archived server to a specified group
+     * @param server server reference
+     * @param group group reference
+     * @return OperationFuture wrapper for BaseServerResponse
+     */
+    public OperationFuture<Link> restore(ServerRef server, GroupRef group) {
+        return baseServerResponse(
+            client.restore(
+                idByRef(server),
+                new RestoreServerRequest()
+                    .targetGroupId(
+                        groupService.findByRef(group).getId()
+                    )
+            )
+        );
+    }
+
     private List<String> ids(ServerRef... serverRefs) {
         return
             Stream
@@ -312,6 +331,26 @@ public class ServerService {
                 .map(this::idByRef)
                 .map(String::toUpperCase)
                 .collect(toList());
+    }
+
+    public OperationFuture<Link> addPublicIp(String serverId, PublicIpAddressRequest publicIpAddressRequest) {
+        return baseServerResponse(
+            client.addPublicIp(serverId, publicIpAddressRequest)
+        );
+    }
+
+    public OperationFuture<Link> addPublicIp(ServerRef server, PublicIpAddressRequest publicIpAddressRequest) {
+        return addPublicIp(((IdServerRef) server).getId(), publicIpAddressRequest);
+    }
+
+    public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
+        return client.getPublicIp(serverId, publicIp);
+    }
+
+    public OperationFuture<Link> removePublicIp(String serverId, String publicIp) {
+        return baseServerResponse(
+                client.removePublicIp(serverId, publicIp)
+        );
     }
 
     private OperationFuture<List<BaseServerResponse>> powerOperationResponse(List<BaseServerResponse> apiResponse) {
@@ -327,9 +366,7 @@ public class ServerService {
             );
     }
 
-    public OperationFuture<Link> addPublicIp(String serverId, PublicIpAddressRequest publicIpAddressRequest) {
-        Link response = client.addPublicIp(serverId, publicIpAddressRequest);
-
+    private OperationFuture<Link> baseServerResponse(Link response) {
         return
             new OperationFuture<>(
                 response,
@@ -337,24 +374,4 @@ public class ServerService {
                 queueClient
             );
     }
-
-    public OperationFuture<Link> addPublicIp(ServerRef server, PublicIpAddressRequest publicIpAddressRequest) {
-        return addPublicIp(((IdServerRef)server).getId(), publicIpAddressRequest);
-    }
-
-    public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
-        return client.getPublicIp(serverId, publicIp);
-    }
-
-    public OperationFuture<Link> removePublicIp(String serverId, String publicIp) {
-        Link response = client.removePublicIp(serverId, publicIp);
-
-        return
-            new OperationFuture<>(
-                response,
-                response.getId(),
-                queueClient
-            );
-    }
-
 }

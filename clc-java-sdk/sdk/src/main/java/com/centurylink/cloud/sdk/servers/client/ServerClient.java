@@ -185,6 +185,15 @@ public class ServerClient extends BaseSdkClient {
                 .readEntity(BaseServerListResponse.class);
     }
 
+    public Link restore(String serverId, RestoreServerRequest request) {
+        return
+            client("/servers/{accountAlias}/{serverId}/restore")
+                .resolveTemplate("serverId", serverId)
+                .request()
+                .post(entity(request, APPLICATION_JSON_TYPE))
+                .readEntity(Link.class);
+    }
+
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
         return
             client("/operations/{accountAlias}/servers/" + operationName)
