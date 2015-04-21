@@ -349,7 +349,7 @@ public class ServerService {
 
     public OperationFuture<Link> removePublicIp(String serverId, String publicIp) {
         return baseServerResponse(
-                client.removePublicIp(serverId, publicIp)
+            client.removePublicIp(serverId, publicIp)
         );
     }
 
@@ -367,11 +367,10 @@ public class ServerService {
     }
 
     private OperationFuture<Link> baseServerResponse(Link response) {
-        return
-            new OperationFuture<>(
-                response,
-                response.getId(),
-                queueClient
-            );
+        return new OperationFuture<>(
+            response,
+            response.getId(),
+            queueClient
+        );
     }
 }
