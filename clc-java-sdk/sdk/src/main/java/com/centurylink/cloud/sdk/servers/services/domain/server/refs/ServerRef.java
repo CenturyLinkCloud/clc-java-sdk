@@ -1,15 +1,14 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server.refs;
 
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
+import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 
 /**
  * @author ilya.drabenia
  */
-public class ServerRef implements Reference {
+public abstract class ServerRef implements Reference {
 
     @Override
-    public Object asFilter() {
-        throw new UnsupportedOperationException();
-    }
+    public abstract ServerFilter asFilter();
 
 }

@@ -22,6 +22,13 @@ public abstract class Predicates {
         return new ConstPredicate<>(true);
     }
 
+    public static <T> boolean isAlwaysTruePredicate(Predicate<T> predicate) {
+        return
+            predicate != null &&
+            predicate instanceof ConstPredicate &&
+            ConstPredicate.cast(predicate).getDefaultValue() == true;
+    }
+
     public static <T> Predicate<T> alwaysFalse() {
         return new ConstPredicate<>(false);
     }

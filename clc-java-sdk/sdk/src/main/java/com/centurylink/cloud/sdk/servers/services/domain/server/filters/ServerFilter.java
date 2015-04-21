@@ -11,18 +11,27 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.combine;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.in;
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Sets.intersection;
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Arrays.asList;
 
 /**
  * @author Ilya Drabenia
  */
 public class ServerFilter implements Filter<ServerFilter> {
+    private List<String> serverIds = new ArrayList<>();
     private GroupFilter groupFilter = new GroupFilter(Predicates.alwaysTrue());
     private Predicate<ServerMetadata> predicate = Predicates.alwaysTrue();
 
@@ -126,10 +135,15 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
+    // TODO implement optimization for search servers by ID without retrieving all servers info from all data centers
     public ServerFilter idIn(String... ids) {
-        predicate = predicate.and(combine(
-            ServerMetadata::getId, in(ids)
-        ));
+        serverIds.addAll(asList(ids));
+
+        return this;
+    }
+
+    public ServerFilter idIn(List<String> ids) {
+        serverIds.addAll(ids);
 
         return this;
     }
@@ -137,6 +151,10 @@ public class ServerFilter implements Filter<ServerFilter> {
     @Override
     public ServerFilter and(ServerFilter otherFilter) {
         return new ServerFilter()
+            .idIn(new ArrayList<>(intersection(
+                newHashSet(getServerIds()),
+                newHashSet(otherFilter.getServerIds())
+            )))
             .groupWhere(
                 groupFilter.and(otherFilter.groupFilter)
             )
@@ -148,6 +166,10 @@ public class ServerFilter implements Filter<ServerFilter> {
     @Override
     public ServerFilter or(ServerFilter otherFilter) {
         return new ServerFilter()
+            .idIn(new ArrayList<String>() {{
+                addAll(getServerIds());
+                addAll(otherFilter.getServerIds());
+            }})
             .groupWhere(
                 groupFilter.or(otherFilter.groupFilter)
             )
@@ -162,5 +184,9 @@ public class ServerFilter implements Filter<ServerFilter> {
 
     public Predicate<ServerMetadata> getPredicate() {
         return predicate;
+    }
+
+    public List<String> getServerIds() {
+        return serverIds;
     }
 }

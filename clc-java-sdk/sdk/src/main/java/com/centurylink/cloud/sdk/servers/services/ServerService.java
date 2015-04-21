@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
+import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -35,6 +36,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.isAlwaysTruePredicate;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static java.util.stream.Collectors.toList;
@@ -90,7 +92,7 @@ public class ServerService {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
-                        serverConverter.buildCreateServerRequest(command)
+                    serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
@@ -131,19 +133,31 @@ public class ServerService {
     }
 
     public ServerMetadata findByRef(ServerRef serverRef) {
-        if (serverRef.is(IdServerRef.class)) {
-            return client.findServerById(serverRef.as(IdServerRef.class).getId());
-        } else {
-            throw new ReferenceNotSupportedException(serverRef.getClass());
-        }
+        return
+            findLazy(
+                serverRef.asFilter()
+            )
+            .findFirst().orElseThrow(() ->
+                new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
+            );
     }
 
     public Stream<ServerMetadata> findLazy(ServerFilter serverFilter) {
-        return
-            groupService
-                .findLazy(serverFilter.getGroupFilter())
-                .flatMap(group -> group.getAllServers().stream())
-                .filter(serverFilter.getPredicate());
+        if (isAlwaysTruePredicate(serverFilter.getPredicate())
+            && isAlwaysTruePredicate(serverFilter.getGroupFilter().getPredicate())
+            && isAlwaysTruePredicate(serverFilter.getGroupFilter().getDataCenterFilter().getPredicate())) {
+            return
+                serverFilter
+                    .getServerIds()
+                    .stream()
+                    .map(client::findServerById);
+        } else {
+            return
+                groupService
+                    .findLazy(serverFilter.getGroupFilter())
+                    .flatMap(group -> group.getAllServers().stream())
+                    .filter(serverFilter.getPredicate());
+        }
     }
 
     public List<ServerMetadata> find(ServerFilter serverFilter) {
@@ -268,7 +282,8 @@ public class ServerService {
     }
 
     /**
-     *  Create snapshot of a single server or group of servers
+     * Create snapshot of a single server or group of servers
+     *
      * @param expirationDays expiration days (must be between 1 and 10)
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
@@ -276,9 +291,9 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
         return powerOperationResponse(
             client.createSnapshot(
-                    new CreateSnapshotRequest()
-                            .snapshotExpirationDays(expirationDays)
-                            .serverIds(ids(serverRefs))
+                new CreateSnapshotRequest()
+                    .snapshotExpirationDays(expirationDays)
+                    .serverIds(ids(serverRefs))
             )
         );
     }

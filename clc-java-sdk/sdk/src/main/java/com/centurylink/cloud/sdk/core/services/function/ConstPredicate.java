@@ -17,4 +17,11 @@ public class ConstPredicate<T> implements Predicate<T> {
         return defaultValue;
     }
 
+    public boolean getDefaultValue() {
+        return defaultValue;
+    }
+
+    public static <T> ConstPredicate<T> cast(Predicate<T> predicate) {
+        return (ConstPredicate<T>) predicate;
+    }
 }

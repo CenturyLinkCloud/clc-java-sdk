@@ -18,6 +18,10 @@ public class ResourceNotFoundException extends ClcServiceException {
         super(message, cause);
     }
 
+    public ResourceNotFoundException(String format, Object... arguments) {
+        super(format, arguments);
+    }
+
     public ResourceNotFoundException(Throwable cause) {
         super(cause);
     }
