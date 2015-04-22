@@ -1,8 +1,11 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
@@ -92,6 +95,12 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
+    private void restoreServer(GroupRef group) {
+        serverService
+            .restore(server, group)
+            .waitUntilComplete();
+    }
+
     public void testPowerOff() {
         testShutDown();
         powerOffServer();
@@ -147,14 +156,24 @@ public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
         assertEquals(serverDetails.getSnapshots().size(), 1);
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testArchive() throws Exception {
-        server = SingleServerFixture.server();
-
+    public void testArchive() {
         testCreateSnapshot();
-        assertThatServerHasStatus(server, "active");
 
+        assertThatServerHasStatus(server, "active");
         archiveServer();
         assertThatServerHasStatus(server, "archived");
+    }
+
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    public void testRestore() throws Exception {
+        server = SingleServerFixture.server();
+
+        String groupId = loadServerMetadata(server).getGroupId();
+        GroupRef group = new IdGroupRef(DataCenter.refByName("FranKfUrt"), groupId);
+
+        testArchive();
+
+        restoreServer(group);
+        assertThatServerHasStatus(server, "active");
     }
 }
