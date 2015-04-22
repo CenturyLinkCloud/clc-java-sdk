@@ -6,10 +6,8 @@ import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
-import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
@@ -17,7 +15,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerReque
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
@@ -33,14 +31,13 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
 import java.util.List;
-import java.util.Spliterators;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.isAlwaysTruePredicate;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -78,14 +75,14 @@ public class ServerService {
             return new OperationFuture<>(
                 serverInfo,
                 new SequentialJobsFuture(
+                    () -> new SingleJobFuture(response.findStatusId(), queueClient),
                     () ->
-                        new SingleJobFuture(response.findStatusId(), queueClient),
-                    () ->
-                        addPublicIp(
-                            serverInfo.getId(),
+                        new OperationFuture<ServerRef>(addPublicIp(
+                            serverInfo.asRefById(),
                             command.getNetwork().getPublicIpAddressRequest()
-                        )
-                        .jobFuture()
+                        ),"" , queueClient)
+                            .jobFuture()
+
                 )
             );
         }
@@ -298,11 +295,11 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
         return powerOperationResponse(
-            client.createSnapshot(
-                new CreateSnapshotRequest()
-                    .snapshotExpirationDays(expirationDays)
-                    .serverIds(ids(serverRefs))
-            )
+                client.createSnapshot(
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(ids(serverRefs))
+                )
         );
     }
 
@@ -314,13 +311,13 @@ public class ServerService {
      */
     public OperationFuture<Link> restore(ServerRef server, GroupRef group) {
         return baseServerResponse(
-            client.restore(
-                idByRef(server),
-                new RestoreServerRequest()
-                    .targetGroupId(
-                        groupService.findByRef(group).getId()
-                    )
-            )
+                client.restore(
+                        idByRef(server),
+                        new RestoreServerRequest()
+                                .targetGroupId(
+                                        groupService.findByRef(group).getId()
+                                )
+                )
         );
     }
 
@@ -334,27 +331,54 @@ public class ServerService {
                 .collect(toList());
     }
 
-    public OperationFuture<Link> addPublicIp(String serverId, PublicIpAddressRequest publicIpAddressRequest) {
-        return baseServerResponse(
-            client.addPublicIp(serverId, publicIpAddressRequest)
-        );
+    /**
+     * Add public IP to server
+     * @param serverRef server reference
+     * @param publicIpAddressRequest
+     * @return server reference
+     */
+    public ServerRef addPublicIp(ServerRef serverRef, PublicIpMetadata publicIpAddressRequest) {
+        client.addPublicIp(idByRef(serverRef), publicIpAddressRequest);
+        return serverRef;
     }
 
-    // TODO return ServerRef
-    public OperationFuture<Link> addPublicIp(ServerRef server, PublicIpAddressRequest publicIpAddressRequest) {
-        return addPublicIp(((IdServerRef) server).getId(), publicIpAddressRequest);
+    /**
+     * Get public IP object
+     * @param serverRef server reference
+     * @param publicIp existing public IP address
+     * @return public IP object
+     */
+    public PublicIpAddressResponse getPublicIp(ServerRef serverRef, String publicIp) {
+        return client.getPublicIp(idByRef(serverRef), publicIp);
     }
 
-    // TODO change to serverRef
-    public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
-        return client.getPublicIp(serverId, publicIp);
+    /**
+     * Remove public IP from server
+     * @param serverRef server reference
+     * @param publicIp existing public IP address
+     * @return server reference
+     */
+    public ServerRef removePublicIp(ServerRef serverRef, String publicIp) {
+        checkNotNull(publicIp, "publicIp must be not null");
+        client.removePublicIp(idByRef(serverRef), publicIp);
+        return serverRef;
     }
 
-    // TODO change to serverRef, ServerRef
-    public OperationFuture<Link> removePublicIp(String serverId, String publicIp) {
-        return baseServerResponse(
-            client.removePublicIp(serverId, publicIp)
-        );
+    /**
+     * Remove all public IPs from server
+     * @param serverRef server reference
+     * @return server reference
+     */
+    public ServerRef removePublicIp(ServerRef serverRef) {
+        ServerMetadata serverMetadata = findByRef(serverRef);
+        String serverId = serverMetadata.getId();
+        serverMetadata.getDetails().getIpAddresses().parallelStream().forEach(address -> {
+            if (address.getPublicIp() != null) {
+                client.removePublicIp(serverId, address.getPublicIp());
+            }
+        });
+
+        return serverRef;
     }
 
     private OperationFuture<List<BaseServerResponse>> powerOperationResponse(List<BaseServerResponse> apiResponse) {
