@@ -74,14 +74,14 @@ public class ServerService {
             return new OperationFuture<>(
                 serverInfo,
                 new SequentialJobsFuture(
+                    () -> new SingleJobFuture(response.findStatusId(), queueClient),
                     () ->
-                        new SingleJobFuture(response.findStatusId(), queueClient),
-                    () ->
-                        addPublicIp(
-                            serverInfo.getId(),
+                        new OperationFuture<ServerRef>(addPublicIp(
+                            serverInfo.asRefById(),
                             command.getNetwork().getPublicIpAddressRequest()
-                        )
-                        .jobFuture()
+                        ),"" , queueClient)
+                            .jobFuture()
+
                 )
             );
         }
@@ -294,11 +294,11 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
         return powerOperationResponse(
-            client.createSnapshot(
-                new CreateSnapshotRequest()
-                    .snapshotExpirationDays(expirationDays)
-                    .serverIds(ids(serverRefs))
-            )
+                client.createSnapshot(
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(ids(serverRefs))
+                )
         );
     }
 
@@ -310,13 +310,13 @@ public class ServerService {
      */
     public OperationFuture<Link> restore(ServerRef server, GroupRef group) {
         return baseServerResponse(
-            client.restore(
-                idByRef(server),
-                new RestoreServerRequest()
-                    .targetGroupId(
-                        groupService.findByRef(group).getId()
-                    )
-            )
+                client.restore(
+                        idByRef(server),
+                        new RestoreServerRequest()
+                                .targetGroupId(
+                                        groupService.findByRef(group).getId()
+                                )
+                )
         );
     }
 
@@ -330,27 +330,36 @@ public class ServerService {
                 .collect(toList());
     }
 
-    public OperationFuture<Link> addPublicIp(String serverId, PublicIpAddressRequest publicIpAddressRequest) {
-        return baseServerResponse(
-            client.addPublicIp(serverId, publicIpAddressRequest)
-        );
+    /**
+     * Add public IP to server
+     * @param serverRef server reference
+     * @param publicIpAddressRequest
+     * @return server reference
+     */
+    public ServerRef addPublicIp(ServerRef serverRef, PublicIpAddressRequest publicIpAddressRequest) {
+        client.addPublicIp(idByRef(serverRef), publicIpAddressRequest);
+        return serverRef;
     }
 
-    // TODO return ServerRef
-    public OperationFuture<Link> addPublicIp(ServerRef server, PublicIpAddressRequest publicIpAddressRequest) {
-        return addPublicIp(((IdServerRef) server).getId(), publicIpAddressRequest);
+    /**
+     * Get public IP object
+     * @param serverRef server reference
+     * @param publicIp existing public IP address
+     * @return public IP object
+     */
+    public PublicIpAddressResponse getPublicIp(ServerRef serverRef, String publicIp) {
+        return client.getPublicIp(idByRef(serverRef), publicIp);
     }
 
-    // TODO change to serverRef
-    public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
-        return client.getPublicIp(serverId, publicIp);
-    }
-
-    // TODO change to serverRef, ServerRef
-    public OperationFuture<Link> removePublicIp(String serverId, String publicIp) {
-        return baseServerResponse(
-            client.removePublicIp(serverId, publicIp)
-        );
+    /**
+     * Remove public IP from server
+     * @param serverRef server reference
+     * @param publicIp existing public IP address
+     * @return server reference
+     */
+    public ServerRef removePublicIp(ServerRef serverRef, String publicIp) {
+        client.removePublicIp(idByRef(serverRef), publicIp);
+        return serverRef;
     }
 
     private OperationFuture<List<BaseServerResponse>> powerOperationResponse(List<BaseServerResponse> apiResponse) {

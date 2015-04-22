@@ -23,11 +23,19 @@ test {
         parallel 'classes'
         threadCount 25
     }
+
+    testLogging {
+        exceptionFormat = 'full' // full information about failed tests
+    }
 }
 
 task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
     useTestNG() {
         includeGroups 'LongRunning'
+    }
+
+    testLogging {
+        exceptionFormat = 'full' // full information about failed tests
     }
 }
 

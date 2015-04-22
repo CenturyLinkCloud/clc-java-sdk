@@ -31,26 +31,22 @@ public class PublicIpTest extends AbstractServersSdkTest {
     public void testPublicIpTest() {
         ServerRef serverRef = SingleServerFixture.server();
 
-        Link response = serverService
+        serverService
             .addPublicIp(serverRef,
-                new PublicIpAddressRequest()
-                    .ports(
-                        PortConfig.HTTPS,
-                        PortConfig.HTTP
-                    )
-                    .sourceRestrictions("70.100.60.140/32")
-            )
-            .waitUntilComplete()
-            .getResult();
-
-        assert !isNullOrEmpty(response.getId());
+                    new PublicIpAddressRequest()
+                            .ports(
+                                    PortConfig.HTTPS,
+                                    PortConfig.HTTP
+                            )
+                            .sourceRestrictions("70.100.60.140/32")
+            );
 
         ServerMetadata server = serverService.findByRef(serverRef);
         List<IpAddress> ipAddresses = server.getDetails().getIpAddresses();
         ipAddresses.parallelStream().forEach(address -> {
             if (address.getPublicIp() != null) {
-                PublicIpAddressResponse resp = serverService.getPublicIp(server.getId(), address.getPublicIp());
-                serverService.removePublicIp(server.getId(), address.getPublicIp()).waitUntilComplete();
+                PublicIpAddressResponse resp = serverService.getPublicIp(serverRef, address.getPublicIp());
+                serverService.removePublicIp(serverRef, address.getPublicIp());
             }
         });
 
