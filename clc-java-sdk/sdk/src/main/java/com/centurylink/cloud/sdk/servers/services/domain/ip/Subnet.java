@@ -19,7 +19,7 @@ public class Subnet {
         return this;
     }
 
-    // for example /17 - used with ipAddress
+    // for example /17 - used with ipAddress()
     public Subnet cidrMask(String cidrMask) {
         return this;
     }
