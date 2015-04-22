@@ -47,17 +47,18 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
         ServerMetadata server = serverService.findByRef(serverRef);
         List<IpAddress> ipAddresses = server.getDetails().getIpAddresses();
+
+        List<IpAddress> initialIpAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
+
+        assertEquals(ipAddresses.stream().filter(addr -> addr.getPublicIp() != null).count(),
+                initialIpAddresses.stream().filter(addr -> addr.getPublicIp() != null).count() + 1);
+
         ipAddresses.parallelStream().forEach(address -> {
             if (address.getPublicIp() != null) {
                 PublicIpAddressResponse resp = serverService.getPublicIp(server.getId(), address.getPublicIp());
                 serverService.removePublicIp(server.getId(), address.getPublicIp()).waitUntilComplete();
             }
         });
-
-        List<IpAddress> initialIpAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
-
-        assertEquals(ipAddresses.stream().filter(addr -> addr.getPublicIp() != null).count(),
-                initialIpAddresses.stream().filter(addr -> addr.getPublicIp() != null).count() + 1);
     }
 
 }
