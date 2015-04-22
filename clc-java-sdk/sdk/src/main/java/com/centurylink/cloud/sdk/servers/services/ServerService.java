@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.isAlwaysTruePredicate;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -358,7 +359,25 @@ public class ServerService {
      * @return server reference
      */
     public ServerRef removePublicIp(ServerRef serverRef, String publicIp) {
+        checkNotNull(publicIp, "publicIp must be not null");
         client.removePublicIp(idByRef(serverRef), publicIp);
+        return serverRef;
+    }
+
+    /**
+     * Remove all public IPs from server
+     * @param serverRef server reference
+     * @return server reference
+     */
+    public ServerRef removePublicIp(ServerRef serverRef) {
+        ServerMetadata serverMetadata = findByRef(serverRef);
+        String serverId = serverMetadata.getId();
+        serverMetadata.getDetails().getIpAddresses().parallelStream().forEach(address -> {
+            if (address.getPublicIp() != null) {
+                client.removePublicIp(serverId, address.getPublicIp());
+            }
+        });
+
         return serverRef;
     }
 
