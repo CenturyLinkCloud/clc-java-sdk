@@ -29,7 +29,9 @@ public class NoWaitingJobFuture implements JobFuture {
 
     @Override
     public CompletableFuture<Void> waitAsync() {
-        return new CompletableFuture<Void>();
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        future.complete(null);
+        return future;
     }
 
 }
