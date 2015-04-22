@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.ip;
 
-import com.centurylink.cloud.sdk.servers.client.domain.ip.PortConfig;
+
+import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 
 /**
  * @author Ilya Drabenia

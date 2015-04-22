@@ -7,11 +7,11 @@ import com.google.common.base.Preconditions;
  * @author Ilya Drabenia
  */
 public class PortConfig {
-    private final Integer HTTP = 80;
-    private final Integer HTTPS = 443;
-    private final Integer SSH = 22;
-    private final Integer RDP = 3389; //
-    private final Integer FTP = 21; //
+    public static final Integer HTTP = 80;
+    public static final Integer HTTPS = 443;
+    public static final Integer SSH = 22;
+    public static final Integer RDP = 3389; //
+    public static final Integer FTP = 21; //
 
     public PortRangeConfig from(Integer from) {
         return new PortRangeConfig(/*protocol, from*/);
