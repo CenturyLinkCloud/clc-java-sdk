@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
-public class ServerPowerOperationsServiceTest extends AbstractServersSdkTest {
+public class ServerOperationsServiceTest extends AbstractServersSdkTest {
 
     private ServerRef server;
 
