@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PortConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.SourceRestriction;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PortConfig;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.SourceRestriction;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

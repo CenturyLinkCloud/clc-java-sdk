@@ -9,7 +9,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpAddressRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpAddressRequest;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 

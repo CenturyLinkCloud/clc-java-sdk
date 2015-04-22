@@ -1,12 +1,8 @@
 package com.centurylink.cloud.sdk.servers.services.domain.ip;
 
 /**
- * Represents acceptable protocol types in {@link PortConfig}
- *
- * @author Aliaksandr Krasitski
+ * @author Ilya Drabenia
  */
 public enum ProtocolType {
-    TCP,
-    UDP,
-    ICMP;
+    TCP, EDP, ICMP;
 }
