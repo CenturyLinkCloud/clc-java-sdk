@@ -7,15 +7,19 @@ import com.centurylink.cloud.sdk.servers.client.domain.ip.PortConfig;
  */
 public class PublicIpConfig {
 
-    public PublicIpConfig ports(Integer... ports) {
+    public PublicIpConfig openPorts(Integer... ports) {
         return this;
     }
 
-    public PublicIpConfig ports(PortConfig... ports) {
+    public PublicIpConfig openPorts(PortConfig... ports) {
         return this;
     }
 
     public PublicIpConfig sourceRestrictions(String... restrictions) {
+        return this;
+    }
+
+    public PublicIpConfig sourceRestrictions(Subnet... restrictions) {
         return this;
     }
 
