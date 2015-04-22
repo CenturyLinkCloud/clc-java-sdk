@@ -76,7 +76,8 @@ public class ServerService {
             return new OperationFuture<>(
                 serverInfo,
                 new SequentialJobsFuture(
-                    () -> new SingleJobFuture(response.findStatusId(), queueClient),
+                    () ->
+                        new SingleJobFuture(response.findStatusId(), queueClient),
                     () ->
                         addPublicIp(
                             serverInfo.getId(),
@@ -338,14 +339,17 @@ public class ServerService {
             );
     }
 
+    // TODO return ServerRef
     public OperationFuture<Link> addPublicIp(ServerRef server, PublicIpAddressRequest publicIpAddressRequest) {
         return addPublicIp(((IdServerRef)server).getId(), publicIpAddressRequest);
     }
 
+    // TODO change to serverRef
     public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
         return client.getPublicIp(serverId, publicIp);
     }
 
+    // TODO change to serverRef, ServerRef
     public OperationFuture<Link> removePublicIp(String serverId, String publicIp) {
         Link response = client.removePublicIp(serverId, publicIp);
 

@@ -14,9 +14,9 @@ import javax.annotation.Generated;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-        "protocol",
-        "port",
-        "portTo"
+    "protocol",
+    "port",
+    "portTo"
 })
 public class PortConfig {
     private String protocol = ProtocolType.TCP.name();
