@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.NameGroupRef;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
@@ -41,13 +42,13 @@ public class GroupServiceTest extends AbstractServersSdkTest {
                 .description(newGroupDescription))
             .getResult();
 
-        GroupMetadata createdGroup = groupService.get(newGroup.getId());
+        GroupMetadata createdGroup = groupService.get(new IdGroupRef(DataCenters.DE_FRANKFURT, newGroup.getId()));
 
         assertEquals(createdGroup.getId(), newGroup.getId());
         assertEquals(createdGroup.getName(), newGroup.getName());
         assertEquals(createdGroup.getDescription(), newGroup.getDescription());
 
-        groupService.delete(createdGroup.getId());
+        groupService.delete(new IdGroupRef(DataCenters.DE_FRANKFURT, newGroup.getId()));
     }
 
 }

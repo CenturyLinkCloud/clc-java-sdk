@@ -14,6 +14,9 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -70,8 +73,8 @@ public class GroupService {
 
     public GroupMetadata findFirst(GroupFilter criteria) {
         return getFirst(
-            findLazy(criteria).limit(1).collect(toList()),
-            null
+                findLazy(criteria).limit(1).collect(toList()),
+                null
         );
     }
 
@@ -92,6 +95,10 @@ public class GroupService {
     }
 
     public OperationFuture<GroupMetadata> create(GroupConfig groupConfig) {
+        checkNotNull(groupConfig, "GroupConfig must be not null");
+        checkNotNull(groupConfig.getName(), "Name of GroupConfig must be not null");
+        checkNotNull(groupConfig.getParentGroupId(), "ParentGroupId of GroupConfig must be not null");
+
         GroupMetadata group = client.createGroup(groupConfig);
 
         return new OperationFuture<>(
@@ -100,12 +107,20 @@ public class GroupService {
         );
     }
 
-    public GroupMetadata get(String groupId) {
-        return client.getGroup(groupId);
+    public GroupMetadata get(GroupRef groupRef) {
+        return client.getGroup(idByRef(groupRef));
     }
 
-    public Link delete(String groupId) {
-        return client.deleteGroup(groupId);
+    public Link delete(GroupRef groupRef) {
+        return client.deleteGroup(idByRef(groupRef));
+    }
+
+    String idByRef(GroupRef ref) {
+        if (ref.is(IdGroupRef.class)) {
+            return ref.as(IdGroupRef.class).getId();
+        } else {
+            return findByRef(ref).getId();
+        }
     }
 
 }
