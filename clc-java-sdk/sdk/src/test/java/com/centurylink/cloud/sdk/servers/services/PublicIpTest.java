@@ -25,18 +25,18 @@ public class PublicIpTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    @Test
+    @Test(enabled = false)
     public void testPublicIpTest() {
         ServerRef serverRef = SingleServerFixture.server();
 
         serverService
             .addPublicIp(serverRef,
-                    new PublicIpMetadata()
-                            .ports(
-                                    PortConfig.HTTPS,
-                                    PortConfig.HTTP
-                            )
-                            .sourceRestrictions("70.100.60.140/32")
+                new PublicIpMetadata()
+                    .ports(
+                        PortConfig.HTTPS,
+                        PortConfig.HTTP
+                    )
+                    .sourceRestrictions("70.100.60.140/32")
             );
 
         ServerMetadata server = serverService.findByRef(serverRef);

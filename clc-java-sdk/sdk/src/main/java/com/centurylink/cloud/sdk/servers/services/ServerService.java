@@ -80,9 +80,8 @@ public class ServerService {
                         new OperationFuture<ServerRef>(addPublicIp(
                             serverInfo.asRefById(),
                             command.getNetwork().getPublicIpAddressRequest()
-                        ),"" , queueClient)
-                            .jobFuture()
-
+                        ), "", queueClient)
+                        .jobFuture()
                 )
             );
         }
@@ -92,7 +91,7 @@ public class ServerService {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
-                        serverConverter.buildCreateServerRequest(command)
+                    serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
@@ -136,7 +135,7 @@ public class ServerService {
                 serverRef.asFilter()
             )
             .findFirst().orElseThrow(() ->
-                            new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
+                new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
             );
     }
 
@@ -190,17 +189,19 @@ public class ServerService {
 
     /**
      * Power on a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(ServerRef... serverRefs) {
         return powerOperationResponse(
-                client.powerOn(ids(serverRefs))
+            client.powerOn(ids(serverRefs))
         );
     }
 
     /**
      * Power off a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
@@ -212,6 +213,7 @@ public class ServerService {
 
     /**
      * Start maintenance mode on a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
@@ -223,6 +225,7 @@ public class ServerService {
 
     /**
      * Stop maintenance mode on a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
@@ -234,6 +237,7 @@ public class ServerService {
 
     /**
      * Pause a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
@@ -245,6 +249,7 @@ public class ServerService {
 
     /**
      * Reboot a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
@@ -256,6 +261,7 @@ public class ServerService {
 
     /**
      * Reset a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
@@ -267,6 +273,7 @@ public class ServerService {
 
     /**
      * Shut down a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
@@ -277,7 +284,8 @@ public class ServerService {
     }
 
     /**
-     *  Archive a single server or group of servers
+     * Archive a single server or group of servers
+     *
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
@@ -289,35 +297,37 @@ public class ServerService {
 
     /**
      * Create snapshot of a single server or group of servers
+     *
      * @param expirationDays expiration days (must be between 1 and 10)
-     * @param serverRefs server references list
+     * @param serverRefs     server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
         return powerOperationResponse(
-                client.createSnapshot(
-                        new CreateSnapshotRequest()
-                                .snapshotExpirationDays(expirationDays)
-                                .serverIds(ids(serverRefs))
-                )
+            client.createSnapshot(
+                new CreateSnapshotRequest()
+                    .snapshotExpirationDays(expirationDays)
+                    .serverIds(ids(serverRefs))
+            )
         );
     }
 
     /**
      * Restore a given archived server to a specified group
+     *
      * @param server server reference
-     * @param group group reference
+     * @param group  group reference
      * @return OperationFuture wrapper for BaseServerResponse
      */
     public OperationFuture<Link> restore(ServerRef server, GroupRef group) {
         return baseServerResponse(
-                client.restore(
-                        idByRef(server),
-                        new RestoreServerRequest()
-                                .targetGroupId(
-                                        groupService.findByRef(group).getId()
-                                )
-                )
+            client.restore(
+                idByRef(server),
+                new RestoreServerRequest()
+                    .targetGroupId(
+                        groupService.findByRef(group).getId()
+                    )
+            )
         );
     }
 
@@ -333,7 +343,8 @@ public class ServerService {
 
     /**
      * Add public IP to server
-     * @param serverRef server reference
+     *
+     * @param serverRef              server reference
      * @param publicIpAddressRequest
      * @return server reference
      */
@@ -344,8 +355,9 @@ public class ServerService {
 
     /**
      * Get public IP object
+     *
      * @param serverRef server reference
-     * @param publicIp existing public IP address
+     * @param publicIp  existing public IP address
      * @return public IP object
      */
     public PublicIpAddressResponse getPublicIp(ServerRef serverRef, String publicIp) {
@@ -354,8 +366,9 @@ public class ServerService {
 
     /**
      * Remove public IP from server
+     *
      * @param serverRef server reference
-     * @param publicIp existing public IP address
+     * @param publicIp  existing public IP address
      * @return server reference
      */
     public ServerRef removePublicIp(ServerRef serverRef, String publicIp) {
@@ -366,6 +379,7 @@ public class ServerService {
 
     /**
      * Remove all public IPs from server
+     *
      * @param serverRef server reference
      * @return server reference
      */
