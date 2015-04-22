@@ -18,7 +18,7 @@ import java.util.List;
     "ports",
     "sourceRestrictions"
 })
-public class PublicIpAddressRequest {
+public class PublicIpMetadata {
     private String internalIPAddress;
     private List<PortConfig> ports;
     private List<SourceRestriction> sourceRestrictions;
@@ -31,7 +31,7 @@ public class PublicIpAddressRequest {
         this.internalIPAddress = internalIPAddress;
     }
 
-    public PublicIpAddressRequest internalIPAddress(String internalIPAddress) {
+    public PublicIpMetadata internalIPAddress(String internalIPAddress) {
         setInternalIPAddress(internalIPAddress);
         return this;
     }
@@ -44,7 +44,7 @@ public class PublicIpAddressRequest {
         this.ports = ports;
     }
 
-    public PublicIpAddressRequest ports(PortConfig... ports) {
+    public PublicIpMetadata ports(PortConfig... ports) {
         setPorts(Arrays.asList(ports));
         return this;
     }
@@ -66,7 +66,7 @@ public class PublicIpAddressRequest {
      * @param sourceRestrictions
      * @return PublicIp configuration
      */
-    public PublicIpAddressRequest sourceRestrictions(String... sourceRestrictions) {
+    public PublicIpMetadata sourceRestrictions(String... sourceRestrictions) {
         List<SourceRestriction> restrictions = new ArrayList<>(sourceRestrictions.length);
         Arrays.asList(sourceRestrictions).forEach(value -> restrictions.add(new SourceRestriction(value)));
         setSourceRestrictions(restrictions);

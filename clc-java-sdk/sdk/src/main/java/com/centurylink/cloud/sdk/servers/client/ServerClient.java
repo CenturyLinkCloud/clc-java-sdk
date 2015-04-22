@@ -9,7 +9,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
-import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpAddressRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
@@ -202,7 +202,7 @@ public class ServerClient extends BaseSdkClient {
                 .readEntity(BaseServerListResponse.class);
     }
 
-    public Link addPublicIp(String serverId, PublicIpAddressRequest publicIpAddressRequest) {
+    public Link addPublicIp(String serverId, PublicIpMetadata publicIpAddressRequest) {
         return
             client("/servers/{accountAlias}/{serverId}/publicIPAddresses")
                 .resolveTemplate("serverId", serverId)
@@ -220,7 +220,7 @@ public class ServerClient extends BaseSdkClient {
                 .get(PublicIpAddressResponse.class);
     }
 
-    public Link updatePublicIp(String serverId, String publicIp, PublicIpAddressRequest publicIpAddressRequest) {
+    public Link updatePublicIp(String serverId, String publicIp, PublicIpMetadata publicIpAddressRequest) {
         return
             client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
                 .resolveTemplate("serverId", serverId)

@@ -15,7 +15,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerReque
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpAddressRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
@@ -336,7 +336,7 @@ public class ServerService {
      * @param publicIpAddressRequest
      * @return server reference
      */
-    public ServerRef addPublicIp(ServerRef serverRef, PublicIpAddressRequest publicIpAddressRequest) {
+    public ServerRef addPublicIp(ServerRef serverRef, PublicIpMetadata publicIpAddressRequest) {
         client.addPublicIp(idByRef(serverRef), publicIpAddressRequest);
         return serverRef;
     }

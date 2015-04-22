@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
 import com.centurylink.cloud.sdk.networks.services.domain.refs.NetworkRef;
-import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpAddressRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 
 /**
  * @author ilya.drabenia
@@ -10,7 +10,7 @@ public class NetworkConfig {
     private NetworkRef network;
     private String primaryDns;
     private String secondaryDns;
-    private PublicIpAddressRequest publicIpAddressRequest;
+    private PublicIpMetadata publicIpAddressRequest;
 
     public String getPrimaryDns() {
         return primaryDns;
@@ -51,15 +51,15 @@ public class NetworkConfig {
         return this;
     }
 
-    public PublicIpAddressRequest getPublicIpAddressRequest() {
+    public PublicIpMetadata getPublicIpAddressRequest() {
         return publicIpAddressRequest;
     }
 
-    public void setPublicIpAddressRequest(PublicIpAddressRequest publicIpAddressRequest) {
+    public void setPublicIpAddressRequest(PublicIpMetadata publicIpAddressRequest) {
         this.publicIpAddressRequest = publicIpAddressRequest;
     }
 
-    public NetworkConfig publicIpAddress(PublicIpAddressRequest publicIpAddressRequest) {
+    public NetworkConfig publicIpAddress(PublicIpMetadata publicIpAddressRequest) {
         setPublicIpAddressRequest(publicIpAddressRequest);
         return this;
     }
