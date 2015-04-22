@@ -39,14 +39,11 @@ public class PublicIpTest extends AbstractServersSdkTest {
                     .sourceRestrictions("70.100.60.140/32")
             );
 
-        ServerMetadata server = serverService.findByRef(serverRef);
-        List<IpAddress> ipAddresses = server.getDetails().getIpAddresses();
         serverService.removePublicIp(serverRef);
 
         List<IpAddress> initialIpAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
 
-        assertEquals(ipAddresses.stream().filter(addr -> addr.getPublicIp() != null).count(),
-                initialIpAddresses.stream().filter(addr -> addr.getPublicIp() != null).count() + 1);
+        assertEquals(initialIpAddresses.stream().filter(addr -> addr.getPublicIp() != null).count(), 0);
     }
 
 }
