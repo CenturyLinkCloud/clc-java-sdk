@@ -473,6 +473,7 @@ public class ServerService {
         return
             serverMetadataList
                 .stream()
+                .filter(notNull())
                 .map(ServerMetadata::getId)
                 .map(String::toUpperCase)
                 .collect(toList());
