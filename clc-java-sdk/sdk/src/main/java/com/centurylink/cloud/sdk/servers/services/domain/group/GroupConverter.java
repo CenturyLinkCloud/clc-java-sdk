@@ -1,8 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
-import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.servers.client.domain.group.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,5 +33,23 @@ public class GroupConverter {
                 .description(groupConfig.getDescription())
                 .parentGroupId(parentGroupId)
                 .customFields(groupConfig.getCustomFields());
+    }
+
+    public UpdateGroupRequest createUpdateGroupRequest(GroupConfig groupConfig, String parentGroupId) {
+        UpdateGroupRequest req = new UpdateGroupRequest();
+
+        if (groupConfig.getName() != null) {
+            req.add(new SimplePatchOperation(PatchOperation.NAME, groupConfig.getName()));
+        }
+        if (groupConfig.getDescription() != null) {
+            req.add(new SimplePatchOperation(PatchOperation.DESCRIPTION, groupConfig.getDescription()));
+        }
+        if (parentGroupId != null) {
+            req.add(new SimplePatchOperation(PatchOperation.GROUP_PARENT_ID, parentGroupId));
+        }
+        if (groupConfig.getCustomFields() != null) {
+            req.add(new CustomFieldPatchOperation(groupConfig.getCustomFields()));
+        }
+        return req;
     }
 }

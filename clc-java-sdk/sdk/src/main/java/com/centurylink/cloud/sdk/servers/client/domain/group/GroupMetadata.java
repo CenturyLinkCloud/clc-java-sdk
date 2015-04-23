@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
@@ -365,6 +363,13 @@ public class GroupMetadata {
                     )
             )
             .collect(toList());
+    }
+
+    public String getParentGroupId() {
+        return this.getLinks().stream()
+                .filter(link -> link.getRel().equals("parentGroup"))
+                .map(Link::getId)
+                .findFirst().get();
     }
 
 }

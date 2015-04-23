@@ -6,6 +6,7 @@ import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.servers.client.domain.group.UpdateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.CreatePublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
@@ -13,6 +14,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMet
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
+import org.apache.http.HttpStatus;
 
 import javax.ws.rs.client.InvocationCallback;
 import java.util.List;
@@ -103,6 +105,15 @@ public class ServerClient extends BaseSdkClient {
                 .request()
                 .post(entity(createGroupRequest, APPLICATION_JSON_TYPE))
                 .readEntity(GroupMetadata.class);
+    }
+
+    public boolean updateGroup(String groupId, UpdateGroupRequest updateGroupRequest) {
+        int responseStatus = client("/groups/{accountAlias}/{groupId}")
+            .resolveTemplate("groupId", groupId)
+            .request()
+            .method("PATCH", entity(updateGroupRequest.getOperations(), APPLICATION_JSON_TYPE))
+            .getStatus();
+        return responseStatus == HttpStatus.SC_NO_CONTENT;
     }
 
     public Link deleteGroup(String groupId) {
