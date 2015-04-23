@@ -83,47 +83,41 @@ public class ServerStubFixture {
     }
 
     private ServerMetadata createServerMetadata() {
-        ServerMetadata serverMetadata = new ServerMetadata();
-
-        serverMetadata.setId(serverId);
-        serverMetadata.setName(serverId.toUpperCase());
-        serverMetadata.setGroupId("de10392941c64838a4f0daec38e67f5a");
-        serverMetadata.setIsTemplate(false);
-        serverMetadata.setLocationId("DE1");
-        serverMetadata.setOsType("CentOS 5 64-bit");
-        serverMetadata.setOs("centOS5_64Bit");
-        serverMetadata.setStatus("active");
-        serverMetadata.setType("standard");
-        serverMetadata.setStorageType("premium");
-
-        ChangeInfo changeInfo = new ChangeInfo();
-        changeInfo.setCreatedBy("idrabenia.altd");
-        changeInfo.setCreatedDate("2015-04-23T11:41:22Z");
-        changeInfo.setModifiedBy("idrabenia.altd");
-        changeInfo.setModifiedDate("2015-04-23T11:48:40Z");
-
-        serverMetadata.setChangeInfo(changeInfo);
-
-        Details details = new Details();
-        details.setCpu(1);
-        details.setDiskCount(4);
-        details.setMemoryMB(3072);
-        details.setPowerState("started");
-        details.setInMaintenanceMode(false);
-
-        serverMetadata.setDetails(details);
-
-        return serverMetadata;
+        return
+            new ServerMetadata() {{
+                setId(serverId);
+                setName(serverId.toUpperCase());
+                setGroupId("de10392941c64838a4f0daec38e67f5a");
+                setIsTemplate(false);
+                setLocationId("DE1");
+                setOsType("CentOS 5 64-bit");
+                setOs("centOS5_64Bit");
+                setStatus("active");
+                setType("standard");
+                setStorageType("premium");
+                setChangeInfo(new ChangeInfo() {{
+                    setCreatedBy("idrabenia.altd");
+                    setCreatedDate("2015-04-23T11:41:22Z");
+                    setModifiedBy("idrabenia.altd");
+                    setModifiedDate("2015-04-23T11:48:40Z");
+                }});
+                setDetails(new Details() {{
+                    setCpu(1);
+                    setDiskCount(4);
+                    setMemoryMB(3072);
+                    setPowerState("started");
+                    setInMaintenanceMode(false);
+                }});
+            }};
     }
 
     private Link createLink() {
-        Link link = new Link();
-
-        link.setRel("status");
-        link.setHref("/v2/operations/alias/status/wa1-12345");
-        link.setId("wa1-12345");
-
-        return link;
+        return
+            new Link() {{
+                setRel("status");
+                setHref("/v2/operations/alias/status/wa1-12345");
+                setId("wa1-12345");
+            }};
     }
 
     private BaseServerListResponse createBaseServerListResponse() {
