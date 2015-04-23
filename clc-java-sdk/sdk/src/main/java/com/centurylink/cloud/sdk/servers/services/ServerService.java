@@ -10,12 +10,11 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.S
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
@@ -49,16 +48,14 @@ public class ServerService {
     private final GroupService groupService;
     private final ServerClient client;
     private final QueueClient queueClient;
-    private final PublicIpConverter publicIpConverter;
 
     @Inject
     public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient,
-                         GroupService groupService, PublicIpConverter publicIpConverter) {
+                         GroupService groupService) {
         this.serverConverter = serverConverter;
         this.client = client;
         this.queueClient = queueClient;
         this.groupService = groupService;
-        this.publicIpConverter = publicIpConverter;
     }
 
     public OperationFuture<ServerMetadata> create(CreateServerCommand command) {
@@ -68,7 +65,7 @@ public class ServerService {
         ServerMetadata serverInfo = client
             .findServerByUuid(response.findServerUuid());
 
-        if (command.getNetwork().getPublicIpConfig() == null) {
+        if (command.getNetwork().getPublicIpAddressRequest() == null) {
             return new OperationFuture<>(
                 serverInfo,
                 response.findStatusId(),
@@ -82,7 +79,7 @@ public class ServerService {
                     () ->
                         addPublicIp(
                             serverInfo.asRefById(),
-                            command.getNetwork().getPublicIpConfig()
+                            command.getNetwork().getPublicIpAddressRequest()
                         ).jobFuture()
                 )
             );
@@ -93,7 +90,7 @@ public class ServerService {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
-                    serverConverter.buildCreateServerRequest(command)
+                        serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
@@ -202,6 +199,18 @@ public class ServerService {
     }
 
     /**
+     * Power on a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOn(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.powerOn(ids(serverFilter))
+        );
+    }
+
+    /**
      * Power off a single server or group of servers
      *
      * @param serverRefs server references list
@@ -210,6 +219,18 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> powerOff(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.powerOff(ids(serverRefs))
+        );
+    }
+
+    /**
+     * Power off a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOff(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.powerOff(ids(serverFilter))
         );
     }
 
@@ -226,6 +247,18 @@ public class ServerService {
     }
 
     /**
+     * Start maintenance mode on a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.startMaintenance(ids(serverFilter))
+        );
+    }
+
+    /**
      * Stop maintenance mode on a single server or group of servers
      *
      * @param serverRefs server references list
@@ -234,6 +267,18 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.stopMaintenance(ids(serverRefs))
+        );
+    }
+
+    /**
+     * Stop maintenance mode on a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.stopMaintenance(ids(serverFilter))
         );
     }
 
@@ -250,6 +295,18 @@ public class ServerService {
     }
 
     /**
+     * Pause a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> pause(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.pause(ids(serverFilter))
+        );
+    }
+
+    /**
      * Reboot a single server or group of servers
      *
      * @param serverRefs server references list
@@ -258,6 +315,18 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> reboot(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.reboot(ids(serverRefs))
+        );
+    }
+
+    /**
+     * Pause a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reboot(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.reboot(ids(serverFilter))
         );
     }
 
@@ -274,6 +343,18 @@ public class ServerService {
     }
 
     /**
+     * Reset a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reset(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.reset(ids(serverFilter))
+        );
+    }
+
+    /**
      * Shut down a single server or group of servers
      *
      * @param serverRefs server references list
@@ -282,6 +363,18 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> shutDown(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.shutDown(ids(serverRefs))
+        );
+    }
+
+    /**
+     * Shut down a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> shutDown(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.shutDown(ids(serverFilter))
         );
     }
 
@@ -298,6 +391,18 @@ public class ServerService {
     }
 
     /**
+     * Archive a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> archive(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.archive(ids(serverFilter))
+        );
+    }
+
+    /**
      * Create snapshot of a single server or group of servers
      *
      * @param expirationDays expiration days (must be between 1 and 10)
@@ -305,13 +410,32 @@ public class ServerService {
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
-        return powerOperationResponse(
+        return
+            powerOperationResponse(
                 client.createSnapshot(
-                        new CreateSnapshotRequest()
-                                .snapshotExpirationDays(expirationDays)
-                                .serverIds(ids(serverRefs))
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(ids(serverRefs))
                 )
         );
+    }
+
+    /**
+     * Create snapshot of a single server or group of servers
+     *
+     * @param expirationDays expiration days (must be between 1 and 10)
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerFilter serverFilter) {
+        return
+            powerOperationResponse(
+                client.createSnapshot(
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(ids(serverFilter))
+                )
+            );
     }
 
     /**
@@ -323,13 +447,13 @@ public class ServerService {
      */
     public OperationFuture<Link> restore(ServerRef server, GroupRef group) {
         return baseServerResponse(
-                client.restore(
-                        idByRef(server),
-                        new RestoreServerRequest()
-                                .targetGroupId(
-                                        groupService.findByRef(group).getId()
-                                )
-                )
+            client.restore(
+                idByRef(server),
+                new RestoreServerRequest()
+                    .targetGroupId(
+                            groupService.findByRef(group).getId()
+                    )
+            )
         );
     }
 
@@ -343,15 +467,27 @@ public class ServerService {
                 .collect(toList());
     }
 
+    private List<String> ids(ServerFilter serverFilter) {
+        List<ServerMetadata> serverMetadataList = find(serverFilter);
+
+        return
+            serverMetadataList
+                .stream()
+                .filter(notNull())
+                .map(ServerMetadata::getId)
+                .map(String::toUpperCase)
+                .collect(toList());
+    }
+
     /**
      * Add public IP to server
      *
      * @param serverRef        server reference
-     * @param publicIpConfig publicIp metadata object
+     * @param publicIpMetadata publicIp metadata object
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpConfig publicIpConfig) {
-        Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
+    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpMetadata publicIpMetadata) {
+        Link response = client.addPublicIp(idByRef(serverRef), publicIpMetadata);
         return new OperationFuture<>(
                 serverRef,
                 response.getId(),
@@ -398,10 +534,11 @@ public class ServerService {
         ServerMetadata serverMetadata = findByRef(serverRef);
         List<JobFuture> jobFutures = new ArrayList<>();
         serverMetadata.getDetails().getIpAddresses()
-                .stream()
+                .parallelStream()
                 .map(IpAddress::getPublicIp)
                 .filter(notNull())
                 .forEach(address -> jobFutures.add(removePublicIp(serverRef, address).jobFuture()));
+
 
         return new OperationFuture<>(
                 serverRef,
