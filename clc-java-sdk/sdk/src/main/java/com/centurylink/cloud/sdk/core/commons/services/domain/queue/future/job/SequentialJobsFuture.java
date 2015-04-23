@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.ClcTimeoutException;
 import com.centurylink.cloud.sdk.core.services.ClcServiceException;
+import com.centurylink.cloud.sdk.core.services.function.Predicates;
 
 import java.time.Duration;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static java.time.temporal.ChronoUnit.NANOS;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
@@ -25,6 +27,7 @@ public class SequentialJobsFuture implements JobFuture {
         List<Supplier<JobFuture>> jobList = asList(jobs);
 
         future = jobList.stream()
+            .filter(notNull())
             .reduce(
                 jobList.get(0).get().waitAsync(),
                 (prev, curItem) -> prev.thenCompose(i -> curItem.get().waitAsync()),

@@ -69,26 +69,29 @@ public class ServerService {
         ServerMetadata serverInfo = client
             .findServerByUuid(response.findServerUuid());
 
-        if (command.getNetwork().getPublicIpConfig() == null) {
-            return new OperationFuture<>(
-                serverInfo,
-                new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client)
-            );
-        } else {
-            return new OperationFuture<>(
-                serverInfo,
-                new SequentialJobsFuture(
-                    () ->
-                        new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client),
+        return new OperationFuture<>(
+            serverInfo,
+            new SequentialJobsFuture(
+                () ->
+                    new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client),
 
-                    () ->
-                        addPublicIp(
-                            serverInfo.asRefById(),
-                            command.getNetwork().getPublicIpConfig()
-                        )
-                        .jobFuture()
+                () ->
+                    addPublicIpIfNeeded(command, serverInfo)
+            )
+        );
+    }
+
+    private JobFuture addPublicIpIfNeeded(CreateServerCommand command, ServerMetadata serverInfo) {
+        if (command.getNetwork().getPublicIpConfig() != null) {
+            return
+                addPublicIp(
+                    serverInfo.asRefById(),
+                    command.getNetwork().getPublicIpConfig()
                 )
-            );
+                .jobFuture();
+        } else {
+            return
+                null;
         }
     }
 
@@ -540,10 +543,10 @@ public class ServerService {
         ServerMetadata serverMetadata = findByRef(serverRef);
         List<JobFuture> jobFutures = new ArrayList<>();
         serverMetadata.getDetails().getIpAddresses()
-                .stream()
-                .map(IpAddress::getPublicIp)
+            .stream()
+            .map(IpAddress::getPublicIp)
                 .filter(notNull())
-                .forEach(address -> jobFutures.add(removePublicIp(serverRef, address).jobFuture()));
+            .forEach(address -> jobFutures.add(removePublicIp(serverRef, address).jobFuture()));
 
         return new OperationFuture<>(
                 serverRef,

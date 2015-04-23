@@ -5,7 +5,6 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.S
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.waiting.SingleWaitingLoop;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.waiting.WaitingLoop;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 
 /**
  * @author Ilya Drabenia

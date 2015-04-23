@@ -52,7 +52,7 @@ public class ServerStubFixture {
         return serverMetadata;
     }
 
-    @BeforeSuite(groups = LONG_RUNNING)
+    @BeforeSuite(groups = LONG_RUNNING, enabled = false)
     public void initMockAndStubs() {
         serverMetadata = createServerMetadata();
         serverRef = serverMetadata.asRefById();
