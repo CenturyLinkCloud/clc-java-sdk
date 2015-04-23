@@ -4,19 +4,19 @@ import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
@@ -30,6 +30,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
@@ -343,12 +344,12 @@ public class ServerService {
     /**
      * Add public IP to server
      *
-     * @param serverRef              server reference
-     * @param publicIpAddressRequest
+     * @param serverRef        server reference
+     * @param publicIpMetadata publicIp metadata object
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpMetadata publicIpAddressRequest) {
-        Link response = client.addPublicIp(idByRef(serverRef), publicIpAddressRequest);
+    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpMetadata publicIpMetadata) {
+        Link response = client.addPublicIp(idByRef(serverRef), publicIpMetadata);
         return new OperationFuture<>(
                 serverRef,
                 response.getId(),
@@ -371,13 +372,13 @@ public class ServerService {
      * Remove public IP from server
      *
      * @param serverRef server reference
-     * @param publicIp  existing public IP address
+     * @param ipAddress  existing public IP address
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> removePublicIp(ServerRef serverRef, String publicIp) {
-        checkNotNull(publicIp, "publicIp must be not null");
+    public OperationFuture<ServerRef> removePublicIp(ServerRef serverRef, String ipAddress) {
+        checkNotNull(ipAddress, "ipAddress must be not null");
 
-        Link response = client.removePublicIp(idByRef(serverRef), publicIp);
+        Link response = client.removePublicIp(idByRef(serverRef), ipAddress);
         return new OperationFuture<>(
                 serverRef,
                 response.getId(),
@@ -391,16 +392,20 @@ public class ServerService {
      * @param serverRef server reference
      * @return server reference
      */
-    public ServerRef removePublicIp(ServerRef serverRef) {
+    public OperationFuture<ServerRef> removePublicIp(ServerRef serverRef) {
         ServerMetadata serverMetadata = findByRef(serverRef);
-        String serverId = serverMetadata.getId();
-        serverMetadata.getDetails().getIpAddresses().parallelStream().forEach(address -> {
-            if (address.getPublicIp() != null) {
-                client.removePublicIp(serverId, address.getPublicIp());
-            }
-        });
+        List<JobFuture> jobFutures = new ArrayList<>();
+        serverMetadata.getDetails().getIpAddresses()
+                .parallelStream()
+                .map(IpAddress::getPublicIp)
+                .filter(notNull())
+                .forEach(address -> jobFutures.add(removePublicIp(serverRef, address).jobFuture()));
 
-        return serverRef;
+
+        return new OperationFuture<>(
+                serverRef,
+                new ParallelJobsFuture(jobFutures)
+        );
     }
 
     private OperationFuture<List<BaseServerResponse>> powerOperationResponse(List<BaseServerResponse> apiResponse) {
