@@ -14,9 +14,9 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
@@ -49,14 +49,16 @@ public class ServerService {
     private final GroupService groupService;
     private final ServerClient client;
     private final QueueClient queueClient;
+    private final PublicIpConverter publicIpConverter;
 
     @Inject
     public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient,
-                         GroupService groupService) {
+                         GroupService groupService, PublicIpConverter publicIpConverter) {
         this.serverConverter = serverConverter;
         this.client = client;
         this.queueClient = queueClient;
         this.groupService = groupService;
+        this.publicIpConverter = publicIpConverter;
     }
 
     public OperationFuture<ServerMetadata> create(CreateServerCommand command) {
@@ -66,7 +68,7 @@ public class ServerService {
         ServerMetadata serverInfo = client
             .findServerByUuid(response.findServerUuid());
 
-        if (command.getNetwork().getPublicIpAddressRequest() == null) {
+        if (command.getNetwork().getPublicIpConfig() == null) {
             return new OperationFuture<>(
                 serverInfo,
                 response.findStatusId(),
@@ -80,7 +82,7 @@ public class ServerService {
                     () ->
                         addPublicIp(
                             serverInfo.asRefById(),
-                            command.getNetwork().getPublicIpAddressRequest()
+                            command.getNetwork().getPublicIpConfig()
                         ).jobFuture()
                 )
             );
@@ -304,11 +306,11 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
         return powerOperationResponse(
-            client.createSnapshot(
-                new CreateSnapshotRequest()
-                    .snapshotExpirationDays(expirationDays)
-                    .serverIds(ids(serverRefs))
-            )
+                client.createSnapshot(
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(ids(serverRefs))
+                )
         );
     }
 
@@ -321,13 +323,13 @@ public class ServerService {
      */
     public OperationFuture<Link> restore(ServerRef server, GroupRef group) {
         return baseServerResponse(
-            client.restore(
-                idByRef(server),
-                new RestoreServerRequest()
-                    .targetGroupId(
-                            groupService.findByRef(group).getId()
-                    )
-            )
+                client.restore(
+                        idByRef(server),
+                        new RestoreServerRequest()
+                                .targetGroupId(
+                                        groupService.findByRef(group).getId()
+                                )
+                )
         );
     }
 
@@ -345,11 +347,11 @@ public class ServerService {
      * Add public IP to server
      *
      * @param serverRef        server reference
-     * @param publicIpMetadata publicIp metadata object
+     * @param publicIpConfig publicIp metadata object
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpMetadata publicIpMetadata) {
-        Link response = client.addPublicIp(idByRef(serverRef), publicIpMetadata);
+    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpConfig publicIpConfig) {
+        Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
         return new OperationFuture<>(
                 serverRef,
                 response.getId(),
@@ -400,7 +402,6 @@ public class ServerService {
                 .map(IpAddress::getPublicIp)
                 .filter(notNull())
                 .forEach(address -> jobFutures.add(removePublicIp(serverRef, address).jobFuture()));
-
 
         return new OperationFuture<>(
                 serverRef,
