@@ -77,11 +77,10 @@ public class ServerService {
                 new SequentialJobsFuture(
                     () -> new SingleJobFuture(response.findStatusId(), queueClient),
                     () ->
-                        new OperationFuture<ServerRef>(addPublicIp(
+                        addPublicIp(
                             serverInfo.asRefById(),
                             command.getNetwork().getPublicIpAddressRequest()
-                        ), "", queueClient)
-                        .jobFuture()
+                        ).jobFuture()
                 )
             );
         }
@@ -325,7 +324,7 @@ public class ServerService {
                 idByRef(server),
                 new RestoreServerRequest()
                     .targetGroupId(
-                        groupService.findByRef(group).getId()
+                            groupService.findByRef(group).getId()
                     )
             )
         );
@@ -346,11 +345,15 @@ public class ServerService {
      *
      * @param serverRef              server reference
      * @param publicIpAddressRequest
-     * @return server reference
+     * @return OperationFuture wrapper for ServerRef
      */
-    public ServerRef addPublicIp(ServerRef serverRef, PublicIpMetadata publicIpAddressRequest) {
-        client.addPublicIp(idByRef(serverRef), publicIpAddressRequest);
-        return serverRef;
+    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpMetadata publicIpAddressRequest) {
+        Link response = client.addPublicIp(idByRef(serverRef), publicIpAddressRequest);
+        return new OperationFuture<>(
+                serverRef,
+                response.getId(),
+                queueClient
+        );
     }
 
     /**
@@ -358,7 +361,7 @@ public class ServerService {
      *
      * @param serverRef server reference
      * @param publicIp  existing public IP address
-     * @return public IP object
+     * @return public IP response object
      */
     public PublicIpAddressResponse getPublicIp(ServerRef serverRef, String publicIp) {
         return client.getPublicIp(idByRef(serverRef), publicIp);
@@ -369,12 +372,17 @@ public class ServerService {
      *
      * @param serverRef server reference
      * @param publicIp  existing public IP address
-     * @return server reference
+     * @return OperationFuture wrapper for ServerRef
      */
-    public ServerRef removePublicIp(ServerRef serverRef, String publicIp) {
+    public OperationFuture<ServerRef> removePublicIp(ServerRef serverRef, String publicIp) {
         checkNotNull(publicIp, "publicIp must be not null");
-        client.removePublicIp(idByRef(serverRef), publicIp);
-        return serverRef;
+
+        Link response = client.removePublicIp(idByRef(serverRef), publicIp);
+        return new OperationFuture<>(
+                serverRef,
+                response.getId(),
+                queueClient
+        );
     }
 
     /**
