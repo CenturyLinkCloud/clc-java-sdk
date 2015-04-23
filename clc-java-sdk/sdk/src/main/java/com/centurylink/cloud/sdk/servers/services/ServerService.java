@@ -534,7 +534,7 @@ public class ServerService {
         ServerMetadata serverMetadata = findByRef(serverRef);
         List<JobFuture> jobFutures = new ArrayList<>();
         serverMetadata.getDetails().getIpAddresses()
-                .parallelStream()
+                .stream()
                 .map(IpAddress::getPublicIp)
                 .filter(notNull())
                 .forEach(address -> jobFutures.add(removePublicIp(serverRef, address).jobFuture()));
