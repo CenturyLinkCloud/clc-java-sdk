@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
+import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
@@ -35,14 +36,16 @@ public class GroupService {
     private final GroupConverter converter;
     private final DataCentersClient dataCentersClient;
     private final DataCenterService dataCenterService;
+    private final QueueClient queueClient;
 
     @Inject
     public GroupService(ServerClient client, GroupConverter converter, DataCentersClient dataCentersClient,
-                        DataCenterService dataCenterService) {
+                        DataCenterService dataCenterService, QueueClient queueClient) {
         this.client = client;
         this.converter = converter;
         this.dataCentersClient = dataCentersClient;
         this.dataCenterService = dataCenterService;
+        this.queueClient = queueClient;
     }
 
     public GroupMetadata findByRef(GroupRef groupRef) {
@@ -109,8 +112,12 @@ public class GroupService {
         return client.getGroup(idByRef(groupRef));
     }
 
-    public Link delete(GroupRef groupRef) {
-        return client.deleteGroup(idByRef(groupRef));
+    public OperationFuture<Link> delete(GroupRef groupRef) {
+        Link response = client.deleteGroup(idByRef(groupRef));
+        return new OperationFuture<>(
+                response,
+                response.getId(),
+                queueClient);
     }
 
     String idByRef(GroupRef ref) {
