@@ -1,7 +1,6 @@
-package com.centurylink.cloud.sdk.servers.services.domain.group;
+package com.centurylink.cloud.sdk.servers.client.domain.group;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.CustomField;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
@@ -10,10 +9,10 @@ import java.util.List;
  * @author Aliaksandr Krasitski
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupConfig {
+public class CreateGroupRequest {
     private String name;
     private String description;
-    private GroupRef parentGroup;
+    private String parentGroupId;
     private List<CustomField> customFields;
 
     public String getName() {
@@ -24,7 +23,7 @@ public class GroupConfig {
         this.name = name;
     }
 
-    public GroupConfig name(String name) {
+    public CreateGroupRequest name(String name) {
         setName(name);
         return this;
     }
@@ -37,21 +36,21 @@ public class GroupConfig {
         this.description = description;
     }
 
-    public GroupConfig description(String description) {
+    public CreateGroupRequest description(String description) {
         setDescription(description);
         return this;
     }
 
-    public GroupRef getParentGroup() {
-        return parentGroup;
+    public String getParentGroupId() {
+        return parentGroupId;
     }
 
-    public void setParentGroup(GroupRef parentGroup) {
-        this.parentGroup = parentGroup;
+    public void setParentGroupId(String parentGroupId) {
+        this.parentGroupId = parentGroupId;
     }
 
-    public GroupConfig parentGroup(GroupRef parentGroup) {
-        setParentGroup(parentGroup);
+    public CreateGroupRequest parentGroupId(String parentGroupId) {
+        setParentGroupId(parentGroupId);
         return this;
     }
 
@@ -63,7 +62,7 @@ public class GroupConfig {
         this.customFields = customFields;
     }
 
-    public GroupConfig customFields(List<CustomField> customFields) {
+    public CreateGroupRequest customFields(List<CustomField> customFields) {
         setCustomFields(customFields);
         return this;
     }

@@ -30,25 +30,21 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = INTEGRATION)
     public void testCreateGroup() {
-        GroupMetadata parentGroup = groupService.findByRef(
-                new NameGroupRef(DataCenters.DE_FRANKFURT, DefaultGroups.DEFAULT_GROUP)
-        );
-
         String newGroupName = "test group";
         String newGroupDescription = "test group description";
-        GroupMetadata newGroup = groupService.create(new GroupConfig()
-                .parentGroupId(parentGroup.getId())
+        IdGroupRef newGroup = groupService.create(new GroupConfig()
+                .parentGroup(new NameGroupRef(DataCenters.DE_FRANKFURT, DefaultGroups.DEFAULT_GROUP))
                 .name(newGroupName)
                 .description(newGroupDescription))
-            .getResult();
+            .getResult().as(IdGroupRef.class);
 
-        GroupMetadata createdGroup = groupService.get(new IdGroupRef(DataCenters.DE_FRANKFURT, newGroup.getId()));
+        GroupMetadata createdGroup = groupService.get(newGroup);
 
         assertEquals(createdGroup.getId(), newGroup.getId());
-        assertEquals(createdGroup.getName(), newGroup.getName());
-        assertEquals(createdGroup.getDescription(), newGroup.getDescription());
+        assertEquals(createdGroup.getName(), newGroupName);
+        assertEquals(createdGroup.getDescription(), newGroupDescription);
 
-        groupService.delete(new IdGroupRef(DataCenters.DE_FRANKFURT, newGroup.getId()));
+        groupService.delete(newGroup);
     }
 
 }

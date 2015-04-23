@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
+import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 
 import java.util.List;
@@ -27,4 +28,11 @@ public class GroupConverter {
                 .dataCenter(new DataCenter(dataCenter));
     }
 
+    public CreateGroupRequest createGroupRequest(GroupConfig groupConfig, String parentGroupId) {
+        return new CreateGroupRequest()
+                .name(groupConfig.getName())
+                .description(groupConfig.getDescription())
+                .parentGroupId(parentGroupId)
+                .customFields(groupConfig.getCustomFields());
+    }
 }

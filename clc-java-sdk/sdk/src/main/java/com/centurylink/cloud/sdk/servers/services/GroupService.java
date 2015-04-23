@@ -15,8 +15,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -94,15 +92,15 @@ public class GroupService {
         );
     }
 
-    public OperationFuture<GroupMetadata> create(GroupConfig groupConfig) {
+    public OperationFuture<GroupRef> create(GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
         checkNotNull(groupConfig.getName(), "Name of GroupConfig must be not null");
-        checkNotNull(groupConfig.getParentGroupId(), "ParentGroupId of GroupConfig must be not null");
+        checkNotNull(groupConfig.getParentGroup(), "ParentGroup of GroupConfig must be not null");
 
-        GroupMetadata group = client.createGroup(groupConfig);
+        GroupMetadata group = client.createGroup(converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup())));
 
         return new OperationFuture<>(
-                group,
+                new IdGroupRef(groupConfig.getParentGroup().getDataCenter(), group.getId()),
                 new NoWaitingJobFuture()
         );
     }
