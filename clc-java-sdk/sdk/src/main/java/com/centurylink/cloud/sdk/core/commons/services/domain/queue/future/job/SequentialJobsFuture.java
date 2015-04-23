@@ -27,7 +27,6 @@ public class SequentialJobsFuture implements JobFuture {
         List<Supplier<JobFuture>> jobList = asList(jobs);
 
         future = jobList.stream()
-            .filter(notNull())
             .reduce(
                 jobList.get(0).get().waitAsync(),
                 (prev, curItem) -> prev.thenCompose(i -> curItem.get().waitAsync()),

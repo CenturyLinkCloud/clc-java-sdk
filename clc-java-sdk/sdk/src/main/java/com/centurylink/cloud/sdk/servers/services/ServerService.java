@@ -4,10 +4,7 @@ import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.*;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
@@ -91,7 +88,7 @@ public class ServerService {
                 .jobFuture();
         } else {
             return
-                null;
+                new NoWaitingJobFuture();
         }
     }
 
@@ -498,9 +495,9 @@ public class ServerService {
     public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpConfig publicIpConfig) {
         Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
         return new OperationFuture<>(
-                serverRef,
-                response.getId(),
-                queueClient
+            serverRef,
+            response.getId(),
+            queueClient
         );
     }
 
