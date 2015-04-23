@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
 import static com.google.common.collect.Iterables.toArray;
@@ -25,12 +27,12 @@ public class ParallelJobsFuture implements JobFuture {
 
     @Override
     public void waitUntilComplete() {
-        doWaitUntilComplete(null);
+        jobs.forEach(JobFuture::waitUntilComplete);
     }
 
     @Override
     public void waitUntilComplete(Duration timeout) {
-        doWaitUntilComplete(timeout);
+        jobs.forEach(j -> j.waitUntilComplete(timeout));
     }
 
     @Override
@@ -39,12 +41,6 @@ public class ParallelJobsFuture implements JobFuture {
             map(jobs, JobFuture::waitAsync),
             CompletableFuture.class
         ));
-    }
-
-    private void doWaitUntilComplete(Duration timeout) {
-        jobs
-            .stream()
-            .forEach(job -> job.waitUntilComplete(timeout));
     }
 
 }

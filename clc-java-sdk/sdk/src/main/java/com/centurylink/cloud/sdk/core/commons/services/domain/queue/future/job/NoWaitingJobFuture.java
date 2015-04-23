@@ -15,23 +15,17 @@ import java.util.concurrent.CompletableFuture;
 public class NoWaitingJobFuture implements JobFuture {
 
     @Override
-    public void waitUntilComplete() {
-        doWaitUntilComplete(null);
-    }
+    public void waitUntilComplete() { }
 
     @Override
-    public void waitUntilComplete(Duration timeout) {
-        doWaitUntilComplete(timeout);
-    }
-
-    private void doWaitUntilComplete(Duration timeout) {
-    }
+    public void waitUntilComplete(Duration timeout) { }
 
     @Override
     public CompletableFuture<Void> waitAsync() {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        future.complete(null);
-        return future;
+        return
+            new CompletableFuture<Void>() {{
+                complete(null);
+            }};
     }
 
 }
