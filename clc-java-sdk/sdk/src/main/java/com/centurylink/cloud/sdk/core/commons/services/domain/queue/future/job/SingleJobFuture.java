@@ -2,22 +2,18 @@ package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFailedException;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.ClcTimeoutException;
-import com.centurylink.cloud.sdk.core.services.SdkThreadPool;
-import com.google.common.base.Throwables;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.waiting.SingleWaitingLoop;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.waiting.WaitingLoop;
 
 import java.time.Duration;
-import java.util.concurrent.CompletableFuture;
-import java.time.Instant;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
+import java.util.function.Supplier;
+
+import static java.time.Instant.now;
 
 /**
  * @author Ilya Drabenia
  */
-public class SingleJobFuture implements JobFuture {
-    public static final long STATUS_POLLING_DELAY = 400L;
-
+public class SingleJobFuture extends AbstractSingleJobFuture {
     private final QueueClient queueClient;
     private final String statusId;
 
@@ -27,67 +23,33 @@ public class SingleJobFuture implements JobFuture {
     }
 
     @Override
-    public void waitUntilComplete() {
-        doWaitUntilComplete(null);
-    }
+    public WaitingLoop waitingLoop() {
+        return
+            new SingleWaitingLoop(() -> {
+                if (statusId == null) {
+                    throw new OperationFailedException();
+                }
 
-    @Override
-    public void waitUntilComplete(Duration timeout) {
-        doWaitUntilComplete(timeout);
-    }
-
-    private void doWaitUntilComplete(Duration timeout) {
-        if (statusId == null) {
-            throw new OperationFailedException();
-        }
-
-        Instant timeLimit = null;
-
-        if (timeout != null) {
-            timeLimit = Instant.now().plusSeconds(timeout.getSeconds());
-        }
-
-        for (;;) {
-            if (timeLimit != null && timeLimit.isBefore(Instant.now())) {
-                throw new ClcTimeoutException();
-            }
-
-            String status = queueClient
+                String status = queueClient
                     .getJobStatus(statusId)
                     .getStatus();
 
-            switch (status) {
-                case "succeeded":
-                    return;
+                switch (status) {
+                    case "succeeded":
+                        return true;
 
-                case "failed":
-                case "unknown":
-                    throw new OperationFailedException();
+                    case "failed":
+                    case "unknown":
+                        throw new OperationFailedException();
 
-                default:
-                    try {
-                        Thread.sleep(STATUS_POLLING_DELAY);
-                    } catch (InterruptedException ex) {
-                        throw Throwables.propagate(ex);
-                    }
-            }
-        }
+                    default:
+                        return false;
+                }
+            });
     }
 
     @Override
-    public CompletableFuture<Void> waitAsync() {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-
-        SdkThreadPool.get().execute(() -> {
-            try {
-                waitUntilComplete();
-                future.complete(null);
-            } catch (Exception e) {
-                future.completeExceptionally(e);
-            }
-        });
-
-        return future;
+    protected String operationInfo() {
+        return statusId;
     }
-
 }

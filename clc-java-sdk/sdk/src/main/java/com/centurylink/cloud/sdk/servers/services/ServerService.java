@@ -19,6 +19,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.server.future.CreateServerJobFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
@@ -71,19 +72,21 @@ public class ServerService {
         if (command.getNetwork().getPublicIpConfig() == null) {
             return new OperationFuture<>(
                 serverInfo,
-                response.findStatusId(),
-                queueClient
+                new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client)
             );
         } else {
             return new OperationFuture<>(
                 serverInfo,
                 new SequentialJobsFuture(
-                    () -> new SingleJobFuture(response.findStatusId(), queueClient),
+                    () ->
+                        new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client),
+
                     () ->
                         addPublicIp(
                             serverInfo.asRefById(),
                             command.getNetwork().getPublicIpConfig()
-                        ).jobFuture()
+                        )
+                        .jobFuture()
                 )
             );
         }
@@ -450,13 +453,13 @@ public class ServerService {
      */
     public OperationFuture<Link> restore(ServerRef server, GroupRef group) {
         return baseServerResponse(
-                client.restore(
-                        idByRef(server),
-                        new RestoreServerRequest()
-                                .targetGroupId(
-                                        groupService.findByRef(group).getId()
-                                )
-                )
+            client.restore(
+                idByRef(server),
+                new RestoreServerRequest()
+                    .targetGroupId(
+                        groupService.findByRef(group).getId()
+                    )
+            )
         );
     }
 

@@ -113,7 +113,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         cleanUpCreatedResources(newServer.asRefById());
     }
 
-    @Test(enabled = false) // blocked by https://github.com/CenturyLinkCloud/APIDocs/issues/4
+    @Test
     public void testCreateWithManagedOS() {
         ServerMetadata newServer =
             serverService.create(anyServerConfig()

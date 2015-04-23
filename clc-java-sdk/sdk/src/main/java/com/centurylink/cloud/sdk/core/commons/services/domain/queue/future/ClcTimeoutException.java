@@ -7,6 +7,10 @@ public class ClcTimeoutException extends ClcServiceException {
     public ClcTimeoutException() {
     }
 
+    public ClcTimeoutException(String format, Object... arguments) {
+        super(format, arguments);
+    }
+
     public ClcTimeoutException(Throwable cause) {
         super(cause);
     }
