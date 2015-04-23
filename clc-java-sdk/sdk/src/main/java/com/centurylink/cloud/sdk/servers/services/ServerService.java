@@ -90,7 +90,7 @@ public class ServerService {
         final SettableFuture<BaseServerResponse> response =
             client
                 .createAsync(
-                    serverConverter.buildCreateServerRequest(command)
+                        serverConverter.buildCreateServerRequest(command)
                 );
 
         ListenableFuture<ServerMetadata> metadata =
@@ -199,6 +199,18 @@ public class ServerService {
     }
 
     /**
+     * Power on a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOn(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.powerOn(ids(serverFilter))
+        );
+    }
+
+    /**
      * Power off a single server or group of servers
      *
      * @param serverRefs server references list
@@ -207,6 +219,18 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> powerOff(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.powerOff(ids(serverRefs))
+        );
+    }
+
+    /**
+     * Power off a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOff(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.powerOff(ids(serverFilter))
         );
     }
 
@@ -223,6 +247,18 @@ public class ServerService {
     }
 
     /**
+     * Start maintenance mode on a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.startMaintenance(ids(serverFilter))
+        );
+    }
+
+    /**
      * Stop maintenance mode on a single server or group of servers
      *
      * @param serverRefs server references list
@@ -231,6 +267,18 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.stopMaintenance(ids(serverRefs))
+        );
+    }
+
+    /**
+     * Stop maintenance mode on a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.stopMaintenance(ids(serverFilter))
         );
     }
 
@@ -247,6 +295,18 @@ public class ServerService {
     }
 
     /**
+     * Pause a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> pause(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.pause(ids(serverFilter))
+        );
+    }
+
+    /**
      * Reboot a single server or group of servers
      *
      * @param serverRefs server references list
@@ -255,6 +315,18 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> reboot(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.reboot(ids(serverRefs))
+        );
+    }
+
+    /**
+     * Pause a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reboot(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.reboot(ids(serverFilter))
         );
     }
 
@@ -271,6 +343,18 @@ public class ServerService {
     }
 
     /**
+     * Reset a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reset(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.reset(ids(serverFilter))
+        );
+    }
+
+    /**
      * Shut down a single server or group of servers
      *
      * @param serverRefs server references list
@@ -279,6 +363,18 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> shutDown(ServerRef... serverRefs) {
         return powerOperationResponse(
             client.shutDown(ids(serverRefs))
+        );
+    }
+
+    /**
+     * Shut down a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> shutDown(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.shutDown(ids(serverFilter))
         );
     }
 
@@ -295,6 +391,18 @@ public class ServerService {
     }
 
     /**
+     * Archive a single server or group of servers
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> archive(ServerFilter serverFilter) {
+        return powerOperationResponse(
+            client.archive(ids(serverFilter))
+        );
+    }
+
+    /**
      * Create snapshot of a single server or group of servers
      *
      * @param expirationDays expiration days (must be between 1 and 10)
@@ -302,13 +410,32 @@ public class ServerService {
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
-        return powerOperationResponse(
-            client.createSnapshot(
-                new CreateSnapshotRequest()
-                    .snapshotExpirationDays(expirationDays)
-                    .serverIds(ids(serverRefs))
-            )
+        return
+            powerOperationResponse(
+                client.createSnapshot(
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(ids(serverRefs))
+                )
         );
+    }
+
+    /**
+     * Create snapshot of a single server or group of servers
+     *
+     * @param expirationDays expiration days (must be between 1 and 10)
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerFilter serverFilter) {
+        return
+            powerOperationResponse(
+                client.createSnapshot(
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(ids(serverFilter))
+                )
+            );
     }
 
     /**
@@ -336,6 +463,17 @@ public class ServerService {
                 .of(serverRefs)
                 .filter(notNull())
                 .map(this::idByRef)
+                .map(String::toUpperCase)
+                .collect(toList());
+    }
+
+    private List<String> ids(ServerFilter serverFilter) {
+        List<ServerMetadata> serverMetadataList = find(serverFilter);
+
+        return
+            serverMetadataList
+                .stream()
+                .map(ServerMetadata::getId)
                 .map(String::toUpperCase)
                 .collect(toList());
     }
