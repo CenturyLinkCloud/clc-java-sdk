@@ -4,12 +4,13 @@ import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.client.InvocationFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.CreatePublicIpRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
-import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
-import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
@@ -117,11 +118,11 @@ public class ServerClient extends BaseSdkClient {
                 .request().get(GroupMetadata.class);
     }
 
-    public GroupMetadata createGroup(GroupConfig groupConfig) {
+    public GroupMetadata createGroup(CreateGroupRequest createGroupRequest) {
         return
             client("/groups/{accountAlias}")
                 .request()
-                .post(entity(groupConfig, APPLICATION_JSON_TYPE))
+                .post(entity(createGroupRequest, APPLICATION_JSON_TYPE))
                 .readEntity(GroupMetadata.class);
     }
 
@@ -202,12 +203,12 @@ public class ServerClient extends BaseSdkClient {
                 .readEntity(BaseServerListResponse.class);
     }
 
-    public Link addPublicIp(String serverId, PublicIpMetadata publicIpAddressRequest) {
+    public Link addPublicIp(String serverId, CreatePublicIpRequest publicIpRequest) {
         return
             client("/servers/{accountAlias}/{serverId}/publicIPAddresses")
                 .resolveTemplate("serverId", serverId)
                 .request()
-                .post(entity(publicIpAddressRequest, APPLICATION_JSON_TYPE))
+                .post(entity(publicIpRequest, APPLICATION_JSON_TYPE))
                 .readEntity(Link.class);
     }
 
@@ -220,13 +221,13 @@ public class ServerClient extends BaseSdkClient {
                 .get(PublicIpAddressResponse.class);
     }
 
-    public Link updatePublicIp(String serverId, String publicIp, PublicIpMetadata publicIpAddressRequest) {
+    public Link updatePublicIp(String serverId, String publicIp, PublicIpMetadata publicIpMetadata) {
         return
             client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
                 .resolveTemplate("serverId", serverId)
                 .resolveTemplate("publicIp", publicIp)
                 .request()
-                .put(entity(publicIpAddressRequest, APPLICATION_JSON_TYPE))
+                .put(entity(publicIpMetadata, APPLICATION_JSON_TYPE))
                 .readEntity(Link.class);
     }
 

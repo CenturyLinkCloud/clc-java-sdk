@@ -13,18 +13,34 @@ public class PortConfig {
     public static final Integer RDP = 3389; //
     public static final Integer FTP = 21; //
 
-    public PortRangeConfig from(Integer from) {
-        return new PortRangeConfig(/*protocol, from*/);
+    private ProtocolType protocolType = ProtocolType.TCP;
+    protected Integer port;
+
+    private static final int MIN_PORT = 0;
+    private static final int MAX_PORT = 65535;
+
+    public PortRangeConfig to(Integer to) {
+        Preconditions.checkArgument(to > MIN_PORT && to < MAX_PORT && this.port < to);
+        return new PortRangeConfig(this.protocolType, this.port, to);
+    }
+
+    public Integer getPort() {
+        return port;
     }
 
     public SinglePortConfig port(Integer port) {
-        Preconditions.checkArgument(port > 0 && port < 65535);
+        Preconditions.checkArgument(port > MIN_PORT && port < MAX_PORT);
 
-        return new SinglePortConfig(/*protocol, port*/);
+        return new SinglePortConfig(protocolType, port);
+    }
+
+    public ProtocolType getProtocolType() {
+        return protocolType;
     }
 
     // default is TCP
-    public PortConfig protocol(ProtocolType protocol) {
+    public PortConfig protocol(ProtocolType protocolType) {
+        this.protocolType = protocolType;
         return this;
     }
 
