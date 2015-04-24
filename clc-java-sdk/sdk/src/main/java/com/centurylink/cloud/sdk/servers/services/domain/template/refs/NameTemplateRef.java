@@ -30,6 +30,7 @@ public class NameTemplateRef extends TemplateRef {
     public TemplateFilter asFilter() {
         return
             new TemplateFilter()
+                .dataCenterIn(getDataCenter())
                 .nameContains(name);
     }
 }
