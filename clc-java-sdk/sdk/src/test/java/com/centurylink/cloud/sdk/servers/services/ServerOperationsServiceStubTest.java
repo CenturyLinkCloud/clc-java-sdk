@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.tests.fixtures.ServerStubFixture;
 import com.google.inject.Inject;
@@ -20,6 +21,8 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
 
     private ServerRef server;
+
+    private ServerFilter serverFilter;
 
     @Inject
     ServerService serverService;
@@ -58,49 +61,49 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
 
     private void powerOnServer() {
         serverService
-            .powerOn(server)
+            .powerOn(serverFilter)
             .waitUntilComplete();
     }
 
     private void powerOffServer() {
         serverService
-            .powerOff(server)
+            .powerOff(serverFilter)
             .waitUntilComplete();
     }
 
     private void pauseServer() {
         serverService
-            .pause(server)
+            .pause(serverFilter)
             .waitUntilComplete();
     }
 
     private void shutDownServer() {
         serverService
-            .shutDown(server)
+            .shutDown(serverFilter)
             .waitUntilComplete();
     }
 
     private void stopServerMaintenance() {
         serverService
-            .stopMaintenance(server)
+            .stopMaintenance(serverFilter)
             .waitUntilComplete();
     }
 
     private void startServerMaintenance() {
         serverService
-            .startMaintenance(server)
+            .startMaintenance(serverFilter)
             .waitUntilComplete();
     }
 
     private void archiveServer() {
         serverService
-            .archive(server)
+            .archive(serverFilter)
             .waitUntilComplete();
     }
 
     private void createServerSnapshot() {
         serverService
-            .createSnapshot(1, server)
+            .createSnapshot(1, serverFilter)
             .waitUntilComplete();
     }
 
@@ -179,6 +182,7 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
 
         ServerMetadata serverMetadata = fixture.getServerMetadata();
         server = serverMetadata.asRefById();
+        serverFilter = new ServerFilter().idIn(serverMetadata.getId());
 
         String groupId = loadServerMetadata(server).getGroupId();
         GroupRef group = new IdGroupRef(DataCenter.refByName("FranKfUrt"), groupId);

@@ -11,8 +11,8 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -34,7 +34,6 @@ public class ServerStubFixture {
 
     private static Link link;
 
-    private IdServerRef serverRef;
     private ServerMetadata serverMetadata;
 
     /* mocked server client*/
@@ -42,10 +41,6 @@ public class ServerStubFixture {
 
     /* mocked queue client*/
     QueueClient queueClient;
-
-    public ServerRef getServerRef() {
-        return serverRef;
-    }
 
     public ServerMetadata getServerMetadata() {
         return serverMetadata;
@@ -60,7 +55,6 @@ public class ServerStubFixture {
 
     private void initMockAndStubs() {
         serverMetadata = createServerMetadata();
-        serverRef = serverMetadata.asRefById();
         link = createLink();
 
         GetStatusResponse statusResponse = new GetStatusResponse("succeeded");
