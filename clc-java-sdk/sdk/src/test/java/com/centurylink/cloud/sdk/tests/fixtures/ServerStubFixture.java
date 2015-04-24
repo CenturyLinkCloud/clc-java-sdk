@@ -30,11 +30,12 @@ import static org.mockito.Mockito.when;
 public class ServerStubFixture {
 
     private final static String serverId = "de1altdtcrt777";
-    private final static Integer snapshotExpirationDays = 1;
+    private final static String serverId2 = "de1altdtcrt888";
 
     private static Link link;
 
     private ServerMetadata serverMetadata;
+    private ServerMetadata serverMetadata2;
 
     /* mocked server client*/
     ServerClient serverClient;
@@ -46,6 +47,10 @@ public class ServerStubFixture {
         return serverMetadata;
     }
 
+    public ServerMetadata getAnotherServerMetadata() {
+        return serverMetadata2;
+    }
+
     public ServerStubFixture(ServerClient serverClient, QueueClient queueClient) {
         this.serverClient = serverClient;
         this.queueClient = queueClient;
@@ -54,7 +59,9 @@ public class ServerStubFixture {
     }
 
     private void initMockAndStubs() {
-        serverMetadata = createServerMetadata();
+        serverMetadata = createServerMetadata(serverId);
+        serverMetadata2 = createServerMetadata(serverId2);
+
         link = createLink();
 
         GetStatusResponse statusResponse = new GetStatusResponse("succeeded");
@@ -62,17 +69,22 @@ public class ServerStubFixture {
 
         List<String> serverIdList = new ArrayList<>();
         serverIdList.add(serverMetadata.getId());
+        serverIdList.add(serverMetadata2.getId());
 
         BaseServerListResponse baseServerListResponse = createBaseServerListResponse();
 
         when(serverClient.findServerById(serverIdList.get(0)))
             .thenReturn(serverMetadata);
 
+        when(serverClient.findServerById(serverIdList.get(1)))
+                .thenReturn(serverMetadata);
+
         when(serverClient.powerOn(anyListOf(String.class)))
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
                         serverMetadata.getDetails().setPowerState("started");
+                        serverMetadata2.getDetails().setPowerState("started");
                         return baseServerListResponse;
                     }
                 }
@@ -83,6 +95,7 @@ public class ServerStubFixture {
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
                         serverMetadata.getDetails().setPowerState("stopped");
+                        serverMetadata2.getDetails().setPowerState("stopped");
                         return baseServerListResponse;
                     }
                 }
@@ -93,6 +106,7 @@ public class ServerStubFixture {
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
                         serverMetadata.getDetails().setInMaintenanceMode(true);
+                        serverMetadata2.getDetails().setInMaintenanceMode(true);
                         return baseServerListResponse;
                     }
                 }
@@ -103,6 +117,7 @@ public class ServerStubFixture {
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
                         serverMetadata.getDetails().setInMaintenanceMode(false);
+                        serverMetadata2.getDetails().setInMaintenanceMode(false);
                         return baseServerListResponse;
                     }
                 }
@@ -113,6 +128,7 @@ public class ServerStubFixture {
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
                         serverMetadata.getDetails().setPowerState("paused");
+                        serverMetadata2.getDetails().setPowerState("paused");
                         return baseServerListResponse;
                     }
                 }
@@ -129,6 +145,7 @@ public class ServerStubFixture {
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
                         serverMetadata.setStatus("archived");
+                        serverMetadata2.setStatus("archived");
                         return baseServerListResponse;
                     }
                 }
@@ -139,6 +156,7 @@ public class ServerStubFixture {
                 new Answer<Link>() {
                     public Link answer(InvocationOnMock invocation) {
                         serverMetadata.setStatus("active");
+                        serverMetadata2.setStatus("active");
                         return link;
                     }
                 }
@@ -149,6 +167,7 @@ public class ServerStubFixture {
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
                         serverMetadata.getDetails().setPowerState("stopped");
+                        serverMetadata2.getDetails().setPowerState("stopped");
                         return baseServerListResponse;
                     }
                 }
@@ -159,13 +178,14 @@ public class ServerStubFixture {
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
                         serverMetadata.getDetails().getSnapshots().add(new Object());
+                        serverMetadata2.getDetails().getSnapshots().add(new Object());
                         return baseServerListResponse;
                     }
                 }
             );
     }
 
-    public ServerMetadata createServerMetadata() {
+    private ServerMetadata createServerMetadata(String serverId) {
         return
             new ServerMetadata() {{
                 setId(serverId);
@@ -210,7 +230,9 @@ public class ServerStubFixture {
         linkList.add(link);
 
         BaseServerResponse response = new BaseServerResponse(serverId, true, linkList);
+        BaseServerResponse response2 = new BaseServerResponse(serverId2, true, linkList);
         responseList.add(response);
+        responseList.add(response2);
 
         return responseList;
     }

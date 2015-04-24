@@ -20,7 +20,8 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
 public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
 
-    private ServerRef server;
+    private ServerRef server1;
+    private ServerRef server2;
 
     private ServerFilter serverFilter;
 
@@ -107,7 +108,7 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
-    private void restoreServer(GroupRef group) {
+    private void restoreServer(GroupRef group, ServerRef server) {
         serverService
             .restore(server, group)
             .waitUntilComplete();
@@ -117,13 +118,15 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
         testShutDown();
         powerOffServer();
 
-        assertThatServerPowerStateHasStatus(server, "stopped");
+        assertThatServerPowerStateHasStatus(server1, "stopped");
+        assertThatServerPowerStateHasStatus(server2, "stopped");
     }
 
     public void testPause() {
         pauseServer();
 
-        assertThatServerPowerStateHasStatus(server, "paused");
+        assertThatServerPowerStateHasStatus(server1, "paused");
+        assertThatServerPowerStateHasStatus(server2, "paused");
         powerOnServer();
     }
 
@@ -131,7 +134,8 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
         testPause();
         shutDownServer();
 
-        assertThatServerPowerStateHasStatus(server, "stopped");
+        assertThatServerPowerStateHasStatus(server1, "stopped");
+        assertThatServerPowerStateHasStatus(server2, "stopped");
         powerOnServer();
     }
 
@@ -139,57 +143,68 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
         testPowerOff();
         powerOnServer();
 
-        assertThatServerPowerStateHasStatus(server, "started");
+        assertThatServerPowerStateHasStatus(server1, "started");
+        assertThatServerPowerStateHasStatus(server2, "started");
     }
 
     public void testStartMaintenance() {
         testPowerOn();
         startServerMaintenance();
 
-        assertThatMaintenanceFlagIs(server, true);
+        assertThatMaintenanceFlagIs(server1, true);
+        assertThatMaintenanceFlagIs(server2, true);
     }
 
     public void testStopMaintenance() {
         testStartMaintenance();
         stopServerMaintenance();
 
-        assertThatMaintenanceFlagIs(server, false);
+        assertThatMaintenanceFlagIs(server1, false);
+        assertThatMaintenanceFlagIs(server2, false);
     }
 
     public void testCreateSnapshot() {
         testStopMaintenance();
 
-        Details serverDetails = loadServerDetails(server);
-        assertEquals(serverDetails.getSnapshots().size(), 0);
+        assertEquals(loadServerDetails(server1).getSnapshots().size(), 0);
+        assertEquals(loadServerDetails(server2).getSnapshots().size(), 0);
 
         createServerSnapshot();
 
-        serverDetails = loadServerDetails(server);
-        assertEquals(serverDetails.getSnapshots().size(), 1);
+        assertEquals(loadServerDetails(server1).getSnapshots().size(), 1);
+        assertEquals(loadServerDetails(server2).getSnapshots().size(), 1);
     }
 
     public void testArchive() {
         testCreateSnapshot();
 
-        assertThatServerHasStatus(server, "active");
+        assertThatServerHasStatus(server1, "active");
+        assertThatServerHasStatus(server2, "active");
+
         archiveServer();
-        assertThatServerHasStatus(server, "archived");
+
+        assertThatServerHasStatus(server1, "archived");
+        assertThatServerHasStatus(server2, "archived");
     }
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testRestore() throws Exception {
         ServerStubFixture fixture = new ServerStubFixture(serverClient, queueClient);
 
-        ServerMetadata serverMetadata = fixture.getServerMetadata();
-        server = serverMetadata.asRefById();
-        serverFilter = new ServerFilter().idIn(serverMetadata.getId());
+        ServerMetadata serverMetadata1 = fixture.getServerMetadata();
+        ServerMetadata serverMetadata2 = fixture.getAnotherServerMetadata();
 
-        String groupId = loadServerMetadata(server).getGroupId();
+        server1 = serverMetadata1.asRefById();
+        server2 = serverMetadata2.asRefById();
+        serverFilter = new ServerFilter().idIn(serverMetadata1.getId(), serverMetadata2.getId());
+
+        String groupId = loadServerMetadata(server1).getGroupId();
         GroupRef group = new IdGroupRef(DataCenter.refByName("FranKfUrt"), groupId);
 
         testArchive();
 
-//        restoreServer(group);
-//        assertThatServerHasStatus(server, "active");
+//        restoreServer(group, server1);
+//        restoreServer(group, server2);
+//        assertThatServerHasStatus(server1, "active");
     }
 }
