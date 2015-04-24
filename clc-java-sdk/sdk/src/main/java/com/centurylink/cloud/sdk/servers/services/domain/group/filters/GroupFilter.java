@@ -2,20 +2,15 @@ package com.centurylink.cloud.sdk.servers.services.domain.group.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 
-import java.util.function.*;
+import java.util.function.Predicate;
 
-import static com.centurylink.cloud.sdk.core.services.filter.Filter.and;
-import static com.centurylink.cloud.sdk.core.services.filter.Filter.or;
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.*;
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.combine;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.containsIgnoreCase;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.in;
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 
@@ -43,9 +38,6 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @return {@link GroupFilter}
      */
     public GroupFilter dataCenterIn(DataCenterRef... dataCenters) {
-        dataCenterFilter = dataCenterFilter.and(Filter.or(
-            map(dataCenters, DataCenterRef::asFilter)
-        ));
 
         return this;
     }

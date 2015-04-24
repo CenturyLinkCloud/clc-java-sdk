@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
 
@@ -9,6 +10,7 @@ import java.util.function.Predicate;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.combine;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.containsIgnoreCase;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.in;
+import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -52,10 +54,16 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      */
     public DataCenterFilter idIn(String... ids) {
         this.predicate = this.predicate.and(combine(
-            DataCenterMetadata::getId, in(ids)
+            DataCenterMetadata::getId, Predicates.in(ids)
         ));
 
         return this;
+    }
+
+    public DataCenterFilter in(DataCenterRef... dataCenterRefs) {
+        return this.and(Filter.or(
+            map(dataCenterRefs, DataCenterRef::asFilter)
+        ));
     }
 
     /**

@@ -3,10 +3,14 @@ package com.centurylink.cloud.sdk.servers.services.domain.template.filters;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
+import com.centurylink.cloud.sdk.core.services.function.Predicates;
+import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture;
 
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.*;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -33,6 +37,12 @@ public class TemplateFilter implements Filter<TemplateFilter> {
 
     public TemplateFilter dataCenterIdIn(String... ids) {
         dataCenter.idIn(ids);
+        return this;
+    }
+
+    public TemplateFilter dataCenterIn(DataCenterRef... dataCenters) {
+        dataCenter.in(dataCenters);
+
         return this;
     }
 
