@@ -202,13 +202,13 @@ public class ServerClient extends BaseSdkClient {
                 .readEntity(Link.class);
     }
 
-    public PublicIpAddressResponse getPublicIp(String serverId, String publicIp) {
+    public PublicIpMetadata getPublicIp(String serverId, String publicIp) {
         return
             client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
                 .resolveTemplate("serverId", serverId)
                 .resolveTemplate("publicIp", publicIp)
                 .request()
-                .get(PublicIpAddressResponse.class);
+                .get(PublicIpMetadata.class);
     }
 
     public Link updatePublicIp(String serverId, String publicIp, PublicIpMetadata publicIpMetadata) {

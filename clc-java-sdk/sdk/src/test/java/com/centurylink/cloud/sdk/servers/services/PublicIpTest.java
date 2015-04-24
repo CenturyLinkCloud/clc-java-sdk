@@ -2,8 +2,8 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.CreatePublicIpRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
-import com.centurylink.cloud.sdk.servers.client.domain.server.PublicIpAddressResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.Subnet;
@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author aliaksandr krasitski
@@ -42,12 +43,21 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
         List<IpAddress> ipAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
 
+
         ipAddresses.stream()
                 .filter(address -> address.getPublicIp() != null)
                 .forEach(address -> {
-                    PublicIpAddressResponse resp = serverService.getPublicIp(serverRef, address.getPublicIp());
+                    PublicIpMetadata resp = serverService.getPublicIp(serverRef, address.getPublicIp());
                     assertEquals(resp.getInternalIPAddress(), address.getInternal(), "internal ip addresses must be equal");
                 });
+
+        int publicIpCount = ipAddresses.stream()
+                .filter(address -> address.getPublicIp() != null)
+                .collect(toList())
+                .size();
+
+        List<PublicIpMetadata> publicIps = serverService.findPublicIp(serverRef);
+        assertEquals(publicIpCount, publicIps.size());
 
         serverService.removePublicIp(serverRef).waitUntilComplete();
 

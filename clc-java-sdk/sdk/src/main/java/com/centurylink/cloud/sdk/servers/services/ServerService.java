@@ -4,12 +4,17 @@ import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.*;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
-import com.centurylink.cloud.sdk.core.services.filter.Filters;
-import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.server.*;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
+import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
@@ -27,9 +32,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
@@ -37,7 +40,6 @@ import static com.centurylink.cloud.sdk.core.services.function.Predicates.isAlwa
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -91,6 +93,38 @@ public class ServerService {
             return
                 new NoWaitingJobFuture();
         }
+    }
+
+    public ListenableFuture<OperationFuture<ServerMetadata>> createAsync(CreateServerCommand command) {
+        final SettableFuture<BaseServerResponse> response =
+            client
+                .createAsync(
+                        serverConverter.buildCreateServerRequest(command)
+                );
+
+        ListenableFuture<ServerMetadata> metadata =
+            Futures.transform(response, new AsyncFunction<BaseServerResponse, ServerMetadata>() {
+                @Override
+                public ListenableFuture<ServerMetadata> apply(BaseServerResponse input) throws Exception {
+                    return client.findServerByUuidAsync(input.findServerUuid());
+                }
+            });
+
+        return
+            Futures.transform(metadata, new Function<ServerMetadata, OperationFuture<ServerMetadata>>() {
+                @Override
+                public OperationFuture<ServerMetadata> apply(ServerMetadata serverInfo) {
+                    try {
+                        return new OperationFuture<>(
+                            serverInfo,
+                            response.get().findStatusId(),
+                            queueClient
+                        );
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new ClcClientException(e);
+                    }
+                }
+            });
     }
 
     public OperationFuture<ServerRef> delete(ServerRef server) {
@@ -407,7 +441,7 @@ public class ServerService {
                         .snapshotExpirationDays(expirationDays)
                         .serverIds(ids(serverRefs))
                 )
-        );
+            );
     }
 
     /**
@@ -492,9 +526,27 @@ public class ServerService {
      * @param publicIp  existing public IP address
      * @return public IP response object
      */
-    public PublicIpAddressResponse getPublicIp(ServerRef serverRef, String publicIp) {
+    public PublicIpMetadata getPublicIp(ServerRef serverRef, String publicIp) {
         return client.getPublicIp(idByRef(serverRef), publicIp);
     }
+
+    /**
+     * Get list public IPs for provided server reference {@code server}
+     *
+     * @param server server reference
+     * @return list public IPs
+     */
+    public List<PublicIpMetadata> findPublicIp(ServerRef server) {
+        List<IpAddress> ipAddresses  = findByRef(server).getDetails().getIpAddresses();
+        List<PublicIpMetadata> result = new ArrayList<>(ipAddresses.size());
+
+        ipAddresses.stream()
+                .map(IpAddress::getPublicIp)
+                .filter(address -> address != null)
+                .forEach(address -> result.add(getPublicIp(server, address)));
+
+        return result;
+    };
 
     /**
      * Remove public IP from server
