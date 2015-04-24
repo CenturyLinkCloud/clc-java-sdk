@@ -13,21 +13,20 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerReque
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
-import com.google.inject.Inject;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 /**
  * Server stub with serverService mocked methods
  */
-@Test
 public class ServerStubFixture {
 
     private final static String serverId = "de1altdtcrt777";
@@ -35,25 +34,31 @@ public class ServerStubFixture {
 
     private static Link link;
 
-    private static volatile IdServerRef serverRef;
-    private static volatile ServerMetadata serverMetadata;
+    private IdServerRef serverRef;
+    private ServerMetadata serverMetadata;
 
-    @Inject
+    /* mocked server client*/
     ServerClient serverClient;
 
-    @Inject
+    /* mocked queue client*/
     QueueClient queueClient;
 
-    public static ServerRef getServerRef() {
+    public ServerRef getServerRef() {
         return serverRef;
     }
 
-    public static ServerMetadata getServerMetadata() {
+    public ServerMetadata getServerMetadata() {
         return serverMetadata;
     }
 
-    @BeforeSuite(groups = LONG_RUNNING, enabled = false)
-    public void initMockAndStubs() {
+    public ServerStubFixture(ServerClient serverClient, QueueClient queueClient) {
+        this.serverClient = serverClient;
+        this.queueClient = queueClient;
+
+        initMockAndStubs();
+    }
+
+    private void initMockAndStubs() {
         serverMetadata = createServerMetadata();
         serverRef = serverMetadata.asRefById();
         link = createLink();
@@ -65,24 +70,108 @@ public class ServerStubFixture {
         serverIdList.add(serverMetadata.getId());
 
         BaseServerListResponse baseServerListResponse = createBaseServerListResponse();
-        CreateSnapshotRequest createSnapshotRequest = createSnapshotRequest(serverIdList);
-        RestoreServerRequest restoreServerRequest = createRestoreServerRequest();
 
-        when(serverClient.findServerById(serverIdList.get(0))).thenReturn(serverMetadata);
-        when(serverClient.powerOn(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.powerOff(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.startMaintenance(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.stopMaintenance(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.pause(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.reset(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.reboot(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.archive(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.restore(serverIdList.get(0), restoreServerRequest)).thenReturn(link);
-        when(serverClient.shutDown(serverIdList)).thenReturn(baseServerListResponse);
-        when(serverClient.createSnapshot(createSnapshotRequest)).thenReturn(baseServerListResponse);
+        when(serverClient.findServerById(serverIdList.get(0)))
+            .thenReturn(serverMetadata);
+
+        when(serverClient.powerOn(anyListOf(String.class)))
+            .thenAnswer(
+                new Answer<BaseServerListResponse>() {
+                    public BaseServerListResponse answer(InvocationOnMock invocation) {
+                        serverMetadata.getDetails().setPowerState("started");
+                        return baseServerListResponse;
+                    }
+                }
+            );
+
+        when(serverClient.powerOff(anyListOf(String.class)))
+            .thenAnswer(
+                new Answer<BaseServerListResponse>() {
+                    public BaseServerListResponse answer(InvocationOnMock invocation) {
+                        serverMetadata.getDetails().setPowerState("stopped");
+                        return baseServerListResponse;
+                    }
+                }
+            );
+
+        when(serverClient.startMaintenance(anyListOf(String.class)))
+            .thenAnswer(
+                new Answer<BaseServerListResponse>() {
+                    public BaseServerListResponse answer(InvocationOnMock invocation) {
+                        serverMetadata.getDetails().setInMaintenanceMode(true);
+                        return baseServerListResponse;
+                    }
+                }
+            );
+
+        when(serverClient.stopMaintenance(anyListOf(String.class)))
+            .thenAnswer(
+                new Answer<BaseServerListResponse>() {
+                    public BaseServerListResponse answer(InvocationOnMock invocation) {
+                        serverMetadata.getDetails().setInMaintenanceMode(false);
+                        return baseServerListResponse;
+                    }
+                }
+            );
+
+        when(serverClient.pause(anyListOf(String.class)))
+            .thenAnswer(
+                new Answer<BaseServerListResponse>() {
+                    public BaseServerListResponse answer(InvocationOnMock invocation) {
+                        serverMetadata.getDetails().setPowerState("paused");
+                        return baseServerListResponse;
+                    }
+                }
+            );
+
+        when(serverClient.reset(anyListOf(String.class)))
+            .thenReturn(baseServerListResponse);
+
+        when(serverClient.reboot(anyListOf(String.class)))
+            .thenReturn(baseServerListResponse);
+
+        when(serverClient.archive(anyListOf(String.class)))
+            .thenAnswer(
+                new Answer<BaseServerListResponse>() {
+                    public BaseServerListResponse answer(InvocationOnMock invocation) {
+                        serverMetadata.setStatus("archived");
+                        return baseServerListResponse;
+                    }
+                }
+            );
+
+        when(serverClient.restore(anyString(), any(RestoreServerRequest.class)))
+            .thenAnswer(
+                new Answer<Link>() {
+                    public Link answer(InvocationOnMock invocation) {
+                        serverMetadata.setStatus("active");
+                        return link;
+                    }
+                }
+            );
+
+        when(serverClient.shutDown(anyListOf(String.class)))
+            .thenAnswer(
+                new Answer<BaseServerListResponse>() {
+                    public BaseServerListResponse answer(InvocationOnMock invocation) {
+                        serverMetadata.getDetails().setPowerState("stopped");
+                        return baseServerListResponse;
+                    }
+                }
+            );
+
+        when(serverClient.createSnapshot(any(CreateSnapshotRequest.class)))
+            .thenAnswer(
+                new Answer<BaseServerListResponse>() {
+                    public BaseServerListResponse answer(InvocationOnMock invocation) {
+                        serverMetadata.getDetails().getSnapshots().add(new Object());
+                        return baseServerListResponse;
+                    }
+                }
+            );
     }
 
-    private ServerMetadata createServerMetadata() {
+    public ServerMetadata createServerMetadata() {
         return
             new ServerMetadata() {{
                 setId(serverId);
@@ -130,19 +219,5 @@ public class ServerStubFixture {
         responseList.add(response);
 
         return responseList;
-    }
-
-    private RestoreServerRequest createRestoreServerRequest() {
-        return new RestoreServerRequest()
-                .targetGroupId(serverMetadata.getGroupId());
-    }
-
-    private CreateSnapshotRequest createSnapshotRequest(List<String> serverIdList) {
-        CreateSnapshotRequest request = new CreateSnapshotRequest();
-
-        request.setSnapshotExpirationDays(snapshotExpirationDays);
-        request.setServerIds(serverIdList);
-
-        return request;
     }
 }
