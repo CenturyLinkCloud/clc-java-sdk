@@ -66,7 +66,16 @@ public class DiskManagementTest extends AbstractServersSdkTest {
         when(groupService.findByRef(any())).thenReturn(new GroupMetadata());
         when(serverClient.findServerByUuid(any())).thenReturn(new ServerMetadata());
         when(serverClient.create(any()))
-            .thenReturn(new BaseServerResponse(null, null, new ArrayList<Link>()));
+            .thenReturn(new BaseServerResponse(null, null, new ArrayList<Link>() {{
+                add(new Link() {{
+                    setRel("status");
+                    setId("statusId");
+                }});
+                add(new Link() {{
+                    setRel("self");
+                    setId("serverId");
+                }});
+            }}));
 
         serverService.create(anyServerConfig()
             .machine(new Machine()

@@ -24,12 +24,12 @@ public class PauseServerJobFuture extends SingleJobFuture {
         return
             super
                 .waitingLoop()
-                .andThen(new SingleWaitingLoop(() -> {
-                    String status = serverClient
+                .andThen(new SingleWaitingLoop(() ->
+                    serverClient
                         .findServerById(serverId)
-                        .getDetails().getPowerState();
-
-                    return "paused".equals(status);
-                }));
+                        .getDetails()
+                        .getPowerState()
+                        .equals("paused")
+                ));
     }
 }
