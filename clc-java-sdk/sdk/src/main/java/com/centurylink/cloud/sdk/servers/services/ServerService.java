@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
@@ -11,10 +10,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.S
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
-import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
@@ -31,7 +27,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplate
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -96,38 +91,6 @@ public class ServerService {
         }
     }
 
-    public ListenableFuture<OperationFuture<ServerMetadata>> createAsync(CreateServerCommand command) {
-        final SettableFuture<BaseServerResponse> response =
-            client
-                .createAsync(
-                        serverConverter.buildCreateServerRequest(command)
-                );
-
-        ListenableFuture<ServerMetadata> metadata =
-            Futures.transform(response, new AsyncFunction<BaseServerResponse, ServerMetadata>() {
-                @Override
-                public ListenableFuture<ServerMetadata> apply(BaseServerResponse input) throws Exception {
-                    return client.findServerByUuidAsync(input.findServerUuid());
-                }
-            });
-
-        return
-            Futures.transform(metadata, new Function<ServerMetadata, OperationFuture<ServerMetadata>>() {
-                @Override
-                public OperationFuture<ServerMetadata> apply(ServerMetadata serverInfo) {
-                    try {
-                        return new OperationFuture<>(
-                            serverInfo,
-                            response.get().findStatusId(),
-                            queueClient
-                        );
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new ClcClientException(e);
-                    }
-                }
-            });
-    }
-
     public OperationFuture<ServerRef> delete(ServerRef server) {
         BaseServerResponse response = client.delete(idByRef(server));
 
@@ -139,19 +102,19 @@ public class ServerService {
     }
 
     public OperationFuture<List<ServerRef>> delete(ServerRef... servers) {
-        List<JobFuture> futures = new ArrayList<>(servers.length);
-        Arrays.asList(servers).stream()
-                .forEach(serverRef -> futures.add(delete(serverRef).jobFuture()));
+        List<JobFuture> futures = Arrays.asList(servers).stream()
+            .map(serverRef -> delete(serverRef).jobFuture())
+            .collect(toList());
 
         return new OperationFuture<>(
-                Arrays.asList(servers),
-                new ParallelJobsFuture(futures));
+            Arrays.asList(servers),
+            new ParallelJobsFuture(futures));
     }
 
     public OperationFuture<List<ServerRef>> delete(ServerFilter filter) {
         List<ServerRef> serverRefs = find(filter).stream()
-                .map(metadata -> metadata.asRefById())
-                .collect(toList());
+            .map(metadata -> metadata.asRefById())
+            .collect(toList());
         return delete(serverRefs.toArray(new ServerRef[serverRefs.size()]));
     }
 
@@ -555,16 +518,14 @@ public class ServerService {
      * @return list public IPs
      */
     public List<PublicIpMetadata> findPublicIp(ServerRef server) {
-        List<IpAddress> ipAddresses  = findByRef(server).getDetails().getIpAddresses();
-        List<PublicIpMetadata> result = new ArrayList<>(ipAddresses.size());
+        List<IpAddress> ipAddresses = findByRef(server).getDetails().getIpAddresses();
 
-        ipAddresses.stream()
-                .map(IpAddress::getPublicIp)
-                .filter(address -> address != null)
-                .forEach(address -> result.add(getPublicIp(server, address)));
-
-        return result;
-    };
+        return ipAddresses.stream()
+            .map(IpAddress::getPublicIp)
+            .filter(notNull())
+            .map(address -> getPublicIp(server, address))
+            .collect(toList());
+    }
 
     /**
      * Remove public IP from server
@@ -593,12 +554,12 @@ public class ServerService {
      */
     public OperationFuture<ServerRef> removePublicIp(ServerRef serverRef) {
         ServerMetadata serverMetadata = findByRef(serverRef);
-        List<JobFuture> jobFutures = new ArrayList<>();
-        serverMetadata.getDetails().getIpAddresses()
+        List<JobFuture> jobFutures = serverMetadata.getDetails().getIpAddresses()
             .stream()
             .map(IpAddress::getPublicIp)
             .filter(notNull())
-            .forEach(address -> jobFutures.add(removePublicIp(serverRef, address).jobFuture()));
+            .map(address -> removePublicIp(serverRef, address).jobFuture())
+            .collect(toList());
 
         return new OperationFuture<>(
             serverRef,
