@@ -1,9 +1,12 @@
 package com.centurylink.cloud.sdk.core.services.filter;
 
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import static com.google.common.base.Strings.nullToEmpty;
@@ -26,6 +29,16 @@ public abstract class Filters {
         } else {
             return operator.apply(head, reduce(tail, operator));
         }
+    }
+
+    public static <T, R> Function<T, R> nullable(Function<T, R> supplier) {
+        return (T val) -> {
+            try {
+                return supplier.apply(val);
+            } catch (ClcClientException ex) {
+                return null;
+            }
+        };
     }
 
 }

@@ -44,27 +44,6 @@ public class ServerClient extends BaseSdkClient {
                 .readEntity(BaseServerResponse.class);
     }
 
-    public SettableFuture<BaseServerResponse> createAsync(CreateServerRequest request) {
-        final InvocationFuture<BaseServerResponse> future = new InvocationFuture<BaseServerResponse>();
-
-        client("/servers/{accountAlias}")
-            .request()
-            .async()
-            .post(entity(request, APPLICATION_JSON_TYPE), new InvocationCallback<BaseServerResponse>() {
-                @Override
-                public void completed(BaseServerResponse createServerResponse) {
-                    future.toListenableFuture().set(createServerResponse);
-                }
-
-                @Override
-                public void failed(Throwable throwable) {
-                    future.toListenableFuture().setException(throwable);
-                }
-            });
-
-        return future.toListenableFuture();
-    }
-
     public BaseServerResponse delete(String serverId) {
         return
             client("/servers/{accountAlias}/{serverId}")

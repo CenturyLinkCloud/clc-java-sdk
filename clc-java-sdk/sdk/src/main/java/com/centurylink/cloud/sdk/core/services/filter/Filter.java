@@ -24,7 +24,6 @@ public interface Filter<T extends Filter<T>> {
         return and(asList(filters));
     }
 
-    @SuppressWarnings("unchecked")
     static <T extends Filter<T>> T and(List<T> filters) {
         return Filters.reduce(
             filters,
@@ -32,7 +31,6 @@ public interface Filter<T extends Filter<T>> {
         );
     }
 
-    @SuppressWarnings("unchecked")
     static <T extends Filter<T>> T or(List<T> filters) {
         return Filters.reduce(
             filters,
