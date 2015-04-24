@@ -101,7 +101,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 .name("CTTL")
                 .network(new NetworkConfig()
                     .publicIpConfig(new PublicIpConfig()
-                                    .openPorts(8080)
+                        .openPorts(8080)
                     )
                 )
             )

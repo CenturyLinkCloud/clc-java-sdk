@@ -74,8 +74,8 @@ public class GroupService {
 
     public GroupMetadata findFirst(GroupFilter criteria) {
         return getFirst(
-                findLazy(criteria).limit(1).collect(toList()),
-                null
+            findLazy(criteria).limit(1).collect(toList()),
+            null
         );
     }
 
@@ -103,8 +103,8 @@ public class GroupService {
         GroupMetadata group = client.createGroup(converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup())));
 
         return new OperationFuture<>(
-                new IdGroupRef(groupConfig.getParentGroup().getDataCenter(), group.getId()),
-                new NoWaitingJobFuture()
+            new IdGroupRef(groupConfig.getParentGroup().getDataCenter(), group.getId()),
+            new NoWaitingJobFuture()
         );
     }
 
@@ -114,10 +114,12 @@ public class GroupService {
 
     public OperationFuture<Link> delete(GroupRef groupRef) {
         Link response = client.deleteGroup(idByRef(groupRef));
+
         return new OperationFuture<>(
-                response,
-                response.getId(),
-                queueClient);
+            response,
+            response.getId(),
+            queueClient
+        );
     }
 
     String idByRef(GroupRef ref) {

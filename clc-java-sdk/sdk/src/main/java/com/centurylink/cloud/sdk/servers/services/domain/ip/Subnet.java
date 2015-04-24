@@ -11,6 +11,18 @@ public class Subnet {
     private String mask;
     private String cidrMask;
 
+    public Subnet() {
+    }
+
+    public Subnet(String cidr) {
+        this.cidr = cidr;
+    }
+
+    public Subnet(String ipAddress, String mask) {
+        this.ipAddress = ipAddress;
+        this.mask = mask;
+    }
+
     // used with next method to define network in format as 192.168.2.0 with mask 255.255.128.0
     public Subnet ipAddress(String ipAddress) {
         this.ipAddress = ipAddress;

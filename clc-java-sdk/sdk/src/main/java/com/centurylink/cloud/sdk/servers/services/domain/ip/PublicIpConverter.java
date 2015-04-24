@@ -17,18 +17,18 @@ public class PublicIpConverter {
         List<PortConfig> ports = new ArrayList<>(publicIpConfig.getPorts().size());
         publicIpConfig.getPorts().stream()
             .forEach(port ->
-                            ports.add(new PortConfig()
-                                    .protocol(port.getProtocolType().name())
-                                    .port(port.getPort())
-                                    .portTo(port instanceof PortRangeConfig ? ((PortRangeConfig) port).getPortTo() : null))
+                ports.add(new PortConfig()
+                    .protocol(port.getProtocolType().name())
+                    .port(port.getPort())
+                    .portTo(port instanceof PortRangeConfig ? ((PortRangeConfig) port).getPortTo() : null))
             );
 
 
         return new CreatePublicIpRequest()
-                .internalIPAddress(publicIpConfig.getInternalIpAddress())
-                .sourceRestrictions(publicIpConfig.getRestrictions().stream()
-                        .map(Subnet::getCidr)
-                        .collect(toList()))
-                .ports(ports);
+            .internalIPAddress(publicIpConfig.getInternalIpAddress())
+            .sourceRestrictions(publicIpConfig.getRestrictions().stream()
+                .map(Subnet::getCidr)
+                .collect(toList()))
+            .ports(ports);
     }
 }

@@ -1,18 +1,23 @@
 package com.centurylink.cloud.sdk.servers.services.domain.ip;
 
 
+import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.port.SinglePortConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
+import static java.util.Arrays.asList;
+
 /**
  * @author Ilya Drabenia
  */
 public class PublicIpConfig {
-    private List<PortConfig> ports;
-    private List<Subnet> restrictions;
+    private List<PortConfig> ports = new ArrayList<>();
+    private List<Subnet> restrictions = new ArrayList<>();
     private String internalIpAddress;
 
     public List<PortConfig> getPorts() {
@@ -20,15 +25,16 @@ public class PublicIpConfig {
     }
 
     public PublicIpConfig openPorts(Integer... ports) {
-        List<PortConfig> portConfigs = new ArrayList<>(ports.length);
-        Arrays.asList(ports).forEach(portNumber -> portConfigs.add(new PortConfig().port(portNumber)));
+        this.ports.addAll(
+            map(ports, SinglePortConfig::new)
+        );
 
-        this.ports = portConfigs;
         return this;
     }
 
     public PublicIpConfig openPorts(PortConfig... ports) {
-        this.ports = Arrays.asList(ports);
+        this.ports.addAll(asList(ports));
+
         return this;
     }
 
@@ -37,16 +43,18 @@ public class PublicIpConfig {
     }
 
     public PublicIpConfig sourceRestrictions(String... restrictions) {
-        List<Subnet> subnets = new ArrayList<>(restrictions.length);
-        Arrays.asList(restrictions).forEach(restriction -> subnets.add(new Subnet().cidr(restriction)));
-
-        this.restrictions = subnets;
+        this.restrictions.addAll(
+            map(restrictions, Subnet::new)
+        );
 
         return this;
     }
 
     public PublicIpConfig sourceRestrictions(Subnet... restrictions) {
-        this.restrictions = Arrays.asList(restrictions);
+        this.restrictions.addAll(
+            asList(restrictions)
+        );
+
         return this;
     }
 
