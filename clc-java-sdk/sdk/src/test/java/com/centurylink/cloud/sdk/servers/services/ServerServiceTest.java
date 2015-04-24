@@ -1,12 +1,14 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
@@ -136,6 +138,34 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         assert !isNullOrEmpty(newServer.getId());
 
         cleanUpCreatedResources(newServer.asRefById());
+    }
+
+    //@Test(expectedExceptions = ResourceNotFoundException.class)
+    public void testDeleteServers() {
+        OperationFuture<ServerMetadata> future1 = serverService.create(anyServerConfig());
+        OperationFuture<ServerMetadata> future2 = serverService.create(anyServerConfig());
+
+        ServerMetadata testServer1 = future1
+                .waitUntilComplete()
+                .getResult();
+
+        ServerMetadata testServer2 = future2
+                .waitUntilComplete()
+                .getResult();
+
+        ServerRef ref1 = testServer1.asRefById();
+        ServerRef ref2 = testServer2.asRefById();
+
+        serverService.delete(ref1.asFilter().idIn(ref2.as(IdServerRef.class).getId())).waitUntilComplete();
+
+        //TODO find by non existing id throws com.fasterxml.jackson.databind.JsonMappingException
+//        //catch only 1st call of finding server
+//        try {
+//            serverService.findByRef(ref1);
+//        } catch (ResourceNotFoundException e) {
+//            serverService.findByRef(ref2);
+//        }
+
     }
 
     void cleanUpCreatedResources(ServerRef newServer) {

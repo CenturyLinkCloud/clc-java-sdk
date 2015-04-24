@@ -32,6 +32,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -135,6 +136,23 @@ public class ServerService {
             response.findStatusId(),
             queueClient
         );
+    }
+
+    public OperationFuture<List<ServerRef>> delete(ServerRef... servers) {
+        List<JobFuture> futures = new ArrayList<>(servers.length);
+        Arrays.asList(servers).stream()
+                .forEach(serverRef -> futures.add(delete(serverRef).jobFuture()));
+
+        return new OperationFuture<>(
+                Arrays.asList(servers),
+                new ParallelJobsFuture(futures));
+    }
+
+    public OperationFuture<List<ServerRef>> delete(ServerFilter filter) {
+        List<ServerRef> serverRefs = find(filter).stream()
+                .map(metadata -> metadata.asRefById())
+                .collect(toList());
+        return delete(serverRefs.toArray(new ServerRef[serverRefs.size()]));
     }
 
     public ServerMetadata findByRef(ServerRef serverRef) {
