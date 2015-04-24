@@ -1,11 +1,11 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.*;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
+import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
@@ -17,26 +17,23 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerComm
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.future.CreateServerJobFuture;
+import com.centurylink.cloud.sdk.servers.services.domain.server.future.PauseServerJobFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
-import com.google.common.base.Function;
-import com.google.common.util.concurrent.AsyncFunction;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.isAlwaysTruePredicate;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -90,38 +87,6 @@ public class ServerService {
             return
                 new NoWaitingJobFuture();
         }
-    }
-
-    public ListenableFuture<OperationFuture<ServerMetadata>> createAsync(CreateServerCommand command) {
-        final SettableFuture<BaseServerResponse> response =
-            client
-                .createAsync(
-                        serverConverter.buildCreateServerRequest(command)
-                );
-
-        ListenableFuture<ServerMetadata> metadata =
-            Futures.transform(response, new AsyncFunction<BaseServerResponse, ServerMetadata>() {
-                @Override
-                public ListenableFuture<ServerMetadata> apply(BaseServerResponse input) throws Exception {
-                    return client.findServerByUuidAsync(input.findServerUuid());
-                }
-            });
-
-        return
-            Futures.transform(metadata, new Function<ServerMetadata, OperationFuture<ServerMetadata>>() {
-                @Override
-                public OperationFuture<ServerMetadata> apply(ServerMetadata serverInfo) {
-                    try {
-                        return new OperationFuture<>(
-                            serverInfo,
-                            response.get().findStatusId(),
-                            queueClient
-                        );
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new ClcClientException(e);
-                    }
-                }
-            });
     }
 
     public OperationFuture<ServerRef> delete(ServerRef server) {
@@ -295,9 +260,23 @@ public class ServerService {
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<BaseServerResponse>> pause(ServerRef... serverRefs) {
-        return powerOperationResponse(
-            client.pause(ids(serverRefs))
-        );
+        BaseServerListResponse response = client.pause(ids(serverRefs));
+
+        return
+            new OperationFuture<>(
+                response,
+                new ParallelJobsFuture(
+                    response.stream().map(r ->
+                        new PauseServerJobFuture(
+                            r.findStatusId(),
+                            r.getServer(),
+                            queueClient,
+                            client
+                        )
+                    )
+                    .collect(toList())
+                )
+            );
     }
 
     /**
@@ -523,10 +502,11 @@ public class ServerService {
         checkNotNull(ipAddress, "ipAddress must be not null");
 
         Link response = client.removePublicIp(idByRef(serverRef), ipAddress);
+
         return new OperationFuture<>(
-                serverRef,
-                response.getId(),
-                queueClient
+            serverRef,
+            response.getId(),
+            queueClient
         );
     }
 
@@ -542,12 +522,12 @@ public class ServerService {
         serverMetadata.getDetails().getIpAddresses()
             .stream()
             .map(IpAddress::getPublicIp)
-                .filter(notNull())
+            .filter(notNull())
             .forEach(address -> jobFutures.add(removePublicIp(serverRef, address).jobFuture()));
 
         return new OperationFuture<>(
-                serverRef,
-                new ParallelJobsFuture(jobFutures)
+            serverRef,
+            new ParallelJobsFuture(jobFutures)
         );
     }
 

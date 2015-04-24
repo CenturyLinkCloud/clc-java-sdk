@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.w
 import java.time.Duration;
 import java.util.function.Supplier;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.Instant.now;
 
 /**
@@ -18,8 +19,8 @@ public class SingleJobFuture extends AbstractSingleJobFuture {
     private final String statusId;
 
     public SingleJobFuture(String statusId, QueueClient queueClient) {
-        this.queueClient = queueClient;
-        this.statusId = statusId;
+        this.queueClient = checkNotNull(queueClient, "Queue client must be not a null");
+        this.statusId = checkNotNull(statusId, "Status ID must be not a null");
     }
 
     @Override
