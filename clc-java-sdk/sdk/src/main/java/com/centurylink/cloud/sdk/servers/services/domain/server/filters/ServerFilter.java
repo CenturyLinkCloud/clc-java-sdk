@@ -121,7 +121,7 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
-    public ServerFilter groupsIn(GroupRef... groups) {
+    public ServerFilter groups(GroupRef... groups) {
         groupFilter = groupFilter.and(Filter.or(
             map(groups, GroupRef::asFilter)
         ));
@@ -135,7 +135,6 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
-    // TODO implement optimization for search servers by ID without retrieving all servers info from all data centers
     public ServerFilter idIn(String... ids) {
         serverIds.addAll(asList(ids));
 

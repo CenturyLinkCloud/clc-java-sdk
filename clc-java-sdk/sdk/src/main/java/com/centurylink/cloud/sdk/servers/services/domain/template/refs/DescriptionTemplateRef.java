@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.refs;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 
 /**
  * @author ilya.drabenia
@@ -23,5 +24,13 @@ public class DescriptionTemplateRef extends TemplateRef {
 
     public DescriptionTemplateRef dataCenter(DataCenterRef dataCenter) {
         return new DescriptionTemplateRef(dataCenter, description);
+    }
+
+    @Override
+    public TemplateFilter asFilter() {
+        return (
+            new TemplateFilter()
+                .descriptionContains(description)
+        );
     }
 }

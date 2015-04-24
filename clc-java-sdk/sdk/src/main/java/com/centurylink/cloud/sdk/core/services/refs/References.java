@@ -2,6 +2,8 @@ package com.centurylink.cloud.sdk.core.services.refs;
 
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 
+import java.util.function.Supplier;
+
 /**
  * @author Ilya Drabenia
  */

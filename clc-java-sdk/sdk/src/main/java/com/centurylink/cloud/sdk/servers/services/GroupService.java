@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
@@ -19,6 +20,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.google.inject.Inject;
 
 import java.util.List;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionIfNotFound;
@@ -100,7 +102,9 @@ public class GroupService {
         checkNotNull(groupConfig.getName(), "Name of GroupConfig must be not null");
         checkNotNull(groupConfig.getParentGroup(), "ParentGroup of GroupConfig must be not null");
 
-        GroupMetadata group = client.createGroup(converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup())));
+        GroupMetadata group = client.createGroup(
+            converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
+        );
 
         return new OperationFuture<>(
             new IdGroupRef(groupConfig.getParentGroup().getDataCenter(), group.getId()),

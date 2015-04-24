@@ -2,22 +2,32 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
+import com.google.common.base.Predicates;
 import com.google.inject.Inject;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.centurylink.cloud.sdk.core.services.refs.Reference.notFound;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author ilya.drabenia
@@ -40,44 +50,37 @@ public class TemplateService {
         this.queueClient = queueClient;
     }
 
-    public TemplateMetadata findByRef(TemplateRef template) {
-        GetDeploymentCapabilitiesResponse deploymentCapabilities =
-            dataCentersClient
-                .getDataCenterDeploymentCapabilities(
-                    dataCenterService.findByRef(template.getDataCenter()).getId()
-                );
+    public TemplateMetadata findByRef(TemplateRef templateRef) {
+        checkNotNull(templateRef, "Reference must be not a null");
 
-        if (template.is(NameTemplateRef.class)) {
-            return
-                deploymentCapabilities
-                    .findByName(
-                        template.as(NameTemplateRef.class).getName()
-                    );
-        } else if (template.is(DescriptionTemplateRef.class)) {
-            return
-                deploymentCapabilities
-                    .findByDescription(
-                        template.as(DescriptionTemplateRef.class).getDescription()
-                    );
-        } else {
-            return deploymentCapabilities.findByOsType(template.as(OsTemplateRef.class));
-        }
+        return
+            findLazy(templateRef.asFilter())
+                .findFirst()
+                .orElseThrow(notFound(templateRef));
+    }
+
+    public List<TemplateMetadata> find(TemplateFilter filter) {
+        checkNotNull(filter, "Filter must be not a null");
+
+        return findLazy(filter).collect(toList());
+    }
+
+    public Stream<TemplateMetadata> findLazy(TemplateFilter filter) {
+        checkNotNull(filter, "Filter must be not a null");
+
+        return
+            dataCenterService
+                .findLazy(filter.getDataCenter())
+                .map(DataCenterMetadata::getId)
+                .map(dataCentersClient::getDataCenterDeploymentCapabilities)
+                .flatMap(c -> c.getTemplates().stream())
+                .filter(filter.getPredicate());
     }
 
     public List<Template> findByDataCenter(String dataCenterId) {
         return converter.templateListFrom(
             dataCentersClient
                 .getDataCenterDeploymentCapabilities(dataCenterId)
-                .getTemplates()
-        );
-    }
-
-    public List<Template> findByDataCenter(DataCenterRef dataCenter) {
-        return converter.templateListFrom(
-            dataCentersClient
-                .getDataCenterDeploymentCapabilities(
-                    dataCenterService.findByRef(dataCenter).getId()
-                )
                 .getTemplates()
         );
     }
