@@ -1,13 +1,11 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.tests.fixtures.ServerStubFixture;
@@ -114,6 +112,18 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
+    private void resetServer() {
+        serverService
+            .reset(serverFilter)
+            .waitUntilComplete();
+    }
+
+    private void rebootServer() {
+        serverService
+            .reboot(serverFilter)
+            .waitUntilComplete();
+    }
+
     public void testPowerOff() {
         testShutDown();
         powerOffServer();
@@ -175,8 +185,27 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
         assertEquals(loadServerDetails(server2).getSnapshots().size(), 1);
     }
 
-    public void testArchive() {
+    public void testRebootServer() {
         testCreateSnapshot();
+
+        rebootServer();
+
+        assertThatServerPowerStateHasStatus(server1, "started");
+        assertThatServerPowerStateHasStatus(server2, "started");
+    }
+
+    public void testReset() {
+        testRebootServer();
+
+        resetServer();
+
+        assertThatServerPowerStateHasStatus(server1, "started");
+        assertThatServerPowerStateHasStatus(server2, "started");
+    }
+
+
+    public void testArchive() {
+        testReset();
 
         assertThatServerHasStatus(server1, "active");
         assertThatServerHasStatus(server2, "active");
@@ -188,7 +217,7 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
     }
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testRestore() throws Exception {
+    public void runChainTests() {
         ServerStubFixture fixture = new ServerStubFixture(serverClient, queueClient);
 
         ServerMetadata serverMetadata1 = fixture.getServerMetadata();
@@ -196,15 +225,9 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
 
         server1 = serverMetadata1.asRefById();
         server2 = serverMetadata2.asRefById();
-        serverFilter = new ServerFilter().idIn(serverMetadata1.getId(), serverMetadata2.getId());
-
-        String groupId = loadServerMetadata(server1).getGroupId();
-        GroupRef group = new IdGroupRef(DataCenter.refByName("FranKfUrt"), groupId);
+        serverFilter = fixture.getServerFilterById();
 
         testArchive();
-
-//        restoreServer(group, server1);
-//        restoreServer(group, server2);
-//        assertThatServerHasStatus(server1, "active");
+        fixture.activateServers();
     }
 }

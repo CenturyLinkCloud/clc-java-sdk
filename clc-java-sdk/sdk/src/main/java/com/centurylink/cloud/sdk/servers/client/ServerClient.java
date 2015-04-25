@@ -17,7 +17,9 @@ import com.google.inject.Inject;
 import org.apache.http.HttpStatus;
 
 import javax.ws.rs.client.InvocationCallback;
+import javax.ws.rs.client.WebTarget;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
@@ -92,11 +94,19 @@ public class ServerClient extends BaseSdkClient {
                 .get(ServerMetadata.class);
     }
 
-    public GroupMetadata getGroup(String rootGroupId) {
-        return
+    public GroupMetadata getGroup(String rootGroupId, boolean includeServerDetails) {
+        WebTarget webTarget =
             client("/groups/{accountAlias}/{rootGroupId}")
-                .resolveTemplate("rootGroupId", rootGroupId)
-                .request().get(GroupMetadata.class);
+                .resolveTemplate("rootGroupId", rootGroupId);
+
+        if (includeServerDetails) {
+            webTarget = webTarget.queryParam("serverDetail", "detailed");
+        }
+
+        return
+            webTarget
+                .request()
+                .get(GroupMetadata.class);
     }
 
     public GroupMetadata createGroup(CreateGroupRequest createGroupRequest) {
