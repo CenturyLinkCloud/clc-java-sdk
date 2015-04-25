@@ -114,6 +114,18 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
+    private void resetServer() {
+        serverService
+            .reset(serverFilter)
+            .waitUntilComplete();
+    }
+
+    private void rebootServer() {
+        serverService
+            .reboot(serverFilter)
+            .waitUntilComplete();
+    }
+
     public void testPowerOff() {
         testShutDown();
         powerOffServer();
@@ -175,20 +187,26 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
         assertEquals(loadServerDetails(server2).getSnapshots().size(), 1);
     }
 
-    public void testArchive() {
+    public void testRebootServer() {
         testCreateSnapshot();
 
-        assertThatServerHasStatus(server1, "active");
-        assertThatServerHasStatus(server2, "active");
+        rebootServer();
 
-        archiveServer();
+        assertThatServerPowerStateHasStatus(server1, "started");
+        assertThatServerPowerStateHasStatus(server2, "started");
+    }
 
-        assertThatServerHasStatus(server1, "archived");
-        assertThatServerHasStatus(server2, "archived");
+    public void testReset() {
+        testRebootServer();
+
+        resetServer();
+
+        assertThatServerPowerStateHasStatus(server1, "started");
+        assertThatServerPowerStateHasStatus(server2, "started");
     }
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testRestore() throws Exception {
+    public void testArchive() {
         ServerStubFixture fixture = new ServerStubFixture(serverClient, queueClient);
 
         ServerMetadata serverMetadata1 = fixture.getServerMetadata();
@@ -198,13 +216,14 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
         server2 = serverMetadata2.asRefById();
         serverFilter = new ServerFilter().idIn(serverMetadata1.getId(), serverMetadata2.getId());
 
-        String groupId = loadServerMetadata(server1).getGroupId();
-        GroupRef group = new IdGroupRef(DataCenter.refByName("FranKfUrt"), groupId);
+        testReset();
 
-        testArchive();
+        assertThatServerHasStatus(server1, "active");
+        assertThatServerHasStatus(server2, "active");
 
-//        restoreServer(group, server1);
-//        restoreServer(group, server2);
-//        assertThatServerHasStatus(server1, "active");
+        archiveServer();
+
+        assertThatServerHasStatus(server1, "archived");
+        assertThatServerHasStatus(server2, "archived");
     }
 }

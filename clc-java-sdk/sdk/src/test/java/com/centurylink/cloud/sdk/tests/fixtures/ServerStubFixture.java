@@ -11,8 +11,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -34,7 +32,7 @@ public class ServerStubFixture {
 
     private static Link link;
 
-    private ServerMetadata serverMetadata;
+    private ServerMetadata serverMetadata1;
     private ServerMetadata serverMetadata2;
 
     /* mocked server client*/
@@ -44,7 +42,7 @@ public class ServerStubFixture {
     QueueClient queueClient;
 
     public ServerMetadata getServerMetadata() {
-        return serverMetadata;
+        return serverMetadata1;
     }
 
     public ServerMetadata getAnotherServerMetadata() {
@@ -59,7 +57,7 @@ public class ServerStubFixture {
     }
 
     private void initMockAndStubs() {
-        serverMetadata = createServerMetadata(serverId);
+        serverMetadata1 = createServerMetadata(serverId);
         serverMetadata2 = createServerMetadata(serverId2);
 
         link = createLink();
@@ -68,22 +66,22 @@ public class ServerStubFixture {
         when(queueClient.getJobStatus(anyString())).thenReturn(statusResponse);
 
         List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(serverMetadata.getId());
+        serverIdList.add(serverMetadata1.getId());
         serverIdList.add(serverMetadata2.getId());
 
         BaseServerListResponse baseServerListResponse = createBaseServerListResponse();
 
         when(serverClient.findServerById(serverIdList.get(0)))
-            .thenReturn(serverMetadata);
+            .thenReturn(serverMetadata1);
 
         when(serverClient.findServerById(serverIdList.get(1)))
-                .thenReturn(serverMetadata);
+                .thenReturn(serverMetadata1);
 
         when(serverClient.powerOn(anyListOf(String.class)))
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata.getDetails().setPowerState("started");
+                        serverMetadata1.getDetails().setPowerState("started");
                         serverMetadata2.getDetails().setPowerState("started");
                         return baseServerListResponse;
                     }
@@ -94,7 +92,7 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata.getDetails().setPowerState("stopped");
+                        serverMetadata1.getDetails().setPowerState("stopped");
                         serverMetadata2.getDetails().setPowerState("stopped");
                         return baseServerListResponse;
                     }
@@ -105,7 +103,7 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata.getDetails().setInMaintenanceMode(true);
+                        serverMetadata1.getDetails().setInMaintenanceMode(true);
                         serverMetadata2.getDetails().setInMaintenanceMode(true);
                         return baseServerListResponse;
                     }
@@ -116,7 +114,7 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata.getDetails().setInMaintenanceMode(false);
+                        serverMetadata1.getDetails().setInMaintenanceMode(false);
                         serverMetadata2.getDetails().setInMaintenanceMode(false);
                         return baseServerListResponse;
                     }
@@ -127,7 +125,7 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata.getDetails().setPowerState("paused");
+                        serverMetadata1.getDetails().setPowerState("paused");
                         serverMetadata2.getDetails().setPowerState("paused");
                         return baseServerListResponse;
                     }
@@ -144,7 +142,7 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata.setStatus("archived");
+                        serverMetadata1.setStatus("archived");
                         serverMetadata2.setStatus("archived");
                         return baseServerListResponse;
                     }
@@ -155,7 +153,7 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<Link>() {
                     public Link answer(InvocationOnMock invocation) {
-                        serverMetadata.setStatus("active");
+                        serverMetadata1.setStatus("active");
                         serverMetadata2.setStatus("active");
                         return link;
                     }
@@ -166,7 +164,7 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata.getDetails().setPowerState("stopped");
+                        serverMetadata1.getDetails().setPowerState("stopped");
                         serverMetadata2.getDetails().setPowerState("stopped");
                         return baseServerListResponse;
                     }
@@ -177,7 +175,7 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata.getDetails().getSnapshots().add(new Object());
+                        serverMetadata1.getDetails().getSnapshots().add(new Object());
                         serverMetadata2.getDetails().getSnapshots().add(new Object());
                         return baseServerListResponse;
                     }
