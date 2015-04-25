@@ -75,7 +75,7 @@ public class ServerStubFixture {
         when(serverClient.findServerById(serverIdList.get(1)))
                 .thenReturn(serverMetadata1);
 
-        when(serverClient.getGroup(groupId))
+        when(serverClient.getGroup(groupId, any()))
                 .thenReturn(groupMetadata);
 
         when(serverClient.powerOn(anyListOf(String.class)))

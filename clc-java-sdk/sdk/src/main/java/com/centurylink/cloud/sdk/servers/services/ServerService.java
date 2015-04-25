@@ -108,7 +108,8 @@ public class ServerService {
 
         return new OperationFuture<>(
             Arrays.asList(servers),
-            new ParallelJobsFuture(futures));
+            new ParallelJobsFuture(futures)
+        );
     }
 
     public OperationFuture<List<ServerRef>> delete(ServerFilter filter) {
@@ -139,7 +140,8 @@ public class ServerService {
     public Stream<ServerMetadata> findLazy(ServerFilter serverFilter) {
         if (isAlwaysTruePredicate(serverFilter.getPredicate())
             && isAlwaysTruePredicate(serverFilter.getGroupFilter().getPredicate())
-            && isAlwaysTruePredicate(serverFilter.getGroupFilter().getDataCenterFilter().getPredicate())) {
+            && isAlwaysTruePredicate(serverFilter.getGroupFilter().getDataCenterFilter().getPredicate())
+            && serverFilter.getServerIds().size() > 0) {
             return
                 serverFilter
                     .getServerIds()
@@ -150,7 +152,8 @@ public class ServerService {
             return
                 groupService
                     .findLazy(serverFilter.getGroupFilter())
-                    .flatMap(group -> group.getAllServers().stream())
+                    .map(group -> client.getGroup(group.getId(), true))
+                    .flatMap(group -> group.getServers().stream())
                     .filter(serverFilter.getPredicate());
         }
     }

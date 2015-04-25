@@ -147,6 +147,11 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
+    public ServerFilter onlyActive() {
+        predicate = predicate.and(s -> s.getStatus().equals("active"));
+        return this;
+    }
+
     @Override
     public ServerFilter and(ServerFilter otherFilter) {
         return new ServerFilter()

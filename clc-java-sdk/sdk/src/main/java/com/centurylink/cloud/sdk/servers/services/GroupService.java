@@ -67,7 +67,7 @@ public class GroupService {
 
         return
             dataCenters
-                .map(d -> client.getGroup(d.getGroup().getId()))
+                .map(d -> client.getGroup(d.getGroup().getId(), false))
                 .flatMap(g -> g.getAllGroups().stream())
                 .filter(criteria.getPredicate());
     }
@@ -87,7 +87,7 @@ public class GroupService {
             .getGroup()
             .getId();
 
-        GroupMetadata result = client.getGroup(rootGroupId);
+        GroupMetadata result = client.getGroup(rootGroupId, false);
 
         return converter.newGroupList(
             dataCenterService.findByRef(dataCenter).getId(),
@@ -121,7 +121,7 @@ public class GroupService {
     }
 
     public GroupMetadata get(GroupRef groupRef) {
-        return client.getGroup(idByRef(groupRef));
+        return client.getGroup(idByRef(groupRef), false);
     }
 
     public OperationFuture<Link> delete(GroupRef groupRef) {

@@ -28,7 +28,7 @@ public class GroupClientTest extends AbstractServersSdkTest {
                 .getGroup()
                 .getId();
 
-        GroupMetadata groupResult = client.getGroup(rootGroupId);
+        GroupMetadata groupResult = client.getGroup(rootGroupId, false);
 
         assert groupResult.getId() != null;
         assert groupResult.findGroupByName("Archive") != null;
