@@ -1,13 +1,11 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.tests.fixtures.ServerStubFixture;
@@ -205,17 +203,8 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
         assertThatServerPowerStateHasStatus(server2, "started");
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+
     public void testArchive() {
-        ServerStubFixture fixture = new ServerStubFixture(serverClient, queueClient);
-
-        ServerMetadata serverMetadata1 = fixture.getServerMetadata();
-        ServerMetadata serverMetadata2 = fixture.getAnotherServerMetadata();
-
-        server1 = serverMetadata1.asRefById();
-        server2 = serverMetadata2.asRefById();
-        serverFilter = new ServerFilter().idIn(serverMetadata1.getId(), serverMetadata2.getId());
-
         testReset();
 
         assertThatServerHasStatus(server1, "active");
@@ -225,5 +214,20 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
 
         assertThatServerHasStatus(server1, "archived");
         assertThatServerHasStatus(server2, "archived");
+    }
+
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    public void runChainTests() {
+        ServerStubFixture fixture = new ServerStubFixture(serverClient, queueClient);
+
+        ServerMetadata serverMetadata1 = fixture.getServerMetadata();
+        ServerMetadata serverMetadata2 = fixture.getAnotherServerMetadata();
+
+        server1 = serverMetadata1.asRefById();
+        server2 = serverMetadata2.asRefById();
+        serverFilter = fixture.getServerFilterById();
+
+        testArchive();
+        fixture.activateServers();
     }
 }

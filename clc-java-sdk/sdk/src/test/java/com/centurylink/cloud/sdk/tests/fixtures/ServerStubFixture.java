@@ -11,6 +11,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -29,6 +30,7 @@ public class ServerStubFixture {
 
     private final static String serverId = "de1altdtcrt777";
     private final static String serverId2 = "de1altdtcrt888";
+    private final static String groupId = "de10392941c64838a4f0daec38e67f5a";
 
     private static Link link;
 
@@ -40,14 +42,6 @@ public class ServerStubFixture {
 
     /* mocked queue client*/
     QueueClient queueClient;
-
-    public ServerMetadata getServerMetadata() {
-        return serverMetadata1;
-    }
-
-    public ServerMetadata getAnotherServerMetadata() {
-        return serverMetadata2;
-    }
 
     public ServerStubFixture(ServerClient serverClient, QueueClient queueClient) {
         this.serverClient = serverClient;
@@ -183,12 +177,28 @@ public class ServerStubFixture {
             );
     }
 
+    public ServerMetadata getServerMetadata() {
+        return serverMetadata1;
+    }
+
+    public ServerMetadata getAnotherServerMetadata() {
+        return serverMetadata2;
+    }
+
+    public ServerFilter getServerFilterById() {
+        return new ServerFilter().idIn(serverMetadata1.getId(), serverMetadata2.getId());
+    }
+
+    public ServerFilter getServerFilterByGroupId() {
+        return new ServerFilter().groupIdIn(groupId);
+    }
+
     private ServerMetadata createServerMetadata(String serverId) {
         return
             new ServerMetadata() {{
                 setId(serverId);
                 setName(serverId.toUpperCase());
-                setGroupId("de10392941c64838a4f0daec38e67f5a");
+                setGroupId(groupId);
                 setIsTemplate(false);
                 setLocationId("DE1");
                 setOsType("CentOS 5 64-bit");
@@ -210,6 +220,12 @@ public class ServerStubFixture {
                     setInMaintenanceMode(false);
                 }});
             }};
+    }
+
+    /* replace with restore stub */
+    public void activateServers() {
+        serverMetadata1.setStatus("active");
+        serverMetadata2.setStatus("active");
     }
 
     private Link createLink() {
