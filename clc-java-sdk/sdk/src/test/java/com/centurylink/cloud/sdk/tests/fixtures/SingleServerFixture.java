@@ -70,10 +70,10 @@ public class SingleServerFixture {
 
     @AfterSuite(groups = LONG_RUNNING)
     public void deleteServer() {
-        new ClcSdk()
-            .serverService()
-            .delete(server)
-            .waitUntilComplete();
+//        new ClcSdk()
+//            .serverService()
+//            .delete(server)
+//            .waitUntilComplete();
     }
 
 }
