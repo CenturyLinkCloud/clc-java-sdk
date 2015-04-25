@@ -283,23 +283,25 @@ public class ServerService {
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<BaseServerResponse>> pause(ServerRef... serverRefs) {
-        BaseServerListResponse response = client.pause(ids(serverRefs));
+        return powerOperationResponse(
+            client.pause(ids(serverRefs))
+        );
 
-        return
-            new OperationFuture<>(
-                response,
-                new ParallelJobsFuture(
-                    response.stream().map(r ->
-                        new PauseServerJobFuture(
-                            r.findStatusId(),
-                            r.getServer(),
-                            queueClient,
-                            client
-                        )
-                    )
-                    .collect(toList())
-                )
-            );
+//        return
+//            new OperationFuture<>(
+//                response,
+//                new ParallelJobsFuture(
+//                    response.stream().map(r ->
+//                        new PauseServerJobFuture(
+//                            r.findStatusId(),
+//                            r.getServer(),
+//                            queueClient,
+//                            client
+//                        )
+//                    )
+//                    .collect(toList())
+//                )
+//            );
     }
 
     /**
