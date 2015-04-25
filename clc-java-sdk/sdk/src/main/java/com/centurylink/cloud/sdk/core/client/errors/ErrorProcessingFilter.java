@@ -31,7 +31,7 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
     }
 
     private boolean isResponseSuccess(ClientResponseContext responseContext) {
-        return asList(OK, CREATED, ACCEPTED).contains(responseContext.getStatusInfo());
+        return asList(OK, CREATED, ACCEPTED, NO_CONTENT).contains(responseContext.getStatusInfo());
     }
 
     private ObjectMapper objectMapper() {
