@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.queue.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
@@ -37,6 +38,8 @@ public class ServerStubFixture {
     private ServerMetadata serverMetadata1;
     private ServerMetadata serverMetadata2;
 
+    private GroupMetadata groupMetadata;
+
     /* mocked server client*/
     ServerClient serverClient;
 
@@ -54,6 +57,7 @@ public class ServerStubFixture {
         serverMetadata1 = createServerMetadata(serverId);
         serverMetadata2 = createServerMetadata(serverId2);
 
+        groupMetadata = createGroupMetadata();
         link = createLink();
 
         GetStatusResponse statusResponse = new GetStatusResponse("succeeded");
@@ -70,6 +74,9 @@ public class ServerStubFixture {
 
         when(serverClient.findServerById(serverIdList.get(1)))
                 .thenReturn(serverMetadata1);
+
+        when(serverClient.getGroup(groupId))
+                .thenReturn(groupMetadata);
 
         when(serverClient.powerOn(anyListOf(String.class)))
             .thenAnswer(
@@ -185,12 +192,22 @@ public class ServerStubFixture {
         return serverMetadata2;
     }
 
+    public GroupMetadata getGroupMetadata() {
+        return groupMetadata;
+    }
+
     public ServerFilter getServerFilterById() {
         return new ServerFilter().idIn(serverMetadata1.getId(), serverMetadata2.getId());
     }
 
     public ServerFilter getServerFilterByGroupId() {
         return new ServerFilter().groupIdIn(groupId);
+    }
+
+    /* replace with restore stub */
+    public void activateServers() {
+        serverMetadata1.setStatus("active");
+        serverMetadata2.setStatus("active");
     }
 
     private ServerMetadata createServerMetadata(String serverId) {
@@ -222,10 +239,15 @@ public class ServerStubFixture {
             }};
     }
 
-    /* replace with restore stub */
-    public void activateServers() {
-        serverMetadata1.setStatus("active");
-        serverMetadata2.setStatus("active");
+    private GroupMetadata createGroupMetadata() {
+        return new GroupMetadata() {{
+            setId(groupId);
+            setName("Default Group");
+            setLocationId("CA1");
+            setType("default");
+            setStatus("active");
+            setServersCount(3);
+        }};
     }
 
     private Link createLink() {
