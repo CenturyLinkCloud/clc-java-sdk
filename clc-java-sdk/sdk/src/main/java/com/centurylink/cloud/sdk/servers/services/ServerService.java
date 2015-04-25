@@ -91,6 +91,11 @@ public class ServerService {
         }
     }
 
+    /**
+     * Delete existing server
+     * @param server server reference
+     * @return OperationFuture wrapper for ServerRef
+     */
     public OperationFuture<ServerRef> delete(ServerRef server) {
         BaseServerResponse response = client.delete(idByRef(server));
 
@@ -101,6 +106,11 @@ public class ServerService {
         );
     }
 
+    /**
+     * Delete existing servers
+     * @param servers the array of servers to delete
+     * @return OperationFuture wrapper for list of ServerRef
+     */
     public OperationFuture<List<ServerRef>> delete(ServerRef... servers) {
         List<JobFuture> futures = Arrays.asList(servers).stream()
             .map(serverRef -> delete(serverRef).jobFuture())
@@ -111,11 +121,21 @@ public class ServerService {
             new ParallelJobsFuture(futures));
     }
 
+    /**
+     * Delete existing servers
+     * @param filter server filter object
+     * @return OperationFuture wrapper for list of ServerRef
+     */
     public OperationFuture<List<ServerRef>> delete(ServerFilter filter) {
+        return delete(getRefsFromFilter(filter));
+    }
+
+    ServerRef[] getRefsFromFilter(ServerFilter filter) {
         List<ServerRef> serverRefs = find(filter).stream()
             .map(metadata -> metadata.asRefById())
             .collect(toList());
-        return delete(serverRefs.toArray(new ServerRef[serverRefs.size()]));
+
+        return serverRefs.toArray(new ServerRef[serverRefs.size()]);
     }
 
     public ServerMetadata findByRef(ServerRef serverRef) {
@@ -124,7 +144,7 @@ public class ServerService {
                 serverRef.asFilter()
             )
             .findFirst().orElseThrow(() ->
-                new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
+                    new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
             );
     }
 
@@ -162,10 +182,10 @@ public class ServerService {
     public OperationFuture<Template> convertToTemplate(CreateTemplateCommand command) {
         BaseServerResponse response =
             client.convertToTemplate(new CreateTemplateRequest()
-                .serverId(command.getServer().as(IdServerRef.class).getId())
-                .description(command.getDescription())
-                .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
-                .password(command.getPassword())
+                    .serverId(command.getServer().as(IdServerRef.class).getId())
+                    .description(command.getDescription())
+                    .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
+                    .password(command.getPassword())
             );
 
         return new OperationFuture<>(
@@ -488,7 +508,7 @@ public class ServerService {
      * Add public IP to server
      *
      * @param serverRef        server reference
-     * @param publicIpConfig publicIp metadata object
+     * @param publicIpConfig publicIp config
      * @return OperationFuture wrapper for ServerRef
      */
     public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpConfig publicIpConfig) {
@@ -498,6 +518,54 @@ public class ServerService {
             response.getId(),
             queueClient
         );
+    }
+
+    /**
+     * Modify existing public IP on server
+     * @param server server reference
+     * @param config publicIp config
+     * @return OperationFuture wrapper for ServerRef
+     */
+    public OperationFuture<ServerRef> modifyPublicIp(ServerRef server, PublicIpConfig config) {
+        checkNotNull(config, "PublicIpConfig must be not null");
+        checkNotNull(config.getPublicIp(), "PublicIpConfig.publicIp must be not null");
+        config.internalIpAddress(null);
+        Link response = client.modifyPublicIp(idByRef(server),
+            config.getPublicIp(),
+            publicIpConverter.createPublicIpRequest(config)
+        );
+
+        return new OperationFuture<>(
+            server,
+            response.getId(),
+            queueClient
+        );
+    }
+
+    /**
+     * Modify existing public IP on servers
+     * @param servers The list of server references
+     * @param config  publicIp config
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<ServerRef>> modifyPublicIp(List<ServerRef> servers, PublicIpConfig config) {
+        List<JobFuture> futures = servers.stream()
+            .map(serverRef -> modifyPublicIp(serverRef, config).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            servers,
+            new ParallelJobsFuture(futures));
+    }
+
+    /**
+     * Modify existing public IP on servers
+     * @param filter The server filter object
+     * @param config  publicIp config
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<ServerRef>> modifyPublicIp(ServerFilter filter, PublicIpConfig config) {
+        return modifyPublicIp(Arrays.asList(getRefsFromFilter(filter)), config);
     }
 
     /**

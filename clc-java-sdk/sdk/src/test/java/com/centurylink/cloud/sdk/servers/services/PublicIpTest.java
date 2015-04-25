@@ -1,8 +1,8 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.client.domain.ip.CreatePublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import org.apache.commons.net.util.SubnetUtils;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
@@ -31,39 +32,74 @@ public class PublicIpTest extends AbstractServersSdkTest {
     ServerService serverService;
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testPublicIpTest() {
+    public void testPublicIp() {
+        new SingleServerFixture().createServer();
         ServerRef serverRef = SingleServerFixture.server();
 
+        assertEquals(serverService.findPublicIp(serverRef).size(), 0, "after server creation public ip doesn't exist");
+
+        //add public IP
         serverService
             .addPublicIp(serverRef,
                 new PublicIpConfig()
                     .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
                     .sourceRestrictions("70.100.60.140/32")
-            );
+            ).waitUntilComplete();
 
         List<IpAddress> ipAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
 
-
         ipAddresses.stream()
-                .filter(address -> address.getPublicIp() != null)
-                .forEach(address -> {
-                    PublicIpMetadata resp = serverService.getPublicIp(serverRef, address.getPublicIp());
-                    assertEquals(resp.getInternalIPAddress(), address.getInternal(), "internal ip addresses must be equal");
-                });
+            .filter(address -> address.getPublicIp() != null)
+            .forEach(address -> {
+                PublicIpMetadata resp = serverService.getPublicIp(serverRef, address.getPublicIp());
+                assertEquals(resp.getInternalIPAddress(), address.getInternal(), "internal ip addresses must be equal");
+            });
+
+        assertEquals(ipAddresses.stream().filter(address -> address.getPublicIp() != null).collect(toList()).size(), 1, "public ip must be added");
 
         int publicIpCount = ipAddresses.stream()
-                .filter(address -> address.getPublicIp() != null)
-                .collect(toList())
-                .size();
+            .filter(address -> address.getPublicIp() != null)
+            .collect(toList())
+            .size();
 
+        //find public IP by server
         List<PublicIpMetadata> publicIps = serverService.findPublicIp(serverRef);
         assertEquals(publicIpCount, publicIps.size());
 
+        //modify public IP
+        Integer[] ports = {8081, 8888};
+        String sourceRestriction = "50.50.50.50/32";
+        String publicIpAddress = ipAddresses.stream()
+            .filter(address -> address.getPublicIp() != null)
+            .map(address -> address.getPublicIp())
+            .findFirst()
+            .get();
+        PublicIpConfig config = new PublicIpConfig()
+            .publicIp(publicIpAddress)
+            .openPorts(ports)
+            .sourceRestrictions(sourceRestriction);
+        serverService.modifyPublicIp(serverRef.asFilter(), config).waitUntilComplete();
+
+        PublicIpMetadata updatedPublicIp = serverService.getPublicIp(serverRef, publicIpAddress);
+
+        List<Integer> updatedPorts = updatedPublicIp.getPorts()
+            .stream()
+            .map(port -> port.getPort())
+            .collect(toList());
+        assertTrue(updatedPorts.containsAll(Arrays.asList(ports)), "added ports must be present");
+
+        List<String> updatedSourceRestrictions = updatedPublicIp.getSourceRestrictions()
+            .stream()
+            .map(restr -> restr.getCidr())
+            .collect(toList());
+        assertTrue(updatedSourceRestrictions.contains(sourceRestriction), "added source restriction must be present");
+
+        //delete public IP
         serverService.removePublicIp(serverRef).waitUntilComplete();
 
         List<IpAddress> initialIpAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
 
-        assertEquals(initialIpAddresses.stream().filter(addr -> addr.getPublicIp() != null).count(), 0, "count of public IP addresses must be 0");
+        assertEquals(initialIpAddresses.stream().filter(addr -> addr.getPublicIp() != null).count(), 0, "count of public IP addresses must be 0 after removing all of them");
     }
 
     @Test
@@ -75,11 +111,11 @@ public class PublicIpTest extends AbstractServersSdkTest {
         int portFrom = 8080;
         int portTo = 8888;
         PublicIpConfig config = new PublicIpConfig()
-                .internalIpAddress(internalIpAddress)
-                .openPorts(new PortConfig().port(portFrom).to(portTo))
-                .sourceRestrictions(new Subnet().cidr(cidr));
+            .internalIpAddress(internalIpAddress)
+            .openPorts(new PortConfig().port(portFrom).to(portTo))
+            .sourceRestrictions(new Subnet().cidr(cidr));
 
-        CreatePublicIpRequest req = converter.createPublicIpRequest(config);
+        PublicIpRequest req = converter.createPublicIpRequest(config);
 
         assertEquals(req.getInternalIPAddress(), config.getInternalIpAddress(), "check internal ip address");
         assertEquals(req.getPorts().size(), config.getPorts().size(), "check ports count");

@@ -1,12 +1,10 @@
 package com.centurylink.cloud.sdk.servers.services.domain.ip;
 
 
-import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.SinglePortConfig;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
@@ -16,9 +14,19 @@ import static java.util.Arrays.asList;
  * @author Ilya Drabenia
  */
 public class PublicIpConfig {
+    private String publicIp;
     private List<PortConfig> ports = new ArrayList<>();
     private List<Subnet> restrictions = new ArrayList<>();
     private String internalIpAddress;
+
+    public String getPublicIp() {
+        return publicIp;
+    }
+
+    public PublicIpConfig publicIp(String publicIp) {
+        this.publicIp = publicIp;
+        return this;
+    }
 
     public List<PortConfig> getPorts() {
         return ports;

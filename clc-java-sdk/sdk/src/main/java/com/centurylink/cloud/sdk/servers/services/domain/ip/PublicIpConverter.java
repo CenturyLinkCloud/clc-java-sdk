@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.ip;
 
-import com.centurylink.cloud.sdk.servers.client.domain.ip.CreatePublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PortConfig;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortRangeConfig;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.toList;
  * @author Aliaksandr Krasitski
  */
 public class PublicIpConverter {
-    public CreatePublicIpRequest createPublicIpRequest(PublicIpConfig publicIpConfig) {
+    public PublicIpRequest createPublicIpRequest(PublicIpConfig publicIpConfig) {
         List<PortConfig> ports = new ArrayList<>(publicIpConfig.getPorts().size());
         publicIpConfig.getPorts().stream()
             .forEach(port ->
@@ -23,8 +23,7 @@ public class PublicIpConverter {
                     .portTo(port instanceof PortRangeConfig ? ((PortRangeConfig) port).getPortTo() : null))
             );
 
-
-        return new CreatePublicIpRequest()
+        return new PublicIpRequest()
             .internalIPAddress(publicIpConfig.getInternalIpAddress())
             .sourceRestrictions(publicIpConfig.getRestrictions().stream()
                 .map(Subnet::getCidr)
