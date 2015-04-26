@@ -157,7 +157,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         ServerRef ref1 = testServer1.asRefById();
         ServerRef ref2 = testServer2.asRefById();
 
-        serverService.delete(ref1.asFilter().idIn(ref2.as(IdServerRef.class).getId())).waitUntilComplete();
+        serverService.delete(ref1.asFilter().id(ref2.as(IdServerRef.class).getId())).waitUntilComplete();
 
         //TODO find by non existing id throws com.fasterxml.jackson.databind.JsonMappingException
 //        //catch only 1st call of finding server

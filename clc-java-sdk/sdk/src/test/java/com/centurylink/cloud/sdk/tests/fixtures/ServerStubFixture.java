@@ -195,11 +195,11 @@ public class ServerStubFixture {
     }
 
     public ServerFilter getServerFilterById() {
-        return new ServerFilter().idIn(serverMetadata1.getId(), serverMetadata2.getId());
+        return new ServerFilter().id(serverMetadata1.getId(), serverMetadata2.getId());
     }
 
     public ServerFilter getServerFilterByGroupId() {
-        return new ServerFilter().groupIdIn(groupId);
+        return new ServerFilter().groupId(groupId);
     }
 
     /* replace with restore stub */

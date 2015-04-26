@@ -213,8 +213,9 @@ public class CreateServerRequest {
 
     public CreateServerRequest managedOS(boolean isManagedOS, boolean hasTemplateCapability) {
         if (isManagedOS && !hasTemplateCapability) {
-            throw new IllegalArgumentException("The template can't manage OS");
+            throw new IllegalArgumentException("Managed OS capabilities is not supported by this template");
         }
+
         this.isManagedOS = isManagedOS;
         return this;
     }

@@ -20,6 +20,6 @@ public class IdDataCenterRef extends DataCenterRef {
 
     @Override
     public DataCenterFilter asFilter() {
-        return new DataCenterFilter().idIn(id);
+        return new DataCenterFilter().id(id);
     }
 }

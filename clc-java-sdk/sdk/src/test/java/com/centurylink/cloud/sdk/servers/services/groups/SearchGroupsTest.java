@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
 import static java.util.Arrays.asList;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.when;
 
 /**
@@ -113,7 +112,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
         mockFrankfurtDataCenterRootGroup();
 
         List<GroupMetadata> groups = groupService.find(new GroupFilter()
-            .dataCenterIn(DE_FRANKFURT)
+            .dataCenters(DE_FRANKFURT)
             .nameContains("Group1")
         );
 

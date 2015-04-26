@@ -26,7 +26,7 @@ public abstract class GroupRef implements Reference {
 
         return new GroupFilter() {{
             if (getDataCenter() != null) {
-                dataCenterIn(GroupRef.this.getDataCenter());
+                dataCenters(GroupRef.this.getDataCenter());
             }
         }};
     }

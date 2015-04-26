@@ -6,7 +6,6 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filter
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
-import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture;
 
 import java.util.function.Predicate;
@@ -35,12 +34,12 @@ public class TemplateFilter implements Filter<TemplateFilter> {
         return this;
     }
 
-    public TemplateFilter dataCenterIdIn(String... ids) {
-        dataCenter.idIn(ids);
+    public TemplateFilter dataCenters(String... ids) {
+        dataCenter.id(ids);
         return this;
     }
 
-    public TemplateFilter dataCenterIn(DataCenterRef... dataCenters) {
+    public TemplateFilter dataCenters(DataCenterRef... dataCenters) {
         dataCenter.in(dataCenters);
 
         return this;
@@ -71,42 +70,14 @@ public class TemplateFilter implements Filter<TemplateFilter> {
         return this;
     }
 
-    public TemplateFilter osType(String osType) {
-        checkNotNull(osType, "OS type must be not a null");
+    public TemplateFilter osTypes(OsFilter... osFilter) {
+        checkNotNull(osFilter, "OS filter must be not a null");
 
-        predicate = predicate.and(combine(
-            TemplateMetadata::getOsType, containsIgnoreCase(osType)
-        ));
-
-        return this;
-    }
-
-    public TemplateFilter architecture(CpuArchitecture architecture) {
-        checkNotNull(architecture, "Architecture must be not a null");
-
-        predicate = predicate.and(combine(
-            TemplateMetadata::getOsType, containsIgnoreCase(architecture.getCode())
-        ));
-
-        return this;
-    }
-
-    public TemplateFilter version(String version) {
-        checkNotNull(version, "Version must be not a null");
-
-        predicate = predicate.and(combine(
-            TemplateMetadata::getOsType, containsIgnoreCase(version)
-        ));
-
-        return this;
-    }
-
-    public TemplateFilter edition(String edition) {
-        checkNotNull(edition, "Edition must be not a null");
-
-        predicate = predicate.and(combine(
-            TemplateMetadata::getOsType, containsIgnoreCase(edition)
-        ));
+        predicate = predicate.and(
+            Stream.of(osFilter)
+                .map(OsFilter::getPredicate)
+                .reduce(alwaysFalse(), Predicate::or)
+        );
 
         return this;
     }

@@ -4,18 +4,13 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCent
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
-import com.centurylink.cloud.sdk.core.services.filter.Filters;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
-import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -48,8 +43,8 @@ public class ServerFilter implements Filter<ServerFilter> {
      * @param dataCenters is not null list of data center references
      * @return {@link GroupFilter}
      */
-    public ServerFilter dataCenterIn(DataCenterRef... dataCenters) {
-        groupFilter.dataCenterIn(dataCenters);
+    public ServerFilter dataCenters(DataCenterRef... dataCenters) {
+        groupFilter.dataCenters(dataCenters);
 
         return this;
     }
@@ -60,8 +55,8 @@ public class ServerFilter implements Filter<ServerFilter> {
      * @param predicate is not null filtering predicate
      * @return {@link GroupFilter}
      */
-    public ServerFilter dataCenterWhere(Predicate<DataCenterMetadata> predicate) {
-        groupFilter.dataCenterWhere(predicate);
+    public ServerFilter dataCentersWhere(Predicate<DataCenterMetadata> predicate) {
+        groupFilter.dataCentersWhere(predicate);
 
         return this;
     }
@@ -72,8 +67,8 @@ public class ServerFilter implements Filter<ServerFilter> {
      * @param filter is not null data center filter
      * @return {@link GroupFilter}
      */
-    public ServerFilter dataCenterWhere(DataCenterFilter filter) {
-        groupFilter.dataCenterWhere(filter);
+    public ServerFilter dataCentersWhere(DataCenterFilter filter) {
+        groupFilter.dataCentersWhere(filter);
 
         return this;
     }
@@ -84,8 +79,8 @@ public class ServerFilter implements Filter<ServerFilter> {
      * @param ids is not null list of group IDs
      * @return {@link GroupFilter}
      */
-    public ServerFilter groupIdIn(String... ids) {
-        groupFilter.idIn(ids);
+    public ServerFilter groupId(String... ids) {
+        groupFilter.id(ids);
 
         return this;
     }
@@ -109,13 +104,13 @@ public class ServerFilter implements Filter<ServerFilter> {
      * @param filter is not null group filtering predicate
      * @return {@link GroupFilter}
      */
-    public ServerFilter groupWhere(Predicate<GroupMetadata> filter) {
+    public ServerFilter groupsWhere(Predicate<GroupMetadata> filter) {
         groupFilter.where(filter);
 
         return this;
     }
 
-    public ServerFilter groupWhere(GroupFilter filter) {
+    public ServerFilter groupsWhere(GroupFilter filter) {
         groupFilter = groupFilter.and(filter);
 
         return this;
@@ -135,13 +130,13 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
-    public ServerFilter idIn(String... ids) {
+    public ServerFilter id(String... ids) {
         serverIds.addAll(asList(ids));
 
         return this;
     }
 
-    public ServerFilter idIn(List<String> ids) {
+    public ServerFilter id(List<String> ids) {
         serverIds.addAll(ids);
 
         return this;
@@ -152,14 +147,22 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
+    public ServerFilter status(String... statuses) {
+        predicate = predicate.and(combine(
+            ServerMetadata::getStatus, in(statuses)
+        ));
+
+        return this;
+    }
+
     @Override
     public ServerFilter and(ServerFilter otherFilter) {
         return new ServerFilter()
-            .idIn(new ArrayList<>(intersection(
+            .id(new ArrayList<>(intersection(
                 newHashSet(getServerIds()),
                 newHashSet(otherFilter.getServerIds())
             )))
-            .groupWhere(
+            .groupsWhere(
                 groupFilter.and(otherFilter.groupFilter)
             )
             .where(
@@ -170,11 +173,11 @@ public class ServerFilter implements Filter<ServerFilter> {
     @Override
     public ServerFilter or(ServerFilter otherFilter) {
         return new ServerFilter()
-            .idIn(new ArrayList<String>() {{
+            .id(new ArrayList<String>() {{
                 addAll(getServerIds());
                 addAll(otherFilter.getServerIds());
             }})
-            .groupWhere(
+            .groupsWhere(
                 groupFilter.or(otherFilter.groupFilter)
             )
             .where(

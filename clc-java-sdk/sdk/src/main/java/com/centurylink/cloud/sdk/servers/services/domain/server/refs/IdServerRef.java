@@ -18,6 +18,6 @@ public class IdServerRef extends ServerRef {
 
     @Override
     public ServerFilter asFilter() {
-        return new ServerFilter().idIn(id);
+        return new ServerFilter().id(id);
     }
 }

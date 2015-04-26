@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture;
 import com.centurylink.cloud.sdk.servers.services.domain.os.OsType;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 
 /**
@@ -67,24 +67,13 @@ public class OsTemplateRef extends TemplateRef {
     @Override
     public TemplateFilter asFilter() {
         return
-            new TemplateFilter() {{
-                dataCenterIn(OsTemplateRef.this.getDataCenter());
-
-                if (type != null) {
-                   osType(type);
-                }
-
-                if (architecture != null) {
-                    architecture(architecture);
-                }
-
-                if (edition != null) {
-                    edition(edition);
-                }
-
-                if (version != null) {
-                    version(version);
-                }
-            }};
+            new TemplateFilter()
+                .dataCenters(getDataCenter())
+                .osTypes(new OsFilter()
+                    .type(type != null ? type : "")
+                    .architecture(architecture)
+                    .version(version != null ? version : "")
+                    .edition(edition != null ? edition : "")
+                );
     }
 }

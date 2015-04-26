@@ -30,7 +30,7 @@ public class DescriptionTemplateRef extends TemplateRef {
     public TemplateFilter asFilter() {
         return (
             new TemplateFilter()
-                .dataCenterIn(getDataCenter())
+                .dataCenters(getDataCenter())
                 .descriptionContains(description)
         );
     }

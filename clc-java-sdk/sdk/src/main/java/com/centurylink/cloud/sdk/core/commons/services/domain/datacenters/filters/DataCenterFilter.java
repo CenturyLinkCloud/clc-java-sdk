@@ -52,7 +52,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @param ids
      * @return {@link DataCenterFilter}
      */
-    public DataCenterFilter idIn(String... ids) {
+    public DataCenterFilter id(String... ids) {
         this.predicate = this.predicate.and(combine(
             DataCenterMetadata::getId, Predicates.in(ids)
         ));
@@ -61,9 +61,11 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
     }
 
     public DataCenterFilter in(DataCenterRef... dataCenterRefs) {
-        return this.and(Filter.or(
+        predicate = predicate.and(Filter.or(
             map(dataCenterRefs, DataCenterRef::asFilter)
-        ));
+        ).getPredicate());
+
+        return this;
     }
 
     /**

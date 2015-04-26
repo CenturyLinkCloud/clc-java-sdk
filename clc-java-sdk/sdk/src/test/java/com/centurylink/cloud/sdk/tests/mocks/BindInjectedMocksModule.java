@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.core.services.ClcServiceException;
 import com.centurylink.cloud.sdk.servers.TestModule;
 import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 import org.mockito.Mock;
+import org.mockito.Spy;
 
 import java.lang.reflect.Field;
 import java.util.stream.Stream;
@@ -27,7 +28,7 @@ public class BindInjectedMocksModule extends TestModule {
     private void overrideInjectedMocksBinding() {
         Stream
             .of(declaredFields())
-            .filter(f -> f.isAnnotationPresent(Mock.class))
+            .filter(f -> f.isAnnotationPresent(Mock.class) || f.isAnnotationPresent(Spy.class))
             .forEach(f -> bind((Class<Object>) f.getType()).toInstance(fieldValue(f)));
     }
 

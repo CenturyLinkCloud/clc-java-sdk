@@ -37,7 +37,7 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @param dataCenters is not null list of data center references
      * @return {@link GroupFilter}
      */
-    public GroupFilter dataCenterIn(DataCenterRef... dataCenters) {
+    public GroupFilter dataCenters(DataCenterRef... dataCenters) {
         dataCenterFilter = dataCenterFilter.and(Filter.or(
             map(dataCenters, DataCenterRef::asFilter)
         ));
@@ -51,7 +51,7 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @param predicate is not null filtering predicate
      * @return {@link GroupFilter}
      */
-    public GroupFilter dataCenterWhere(Predicate<DataCenterMetadata> predicate) {
+    public GroupFilter dataCentersWhere(Predicate<DataCenterMetadata> predicate) {
         dataCenterFilter.where(
             dataCenterFilter.getPredicate().or(predicate)
         );
@@ -65,7 +65,7 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @param filter is not null data center filter
      * @return {@link GroupFilter}
      */
-    public GroupFilter dataCenterWhere(DataCenterFilter filter) {
+    public GroupFilter dataCentersWhere(DataCenterFilter filter) {
         dataCenterFilter = dataCenterFilter.and(filter);
         return this;
     }
@@ -76,7 +76,7 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @param ids is not null list of group IDs
      * @return {@link GroupFilter}
      */
-    public GroupFilter idIn(String... ids) {
+    public GroupFilter id(String... ids) {
         checkNotNull(ids, "List of ids must be not a null");
 
         this.predicate = predicate.and(
@@ -122,7 +122,7 @@ public class GroupFilter implements Filter<GroupFilter> {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
         return new GroupFilter()
-            .dataCenterWhere(
+            .dataCentersWhere(
                 dataCenterFilter.and(otherFilter.dataCenterFilter)
             )
             .where(
@@ -135,7 +135,7 @@ public class GroupFilter implements Filter<GroupFilter> {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
         return new GroupFilter()
-            .dataCenterWhere(
+            .dataCentersWhere(
                 dataCenterFilter.or(otherFilter.dataCenterFilter)
             )
             .where(

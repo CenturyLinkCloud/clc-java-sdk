@@ -34,6 +34,6 @@ public class IdGroupRef extends GroupRef {
     public GroupFilter asFilter() {
         checkNotNull(id, "Group ID must be not null");
 
-        return super.asFilter().idIn(id);
+        return super.asFilter().id(id);
     }
 }

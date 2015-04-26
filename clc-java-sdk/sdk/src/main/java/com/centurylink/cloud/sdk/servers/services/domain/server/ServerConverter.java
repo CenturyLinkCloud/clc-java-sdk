@@ -52,8 +52,10 @@ public class ServerConverter {
                             .getNetworkId()
                 )
                 .timeToLive(newServer.getTimeToLive())
-                .managedOS(newServer.isManagedOS(), templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE))
-                ;
+                .managedOS(
+                    newServer.isManagedOS(),
+                    templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
+                );
     }
 
     public DiskRequest buildDisk(DiskConfig diskConfig) {
