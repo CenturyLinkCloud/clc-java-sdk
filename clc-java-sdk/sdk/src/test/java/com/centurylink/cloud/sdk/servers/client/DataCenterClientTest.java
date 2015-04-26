@@ -2,7 +2,7 @@ package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.GetDeploymentCapabilitiesResponse;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
@@ -29,7 +29,7 @@ public class DataCenterClientTest extends AbstractServersSdkTest {
 
     @Test
     public void getDeploymentCapabilitiesTest() {
-        GetDeploymentCapabilitiesResponse deployment =
+        DatacenterDeploymentCapabilitiesMetadata deployment =
                 client.getDataCenterDeploymentCapabilities(CA_VANCOUVER.getId());
 
         assert deployment.getTemplates().size() > 0;

@@ -20,7 +20,7 @@ import java.util.Map;
         "templates",
         "importableOSTypes"
 })
-public class GetDeploymentCapabilitiesResponse {
+public class DatacenterDeploymentCapabilitiesMetadata {
 
     @JsonProperty("dataCenterEnabled")
     private Boolean dataCenterEnabled;
@@ -139,7 +139,7 @@ public class GetDeploymentCapabilitiesResponse {
         this.deployableNetworks = deployableNetworks;
     }
 
-    public GetDeploymentCapabilitiesResponse deployableNetworks(List<NetworkMetadata> networks) {
+    public DatacenterDeploymentCapabilitiesMetadata deployableNetworks(List<NetworkMetadata> networks) {
         setDeployableNetworks(networks);
         return this;
     }

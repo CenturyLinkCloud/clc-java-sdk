@@ -32,13 +32,13 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
     @Inject
     GroupService groupService;
 
-    @Mock
+    @Inject @Mock
     ServerClient serverClient;
 
-    @Mock
+    @Inject @Mock
     DataCenterService dataCenterService;
 
-    @Mock
+    @Inject @Mock
     DataCentersClient dataCentersClient;
 
     private void mockDataCentersMetadata() {

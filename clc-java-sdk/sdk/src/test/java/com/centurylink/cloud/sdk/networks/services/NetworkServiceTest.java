@@ -4,7 +4,7 @@ import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.GetDeploymentCapabilitiesResponse;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters;
 import com.centurylink.cloud.sdk.networks.AbstractNetworksSdkTest;
@@ -60,9 +60,9 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
         assert networks.get(1).getNetworkId().equals("2");
     }
 
-    private OngoingStubbing<GetDeploymentCapabilitiesResponse> mockNetworks(List<NetworkMetadata> networks) {
+    private OngoingStubbing<DatacenterDeploymentCapabilitiesMetadata> mockNetworks(List<NetworkMetadata> networks) {
         return when(dataCentersClient.getDataCenterDeploymentCapabilities(anyString()))
-            .thenReturn(new GetDeploymentCapabilitiesResponse()
+            .thenReturn(new DatacenterDeploymentCapabilitiesMetadata()
                 .deployableNetworks(networks)
             );
     }

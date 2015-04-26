@@ -4,7 +4,7 @@ import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.GetDeploymentCapabilitiesResponse;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.google.inject.Inject;
 
 /**
@@ -17,11 +17,11 @@ public class DataCentersClient extends BaseSdkClient {
         super(authFilter);
     }
 
-    public GetDeploymentCapabilitiesResponse getDataCenterDeploymentCapabilities(String dataCenterId) {
+    public DatacenterDeploymentCapabilitiesMetadata getDataCenterDeploymentCapabilities(String dataCenterId) {
         return
             client("/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
                 .resolveTemplate("dataCenterId", dataCenterId)
-                .request().get(GetDeploymentCapabilitiesResponse.class);
+                .request().get(DatacenterDeploymentCapabilitiesMetadata.class);
     }
 
     public DataCenterMetadata getDataCenter(String dataCenterId) {

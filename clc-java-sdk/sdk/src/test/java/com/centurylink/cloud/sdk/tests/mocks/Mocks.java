@@ -5,4 +5,5 @@ package com.centurylink.cloud.sdk.tests.mocks;
  */
 public abstract class Mocks {
 
+
 }

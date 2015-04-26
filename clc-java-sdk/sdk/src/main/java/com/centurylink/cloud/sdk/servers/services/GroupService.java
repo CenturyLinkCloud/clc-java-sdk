@@ -17,6 +17,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilt
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -36,16 +37,23 @@ public class GroupService {
     private final GroupConverter converter;
     private final DataCentersClient dataCentersClient;
     private final DataCenterService dataCenterService;
+    private final Provider<ServerService> serverServiceProvider;
     private final QueueClient queueClient;
 
     @Inject
     public GroupService(ServerClient client, GroupConverter converter, DataCentersClient dataCentersClient,
-                        DataCenterService dataCenterService, QueueClient queueClient) {
+                        DataCenterService dataCenterService, QueueClient queueClient,
+                        Provider<ServerService> serverServiceProvider) {
         this.client = client;
         this.converter = converter;
         this.dataCentersClient = dataCentersClient;
         this.dataCenterService = dataCenterService;
+        this.serverServiceProvider = serverServiceProvider;
         this.queueClient = queueClient;
+    }
+
+    public ServerService serverService() {
+        return serverServiceProvider.get();
     }
 
     public GroupMetadata findByRef(GroupRef groupRef) {
@@ -115,13 +123,9 @@ public class GroupService {
         boolean updated = client.updateGroup(idByRef(groupRef), converter.createUpdateGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup())));
 
         return new OperationFuture<>(
-                groupRef,
-                new NoWaitingJobFuture()
+            groupRef,
+            new NoWaitingJobFuture()
         );
-    }
-
-    public GroupMetadata get(GroupRef groupRef) {
-        return client.getGroup(idByRef(groupRef), false);
     }
 
     public OperationFuture<Link> delete(GroupRef groupRef) {

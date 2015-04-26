@@ -1,6 +1,7 @@
-package com.centurylink.cloud.sdk.servers.services;
+package com.centurylink.cloud.sdk.servers.services.templates;
 
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;

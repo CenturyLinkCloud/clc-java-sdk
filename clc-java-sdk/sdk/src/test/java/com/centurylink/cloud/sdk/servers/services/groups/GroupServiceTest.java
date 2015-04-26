@@ -43,7 +43,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
                 .description(newGroupDescription))
             .getResult().as(IdGroupRef.class);
 
-        GroupMetadata createdGroup = groupService.get(newGroup);
+        GroupMetadata createdGroup = groupService.findByRef(newGroup);
 
         assertEquals(createdGroup.getId(), newGroup.getId());
         assertEquals(createdGroup.getName(), newGroupName);

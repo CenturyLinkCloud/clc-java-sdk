@@ -3,26 +3,18 @@ package com.centurylink.cloud.sdk.servers.services;
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.GetDeploymentCapabilitiesResponse;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
-import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
-import com.google.common.base.Predicates;
 import com.google.inject.Inject;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.refs.Reference.notFound;
