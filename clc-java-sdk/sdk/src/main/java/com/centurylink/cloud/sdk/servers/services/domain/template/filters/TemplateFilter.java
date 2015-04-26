@@ -90,6 +90,14 @@ public class TemplateFilter implements Filter<TemplateFilter> {
         return this;
     }
 
+    public TemplateFilter where(Predicate<TemplateMetadata> predicate) {
+        checkNotNull(predicate, "Predicate must be not a null");
+
+        this.predicate = this.predicate.and(predicate);
+
+        return this;
+    }
+
     @Override
     public TemplateFilter and(TemplateFilter otherFilter) {
         return

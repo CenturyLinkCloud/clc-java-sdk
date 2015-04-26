@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.template.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture;
+import com.centurylink.cloud.sdk.servers.services.domain.os.OsType;
 
 import java.util.function.Predicate;
 
@@ -18,6 +19,14 @@ public class OsFilter {
 
     public OsFilter() {
 
+    }
+
+    public OsFilter type(OsType osType) {
+        this.osType =
+            checkNotNull(osType, "OS type must be not a null")
+                .getCode();
+
+        return this;
     }
 
     public OsFilter type(String osType) {
