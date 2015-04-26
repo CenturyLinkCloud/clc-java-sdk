@@ -31,6 +31,6 @@ public class NameTemplateRef extends TemplateRef {
         return
             new TemplateFilter()
                 .dataCenters(getDataCenter())
-                .nameContains(name);
+                .names(name);
     }
 }

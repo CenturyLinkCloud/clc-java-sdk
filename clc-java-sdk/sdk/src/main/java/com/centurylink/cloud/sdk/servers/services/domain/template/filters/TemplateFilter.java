@@ -29,7 +29,7 @@ public class TemplateFilter implements Filter<TemplateFilter> {
         this.predicate = predicate;
     }
 
-    public TemplateFilter dataCenterWhere(Predicate<DataCenterMetadata> predicate) {
+    public TemplateFilter dataCentersWhere(Predicate<DataCenterMetadata> predicate) {
         dataCenter.where(predicate);
         return this;
     }
@@ -55,6 +55,14 @@ public class TemplateFilter implements Filter<TemplateFilter> {
 
         predicate = predicate.and(combine(
             TemplateMetadata::getName, containsIgnoreCase(name)
+        ));
+
+        return this;
+    }
+
+    public TemplateFilter names(String... names) {
+        predicate = predicate.and(combine(
+            TemplateMetadata::getName, in(names)
         ));
 
         return this;
