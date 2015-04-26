@@ -14,6 +14,7 @@ import org.mockito.Spy;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.RHEL;
 
@@ -51,7 +52,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
     @Test
     public void testFindTemplateByOsRef() throws Exception {
         TemplateMetadata metadata = templateService.findByRef(Template.refByOs()
-                .dataCenter(DataCenters.US_EAST_STERLING)
+                .dataCenter(US_EAST_STERLING)
                 .type(RHEL)
                 .edition("6")
                 .architecture(x86_64)
@@ -63,11 +64,21 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
     @Test
     public void testFindTemplateByNameRef() {
         TemplateMetadata metadata = templateService.findByRef(Template.refByName()
-                .dataCenter(DataCenters.US_EAST_STERLING)
-                .name("CENTOS-6-64-TEMPLATE")
+            .dataCenter(US_EAST_STERLING)
+            .name("CENTOS-6-64-TEMPLATE")
         );
 
         assertEquals(metadata.getName(), "CENTOS-6-64-TEMPLATE");
+    }
+
+    @Test
+    public void testFindTemplateByDescriptionRef() {
+        TemplateMetadata metadata = templateService.findByRef(Template.refByDescription()
+            .dataCenter(US_EAST_STERLING)
+            .description("pxe boot")
+        );
+
+        assertEquals(metadata.getName(), "PXE-TEMPLATE");
     }
 
 }
