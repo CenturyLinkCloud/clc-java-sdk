@@ -19,9 +19,7 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -75,7 +73,7 @@ public class ServerStubFixture {
         when(serverClient.findServerById(serverIdList.get(1)))
                 .thenReturn(serverMetadata1);
 
-        when(serverClient.getGroup(groupId, any()))
+        when(serverClient.getGroup(eq(groupId), any(Boolean.class)))
                 .thenReturn(groupMetadata);
 
         when(serverClient.powerOn(anyListOf(String.class)))
