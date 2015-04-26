@@ -60,6 +60,12 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
         return this;
     }
 
+    /**
+     * Method allow to filter data centers by references.
+     *
+     * @param dataCenterRefs is list of references to target dataCenters
+     * @return {@link DataCenterFilter}
+     */
     public DataCenterFilter in(DataCenterRef... dataCenterRefs) {
         predicate = predicate.and(Filter.or(
             map(dataCenterRefs, DataCenterRef::asFilter)
@@ -72,7 +78,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * Method allow to filter data centers by name.
      * Filtering is case insensitive and occurs using substring search.
      *
-     * @param name
+     * @param name is a not null name substring
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter nameContains(String name) {
