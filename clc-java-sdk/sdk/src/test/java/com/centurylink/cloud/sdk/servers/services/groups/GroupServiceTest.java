@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
 public class GroupServiceTest extends AbstractServersSdkTest {
 
@@ -32,7 +33,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
         assert groups.size() > 0;
     }
 
-    @Test(groups = INTEGRATION)
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testCreateGroup() {
         String newGroupName = "test group";
         String newGroupDescription = "test group description";
@@ -48,12 +49,10 @@ public class GroupServiceTest extends AbstractServersSdkTest {
         assertEquals(createdGroup.getName(), newGroupName);
         assertEquals(createdGroup.getDescription(), newGroupDescription);
 
-
-
         groupService.delete(newGroup);
     }
 
-    @Test(groups = INTEGRATION)
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testUpdateGroup() throws JsonProcessingException {
         GroupRef groupRef = new NameGroupRef(DataCenters.DE_FRANKFURT, DefaultGroups.DEFAULT_GROUP);
         GroupMetadata groupMetadata = groupService.findByRef(groupRef);

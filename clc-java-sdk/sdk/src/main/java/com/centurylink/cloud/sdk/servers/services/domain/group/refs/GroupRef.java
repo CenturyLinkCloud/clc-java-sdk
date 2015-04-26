@@ -24,7 +24,10 @@ public abstract class GroupRef implements Reference {
     public GroupFilter asFilter() {
         checkNotNull(dataCenter, "Data center reference must be not a null");
 
-        return new GroupFilter()
-            .dataCenterIn(getDataCenter());
+        return new GroupFilter() {{
+            if (getDataCenter() != null) {
+                dataCenterIn(GroupRef.this.getDataCenter());
+            }
+        }};
     }
 }

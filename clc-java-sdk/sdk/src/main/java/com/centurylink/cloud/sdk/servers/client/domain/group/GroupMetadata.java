@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
@@ -324,30 +325,18 @@ public class GroupMetadata {
     }
 
     public List<GroupMetadata> getAllGroups() {
-        List<GroupMetadata> groups = new ArrayList<>();
+        return
+            concat(
+                Stream
+                    .of(this),
 
-        groups.add(this);
-
-        for (GroupMetadata curGroup : this.getGroups()) {
-            groups.addAll(getSubGroups(curGroup));
-        }
-
-        return groups;
-    }
-
-    private List<GroupMetadata> getSubGroups(final GroupMetadata curGroup) {
-        if (curGroup.getGroups() == null || curGroup.getGroups().isEmpty()) {
-            return new ArrayList<GroupMetadata>() {{ add(curGroup); }};
-        }
-
-        List<GroupMetadata> result = new ArrayList<>();
-
-        result.addAll(curGroup.getGroups());
-        for (GroupMetadata group : curGroup.getGroups()) {
-            result.addAll(getSubGroups(group));
-        }
-
-        return result;
+                getGroups()
+                    .stream()
+                    .flatMap(group ->
+                        group.getAllGroups().stream()
+                    )
+            )
+            .collect(toList());
     }
 
     public List<ServerMetadata> getAllServers() {

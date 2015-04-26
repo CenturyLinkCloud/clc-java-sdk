@@ -38,6 +38,9 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @return {@link GroupFilter}
      */
     public GroupFilter dataCenterIn(DataCenterRef... dataCenters) {
+        dataCenterFilter = dataCenterFilter.and(Filter.or(
+            map(dataCenters, DataCenterRef::asFilter)
+        ));
 
         return this;
     }

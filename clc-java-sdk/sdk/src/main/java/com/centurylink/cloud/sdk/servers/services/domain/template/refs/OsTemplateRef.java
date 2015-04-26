@@ -68,9 +68,7 @@ public class OsTemplateRef extends TemplateRef {
     public TemplateFilter asFilter() {
         return
             new TemplateFilter() {{
-                if (OsTemplateRef.this.getDataCenter() != null) {
-                    dataCenterIn(OsTemplateRef.this.getDataCenter());
-                }
+                dataCenterIn(OsTemplateRef.this.getDataCenter());
 
                 if (type != null) {
                    osType(type);
