@@ -45,6 +45,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
         ServerMetadata server = serverService.findByRef(serverRef);
         assert !isNullOrEmpty(server.getId());
+        assertEquals(server.getLocationId().toUpperCase(), "DE1");
     }
 
     @Test(enabled = false) // custom template endpoint is not documented yet
