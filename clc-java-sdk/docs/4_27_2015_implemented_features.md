@@ -337,7 +337,7 @@ groupServer.delete(groupRef);
 ```
 
 
-Server Power Operations
+Server Operations
 ----------------------------
 
 Single server operations:
@@ -488,8 +488,8 @@ protected void rebootServer() {
 
 ```
 
-
-Groups power operations:
+Groups operations
+-----------------
 
 ``` java
 
