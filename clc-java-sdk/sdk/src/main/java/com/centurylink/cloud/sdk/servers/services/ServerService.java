@@ -9,10 +9,12 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.P
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
+import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
@@ -27,6 +29,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplate
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -125,7 +128,7 @@ public class ServerService {
                 serverRef.asFilter()
             )
             .findFirst().orElseThrow(() ->
-                new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
+                            new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
             );
     }
 
@@ -188,7 +191,7 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(ServerRef... serverRefs) {
         return powerOperationResponse(
-            client.powerOn(ids(serverRefs))
+                client.powerOn(ids(serverRefs))
         );
     }
 
@@ -201,6 +204,30 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> powerOn(ServerFilter serverFilter) {
         return powerOperationResponse(
             client.powerOn(ids(serverFilter))
+        );
+    }
+
+    /**
+     * Power on groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOn(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.powerOn(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Power on groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOn(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.powerOn(ids(groupRefs))
         );
     }
 
@@ -229,6 +256,30 @@ public class ServerService {
     }
 
     /**
+     * Power off groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOff(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.powerOff(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Power off groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOff(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.powerOff(ids(groupRefs))
+        );
+    }
+
+    /**
      * Start maintenance mode on a single server or group of servers
      *
      * @param serverRefs server references list
@@ -253,6 +304,30 @@ public class ServerService {
     }
 
     /**
+     * Start servers groups maintenance
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.startMaintenance(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Start servers groups maintenance
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.startMaintenance(ids(groupRefs))
+        );
+    }
+
+    /**
      * Stop maintenance mode on a single server or group of servers
      *
      * @param serverRefs server references list
@@ -273,6 +348,30 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerFilter serverFilter) {
         return powerOperationResponse(
             client.stopMaintenance(ids(serverFilter))
+        );
+    }
+
+    /**
+     * Stop servers groups maintenance
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.stopMaintenance(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Stop servers groups maintenance
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.stopMaintenance(ids(groupRefs))
         );
     }
 
@@ -315,6 +414,30 @@ public class ServerService {
     }
 
     /**
+     * Pause groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> pause(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.pause(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Pause groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> pause(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.pause(ids(groupRefs))
+        );
+    }
+
+    /**
      * Reboot a single server or group of servers
      *
      * @param serverRefs server references list
@@ -327,7 +450,7 @@ public class ServerService {
     }
 
     /**
-     * Pause a single server or group of servers
+     * Reboot a single server or group of servers
      *
      * @param serverFilter search servers criteria
      * @return OperationFuture wrapper for BaseServerResponse list
@@ -335,6 +458,30 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> reboot(ServerFilter serverFilter) {
         return powerOperationResponse(
             client.reboot(ids(serverFilter))
+        );
+    }
+
+    /**
+     * Reboot groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reboot(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.reboot(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Reboot groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reboot(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.reboot(ids(groupRefs))
         );
     }
 
@@ -363,6 +510,30 @@ public class ServerService {
     }
 
     /**
+     * Reset groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reset(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.reset(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Reset groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reset(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.reset(ids(groupRefs))
+        );
+    }
+
+    /**
      * Shut down a single server or group of servers
      *
      * @param serverRefs server references list
@@ -383,6 +554,30 @@ public class ServerService {
     public OperationFuture<List<BaseServerResponse>> shutDown(ServerFilter serverFilter) {
         return powerOperationResponse(
             client.shutDown(ids(serverFilter))
+        );
+    }
+
+    /**
+     * Shut down groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> shutDown(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.shutDown(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Shut down groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> shutDown(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.shutDown(ids(groupRefs))
         );
     }
 
@@ -411,6 +606,30 @@ public class ServerService {
     }
 
     /**
+     * Archive groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> archive(GroupFilter groupFilter) {
+        return powerOperationResponse(
+            client.archive(ids(groupFilter))
+        );
+    }
+
+    /**
+     * Archive groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> archive(GroupRef... groupRefs) {
+        return powerOperationResponse(
+            client.archive(ids(groupRefs))
+        );
+    }
+
+    /**
      * Create snapshot of a single server or group of servers
      *
      * @param expirationDays expiration days (must be between 1 and 10)
@@ -421,9 +640,9 @@ public class ServerService {
         return
             powerOperationResponse(
                 client.createSnapshot(
-                    new CreateSnapshotRequest()
-                        .snapshotExpirationDays(expirationDays)
-                        .serverIds(ids(serverRefs))
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(ids(serverRefs))
                 )
             );
     }
@@ -459,7 +678,7 @@ public class ServerService {
                 idByRef(server),
                 new RestoreServerRequest()
                     .targetGroupId(
-                        groupService.findByRef(group).getId()
+                            groupService.findByRef(group).getId()
                     )
             )
         );
@@ -485,6 +704,20 @@ public class ServerService {
                 .map(ServerMetadata::getId)
                 .map(String::toUpperCase)
                 .collect(toList());
+    }
+
+    private List<String> ids(GroupFilter groupFilter) {
+        return ids(
+            new ServerFilter()
+                .groupsWhere(groupFilter)
+        );
+    }
+
+    private List<String> ids(GroupRef... groups) {
+        return ids(
+            new ServerFilter()
+                .groups(groups)
+        );
     }
 
     /**
