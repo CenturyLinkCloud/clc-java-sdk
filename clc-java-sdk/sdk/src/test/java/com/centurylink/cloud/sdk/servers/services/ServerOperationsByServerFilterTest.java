@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
-public class ServerOperationsServiceStubTest extends AbstractServerOperationsStubTest {
+public class ServerOperationsByServerFilterTest extends AbstractServerOperationsStubTest {
 
     @Inject @Mock
     ServerClient serverClient;
