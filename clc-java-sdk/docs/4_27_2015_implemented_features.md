@@ -151,8 +151,36 @@ List<TemplateMetadata> results =
 List<TemplateMetadata> results = 
     templateService
         .find(new TemplateFilter()
-        .dataCenters(US_EAST_STERLING)
-        .where(t -> t.getCapabilities().contains(MANAGED_OS_VALUE))
-    );
+            .dataCenters(US_EAST_STERLING)
+            .where(t -> t.getCapabilities().contains(MANAGED_OS_VALUE))
+        );
 
 ```
+
+
+Search Servers Functionality
+-----------------------------
+
+``` java
+
+serverService
+    .find(new ServerFilter()
+        .dataCenters(dataCenter1, dataCenter2)
+        .dataCentersWhere(d -> d.getGroup().equals("groupId"))
+        .groupId("group1", "group2")
+        .groups(Group.refByName()
+            .dataCenter(DataCenters.US_EAST_NEW_YORK)
+            .name("MyServers")
+        )
+        .groupsWhere(g -> g.getType().equals("default"))
+        .status("active", "archived")
+        .id("DE1ALTDTCRT154", "DE1ALTDTCRT155")
+        .where(s -> s.getDetails().getInMaintenanceMode())
+    );
+    
+```
+
+
+Add public IP functionality
+---------------------------
+
