@@ -85,10 +85,10 @@ Search DataCenters Functionality
 List<DataCenterMetadata> results = 
     dataCenterServer
         .find(new DataCenterFilter()
-              .dataCenters(dataCenterRef)
-              .id("va1", "ca1")
-              .nameContains("FrankFurt")
-              .where(d -> d.getGroup().equals("groupId"))
+            .dataCenters(dataCenterRef)
+            .id("va1", "ca1")
+            .nameContains("FrankFurt")
+            .where(d -> d.getGroup().equals("groupId"))
         );
 
 ```
