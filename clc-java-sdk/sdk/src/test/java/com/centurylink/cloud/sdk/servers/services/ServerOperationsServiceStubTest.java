@@ -216,7 +216,7 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
         assertThatServerHasStatus(server2, "archived");
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    @Test(groups = {INTEGRATION})
     public void runChainTests() {
         ServerStubFixture fixture = new ServerStubFixture(serverClient, queueClient);
 
