@@ -226,3 +226,53 @@ List<PublicIpMetadata> publicIps = serverService.findPublicIp(serverRef);
 ```
 
 
+Modify public IP functionality
+------------------------------
+
+``` java
+
+/* 
+ * this methods modify all public IPs of target servers (in 90% cases it will be one IP)
+ */
+ 
+serverService
+    .modifyPublicIp(serverRef,
+        new PublicIpConfig()
+            .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
+            .sourceRestrictions("70.100.60.140/32")
+    );
+    
+serverService
+    .modifyPublicIp(
+        asList(
+            serverRef1, serverRef2
+        ),
+        new PublicIpConfig()
+            .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
+            .sourceRestrictions("70.100.60.140/32")
+    );
+    
+serverService
+    .modifyPublicIp(
+        new ServerFilter()
+            .dataCenters(DataCenters.US_WEST_SEATTLE)
+            .onlyActive(),
+        new PublicIpConfig()
+            .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
+            .sourceRestrictions("70.100.60.140/32")
+    );
+    
+/*
+ * Method for public IP modification in case of multiple IPs
+ */
+serverService
+    .modifyPublicIp(
+        serverRef, publicIP, 
+        new PublicIpConfig()
+            .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
+            .sourceRestrictions("70.100.60.140/32")
+    );
+
+```
+
+
