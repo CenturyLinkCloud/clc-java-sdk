@@ -276,3 +276,52 @@ serverService
 ```
 
 
+Delete public IP functionality
+------------------------------
+
+``` java
+
+// remove all public IP of specified server
+serverService.removePublicIp(serverRef);
+
+// remove specified public IP of some server
+serverService.removePublicIp(serverRef, publicIp);
+
+```
+
+
+Create group functionality
+--------------------------
+
+``` java
+
+groupService
+    .create(new GroupConfig()
+        .name(newGroupName)
+        .description(newGroupDescription)
+        .parentGroup(Group.refByName()
+            .datacenter(DataCenters.DE_FRANKFURT)
+            .name(DefaultGroups.DEFAULT_GROUP)
+        )
+    )
+
+```
+
+
+Modify Group Functionality
+--------------------------
+
+``` java
+
+    groupService
+        .update(groupRef, new GroupConfig()
+            .name(groupName)
+            .description(groupDescription)
+            .parentGroup(Group.refById()
+                .dataCenter(DataCenters.DE_FRANKFURT)
+                .id(parentGroupId)
+            )
+        )
+        .waitUntilComplete()
+        
+```
