@@ -44,7 +44,7 @@ new ClcSdk()
 Delete Server Functionality
 -----------------------
 
-Delete single server
+Delete single server:
 
 ``` java
 
@@ -52,7 +52,7 @@ serverService.delete(newServer);
 
 ```
 
-Delete set of servers
+Delete set of servers:
 
 ``` java
 
@@ -64,7 +64,7 @@ serverService
     
 ```
 
-Delete set of servers specified by search criteria
+Delete set of servers specified by search criteria:
 
 ``` java
 
@@ -83,12 +83,95 @@ Search DataCenters Functionality
 ``` java
 
 List<DataCenterMetadata> results = 
-    dataCenterServer
+    dataCenterService
         .find(new DataCenterFilter()
             .dataCenters(dataCenterRef)
             .id("va1", "ca1")
             .nameContains("FrankFurt")
             .where(d -> d.getGroup().equals("groupId"))
         );
+
+```
+
+
+Search Groups Functionality
+-----------------------------
+
+``` java
+
+List<GroupMetadata> results = 
+    groupServerService.find(
+        new GroupFilter()
+            .dataCenters(dataCenter1, dataCenter2)
+            .dataCentersWhere(d -> d.getGroup().equals("groupId"))
+            .id("groupId1", "groupId2")
+            .nameContains("MyGroup")
+    )
+
+```
+
+
+Search Templates Functionality
+-----------------------------
+
+``` java
+
+@Test
+public void testFindTemplateByOsRef() throws Exception {
+    TemplateMetadata metadata = templateService.findByRef(Template.refByOs()
+        .dataCenter(US_EAST_STERLING)
+        .type(RHEL)
+        .version("6")
+        .architecture(x86_64)
+    );
+
+    assertEquals(metadata.getName(), "RHEL-6-64-TEMPLATE");
+}
+
+@Test
+public void testFindTemplateByNameRef() {
+    TemplateMetadata metadata = templateService.findByRef(Template.refByName()
+        .dataCenter(US_EAST_STERLING)
+        .name("CENTOS-6-64-TEMPLATE")
+    );
+
+    assertEquals(metadata.getName(), "CENTOS-6-64-TEMPLATE");
+}
+
+@Test
+public void testFindTemplateByDescriptionRef() {
+    TemplateMetadata metadata = templateService.findByRef(Template.refByDescription()
+        .dataCenter(US_EAST_STERLING)
+        .description("pxe boot")
+    );
+
+    assertEquals(metadata.getName(), "PXE-TEMPLATE");
+}
+
+@Test
+public void testFindAllCentOsTemplates() {
+    List<TemplateMetadata> results = templateService.find(new TemplateFilter()
+        .dataCenters(US_EAST_STERLING)
+        .osTypes(new OsFilter()
+            .type(CENTOS)
+        )
+    );
+
+    assertEquals(results.size(), 2);
+    assertEquals(
+        map(results, TemplateMetadata::getName),
+        asList("CENTOS-5-64-TEMPLATE", "CENTOS-6-64-TEMPLATE")
+    );
+}
+
+@Test
+public void testFindAllTemplatesWithManagedOsCapabilities() {
+    List<TemplateMetadata> results = templateService.find(new TemplateFilter()
+        .dataCenters(US_EAST_STERLING)
+        .where(t -> t.getCapabilities().contains(MANAGED_OS_VALUE))
+    );
+
+    assertEquals(results.size(), 8);
+}
 
 ```
