@@ -14,19 +14,9 @@ import static java.util.Arrays.asList;
  * @author Ilya Drabenia
  */
 public class PublicIpConfig {
-    private String publicIp;
     private List<PortConfig> ports = new ArrayList<>();
     private List<Subnet> restrictions = new ArrayList<>();
     private String internalIpAddress;
-
-    public String getPublicIp() {
-        return publicIp;
-    }
-
-    public PublicIpConfig publicIp(String publicIp) {
-        this.publicIp = publicIp;
-        return this;
-    }
 
     public List<PortConfig> getPorts() {
         return ports;

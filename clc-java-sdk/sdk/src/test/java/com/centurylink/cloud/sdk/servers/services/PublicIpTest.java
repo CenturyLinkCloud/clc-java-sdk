@@ -75,10 +75,10 @@ public class PublicIpTest extends AbstractServersSdkTest {
             .findFirst()
             .get();
         PublicIpConfig config = new PublicIpConfig()
-            .publicIp(publicIpAddress)
             .openPorts(ports)
             .sourceRestrictions(sourceRestriction);
         serverService.modifyPublicIp(serverRef.asFilter(), config).waitUntilComplete();
+        serverService.modifyPublicIp(serverRef, publicIpAddress, config).waitUntilComplete();
 
         PublicIpMetadata updatedPublicIp = serverService.getPublicIp(serverRef, publicIpAddress);
 

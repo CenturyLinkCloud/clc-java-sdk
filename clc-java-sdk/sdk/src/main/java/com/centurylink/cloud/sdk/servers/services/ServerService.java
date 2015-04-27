@@ -521,17 +521,44 @@ public class ServerService {
     }
 
     /**
-     * Modify existing public IP on server
+     * Modify ALL existing public IPs on server
      * @param server server reference
      * @param config publicIp config
      * @return OperationFuture wrapper for ServerRef
      */
     public OperationFuture<ServerRef> modifyPublicIp(ServerRef server, PublicIpConfig config) {
         checkNotNull(config, "PublicIpConfig must be not null");
-        checkNotNull(config.getPublicIp(), "PublicIpConfig.publicIp must be not null");
-        config.internalIpAddress(null);
+        List<IpAddress> ipAddresses = findByRef(server).getDetails().getIpAddresses();
+        List<String> responseIds = ipAddresses.stream()
+            .map(address -> address.getPublicIp())
+            .filter(notNull())
+            .map(ipAddress ->
+                client.modifyPublicIp(idByRef(server),
+                    ipAddress,
+                    publicIpConverter.createPublicIpRequest(config)))
+            .map(link -> link.getId())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            server,
+            responseIds,
+            queueClient
+        );
+    }
+
+    /**
+     * Modify provided public IP on server
+     * @param server server reference
+     * @param publicIp public ip
+     * @param config publicIp config
+     * @return OperationFuture wrapper for ServerRef
+     */
+    public OperationFuture<ServerRef> modifyPublicIp(ServerRef server, String publicIp, PublicIpConfig config) {
+        checkNotNull(config, "PublicIpConfig must be not null");
+        checkNotNull(publicIp, "public ip must not be null");
+
         Link response = client.modifyPublicIp(idByRef(server),
-            config.getPublicIp(),
+            publicIp,
             publicIpConverter.createPublicIpRequest(config)
         );
 
@@ -543,7 +570,7 @@ public class ServerService {
     }
 
     /**
-     * Modify existing public IP on servers
+     * Modify ALL existing public IPs on servers
      * @param servers The list of server references
      * @param config  publicIp config
      * @return OperationFuture wrapper for list of ServerRef
