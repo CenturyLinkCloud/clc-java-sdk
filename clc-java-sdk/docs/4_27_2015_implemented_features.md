@@ -184,3 +184,45 @@ serverService
 Add public IP functionality
 ---------------------------
 
+``` java
+
+serverService
+    .addPublicIp(serverRef,
+        new PublicIpConfig()
+            .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
+            .sourceRestrictions("70.100.60.140/32")
+    );
+    
+serverService
+    .addPublicIp(
+        asList(
+            serverRef1, serverRef2
+        ),
+        new PublicIpConfig()
+            .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
+            .sourceRestrictions("70.100.60.140/32")
+    );
+    
+serverService
+    .addPublicIp(
+        new ServerFilter()
+            .dataCenters(DataCenters.US_WEST_SEATTLE)
+            .onlyActive(),
+        new PublicIpConfig()
+            .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
+            .sourceRestrictions("70.100.60.140/32")
+    );
+
+```
+
+
+Search public IP functionality
+------------------------------
+
+``` java
+
+List<PublicIpMetadata> publicIps = serverService.findPublicIp(serverRef);
+
+```
+
+
