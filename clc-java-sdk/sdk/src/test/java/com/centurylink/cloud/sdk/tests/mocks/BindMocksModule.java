@@ -23,6 +23,7 @@ public class BindMocksModule extends TestModule {
         overrideInjectedMocksBinding();
     }
 
+    @SuppressWarnings("unchecked")
     private void overrideInjectedMocksBinding() {
         Stream
             .of(declaredFields())
