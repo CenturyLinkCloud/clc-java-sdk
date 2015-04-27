@@ -42,7 +42,7 @@ new ClcSdk()
 
 
 Delete Server Functionality
------------------------
+---------------------------
 
 Delete single server:
 
@@ -337,4 +337,221 @@ groupServer.delete(groupRef);
 ```
 
 
+Server Power Operations
+----------------------------
+
+Single server operations:
+
+``` java
+
+private void powerOnServer() {
+    serverService
+        .powerOn(server)
+        .waitUntilComplete();
+}
+
+private void powerOffServer() {
+    serverService
+        .powerOff(server)
+        .waitUntilComplete();
+}
+
+private void pauseServer() {
+    serverService
+        .pause(server)
+        .waitUntilComplete();
+}
+
+private void shutDownServer() {
+    serverService
+        .shutDown(server)
+        .waitUntilComplete();
+}
+
+private void stopServerMaintenance() {
+    serverService
+        .stopMaintenance(server)
+        .waitUntilComplete();
+}
+
+private void startServerMaintenance() {
+    serverService
+        .startMaintenance(server)
+        .waitUntilComplete();
+}
+
+private void archiveServer() {
+    serverService
+        .archive(server)
+        .waitUntilComplete();
+}
+
+private void createServerSnapshot() {
+    serverService
+        .createSnapshot(1, server)
+        .waitUntilComplete();
+}
+
+private void restoreServer(GroupRef group) {
+    serverService
+        .restore(server, group)
+        .waitUntilComplete();
+}
+
+```
+
+Multiple servers operations:
+
+``` java
+
+private final serverFilter = new ServerFilter()
+    .id(
+        serverMetadata1.getId(), 
+        serverMetadata2.getId()
+    );
+
+protected void powerOnServer() {
+    serverService
+        .powerOn(serverFilter)
+        .waitUntilComplete();
+}
+
+protected void powerOffServer() {
+    serverService
+        .powerOff(serverFilter)
+        .waitUntilComplete();
+}
+
+protected void pauseServer() {
+    serverService
+        .pause(serverFilter)
+        .waitUntilComplete();
+}
+
+protected void shutDownServer() {
+    serverService
+        .shutDown(serverFilter)
+        .waitUntilComplete();
+}
+
+protected void stopServerMaintenance() {
+    serverService
+        .stopMaintenance(serverFilter)
+        .waitUntilComplete();
+}
+
+protected void startServerMaintenance() {
+    serverService
+        .startMaintenance(serverFilter)
+        .waitUntilComplete();
+}
+
+protected void archiveServer() {
+    serverService
+        .archive(serverFilter)
+        .waitUntilComplete();
+}
+
+protected void createServerSnapshot() {
+    serverService
+        .createSnapshot(1, serverFilter)
+        .waitUntilComplete();
+}
+
+protected void restoreServer(GroupRef group, ServerRef server) {
+    serverService
+        .restore(server, group)
+        .waitUntilComplete();
+}
+
+protected void resetServer() {
+    serverService
+        .reset(serverFilter)
+        .waitUntilComplete();
+}
+
+protected void rebootServer() {
+    serverService
+        .reboot(serverFilter)
+        .waitUntilComplete();
+}
+
+```
+
+
+Groups power operations:
+
+``` java
+
+private final serverFilter = new GroupFilter()
+    .dataCenter(DE1_FRANKFURT)
+    .name("MyGroup");
+
+protected void powerOnServer() {
+    serverService
+        .powerOn(groupFilter)
+        .waitUntilComplete();
+}
+
+protected void powerOffServer() {
+    serverService
+        .powerOff(groupFilter)
+        .waitUntilComplete();
+}
+
+protected void pauseServer() {
+    serverService
+        .pause(groupFilter)
+        .waitUntilComplete();
+}
+
+protected void shutDownServer() {
+    serverService
+        .shutDown(groupFilter)
+        .waitUntilComplete();
+}
+
+protected void stopServerMaintenance() {
+    serverService
+        .stopMaintenance(groupFilter)
+        .waitUntilComplete();
+}
+
+protected void startServerMaintenance() {
+    serverService
+        .startMaintenance(groupFilter)
+        .waitUntilComplete();
+}
+
+protected void archiveServer() {
+    serverService
+        .archive(groupFilter)
+        .waitUntilComplete();
+}
+
+protected void createServerSnapshot() {
+    serverService
+        .createSnapshot(1, groupFilter)
+        .waitUntilComplete();
+}
+
+protected void restoreServer(GroupRef group, ServerRef server) {
+    serverService
+        .restore(server, group)
+        .waitUntilComplete();
+}
+
+protected void resetServer() {
+    serverService
+        .reset(groupFilter)
+        .waitUntilComplete();
+}
+
+protected void rebootServer() {
+    serverService
+        .reboot(groupFilter)
+        .waitUntilComplete();
+}
+
+```
 
