@@ -116,62 +116,43 @@ Search Templates Functionality
 
 ``` java
 
-@Test
-public void testFindTemplateByOsRef() throws Exception {
-    TemplateMetadata metadata = templateService.findByRef(Template.refByOs()
-        .dataCenter(US_EAST_STERLING)
-        .type(RHEL)
-        .version("6")
-        .architecture(x86_64)
-    );
+TemplateMetadata metadata = 
+    templateService
+        .findByRef(Template.refByOs()
+            .dataCenter(US_EAST_STERLING)
+            .type(RHEL)
+            .version("6")
+            .architecture(x86_64)
+        );
 
-    assertEquals(metadata.getName(), "RHEL-6-64-TEMPLATE");
-}
+TemplateMetadata metadata = 
+    templateService
+        .findByRef(Template.refByName()
+            .dataCenter(US_EAST_STERLING)
+            .name("CENTOS-6-64-TEMPLATE")
+        );
 
-@Test
-public void testFindTemplateByNameRef() {
-    TemplateMetadata metadata = templateService.findByRef(Template.refByName()
-        .dataCenter(US_EAST_STERLING)
-        .name("CENTOS-6-64-TEMPLATE")
-    );
+TemplateMetadata metadata = 
+    templateService
+        .findByRef(Template.refByDescription()
+            .dataCenter(US_EAST_STERLING)
+            .description("pxe boot")
+        );
 
-    assertEquals(metadata.getName(), "CENTOS-6-64-TEMPLATE");
-}
-
-@Test
-public void testFindTemplateByDescriptionRef() {
-    TemplateMetadata metadata = templateService.findByRef(Template.refByDescription()
-        .dataCenter(US_EAST_STERLING)
-        .description("pxe boot")
-    );
-
-    assertEquals(metadata.getName(), "PXE-TEMPLATE");
-}
-
-@Test
-public void testFindAllCentOsTemplates() {
-    List<TemplateMetadata> results = templateService.find(new TemplateFilter()
-        .dataCenters(US_EAST_STERLING)
-        .osTypes(new OsFilter()
-            .type(CENTOS)
-        )
-    );
-
-    assertEquals(results.size(), 2);
-    assertEquals(
-        map(results, TemplateMetadata::getName),
-        asList("CENTOS-5-64-TEMPLATE", "CENTOS-6-64-TEMPLATE")
-    );
-}
-
-@Test
-public void testFindAllTemplatesWithManagedOsCapabilities() {
-    List<TemplateMetadata> results = templateService.find(new TemplateFilter()
+List<TemplateMetadata> results = 
+    templateService
+        .find(new TemplateFilter()
+            .dataCenters(US_EAST_STERLING)
+            .osTypes(new OsFilter()
+                .type(CENTOS)
+            )
+        );
+        
+List<TemplateMetadata> results = 
+    templateService
+        .find(new TemplateFilter()
         .dataCenters(US_EAST_STERLING)
         .where(t -> t.getCapabilities().contains(MANAGED_OS_VALUE))
     );
-
-    assertEquals(results.size(), 8);
-}
 
 ```
