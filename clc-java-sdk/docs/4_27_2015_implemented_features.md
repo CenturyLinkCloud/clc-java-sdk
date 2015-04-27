@@ -4,7 +4,7 @@ Create Server Functionality
 
 ``` java
 
-new ClcSdk()
+new ClcSdk( )
     .serverService()
     .create(new CreateServerCommand()
         .name("TCRT")
