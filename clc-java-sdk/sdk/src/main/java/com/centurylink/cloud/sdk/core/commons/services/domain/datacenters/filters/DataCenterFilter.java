@@ -66,7 +66,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @param dataCenterRefs is list of references to target dataCenters
      * @return {@link DataCenterFilter}
      */
-    public DataCenterFilter in(DataCenterRef... dataCenterRefs) {
+    public DataCenterFilter dataCenters(DataCenterRef... dataCenterRefs) {
         predicate = predicate.and(Filter.or(
             map(dataCenterRefs, DataCenterRef::asFilter)
         ).getPredicate());

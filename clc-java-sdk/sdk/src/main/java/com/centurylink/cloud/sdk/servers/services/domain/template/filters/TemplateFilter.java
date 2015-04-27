@@ -5,8 +5,6 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployme
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
-import com.centurylink.cloud.sdk.core.services.function.Predicates;
-import com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture;
 
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -62,7 +60,7 @@ public class TemplateFilter implements Filter<TemplateFilter> {
      * @throws java.lang.NullPointerException
      */
     public TemplateFilter dataCenters(DataCenterRef... dataCenters) {
-        dataCenter.in(dataCenters);
+        dataCenter.dataCenters(dataCenters);
 
         return this;
     }

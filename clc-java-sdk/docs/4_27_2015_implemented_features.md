@@ -1,7 +1,4 @@
 
-During this time implemented next functionality
-
-
 Create Server Functionality
 ---------------------------
 
@@ -43,7 +40,8 @@ new ClcSdk()
 
 ```
 
-Delete Server
+
+Delete Server Functionality
 -----------------------
 
 Delete single server
@@ -71,7 +69,26 @@ Delete set of servers specified by search criteria
 ``` java
 
 serverService
-    .delete(new DataCenterFilter
+    .delete(new ServerFilter()
+        .dataCenters(DataCenters.US_WEST_SEATTLE)
+        .onlyActive()
     );
     
+```
+
+
+Search DataCenters Functionality
+----------------------------------
+
+``` java
+
+List<DataCenterMetadata> results = 
+    dataCenterServer
+        .find(new DataCenterFilter()
+              .dataCenters(dataCenterRef)
+              .id("va1", "ca1")
+              .nameContains("FrankFurt")
+              .where(d -> d.getGroup().equals("groupId"))
+        );
+
 ```
