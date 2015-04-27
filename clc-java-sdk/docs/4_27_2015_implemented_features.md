@@ -313,15 +313,28 @@ Modify Group Functionality
 
 ``` java
 
-    groupService
-        .update(groupRef, new GroupConfig()
-            .name(groupName)
-            .description(groupDescription)
-            .parentGroup(Group.refById()
-                .dataCenter(DataCenters.DE_FRANKFURT)
-                .id(parentGroupId)
-            )
+groupService
+    .update(groupRef, new GroupConfig()
+        .name(groupName)
+        .description(groupDescription)
+        .parentGroup(Group.refById()
+            .dataCenter(DataCenters.DE_FRANKFURT)
+            .id(parentGroupId)
         )
-        .waitUntilComplete()
+    )
+    .waitUntilComplete()
         
 ```
+
+
+Delete Group Functionality
+--------------------------
+
+``` java
+
+groupServer.delete(groupRef);
+
+```
+
+
+
