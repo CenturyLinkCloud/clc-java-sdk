@@ -171,8 +171,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     void cleanUpCreatedResources(ServerRef newServer) {
         serverService
-            .delete(newServer)
-            .waitUntilComplete();
+            .delete(newServer);
     }
 
 }

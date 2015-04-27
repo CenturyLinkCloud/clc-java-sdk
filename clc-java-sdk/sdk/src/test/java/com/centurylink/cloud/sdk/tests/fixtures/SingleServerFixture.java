@@ -72,8 +72,7 @@ public class SingleServerFixture {
     public void deleteServer() {
         new ClcSdk()
             .serverService()
-            .delete(server)
-            .waitUntilComplete();
+            .delete(server);
     }
 
 }
