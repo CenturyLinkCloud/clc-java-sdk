@@ -26,10 +26,10 @@ public class ServerOperationsServiceStubTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    @Mock
+    @Inject @Mock
     ServerClient serverClient;
 
-    @Mock
+    @Inject @Mock
     QueueClient queueClient;
 
     private ServerMetadata loadServerMetadata(ServerRef server) {
