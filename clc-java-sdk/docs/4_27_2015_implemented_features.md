@@ -300,7 +300,7 @@ groupService
         .name(newGroupName)
         .description(newGroupDescription)
         .parentGroup(Group.refByName()
-            .datacenter(DataCenters.DE_FRANKFURT)
+            .dataCenter(DataCenters.DE_FRANKFURT)
             .name(DefaultGroups.DEFAULT_GROUP)
         )
     )
