@@ -404,35 +404,40 @@ Multiple servers operations:
 
 ``` java
 
-private final serverFilter = new ServerFilter()
-    .id(
-        serverMetadata1.getId(), 
-        serverMetadata2.getId()
-    );
+serverService
+    .powerOn(new ServerFilter()
+        .dataCenters(DE1_FRANKFURT)
+        .groups("MyServer")
+    )
+    .waitUntilComplete();
 
-protected void powerOnServer() {
-    serverService
-        .powerOn(serverFilter)
-        .waitUntilComplete();
-}
 
-protected void powerOffServer() {
-    serverService
-        .powerOff(serverFilter)
-        .waitUntilComplete();
-}
+serverService
+    .powerOff(new ServerFilter()
+        .id(id1, id2)
+    )
+    .waitUntilComplete();
 
-protected void pauseServer() {
-    serverService
-        .pause(serverFilter)
-        .waitUntilComplete();
-}
 
-protected void shutDownServer() {
-    serverService
-        .shutDown(serverFilter)
-        .waitUntilComplete();
-}
+serverService
+    .pause(new ServerFilter()
+        .id(id1, id2)
+    )
+    .waitUntilComplete();
+
+serverService
+    .shutDown(new ServerFilter()
+        .id(id1, id2)
+    )
+    .waitUntilComplete();
+
+
+private final serverFilter =
+    new ServerFilter()
+        .id(
+            serverMetadata1.getId(),
+            serverMetadata2.getId()
+        );
 
 protected void stopServerMaintenance() {
     serverService
@@ -483,15 +488,20 @@ Groups power operations:
 
 ``` java
 
-private final serverFilter = new GroupFilter()
-    .dataCenter(DE1_FRANKFURT)
-    .name("MyGroup");
 
 protected void powerOnServer() {
     serverService
-        .powerOn(groupFilter)
+        .powerOn(new GroupFilter()
+            .dataCenters("va1", "ca1")
+            .nameContains("MyServer")
+        )
         .waitUntilComplete();
 }
+
+private final serverFilter = 
+    new GroupFilter()
+        .dataCenter(DE1_FRANKFURT)
+        .name("MyGroup");
 
 protected void powerOffServer() {
     serverService
