@@ -46,8 +46,32 @@ new ClcSdk()
 Delete Server
 -----------------------
 
+Delete single server
+
 ``` java
 
+serverService.delete(newServer);
 
+```
 
+Delete set of servers
+
+``` java
+
+serverService
+    .delete(
+        Server.refById("DE1ALTDTCRT154"),
+        Server.refById("DE1ALTDTCRT155"),
+    );
+    
+```
+
+Delete set of servers specified by search criteria
+
+``` java
+
+serverService
+    .delete(new DataCenterFilter
+    );
+    
 ```
