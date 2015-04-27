@@ -59,7 +59,7 @@ public class NetworkConfig {
         this.publicIpConfig = publicIpConfig;
     }
 
-    public NetworkConfig publicIpConfig(PublicIpConfig publicIpConfig) {
+    public NetworkConfig publicIp(PublicIpConfig publicIpConfig) {
         setPublicIpConfig(publicIpConfig);
         return this;
     }
