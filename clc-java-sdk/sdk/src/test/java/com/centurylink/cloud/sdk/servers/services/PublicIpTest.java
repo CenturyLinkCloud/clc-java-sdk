@@ -4,7 +4,8 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.Subnet;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
@@ -32,8 +33,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
     ServerService serverService;
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testPublicIp() {
-        new SingleServerFixture().createServer();
+    public void testAddPublicIp() {
         ServerRef serverRef = SingleServerFixture.server();
 
         assertEquals(serverService.findPublicIp(serverRef).size(), 0, "after server creation public ip doesn't exist");
@@ -41,7 +41,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
         //add public IP
         serverService
             .addPublicIp(serverRef,
-                new PublicIpConfig()
+                new CreatePublicIpConfig()
                     .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
                     .sourceRestrictions("70.100.60.140/32")
             ).waitUntilComplete();
@@ -65,8 +65,13 @@ public class PublicIpTest extends AbstractServersSdkTest {
         //find public IP by server
         List<PublicIpMetadata> publicIps = serverService.findPublicIp(serverRef);
         assertEquals(publicIpCount, publicIps.size());
+    }
 
-        //modify public IP
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    public void testModifyPublicIp() {
+        ServerRef serverRef = SingleServerFixture.server();
+        List<IpAddress> ipAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
+
         Integer[] ports = {8081, 8888};
         String sourceRestriction = "50.50.50.50/32";
         String publicIpAddress = ipAddresses.stream()
@@ -74,10 +79,13 @@ public class PublicIpTest extends AbstractServersSdkTest {
             .map(address -> address.getPublicIp())
             .findFirst()
             .get();
-        PublicIpConfig config = new PublicIpConfig()
+
+        ModifyPublicIpConfig config = new ModifyPublicIpConfig()
             .openPorts(ports)
             .sourceRestrictions(sourceRestriction);
         serverService.modifyPublicIp(serverRef.asFilter(), config).waitUntilComplete();
+
+        config.sourceRestrictions("50.50.50.25/32");
         serverService.modifyPublicIp(serverRef, publicIpAddress, config).waitUntilComplete();
 
         PublicIpMetadata updatedPublicIp = serverService.getPublicIp(serverRef, publicIpAddress);
@@ -93,13 +101,17 @@ public class PublicIpTest extends AbstractServersSdkTest {
             .map(restr -> restr.getCidr())
             .collect(toList());
         assertTrue(updatedSourceRestrictions.contains(sourceRestriction), "added source restriction must be present");
+    }
 
-        //delete public IP
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    public void testDeletePublicIp() {
+        ServerRef serverRef = SingleServerFixture.server();
         serverService.removePublicIp(serverRef).waitUntilComplete();
 
         List<IpAddress> initialIpAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
 
-        assertEquals(initialIpAddresses.stream().filter(addr -> addr.getPublicIp() != null).count(), 0, "count of public IP addresses must be 0 after removing all of them");
+        assertEquals(initialIpAddresses.stream()
+            .filter(addr -> addr.getPublicIp() != null).count(), 0, "count of public IPs must be 0 after clearing");
     }
 
     @Test
@@ -110,7 +122,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
         String cidr = "100.0.50.1/17";
         int portFrom = 8080;
         int portTo = 8888;
-        PublicIpConfig config = new PublicIpConfig()
+        CreatePublicIpConfig config = new CreatePublicIpConfig()
             .internalIpAddress(internalIpAddress)
             .openPorts(new PortConfig().port(portFrom).to(portTo))
             .sourceRestrictions(new Subnet().cidr(cidr));

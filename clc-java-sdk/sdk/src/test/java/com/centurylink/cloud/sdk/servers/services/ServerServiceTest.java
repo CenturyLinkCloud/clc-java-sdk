@@ -5,7 +5,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
@@ -102,7 +102,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
             serverService.create(anyServerConfig()
                 .name("CTTL")
                 .network(new NetworkConfig()
-                    .publicIpConfig(new PublicIpConfig()
+                    .publicIpConfig(new CreatePublicIpConfig()
                         .openPorts(8080)
                     )
                 )

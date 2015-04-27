@@ -13,7 +13,7 @@ import static java.util.stream.Collectors.toList;
  * @author Aliaksandr Krasitski
  */
 public class PublicIpConverter {
-    public PublicIpRequest createPublicIpRequest(PublicIpConfig publicIpConfig) {
+    public PublicIpRequest createPublicIpRequest(CreatePublicIpConfig publicIpConfig) {
         List<PortConfig> ports = new ArrayList<>(publicIpConfig.getPorts().size());
         publicIpConfig.getPorts().stream()
             .forEach(port ->
@@ -25,6 +25,21 @@ public class PublicIpConverter {
 
         return new PublicIpRequest()
             .internalIPAddress(publicIpConfig.getInternalIpAddress())
+            .sourceRestrictions(publicIpConfig.getRestrictions().stream()
+                .map(Subnet::getCidr)
+                .collect(toList()))
+            .ports(ports);
+    }
+
+    public PublicIpRequest createPublicIpRequest(ModifyPublicIpConfig publicIpConfig) {
+        List<PortConfig> ports = publicIpConfig.getPorts().stream()
+            .map(port -> new PortConfig()
+                .protocol(port.getProtocolType().name())
+                .port(port.getPort())
+                .portTo(port instanceof PortRangeConfig ? ((PortRangeConfig) port).getPortTo() : null))
+            .collect(toList());
+
+        return new PublicIpRequest()
             .sourceRestrictions(publicIpConfig.getRestrictions().stream()
                 .map(Subnet::getCidr)
                 .collect(toList()))

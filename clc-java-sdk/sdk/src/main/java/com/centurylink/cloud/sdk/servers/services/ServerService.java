@@ -14,7 +14,8 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
@@ -511,7 +512,7 @@ public class ServerService {
      * @param publicIpConfig publicIp config
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpConfig publicIpConfig) {
+    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, CreatePublicIpConfig publicIpConfig) {
         Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
         return new OperationFuture<>(
             serverRef,
@@ -526,7 +527,7 @@ public class ServerService {
      * @param config publicIp config
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> modifyPublicIp(ServerRef server, PublicIpConfig config) {
+    public OperationFuture<ServerRef> modifyPublicIp(ServerRef server, ModifyPublicIpConfig config) {
         checkNotNull(config, "PublicIpConfig must be not null");
         List<IpAddress> ipAddresses = findByRef(server).getDetails().getIpAddresses();
         List<String> responseIds = ipAddresses.stream()
@@ -553,7 +554,7 @@ public class ServerService {
      * @param config publicIp config
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> modifyPublicIp(ServerRef server, String publicIp, PublicIpConfig config) {
+    public OperationFuture<ServerRef> modifyPublicIp(ServerRef server, String publicIp, ModifyPublicIpConfig config) {
         checkNotNull(config, "PublicIpConfig must be not null");
         checkNotNull(publicIp, "public ip must not be null");
 
@@ -575,7 +576,7 @@ public class ServerService {
      * @param config  publicIp config
      * @return OperationFuture wrapper for list of ServerRef
      */
-    public OperationFuture<List<ServerRef>> modifyPublicIp(List<ServerRef> servers, PublicIpConfig config) {
+    public OperationFuture<List<ServerRef>> modifyPublicIp(List<ServerRef> servers, ModifyPublicIpConfig config) {
         List<JobFuture> futures = servers.stream()
             .map(serverRef -> modifyPublicIp(serverRef, config).jobFuture())
             .collect(toList());
@@ -591,7 +592,7 @@ public class ServerService {
      * @param config  publicIp config
      * @return OperationFuture wrapper for list of ServerRef
      */
-    public OperationFuture<List<ServerRef>> modifyPublicIp(ServerFilter filter, PublicIpConfig config) {
+    public OperationFuture<List<ServerRef>> modifyPublicIp(ServerFilter filter, ModifyPublicIpConfig config) {
         return modifyPublicIp(Arrays.asList(getRefsFromFilter(filter)), config);
     }
 
