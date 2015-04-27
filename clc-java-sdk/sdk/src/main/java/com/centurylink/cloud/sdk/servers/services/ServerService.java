@@ -658,9 +658,45 @@ public class ServerService {
         return
             powerOperationResponse(
                 client.createSnapshot(
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(ids(serverFilter))
+                )
+            );
+    }
+
+    /**
+     * Create snapshot of servers groups
+     *
+     * @param expirationDays expiration days (must be between 1 and 10)
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, GroupFilter groupFilter) {
+        return
+            powerOperationResponse(
+                client.createSnapshot(
                     new CreateSnapshotRequest()
                         .snapshotExpirationDays(expirationDays)
-                        .serverIds(ids(serverFilter))
+                        .serverIds(ids(groupFilter))
+                )
+            );
+    }
+
+    /**
+     * Create snapshot of servers groups
+     *
+     * @param expirationDays expiration days (must be between 1 and 10)
+     * @param groupRef groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, GroupRef... groupRef) {
+        return
+            powerOperationResponse(
+                client.createSnapshot(
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                            .serverIds(ids(groupRef))
                 )
             );
     }

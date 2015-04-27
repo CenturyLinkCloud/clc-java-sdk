@@ -12,6 +12,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -196,6 +197,10 @@ public class ServerStubFixture {
 
     public ServerFilter getServerFilterById() {
         return new ServerFilter().id(serverMetadata1.getId(), serverMetadata2.getId());
+    }
+
+    public GroupFilter getGroupFilterById() {
+        return new GroupFilter().id(groupId);
     }
 
     public ServerFilter getServerFilterByGroupId() {

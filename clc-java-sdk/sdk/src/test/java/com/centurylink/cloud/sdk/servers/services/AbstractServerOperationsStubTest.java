@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
@@ -17,6 +18,7 @@ public abstract class AbstractServerOperationsStubTest extends AbstractServersSd
     protected ServerRef server2;
 
     protected ServerFilter serverFilter;
+    protected GroupFilter groupFilter;
 
     @Inject
     ServerService serverService;
