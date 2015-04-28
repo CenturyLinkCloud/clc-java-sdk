@@ -63,7 +63,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByIdRef() {
-        GroupMetadata group = groupService.findByRef(Group.refById("e9cf5a7a9fad43a8a9184d0265ae076c"));
+        GroupMetadata group = groupService.findByRef(Group.refById(DE_ROOT_ID));
 
         assert group.getDescription().equals("DE1 Hardware");
     }
@@ -164,7 +164,10 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
         ));
 
         assertEquals(groups.size(), 3);
-        assertEquals(newHashSet(map(groups, GroupMetadata::getName)), newHashSet(ARCHIVE, TEMPLATES, DEFAULT_GROUP));
+        assertEquals(
+            newHashSet(map(groups, GroupMetadata::getName)),
+            newHashSet(ARCHIVE, TEMPLATES, DEFAULT_GROUP)
+        );
     }
 
     @Test(enabled = false) // require search redesign
