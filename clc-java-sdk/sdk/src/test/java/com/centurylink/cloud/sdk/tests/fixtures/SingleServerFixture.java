@@ -39,7 +39,7 @@ public class SingleServerFixture {
         server =
             clcSdk
                 .serverService()
-                .create(new CreateServerCommand()
+                .create(new CreateServerConfig()
                     .name("TCRT")
                     .type(STANDARD)
                     .group(Group.refByName()

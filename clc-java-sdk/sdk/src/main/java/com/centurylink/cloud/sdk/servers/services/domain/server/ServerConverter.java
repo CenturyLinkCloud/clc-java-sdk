@@ -27,7 +27,7 @@ public class ServerConverter {
         this.networkService = networkService;
     }
 
-    public CreateServerRequest buildCreateServerRequest(CreateServerCommand newServer) {
+    public CreateServerRequest buildCreateServerRequest(CreateServerConfig newServer) {
         TemplateMetadata templateMetadata = templateService.findByRef(newServer.getTemplate());
         return
             new CreateServerRequest()

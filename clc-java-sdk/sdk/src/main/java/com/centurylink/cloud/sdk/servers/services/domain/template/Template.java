@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template;
 
 import com.centurylink.cloud.sdk.servers.services.domain.os.OperatingSystem;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.DescriptionTemplateRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplatebyDescriptionRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateByNameRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateByOsRef;
 
 import java.util.List;
 
@@ -60,15 +60,15 @@ public class Template {
         return this;
     }
 
-    public static NameTemplateRef refByName() {
-        return new NameTemplateRef(null, null);
+    public static TemplateByNameRef refByName() {
+        return new TemplateByNameRef(null, null);
     }
 
-    public static OsTemplateRef refByOs() {
-        return new OsTemplateRef(null, null, null, null, null);
+    public static TemplateByOsRef refByOs() {
+        return new TemplateByOsRef(null, null, null, null, null);
     }
 
-    public static DescriptionTemplateRef refByDescription() {
-        return new DescriptionTemplateRef(null, null);
+    public static TemplatebyDescriptionRef refByDescription() {
+        return new TemplatebyDescriptionRef(null, null);
     }
 }

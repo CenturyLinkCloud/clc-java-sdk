@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 
@@ -21,7 +20,7 @@ public abstract class Group implements Reference {
         return new GroupByIdRef(id);
     }
 
-    public static GroupByNameRef refByName() {
-        return new GroupByNameRef(null, null);
+    public static GroupNameRef refByName() {
+        return new GroupNameRef(null, null);
     }
 }

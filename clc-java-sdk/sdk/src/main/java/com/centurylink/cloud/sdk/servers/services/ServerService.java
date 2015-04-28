@@ -20,7 +20,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilt
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
-import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.future.CreateServerJobFuture;
@@ -61,7 +61,7 @@ public class ServerService {
         this.publicIpConverter = publicIpConverter;
     }
 
-    public OperationFuture<ServerMetadata> create(CreateServerCommand command) {
+    public OperationFuture<ServerMetadata> create(CreateServerConfig command) {
         BaseServerResponse response = client
             .create(serverConverter.buildCreateServerRequest(command));
 
@@ -80,7 +80,7 @@ public class ServerService {
         );
     }
 
-    private JobFuture addPublicIpIfNeeded(CreateServerCommand command, ServerMetadata serverInfo) {
+    private JobFuture addPublicIpIfNeeded(CreateServerConfig command, ServerMetadata serverInfo) {
         if (command.getNetwork().getPublicIpConfig() != null) {
             return
                 addPublicIp(

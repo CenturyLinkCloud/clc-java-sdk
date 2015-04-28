@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.services;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
@@ -26,8 +26,8 @@ public class TestServerSupport {
         this.serverService = serverService;
     }
 
-    public static CreateServerCommand anyServerConfig() {
-        return new CreateServerCommand()
+    public static CreateServerConfig anyServerConfig() {
+        return new CreateServerConfig()
             .name("ALTRS1")
             .type(STANDARD)
 
@@ -51,7 +51,7 @@ public class TestServerSupport {
 
     public ServerMetadata createAnyServer() {
         return
-            serverService.create(new CreateServerCommand()
+            serverService.create(new CreateServerConfig()
                 .name("ALTRS1")
                 .type(STANDARD)
                 .password(PASSWORD)

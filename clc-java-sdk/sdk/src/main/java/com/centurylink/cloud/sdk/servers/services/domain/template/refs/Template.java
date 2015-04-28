@@ -7,10 +7,10 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.Templa
 /**
  * @author ilya.drabenia
  */
-public abstract class TemplateRef implements Reference {
+public abstract class Template implements Reference {
     private final DataCenter dataCenter;
 
-    public TemplateRef(DataCenter dataCenter) {
+    Template(DataCenter dataCenter) {
         this.dataCenter = dataCenter;
     }
 

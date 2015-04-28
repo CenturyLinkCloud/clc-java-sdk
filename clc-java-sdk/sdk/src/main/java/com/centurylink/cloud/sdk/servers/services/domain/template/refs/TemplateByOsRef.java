@@ -9,14 +9,14 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.Templa
 /**
  * @author ilya.drabenia
  */
-public class OsTemplateRef extends TemplateRef {
+public class TemplateByOsRef extends Template {
     private final String type;
     private final CpuArchitecture architecture;
     private final String edition;
     private final String version;
 
-    public OsTemplateRef(DataCenter dataCenter, String type, CpuArchitecture architecture, String edition,
-                         String version) {
+    public TemplateByOsRef(DataCenter dataCenter, String type, CpuArchitecture architecture, String edition,
+                           String version) {
         super(dataCenter);
         this.type = type;
         this.architecture = architecture;
@@ -24,28 +24,28 @@ public class OsTemplateRef extends TemplateRef {
         this.version = version;
     }
 
-    public OsTemplateRef type(String type) {
-        return new OsTemplateRef(getDataCenter(), type, architecture, edition, version);
+    public TemplateByOsRef type(String type) {
+        return new TemplateByOsRef(getDataCenter(), type, architecture, edition, version);
     }
 
-    public OsTemplateRef type(OsType type) {
-        return new OsTemplateRef(getDataCenter(), type.getCode(), architecture, edition, version);
+    public TemplateByOsRef type(OsType type) {
+        return new TemplateByOsRef(getDataCenter(), type.getCode(), architecture, edition, version);
     }
 
     public String getType() {
         return type;
     }
 
-    public OsTemplateRef architecture(CpuArchitecture architecture) {
-        return new OsTemplateRef(getDataCenter(), type, architecture, edition, version);
+    public TemplateByOsRef architecture(CpuArchitecture architecture) {
+        return new TemplateByOsRef(getDataCenter(), type, architecture, edition, version);
     }
 
     public CpuArchitecture getArchitecture() {
         return architecture;
     }
 
-    public OsTemplateRef version(String version) {
-        return new OsTemplateRef(getDataCenter(), type, architecture, edition, version);
+    public TemplateByOsRef version(String version) {
+        return new TemplateByOsRef(getDataCenter(), type, architecture, edition, version);
     }
 
     public String getVersion() {
@@ -56,12 +56,12 @@ public class OsTemplateRef extends TemplateRef {
         return edition;
     }
 
-    public OsTemplateRef edition(String edition) {
-        return new OsTemplateRef(getDataCenter(), type, architecture, edition, version);
+    public TemplateByOsRef edition(String edition) {
+        return new TemplateByOsRef(getDataCenter(), type, architecture, edition, version);
     }
 
-    public OsTemplateRef dataCenter(DataCenter dataCenter) {
-        return new OsTemplateRef(dataCenter, type, architecture, edition, version);
+    public TemplateByOsRef dataCenter(DataCenter dataCenter) {
+        return new TemplateByOsRef(dataCenter, type, architecture, edition, version);
     }
 
     @Override

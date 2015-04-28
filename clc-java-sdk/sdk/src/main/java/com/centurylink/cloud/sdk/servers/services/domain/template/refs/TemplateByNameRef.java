@@ -6,10 +6,10 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.Templa
 /**
  * @author ilya.drabenia
  */
-public class NameTemplateRef extends TemplateRef {
+public class TemplateByNameRef extends Template {
     private final String name;
 
-    public NameTemplateRef(DataCenter dataCenter, String name) {
+    public TemplateByNameRef(DataCenter dataCenter, String name) {
         super(dataCenter);
         this.name = name;
     }
@@ -18,12 +18,12 @@ public class NameTemplateRef extends TemplateRef {
         return name;
     }
 
-    public NameTemplateRef name(String name) {
-        return new NameTemplateRef(getDataCenter(), name);
+    public TemplateByNameRef name(String name) {
+        return new TemplateByNameRef(getDataCenter(), name);
     }
 
-    public NameTemplateRef dataCenter(DataCenter dataCenter) {
-        return new NameTemplateRef(dataCenter, name);
+    public TemplateByNameRef dataCenter(DataCenter dataCenter) {
+        return new TemplateByNameRef(dataCenter, name);
     }
 
     @Override
