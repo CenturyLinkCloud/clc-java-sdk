@@ -3,11 +3,9 @@ package com.centurylink.cloud.sdk.servers.services;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.*;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
+import com.centurylink.cloud.sdk.core.services.function.Streams;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
@@ -191,7 +189,7 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(ServerRef... serverRefs) {
         return powerOperationResponse(
-                client.powerOn(ids(serverRefs))
+            client.powerOn(ids(serverRefs))
         );
     }
 
@@ -382,22 +380,9 @@ public class ServerService {
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<BaseServerResponse>> pause(ServerRef... serverRefs) {
-        BaseServerListResponse response = client.pause(ids(serverRefs));
-
         return
-            new OperationFuture<>(
-                response,
-                new ParallelJobsFuture(
-                    response.stream().map(r ->
-                        new PauseServerJobFuture(
-                            r.findStatusId(),
-                            r.getServer(),
-                            queueClient,
-                            client
-                        )
-                    )
-                    .collect(toList())
-                )
+            powerOperationResponse(
+                client.pause(ids(serverRefs))
             );
     }
 
@@ -640,9 +625,9 @@ public class ServerService {
         return
             powerOperationResponse(
                 client.createSnapshot(
-                        new CreateSnapshotRequest()
-                                .snapshotExpirationDays(expirationDays)
-                                .serverIds(ids(serverRefs))
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(ids(serverRefs))
                 )
             );
     }
@@ -658,9 +643,9 @@ public class ServerService {
         return
             powerOperationResponse(
                 client.createSnapshot(
-                        new CreateSnapshotRequest()
-                                .snapshotExpirationDays(expirationDays)
-                                .serverIds(ids(serverFilter))
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(ids(serverFilter))
                 )
             );
     }
