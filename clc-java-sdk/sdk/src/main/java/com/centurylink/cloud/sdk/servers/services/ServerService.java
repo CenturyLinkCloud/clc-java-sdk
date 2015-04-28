@@ -765,6 +765,7 @@ public class ServerService {
      */
     public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpConfig publicIpConfig) {
         Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
+
         return new OperationFuture<>(
             serverRef,
             response.getId(),

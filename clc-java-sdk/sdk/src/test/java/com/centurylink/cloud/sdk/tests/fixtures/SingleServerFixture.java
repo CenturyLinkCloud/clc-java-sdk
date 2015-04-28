@@ -6,6 +6,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -18,6 +19,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitectu
 import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static org.testng.Assert.assertEquals;
 
 /**
  * @author Ilya Drabenia
@@ -33,8 +35,10 @@ public class SingleServerFixture {
 
     @BeforeSuite(groups = LONG_RUNNING)
     public void createServer() {
+        ClcSdk sdk = new ClcSdk();
+
         server =
-            new ClcSdk()
+            sdk
                 .serverService()
                 .create(new CreateServerCommand()
                     .name("TCRT")
@@ -66,6 +70,15 @@ public class SingleServerFixture {
                 .waitUntilComplete()
                 .getResult()
                 .asRefById();
+
+        assertEquals(
+            sdk
+                .serverService()
+                .findByRef(server)
+                .getLocationId()
+                .toUpperCase(),
+            "DE1"
+        );
     }
 
     @AfterSuite(groups = LONG_RUNNING)

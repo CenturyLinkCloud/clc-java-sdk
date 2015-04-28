@@ -9,8 +9,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.Subnet;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortRangeConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
-import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.apache.commons.net.util.SubnetUtils;
 import org.testng.annotations.Test;
@@ -30,19 +30,25 @@ public class PublicIpTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
+    private long countOfPublicIp(List<IpAddress> ipAddresses) {
+        return ipAddresses.stream()
+            .filter(address -> address.getPublicIp() != null)
+            .count();
+    }
+
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testPublicIpTest() {
-        ServerRef serverRef = SingleServerFixture.server();
+        ServerRef serverRef = Server.refById("CA1ALTDTCRT30");
 
         serverService
             .addPublicIp(serverRef,
                 new PublicIpConfig()
                     .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
                     .sourceRestrictions("70.100.60.140/32")
-            );
+            )
+            .waitUntilComplete();
 
         List<IpAddress> ipAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
-
 
         ipAddresses.stream()
                 .filter(address -> address.getPublicIp() != null)
@@ -63,7 +69,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
         List<IpAddress> initialIpAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
 
-        assertEquals(initialIpAddresses.stream().filter(addr -> addr.getPublicIp() != null).count(), 0, "count of public IP addresses must be 0");
+        assertEquals(countOfPublicIp(initialIpAddresses), 0, "count of public IP addresses must be 0");
     }
 
     @Test
