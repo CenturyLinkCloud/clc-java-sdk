@@ -1,8 +1,9 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
-import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +24,11 @@ public class GroupController {
     SdkRegistry sdkRegistry;
 
     @RequestMapping(method = GET)
-    public List<Group> findAll(@PathVariable("dataCenter") String dataCenter) {
+    public List<GroupMetadata> findAll(@PathVariable("dataCenter") String dataCenter) {
         return
             sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
                 .groupService()
-                .findByDataCenter(DataCenter.refById(dataCenter));
+                .find(new GroupFilter().dataCenters(DataCenter.refById(dataCenter)));
     }
 
 }

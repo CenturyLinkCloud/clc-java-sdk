@@ -1,7 +1,10 @@
 package com.centurylink.cloud.sdk.tests.fixtures;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.core.commons.client.domain.queue.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
@@ -20,7 +23,10 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.when;
 
 /**
@@ -30,7 +36,7 @@ public class ServerStubFixture {
 
     private final static String serverId = "de1altdtcrt777";
     private final static String serverId2 = "de1altdtcrt888";
-    private final static String groupId = "de10392941c64838a4f0daec38e67f5a";
+    private final static String groupId = "e9cf5a7a9fad43a8a9184d0265ae076c";
 
     private static Link link;
 
@@ -39,15 +45,21 @@ public class ServerStubFixture {
 
     private GroupMetadata groupMetadata;
 
+    private DataCenterMetadata dataCenterMetadata;
+
     /* mocked server client*/
     ServerClient serverClient;
 
     /* mocked queue client*/
     QueueClient queueClient;
 
-    public ServerStubFixture(ServerClient serverClient, QueueClient queueClient) {
+    /* mocked dataCenter client*/
+    DataCentersClient dataCentersClient;
+
+    public ServerStubFixture(ServerClient serverClient, QueueClient queueClient, DataCentersClient dataCentersClient) {
         this.serverClient = serverClient;
         this.queueClient = queueClient;
+        this.dataCentersClient = dataCentersClient;
 
         initMockAndStubs();
     }
@@ -57,6 +69,7 @@ public class ServerStubFixture {
         serverMetadata2 = createServerMetadata(serverId2);
 
         groupMetadata = createGroupMetadata();
+        dataCenterMetadata = createDataCenterMetadata();
         link = createLink();
 
         GetStatusResponse statusResponse = new GetStatusResponse("succeeded");
@@ -73,6 +86,11 @@ public class ServerStubFixture {
 
         when(serverClient.findServerById(serverIdList.get(1)))
                 .thenReturn(serverMetadata1);
+
+        GetDataCenterListResponse dataCenterListResponse = createDataCenterListResponse();
+
+        when(dataCentersClient.findAllDataCenters())
+                .thenReturn(dataCenterListResponse);
 
         when(serverClient.getGroup(eq(groupId), any(Boolean.class)))
                 .thenReturn(groupMetadata);
@@ -246,7 +264,7 @@ public class ServerStubFixture {
         return new GroupMetadata() {{
             setId(groupId);
             setName("Default Group");
-            setLocationId("CA1");
+            setLocationId("DE1");
             setType("default");
             setStatus("active");
             setServersCount(3);
@@ -262,6 +280,24 @@ public class ServerStubFixture {
             }};
     }
 
+    private DataCenterMetadata createDataCenterMetadata() {
+        Link link = new Link() {{
+            setRel("group");
+            setHref("/v2/groups/altd/" + groupId);
+            setId(groupId);
+            setName("DE1 Hardware");
+        }};
+
+        List<Link> links = new ArrayList<>();
+        links.add(link);
+
+        return new DataCenterMetadata() {{
+            setId("de1");
+            setName("DE1 - Germany (Frankfurt)");
+            setLinks(links);
+        }};
+    }
+
     private BaseServerListResponse createBaseServerListResponse() {
         BaseServerListResponse responseList = new BaseServerListResponse();
 
@@ -272,6 +308,13 @@ public class ServerStubFixture {
         BaseServerResponse response2 = new BaseServerResponse(serverId2, true, linkList);
         responseList.add(response);
         responseList.add(response2);
+
+        return responseList;
+    }
+
+    private GetDataCenterListResponse createDataCenterListResponse() {
+        GetDataCenterListResponse responseList = new GetDataCenterListResponse();
+        responseList.add(dataCenterMetadata);
 
         return responseList;
     }

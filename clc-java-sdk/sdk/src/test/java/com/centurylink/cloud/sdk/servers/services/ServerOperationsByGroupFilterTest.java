@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
@@ -12,6 +13,7 @@ import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
+
 public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsStubTest {
 
     @Inject @Mock
@@ -19,6 +21,9 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
 
     @Inject @Mock
     QueueClient queueClient;
+
+    @Inject @Mock
+    DataCentersClient dataCentersClient;
 
     @Override
     protected void powerOnServer() {
@@ -100,6 +105,16 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
     @Override
     @Test(groups = {INTEGRATION})
     public void runChainTests() {
-        /* TODO implement tests asap */
+        ServerStubFixture fixture = new ServerStubFixture(serverClient, queueClient, dataCentersClient);
+
+        ServerMetadata serverMetadata1 = fixture.getServerMetadata();
+        ServerMetadata serverMetadata2 = fixture.getAnotherServerMetadata();
+
+        server1 = serverMetadata1.asRefById();
+        server2 = serverMetadata2.asRefById();
+        groupFilter = fixture.getGroupFilterById();
+
+        testArchive();
+        fixture.activateServers();
     }
 }
