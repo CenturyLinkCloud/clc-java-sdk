@@ -6,10 +6,10 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.Templa
 /**
  * @author ilya.drabenia
  */
-public class TemplatebyDescriptionRef extends Template {
+public class TemplateDescriptionRef extends Template {
     private final String description;
 
-    public TemplatebyDescriptionRef(DataCenter dataCenter, String description) {
+    TemplateDescriptionRef(DataCenter dataCenter, String description) {
         super(dataCenter);
         this.description = description;
     }
@@ -18,12 +18,12 @@ public class TemplatebyDescriptionRef extends Template {
         return description;
     }
 
-    public TemplatebyDescriptionRef description(String description) {
-        return new TemplatebyDescriptionRef(getDataCenter(), description);
+    public TemplateDescriptionRef description(String description) {
+        return new TemplateDescriptionRef(getDataCenter(), description);
     }
 
-    public TemplatebyDescriptionRef dataCenter(DataCenter dataCenter) {
-        return new TemplatebyDescriptionRef(dataCenter, description);
+    public TemplateDescriptionRef dataCenter(DataCenter dataCenter) {
+        return new TemplateDescriptionRef(dataCenter, description);
     }
 
     @Override

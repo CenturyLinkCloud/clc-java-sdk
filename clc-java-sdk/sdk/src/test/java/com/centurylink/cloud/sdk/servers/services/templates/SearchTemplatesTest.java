@@ -6,7 +6,6 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployme
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.google.inject.Inject;
@@ -58,7 +57,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindTemplateByOsRef() throws Exception {
-        TemplateMetadata metadata = templateService.findByRef(Template.refByOs()
+        TemplateMetadata metadata = templateService.findByRef(com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template.refByOs()
             .dataCenter(US_EAST_STERLING)
             .type(RHEL)
             .version("6")
@@ -70,7 +69,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindTemplateByNameRef() {
-        TemplateMetadata metadata = templateService.findByRef(Template.refByName()
+        TemplateMetadata metadata = templateService.findByRef(com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template.refByName()
             .dataCenter(US_EAST_STERLING)
             .name("CENTOS-6-64-TEMPLATE")
         );
@@ -80,7 +79,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindTemplateByDescriptionRef() {
-        TemplateMetadata metadata = templateService.findByRef(Template.refByDescription()
+        TemplateMetadata metadata = templateService.findByRef(com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template.refByDescription()
             .dataCenter(US_EAST_STERLING)
             .description("pxe boot")
         );

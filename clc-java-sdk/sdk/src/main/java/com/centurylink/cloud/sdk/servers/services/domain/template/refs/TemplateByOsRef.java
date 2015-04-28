@@ -15,7 +15,7 @@ public class TemplateByOsRef extends Template {
     private final String edition;
     private final String version;
 
-    public TemplateByOsRef(DataCenter dataCenter, String type, CpuArchitecture architecture, String edition,
+    TemplateByOsRef(DataCenter dataCenter, String type, CpuArchitecture architecture, String edition,
                            String version) {
         super(dataCenter);
         this.type = type;

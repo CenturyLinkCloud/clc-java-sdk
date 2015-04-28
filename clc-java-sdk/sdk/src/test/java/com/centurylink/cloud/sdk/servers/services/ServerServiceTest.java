@@ -1,27 +1,26 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.RHEL;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -35,9 +34,6 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    @Inject
-    TemplateService templateService;
-
     @Test
     public void testCreate() throws Exception {
         Server serverRef = SingleServerFixture.server();
@@ -45,39 +41,6 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         ServerMetadata server = serverService.findByRef(serverRef);
         assert !isNullOrEmpty(server.getId());
         assertEquals(server.getLocationId().toUpperCase(), "DE1");
-    }
-
-    @Test(enabled = false) // custom template endpoint is not documented yet
-    public void testCreateWithCustomTemplate() throws Exception {
-        Template customTemplate = createTemplateWithDescription("template1");
-
-        ServerMetadata testServer = serverService
-            .create(anyServerConfig()
-                .template(Template.refByDescription()
-                    .description("template1")
-                )
-            )
-            .waitUntilComplete()
-            .getResult();
-
-        assert testServer.getId() != null;
-
-        serverService.delete(testServer.asRefById());
-        templateService.delete(customTemplate);
-    }
-
-    private Template createTemplateWithDescription(String description) {
-        ServerMetadata templateServer = new TestServerSupport(serverService).createAnyServer();
-
-        return serverService
-            .convertToTemplate(new CreateTemplateCommand()
-                .server(templateServer.asRefById())
-                .visibility(PRIVATE)
-                .password(TestServerSupport.PASSWORD)
-                .description(description)
-            )
-            .waitUntilComplete()
-            .getResult();
     }
 
     @Test(enabled = false) // This functionality tested by single server fixture
@@ -120,8 +83,8 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         ServerMetadata newServer =
             serverService.create(anyServerConfig()
                 .name("CMOS")
-                .template(Template.refByOs()
-                    .dataCenter(com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING)
+                .template(com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template.refByOs()
+                    .dataCenter(US_EAST_STERLING)
                     .type(RHEL)
                     .edition("6")
                     .architecture(x86_64)
@@ -129,7 +92,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 .managedOs()
                 .group(Group.refByName()
                     .name(DEFAULT_GROUP)
-                    .dataCenter(com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING)
+                    .dataCenter(US_EAST_STERLING)
                 )
             )
             .waitUntilComplete()
@@ -140,7 +103,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         cleanUpCreatedResources(newServer.asRefById());
     }
 
-    //@Test(expectedExceptions = ResourceNotFoundException.class)
+    @Test(enabled = false, expectedExceptions = ResourceNotFoundException.class)
     public void testDeleteServers() {
         OperationFuture<ServerMetadata> future1 = serverService.create(anyServerConfig());
         OperationFuture<ServerMetadata> future2 = serverService.create(anyServerConfig());

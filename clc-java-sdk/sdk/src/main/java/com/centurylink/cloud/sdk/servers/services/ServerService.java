@@ -15,7 +15,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
 import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
@@ -26,8 +25,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFi
 import com.centurylink.cloud.sdk.servers.services.domain.server.future.CreateServerJobFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 
 import java.util.Arrays;
@@ -37,7 +34,6 @@ import java.util.stream.Stream;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.isAlwaysTruePredicate;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -163,24 +159,6 @@ public class ServerService {
 
     public List<ServerMetadata> find(ServerFilter serverFilter) {
         return findLazy(serverFilter).collect(toList());
-    }
-
-    public OperationFuture<Template> convertToTemplate(CreateTemplateCommand command) {
-        BaseServerResponse response =
-            client.convertToTemplate(new CreateTemplateRequest()
-                .serverId(command.getServer().as(ServerByIdRef.class).getId())
-                .description(command.getDescription())
-                .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
-                .password(command.getPassword())
-            );
-
-        return new OperationFuture<>(
-            new Template()
-                .name(response.getServer())
-                .description(command.getDescription()),
-            response.findStatusId(),
-            queueClient
-        );
     }
 
     /**

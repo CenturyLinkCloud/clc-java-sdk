@@ -1,15 +1,15 @@
 package com.centurylink.cloud.sdk.servers.services.templates;
 
+import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
 @Test(groups = INTEGRATION)
 public class TemplateServiceTest extends AbstractServersSdkTest {
@@ -19,7 +19,7 @@ public class TemplateServiceTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindByDataCenter() {
-        List<Template> templates = templateService.findByDataCenter(DE_FRANKFURT.getId());
+        List<TemplateMetadata> templates = templateService.findByDataCenter(DE_FRANKFURT.getId());
 
         assert templates.size() > 0;
     }

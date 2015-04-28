@@ -9,7 +9,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.Templa
 public class TemplateByNameRef extends Template {
     private final String name;
 
-    public TemplateByNameRef(DataCenter dataCenter, String name) {
+    TemplateByNameRef(DataCenter dataCenter, String name) {
         super(dataCenter);
         this.name = name;
     }

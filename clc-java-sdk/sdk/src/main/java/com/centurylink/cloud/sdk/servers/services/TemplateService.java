@@ -1,14 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
-import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.google.inject.Inject;
@@ -25,20 +20,12 @@ import static java.util.stream.Collectors.toList;
  */
 public class TemplateService {
     private final DataCenterService dataCenterService;
-    private final ServerClient serversClient;
     private final DataCentersClient dataCentersClient;
-    private final TemplateConverter converter;
-    private final QueueClient queueClient;
 
     @Inject
-    public TemplateService(DataCenterService dataCenterService, ServerClient serversClient,
-                           DataCentersClient dataCentersClient, TemplateConverter converter,
-                           QueueClient queueClient) {
+    public TemplateService(DataCenterService dataCenterService, DataCentersClient dataCentersClient) {
         this.dataCenterService = dataCenterService;
-        this.serversClient = serversClient;
         this.dataCentersClient = dataCentersClient;
-        this.converter = converter;
-        this.queueClient = queueClient;
     }
 
     public TemplateMetadata findByRef(Template templateRef) {
@@ -68,22 +55,11 @@ public class TemplateService {
                 .filter(filter.getPredicate());
     }
 
-    public List<com.centurylink.cloud.sdk.servers.services.domain.template.Template> findByDataCenter(String dataCenterId) {
-        return converter.templateListFrom(
+    public List<TemplateMetadata> findByDataCenter(String dataCenterId) {
+        return
             dataCentersClient
                 .getDataCenterDeploymentCapabilities(dataCenterId)
-                .getTemplates()
-        );
-    }
-
-    public OperationFuture<com.centurylink.cloud.sdk.servers.services.domain.template.Template> delete(com.centurylink.cloud.sdk.servers.services.domain.template.Template template) {
-        BaseServerResponse response = serversClient.delete(template.getName());
-
-        return new OperationFuture<>(
-            template,
-            response.findStatusId(),
-            queueClient
-        );
+                .getTemplates();
     }
 
 }

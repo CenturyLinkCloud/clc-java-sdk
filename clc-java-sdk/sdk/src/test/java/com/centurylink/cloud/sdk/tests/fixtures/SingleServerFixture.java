@@ -6,7 +6,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMet
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -55,7 +54,7 @@ public class SingleServerFixture {
                             .size(14)
                         )
                     )
-                    .template(Template.refByOs()
+                    .template(com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template.refByOs()
                         .dataCenter(DE_FRANKFURT)
                         .type(CENTOS)
                         .version("6")

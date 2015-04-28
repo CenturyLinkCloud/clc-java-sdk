@@ -14,6 +14,18 @@ public abstract class Template implements Reference {
         this.dataCenter = dataCenter;
     }
 
+    public static TemplateByNameRef refByName() {
+        return new TemplateByNameRef(null, null);
+    }
+
+    public static TemplateByOsRef refByOs() {
+        return new TemplateByOsRef(null, null, null, null, null);
+    }
+
+    public static TemplateDescriptionRef refByDescription() {
+        return new TemplateDescriptionRef(null, null);
+    }
+
     public DataCenter getDataCenter() {
         return dataCenter;
     }
