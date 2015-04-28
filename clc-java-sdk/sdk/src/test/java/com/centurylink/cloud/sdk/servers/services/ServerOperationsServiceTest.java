@@ -99,6 +99,18 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
+    private void revertToSnapshot() {
+        serverService
+            .revertToSnapshot(server.asFilter())
+            .waitUntilComplete();
+    }
+
+    private void deleteSnapshot() {
+        serverService
+            .deleteSnapshot(server)
+            .waitUntilComplete();
+    }
+
     public void testPowerOff() {
         testShutDown();
         powerOffServer();
@@ -162,6 +174,18 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         assertThatServerHasStatus(server, "archived");
     }
 
+    public void testRevertToSnapshot() {
+        Details serverDetails = loadServerDetails(server);
+        assertEquals(serverDetails.getSnapshots().size(), 1);
+
+        revertToSnapshot();
+
+        deleteSnapshot();
+
+        serverDetails = loadServerDetails(server);
+        assertEquals(serverDetails.getSnapshots().size(), 0);
+    }
+
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testRestore() throws Exception {
         server = SingleServerFixture.server();
@@ -170,8 +194,10 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         Group group = Group.refById(groupId);
 
         testArchive();
-
         restoreServer(group);
+
+        testRevertToSnapshot();
+
         assertThatServerHasStatus(server, "active");
     }
 }

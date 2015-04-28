@@ -50,7 +50,7 @@ public class Details {
     @JsonProperty("partitions")
     private List<Partition> partitions = new ArrayList<Partition>();
     @JsonProperty("snapshots")
-    private List<Object> snapshots = new ArrayList<Object>();
+    private List<Snapshot> snapshots = new ArrayList<Snapshot>();
     @JsonProperty("customFields")
     private List<Object> customFields = new ArrayList<Object>();
     @JsonIgnore
@@ -282,7 +282,7 @@ public class Details {
      * The snapshots
      */
     @JsonProperty("snapshots")
-    public List<Object> getSnapshots() {
+    public List<Snapshot> getSnapshots() {
         return snapshots;
     }
 
@@ -292,7 +292,7 @@ public class Details {
      * The snapshots
      */
     @JsonProperty("snapshots")
-    public void setSnapshots(List<Object> snapshots) {
+    public void setSnapshots(List<Snapshot> snapshots) {
         this.snapshots = snapshots;
     }
 

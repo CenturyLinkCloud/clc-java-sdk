@@ -10,10 +10,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.S
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
-import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
@@ -28,6 +25,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
 import com.google.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -431,6 +429,58 @@ public class ServerService {
     }
 
     /**
+     * Delete all snapshots for provided servers
+     * @param servers server references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> deleteSnapshot(Server... servers) {
+        List<String> responseIds = new ArrayList<>();
+        List<Server> serverList = Arrays.asList(servers);
+
+        Arrays.asList(servers).stream()
+            .map(serverRef -> findByRef(serverRef))
+            .forEach(metadata -> {
+                List<Snapshot> snapshotsList = metadata.getDetails().getSnapshots();
+                String serverId = metadata.getId();
+
+                responseIds.addAll(snapshotsList
+                        .stream()
+                        .map(snapshot ->
+                            client.deleteSnapshot(serverId, getSnapshotId(snapshot)).getId())
+                        .collect(toList())
+                );
+            });
+
+        return new OperationFuture<>(
+            serverList,
+            responseIds,
+            queueClient
+        );
+    }
+
+    private String getSnapshotId(Snapshot snapshot) {
+        String rel = "self";
+        String slash = "/";
+
+        String snapshotUrl = snapshot.getLinks().stream()
+            .filter(link -> link.getRel().equals(rel))
+            .map(Link::getHref)
+            .findFirst()
+            .get();
+
+        return snapshotUrl.substring(snapshotUrl.lastIndexOf(slash) + 1);
+    }
+
+    /**
+     * Delete all snapshots for server criteria
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> deleteSnapshot(ServerFilter serverFilter) {
+        return deleteSnapshot(getRefsFromFilter(serverFilter));
+    }
+
+    /**
      * Restore a given archived server to a specified group
      *
      * @param server server reference
@@ -439,17 +489,57 @@ public class ServerService {
      */
     public OperationFuture<Link> restore(Server server, Group group) {
         return baseServerResponse(
-            client.restore(
-                idByRef(server),
-                new RestoreServerRequest()
-                    .targetGroupId(
-                            groupService.findByRef(group).getId()
-                    )
-            )
+            restore(server, groupService.findByRef(group).getId())
         );
     }
 
-    public List<String> ids(Server... serverRefs) {
+    private Link restore(Server server, String groupId) {
+        return client.restore(
+            idByRef(server),
+            new RestoreServerRequest()
+                .targetGroupId(groupId)
+        );
+    }
+
+    /**
+     * Revert a set of servers to snapshot
+     * @param servers server references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> revertToSnapshot(Server... servers) {
+        List<Server> serverList = Arrays.asList(servers);
+
+        List<JobFuture> futures = new ArrayList<>();
+
+        Arrays.asList(servers).stream()
+            .map(serverRef -> findByRef(serverRef))
+            .forEach(metadata -> {
+                List<Snapshot> snapshotsList = metadata.getDetails().getSnapshots();
+                String serverId = metadata.getId();
+
+                futures.addAll(snapshotsList
+                    .stream()
+                    .map(snapshot ->
+                        baseServerResponse(client.revertToSnapshot(serverId, getSnapshotId(snapshot))).jobFuture())
+                    .collect(toList()));
+            });
+
+        return new OperationFuture<>(
+                serverList,
+                new ParallelJobsFuture(futures)
+            );
+    }
+
+    /**
+     * Revert a set of servers to snapshot
+     * @param filter search servers criteria
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> revertToSnapshot(ServerFilter filter) {
+        return revertToSnapshot(getRefsFromFilter(filter));
+    }
+
+    private List<String> ids(Server... serverRefs) {
         return
             Stream
                 .of(serverRefs)
@@ -518,7 +608,7 @@ public class ServerService {
                 client.modifyPublicIp(idByRef(server),
                     ipAddress,
                     publicIpConverter.createPublicIpRequest(config)))
-            .map(link -> link.getId())
+            .map(Link::getId)
             .collect(toList());
 
         return new OperationFuture<>(
