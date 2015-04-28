@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.client.domain.server.metadata;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.annotation.Generated;
@@ -363,8 +363,8 @@ public class ServerMetadata {
         this.additionalProperties.put(name, value);
     }
 
-    public IdServerRef asRefById() {
-        return new IdServerRef(this.getId());
+    public ServerByIdRef asRefById() {
+        return new ServerByIdRef(this.getId());
     }
 
 }

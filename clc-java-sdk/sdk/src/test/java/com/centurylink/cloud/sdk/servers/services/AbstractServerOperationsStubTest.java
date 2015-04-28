@@ -6,14 +6,14 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMet
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 
 import com.google.inject.Inject;
 
 public abstract class AbstractServerOperationsStubTest extends AbstractServersSdkTest {
 
-    protected ServerRef server1;
-    protected ServerRef server2;
+    protected Server server1;
+    protected Server server2;
 
     protected ServerFilter serverFilter;
     protected GroupFilter groupFilter;
@@ -26,29 +26,29 @@ public abstract class AbstractServerOperationsStubTest extends AbstractServersSd
     @Inject
     GroupService groupService;
 
-    protected ServerMetadata loadServerMetadata(ServerRef server) {
+    protected ServerMetadata loadServerMetadata(Server server) {
         ServerMetadata metadata = serverService.findByRef(server);
         assertNotNull(metadata);
 
         return metadata;
     }
 
-    protected Details loadServerDetails(ServerRef server) {
+    protected Details loadServerDetails(Server server) {
         ServerMetadata metadata = loadServerMetadata(server);
         assertNotNull(metadata.getDetails());
 
         return metadata.getDetails();
     }
 
-    protected void assertThatServerHasStatus(ServerRef server, String status) {
+    protected void assertThatServerHasStatus(Server server, String status) {
         assertEquals(loadServerMetadata(server).getStatus(), status);
     }
 
-    protected void assertThatServerPowerStateHasStatus(ServerRef server, String status) {
+    protected void assertThatServerPowerStateHasStatus(Server server, String status) {
         assertEquals(loadServerDetails(server).getPowerState(), status);
     }
 
-    protected void assertThatMaintenanceFlagIs(ServerRef server, Boolean expectedResult) {
+    protected void assertThatMaintenanceFlagIs(Server server, Boolean expectedResult) {
         assertEquals(loadServerDetails(server).getInMaintenanceMode(), expectedResult);
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractServerOperationsStubTest extends AbstractServersSd
 
     protected abstract void createServerSnapshot();
 
-    protected abstract void restoreServer(Group group, ServerRef server);
+    protected abstract void restoreServer(Group group, Server server);
 
     protected abstract void resetServer();
 

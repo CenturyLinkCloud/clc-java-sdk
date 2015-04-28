@@ -5,7 +5,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.D
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -28,9 +28,9 @@ import static org.testng.Assert.assertEquals;
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 public class SingleServerFixture {
     private final ClcSdk clcSdk = new ClcSdk();
-    private static volatile ServerRef server;
+    private static volatile Server server;
 
-    public static ServerRef server() {
+    public static Server server() {
         return server;
     }
 

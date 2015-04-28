@@ -5,10 +5,10 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFi
 /**
  * @author ilya.drabenia
  */
-public class IdServerRef extends ServerRef {
+public class ServerByIdRef extends Server {
     private final String id;
 
-    public IdServerRef(String id) {
+    public ServerByIdRef(String id) {
         this.id = id;
     }
 

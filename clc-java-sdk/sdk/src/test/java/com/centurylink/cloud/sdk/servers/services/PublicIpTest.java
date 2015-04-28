@@ -9,8 +9,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.Subnet;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortRangeConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.apache.commons.net.util.SubnetUtils;
@@ -39,7 +38,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testPublicIpTest() {
-        ServerRef serverRef = SingleServerFixture.server();
+        Server serverRef = SingleServerFixture.server();
 
         serverService
             .addPublicIp(serverRef,

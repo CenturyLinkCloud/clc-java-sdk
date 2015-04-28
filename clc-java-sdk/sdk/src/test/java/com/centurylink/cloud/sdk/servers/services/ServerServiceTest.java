@@ -7,8 +7,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
@@ -40,7 +40,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Test
     public void testCreate() throws Exception {
-        ServerRef serverRef = SingleServerFixture.server();
+        Server serverRef = SingleServerFixture.server();
 
         ServerMetadata server = serverService.findByRef(serverRef);
         assert !isNullOrEmpty(server.getId());
@@ -153,10 +153,10 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 .waitUntilComplete()
                 .getResult();
 
-        ServerRef ref1 = testServer1.asRefById();
-        ServerRef ref2 = testServer2.asRefById();
+        Server ref1 = testServer1.asRefById();
+        Server ref2 = testServer2.asRefById();
 
-        serverService.delete(ref1.asFilter().id(ref2.as(IdServerRef.class).getId())).waitUntilComplete();
+        serverService.delete(ref1.asFilter().id(ref2.as(ServerByIdRef.class).getId())).waitUntilComplete();
 
 
 
@@ -170,7 +170,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     }
 
-    void cleanUpCreatedResources(ServerRef newServer) {
+    void cleanUpCreatedResources(Server newServer) {
         serverService
             .delete(newServer);
     }

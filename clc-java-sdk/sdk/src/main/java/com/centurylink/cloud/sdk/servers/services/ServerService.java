@@ -24,8 +24,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConf
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.future.CreateServerJobFuture;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import com.google.inject.Inject;
@@ -94,7 +94,7 @@ public class ServerService {
         }
     }
 
-    public OperationFuture<ServerRef> delete(ServerRef server) {
+    public OperationFuture<Server> delete(Server server) {
         BaseServerResponse response = client.delete(idByRef(server));
 
         return new OperationFuture<>(
@@ -104,7 +104,7 @@ public class ServerService {
         );
     }
 
-    public OperationFuture<List<ServerRef>> delete(ServerRef... servers) {
+    public OperationFuture<List<Server>> delete(Server... servers) {
         List<JobFuture> futures = Arrays.asList(servers).stream()
             .map(serverRef -> delete(serverRef).jobFuture())
             .collect(toList());
@@ -115,14 +115,14 @@ public class ServerService {
         );
     }
 
-    public OperationFuture<List<ServerRef>> delete(ServerFilter filter) {
-        List<ServerRef> serverRefs = find(filter).stream()
+    public OperationFuture<List<Server>> delete(ServerFilter filter) {
+        List<Server> serverRefs = find(filter).stream()
             .map(metadata -> metadata.asRefById())
             .collect(toList());
-        return delete(serverRefs.toArray(new ServerRef[serverRefs.size()]));
+        return delete(serverRefs.toArray(new Server[serverRefs.size()]));
     }
 
-    public ServerMetadata findByRef(ServerRef serverRef) {
+    public ServerMetadata findByRef(Server serverRef) {
         return
             findLazy(
                 serverRef.asFilter()
@@ -132,9 +132,9 @@ public class ServerService {
             );
     }
 
-    String idByRef(ServerRef ref) {
-        if (ref.is(IdServerRef.class)) {
-            return ref.as(IdServerRef.class).getId();
+    String idByRef(Server ref) {
+        if (ref.is(ServerByIdRef.class)) {
+            return ref.as(ServerByIdRef.class).getId();
         } else {
             return findByRef(ref).getId();
         }
@@ -168,7 +168,7 @@ public class ServerService {
     public OperationFuture<Template> convertToTemplate(CreateTemplateCommand command) {
         BaseServerResponse response =
             client.convertToTemplate(new CreateTemplateRequest()
-                .serverId(command.getServer().as(IdServerRef.class).getId())
+                .serverId(command.getServer().as(ServerByIdRef.class).getId())
                 .description(command.getDescription())
                 .visibility(command.getVisibility() == PRIVATE ? "private" : "privateShared")
                 .password(command.getPassword())
@@ -189,7 +189,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOn(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> powerOn(Server... serverRefs) {
         return powerOperationResponse(
             client.powerOn(ids(serverRefs))
         );
@@ -213,7 +213,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOff(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> powerOff(Server... serverRefs) {
         return powerOperationResponse(
             client.powerOff(ids(serverRefs))
         );
@@ -237,7 +237,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> startMaintenance(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(Server... serverRefs) {
         return powerOperationResponse(
             client.startMaintenance(ids(serverRefs))
         );
@@ -261,7 +261,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(Server... serverRefs) {
         return powerOperationResponse(
             client.stopMaintenance(ids(serverRefs))
         );
@@ -285,7 +285,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> pause(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> pause(Server... serverRefs) {
         return
             powerOperationResponse(
                 client.pause(ids(serverRefs))
@@ -310,7 +310,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> reboot(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> reboot(Server... serverRefs) {
         return powerOperationResponse(
             client.reboot(ids(serverRefs))
         );
@@ -334,7 +334,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> reset(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> reset(Server... serverRefs) {
         return powerOperationResponse(
             client.reset(ids(serverRefs))
         );
@@ -358,7 +358,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> shutDown(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> shutDown(Server... serverRefs) {
         return powerOperationResponse(
             client.shutDown(ids(serverRefs))
         );
@@ -382,7 +382,7 @@ public class ServerService {
      * @param serverRefs server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> archive(ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> archive(Server... serverRefs) {
         return powerOperationResponse(
             client.archive(ids(serverRefs))
         );
@@ -407,7 +407,7 @@ public class ServerService {
      * @param serverRefs     server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerRef... serverRefs) {
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, Server... serverRefs) {
         return
             powerOperationResponse(
                 client.createSnapshot(
@@ -443,7 +443,7 @@ public class ServerService {
      * @param group  group reference
      * @return OperationFuture wrapper for BaseServerResponse
      */
-    public OperationFuture<Link> restore(ServerRef server, Group group) {
+    public OperationFuture<Link> restore(Server server, Group group) {
         return baseServerResponse(
             client.restore(
                 idByRef(server),
@@ -455,7 +455,7 @@ public class ServerService {
         );
     }
 
-    public List<String> ids(ServerRef... serverRefs) {
+    public List<String> ids(Server... serverRefs) {
         return
             Stream
                 .of(serverRefs)
@@ -498,7 +498,7 @@ public class ServerService {
      * @param publicIpConfig publicIp metadata object
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> addPublicIp(ServerRef serverRef, PublicIpConfig publicIpConfig) {
+    public OperationFuture<Server> addPublicIp(Server serverRef, PublicIpConfig publicIpConfig) {
         Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
 
         return new OperationFuture<>(
@@ -515,7 +515,7 @@ public class ServerService {
      * @param publicIp  existing public IP address
      * @return public IP response object
      */
-    public PublicIpMetadata getPublicIp(ServerRef serverRef, String publicIp) {
+    public PublicIpMetadata getPublicIp(Server serverRef, String publicIp) {
         return client.getPublicIp(idByRef(serverRef), publicIp);
     }
 
@@ -525,7 +525,7 @@ public class ServerService {
      * @param server server reference
      * @return list public IPs
      */
-    public List<PublicIpMetadata> findPublicIp(ServerRef server) {
+    public List<PublicIpMetadata> findPublicIp(Server server) {
         List<IpAddress> ipAddresses = findByRef(server).getDetails().getIpAddresses();
 
         return ipAddresses.stream()
@@ -542,7 +542,7 @@ public class ServerService {
      * @param ipAddress  existing public IP address
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<ServerRef> removePublicIp(ServerRef serverRef, String ipAddress) {
+    public OperationFuture<Server> removePublicIp(Server serverRef, String ipAddress) {
         checkNotNull(ipAddress, "ipAddress must be not null");
 
         Link response = client.removePublicIp(idByRef(serverRef), ipAddress);
@@ -560,7 +560,7 @@ public class ServerService {
      * @param serverRef server reference
      * @return server reference
      */
-    public OperationFuture<ServerRef> removePublicIp(ServerRef serverRef) {
+    public OperationFuture<Server> removePublicIp(Server serverRef) {
         ServerMetadata serverMetadata = findByRef(serverRef);
         List<JobFuture> jobFutures = serverMetadata.getDetails().getIpAddresses()
             .stream()

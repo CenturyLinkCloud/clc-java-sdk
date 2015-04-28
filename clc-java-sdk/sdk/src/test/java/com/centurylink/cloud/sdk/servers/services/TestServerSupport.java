@@ -5,7 +5,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMet
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 
 import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
@@ -78,7 +78,7 @@ public class TestServerSupport {
             .getResult();
     }
 
-    public void deleteServer(ServerRef newServer) {
+    public void deleteServer(Server newServer) {
         serverService
             .delete(newServer)
             .waitUntilComplete();
