@@ -38,6 +38,10 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
         assertEquals(serverService.findPublicIp(serverRef).size(), 0, "after server creation public ip doesn't exist");
 
+        if (!serverService.findByRef(serverRef).getDetails().getPowerState().equals("started")) {
+            serverService.powerOn(serverRef);
+        }
+
         //add public IP
         serverService
             .addPublicIp(serverRef,
@@ -67,7 +71,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
         assertEquals(publicIpCount, publicIps.size());
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    @Test(dependsOnMethods = "testAddPublicIp", groups = {INTEGRATION, LONG_RUNNING})
     public void testModifyPublicIp() {
         ServerRef serverRef = SingleServerFixture.server();
         List<IpAddress> ipAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
@@ -103,7 +107,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
         assertTrue(updatedSourceRestrictions.contains(sourceRestriction), "added source restriction must be present");
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    @Test(dependsOnMethods = "testModifyPublicIp", groups = {INTEGRATION, LONG_RUNNING})
     public void testDeletePublicIp() {
         ServerRef serverRef = SingleServerFixture.server();
         serverService.removePublicIp(serverRef).waitUntilComplete();
