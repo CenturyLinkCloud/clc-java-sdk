@@ -22,8 +22,8 @@ public abstract class Template implements Reference {
         return new TemplateByOsRef(null, null, null, null, null);
     }
 
-    public static TemplateDescriptionRef refByDescription() {
-        return new TemplateDescriptionRef(null, null);
+    public static TemplateByDescriptionRef refByDescription() {
+        return new TemplateByDescriptionRef(null, null);
     }
 
     public DataCenter getDataCenter() {
