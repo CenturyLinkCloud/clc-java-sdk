@@ -1,7 +1,8 @@
-package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
+package com.centurylink.cloud.sdk.servers.services.domain.group;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -10,11 +11,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author ilya.drabenia
  */
-public class GroupNameRef extends Group {
+public class GroupByNameRef extends Group {
     private final DataCenter dataCenter;
     private final String name;
 
-    GroupNameRef(DataCenter dataCenter, String name) {
+    GroupByNameRef(DataCenter dataCenter, String name) {
         this.dataCenter = dataCenter;
         this.name = name;
     }
@@ -23,12 +24,12 @@ public class GroupNameRef extends Group {
         return name;
     }
 
-    public GroupNameRef name(String name) {
-        return new GroupNameRef(dataCenter, name);
+    public GroupByNameRef name(String name) {
+        return new GroupByNameRef(dataCenter, name);
     }
 
-    public GroupNameRef dataCenter(DataCenter dataCenter) {
-        return new GroupNameRef(dataCenter, name);
+    public GroupByNameRef dataCenter(DataCenter dataCenter) {
+        return new GroupByNameRef(dataCenter, name);
     }
 
     @Override
