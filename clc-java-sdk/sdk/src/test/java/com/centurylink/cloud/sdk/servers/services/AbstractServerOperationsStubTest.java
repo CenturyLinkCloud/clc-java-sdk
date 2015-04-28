@@ -25,6 +25,9 @@ public abstract class AbstractServerOperationsStubTest extends AbstractServersSd
     @Inject
     ServerService serverService;
 
+    @Inject
+    GroupService groupService;
+
     protected ServerMetadata loadServerMetadata(ServerRef server) {
         ServerMetadata metadata = serverService.findByRef(server);
         assertNotNull(metadata);
