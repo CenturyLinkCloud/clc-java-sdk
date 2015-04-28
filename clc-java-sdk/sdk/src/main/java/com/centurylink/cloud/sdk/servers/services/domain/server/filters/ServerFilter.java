@@ -121,7 +121,6 @@ public class ServerFilter implements Filter<ServerFilter> {
      */
     public ServerFilter groupsWhere(GroupFilter filter) {
         groupFilter = groupFilter.and(filter);
-        this.groupsWhere(new GroupFilter());
         return this;
     }
 

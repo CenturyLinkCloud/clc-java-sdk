@@ -8,7 +8,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFi
 public class ServerByIdRef extends Server {
     private final String id;
 
-    public ServerByIdRef(String id) {
+    ServerByIdRef(String id) {
         this.id = id;
     }
 

@@ -8,7 +8,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFi
  */
 public abstract class Server implements Reference {
 
-    public static Server refById(String id) {
+    public static ServerByIdRef refById(String id) {
         return new ServerByIdRef(id);
     }
 
