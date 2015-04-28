@@ -17,7 +17,7 @@ public class DataCentersClient extends BaseSdkClient {
         super(authFilter);
     }
 
-    public DatacenterDeploymentCapabilitiesMetadata getDataCenterDeploymentCapabilities(String dataCenterId) {
+    public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(String dataCenterId) {
         return
             client("/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
                 .resolveTemplate("dataCenterId", dataCenterId)

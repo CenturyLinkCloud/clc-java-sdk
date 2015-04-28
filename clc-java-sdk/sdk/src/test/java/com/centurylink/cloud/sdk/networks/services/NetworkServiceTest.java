@@ -60,7 +60,7 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
     }
 
     private OngoingStubbing<DatacenterDeploymentCapabilitiesMetadata> mockNetworks(List<NetworkMetadata> networks) {
-        return when(dataCentersClient.getDataCenterDeploymentCapabilities(anyString()))
+        return when(dataCentersClient.getDeploymentCapabilities(anyString()))
             .thenReturn(new DatacenterDeploymentCapabilitiesMetadata()
                 .deployableNetworks(networks)
             );

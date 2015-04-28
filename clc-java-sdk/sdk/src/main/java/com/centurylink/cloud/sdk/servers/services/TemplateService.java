@@ -50,7 +50,7 @@ public class TemplateService {
             dataCenterService
                 .findLazy(filter.getDataCenter())
                 .map(DataCenterMetadata::getId)
-                .map(dataCentersClient::getDataCenterDeploymentCapabilities)
+                .map(dataCentersClient::getDeploymentCapabilities)
                 .flatMap(c -> c.getTemplates().stream())
                 .filter(filter.getPredicate());
     }
@@ -58,7 +58,7 @@ public class TemplateService {
     public List<TemplateMetadata> findByDataCenter(String dataCenterId) {
         return
             dataCentersClient
-                .getDataCenterDeploymentCapabilities(dataCenterId)
+                .getDeploymentCapabilities(dataCenterId)
                 .getTemplates();
     }
 

@@ -28,7 +28,7 @@ public class NetworkService {
         if (networkRef.is(IdNetworkRef.class)) {
             return
                 dataCentersClient
-                    .getDataCenterDeploymentCapabilities(dataCenterId(networkRef.getDataCenter()))
+                    .getDeploymentCapabilities(dataCenterId(networkRef.getDataCenter()))
                     .findNetworkById(networkRef.as(IdNetworkRef.class).getId());
         } else {
             throw new ReferenceNotSupportedException(networkRef.getClass());
@@ -38,7 +38,7 @@ public class NetworkService {
     public List<NetworkMetadata> findByDataCenter(DataCenter dataCenter) {
         return
             dataCentersClient
-                .getDataCenterDeploymentCapabilities(dataCenterId(dataCenter))
+                .getDeploymentCapabilities(dataCenterId(dataCenter))
                 .getDeployableNetworks();
     }
 

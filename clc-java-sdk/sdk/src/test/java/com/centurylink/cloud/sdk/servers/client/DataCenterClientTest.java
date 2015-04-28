@@ -30,7 +30,7 @@ public class DataCenterClientTest extends AbstractServersSdkTest {
     @Test
     public void getDeploymentCapabilitiesTest() {
         DatacenterDeploymentCapabilitiesMetadata deployment =
-                client.getDataCenterDeploymentCapabilities(CA_VANCOUVER.getId());
+                client.getDeploymentCapabilities(CA_VANCOUVER.getId());
 
         assert deployment.getTemplates().size() > 0;
     }

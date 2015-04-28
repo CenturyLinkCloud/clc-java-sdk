@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.google.inject.Inject;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -52,12 +53,12 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
             .doReturn(
                 fromJson("va1_deployment_capabilities.json", DatacenterDeploymentCapabilitiesMetadata.class)
             )
-            .when(dataCentersClient).getDataCenterDeploymentCapabilities("va1");
+            .when(dataCentersClient).getDeploymentCapabilities("va1");
     }
 
     @Test
     public void testFindTemplateByOsRef() throws Exception {
-        TemplateMetadata metadata = templateService.findByRef(com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template.refByOs()
+        TemplateMetadata metadata = templateService.findByRef(Template.refByOs()
             .dataCenter(US_EAST_STERLING)
             .type(RHEL)
             .version("6")
@@ -69,7 +70,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindTemplateByNameRef() {
-        TemplateMetadata metadata = templateService.findByRef(com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template.refByName()
+        TemplateMetadata metadata = templateService.findByRef(Template.refByName()
             .dataCenter(US_EAST_STERLING)
             .name("CENTOS-6-64-TEMPLATE")
         );
@@ -79,7 +80,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindTemplateByDescriptionRef() {
-        TemplateMetadata metadata = templateService.findByRef(com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template.refByDescription()
+        TemplateMetadata metadata = templateService.findByRef(Template.refByDescription()
             .dataCenter(US_EAST_STERLING)
             .description("pxe boot")
         );
