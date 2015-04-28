@@ -1,7 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
-import com.centurylink.cloud.sdk.servers.services.domain.group.GroupByNameRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
