@@ -117,6 +117,9 @@ public class GroupFilter implements Filter<GroupFilter> {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GroupFilter and(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
@@ -130,6 +133,9 @@ public class GroupFilter implements Filter<GroupFilter> {
             );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GroupFilter or(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
