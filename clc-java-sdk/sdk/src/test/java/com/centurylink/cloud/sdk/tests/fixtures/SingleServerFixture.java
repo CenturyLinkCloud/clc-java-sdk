@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.tests.fixtures;
 
 import com.centurylink.cloud.sdk.ClcSdk;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
@@ -18,15 +19,16 @@ import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGro
 import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static org.testng.Assert.assertEquals;
 
 /**
  * @author Ilya Drabenia
  */
-@Test
+@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class SingleServerFixture {
-
+    private final ClcSdk clcSdk = new ClcSdk();
     private static volatile ServerRef server;
 
     public static ServerRef server() {
@@ -35,10 +37,8 @@ public class SingleServerFixture {
 
     @BeforeSuite(groups = LONG_RUNNING)
     public void createServer() {
-        ClcSdk sdk = new ClcSdk();
-
         server =
-            sdk
+            clcSdk
                 .serverService()
                 .create(new CreateServerCommand()
                     .name("TCRT")
@@ -71,19 +71,26 @@ public class SingleServerFixture {
                 .getResult()
                 .asRefById();
 
-        assertEquals(
-            sdk
+        assertThatServerProperlyStarted();
+    }
+
+    @Test(enabled = false) // it's assert, not a test
+    public void assertThatServerProperlyStarted() {
+        ServerMetadata metadata =
+            clcSdk
                 .serverService()
-                .findByRef(server)
-                .getLocationId()
-                .toUpperCase(),
-            "DE1"
-        );
+                .findByRef(server);
+
+        assertEquals(metadata.getLocationId().toUpperCase(), "DE1");
+        assertEquals(metadata.getDetails().getPowerState(), "started");
+        assertEquals(metadata.getStatus(), "active");
     }
 
     @AfterSuite(groups = LONG_RUNNING)
     public void deleteServer() {
-        new ClcSdk()
+        assertThatServerProperlyStarted();
+
+        clcSdk
             .serverService()
             .delete(server);
     }
