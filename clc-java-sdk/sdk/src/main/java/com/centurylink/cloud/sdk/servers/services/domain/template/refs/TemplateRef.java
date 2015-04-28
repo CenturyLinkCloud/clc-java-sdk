@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 
@@ -8,13 +8,13 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.Templa
  * @author ilya.drabenia
  */
 public abstract class TemplateRef implements Reference {
-    private final DataCenterRef dataCenter;
+    private final DataCenter dataCenter;
 
-    public TemplateRef(DataCenterRef dataCenter) {
+    public TemplateRef(DataCenter dataCenter) {
         this.dataCenter = dataCenter;
     }
 
-    public DataCenterRef getDataCenter() {
+    public DataCenter getDataCenter() {
         return dataCenter;
     }
 

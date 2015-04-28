@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
@@ -15,7 +15,7 @@ public class OsTemplateRef extends TemplateRef {
     private final String edition;
     private final String version;
 
-    public OsTemplateRef(DataCenterRef dataCenter, String type, CpuArchitecture architecture, String edition,
+    public OsTemplateRef(DataCenter dataCenter, String type, CpuArchitecture architecture, String edition,
                          String version) {
         super(dataCenter);
         this.type = type;
@@ -60,7 +60,7 @@ public class OsTemplateRef extends TemplateRef {
         return new OsTemplateRef(getDataCenter(), type, architecture, edition, version);
     }
 
-    public OsTemplateRef dataCenter(DataCenterRef dataCenter) {
+    public OsTemplateRef dataCenter(DataCenter dataCenter) {
         return new OsTemplateRef(dataCenter, type, architecture, edition, version);
     }
 

@@ -170,7 +170,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         server = SingleServerFixture.server();
 
         String groupId = loadServerMetadata(server).getGroupId();
-        GroupRef group = new IdGroupRef(DataCenter.refByName("FranKfUrt"), groupId);
+        GroupRef group = GroupRef.matchById(groupId);
 
         testArchive();
 

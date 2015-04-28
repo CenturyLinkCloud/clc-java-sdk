@@ -1,18 +1,18 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
@@ -21,6 +21,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -89,7 +90,7 @@ public class GroupService {
         );
     }
 
-    public List<Group> findByDataCenter(DataCenterRef dataCenter) {
+    public List<GroupMetadata> findByDataCenter(DataCenter dataCenter) {
         String rootGroupId = dataCentersClient
             .getDataCenter(
                 dataCenterService.findByRef(dataCenter).getId()
@@ -97,12 +98,14 @@ public class GroupService {
             .getGroup()
             .getId();
 
-        GroupMetadata result = client.getGroup(rootGroupId, false);
-
-        return converter.newGroupList(
-                dataCenterService.findByRef(dataCenter).getId(),
-                result.getAllGroups()
-        );
+        try {
+            return
+                client
+                    .getGroup(rootGroupId, false)
+                    .getAllGroups();
+        } catch (ClcClientException ex) {
+            return new ArrayList<>();
+        }
     }
 
     public OperationFuture<GroupRef> create(GroupConfig groupConfig) {
@@ -111,11 +114,12 @@ public class GroupService {
         checkNotNull(groupConfig.getParentGroup(), "ParentGroup of GroupConfig must be not null");
 
         GroupMetadata group = client.createGroup(
-                converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
+            converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
         );
 
         return new OperationFuture<>(
-            new IdGroupRef(groupConfig.getParentGroup().getDataCenter(), group.getId()),
+            GroupRef.matchById()
+                .id(group.getId()),
             new NoWaitingJobFuture()
         );
     }

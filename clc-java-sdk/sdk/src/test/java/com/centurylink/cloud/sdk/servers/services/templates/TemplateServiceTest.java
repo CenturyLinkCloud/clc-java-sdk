@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.DE_FRANKFURT;
 
 @Test(groups = INTEGRATION)
 public class TemplateServiceTest extends AbstractServersSdkTest {

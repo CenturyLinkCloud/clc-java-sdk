@@ -8,8 +8,8 @@ import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.CA_VANCOUVER;
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.CA_VANCOUVER;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.DE_FRANKFURT;
 
 /**
  * @author ilya.drabenia

@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.template.filters;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 
@@ -60,7 +60,7 @@ public class TemplateFilter implements Filter<TemplateFilter> {
      * @return {@link TemplateFilter}
      * @throws java.lang.NullPointerException
      */
-    public TemplateFilter dataCenters(DataCenterRef... dataCenters) {
+    public TemplateFilter dataCenters(DataCenter... dataCenters) {
         dataCenter.dataCenters(dataCenters);
 
         return this;

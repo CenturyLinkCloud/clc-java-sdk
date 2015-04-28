@@ -7,10 +7,10 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filter
  *
  * @author ilya.drabenia
  */
-public class IdDataCenterRef extends DataCenterRef {
+public class DataCenterByIdRef extends DataCenter {
     private final String id;
 
-    public IdDataCenterRef(String id) {
+    DataCenterByIdRef(String id) {
         this.id = id;
     }
 

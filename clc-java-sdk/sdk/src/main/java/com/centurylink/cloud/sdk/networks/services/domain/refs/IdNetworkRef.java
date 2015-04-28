@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.networks.services.domain.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 
 /**
  * @author ilya.drabenia
@@ -8,7 +8,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.D
 public class IdNetworkRef extends NetworkRef {
     private final String id;
 
-    public IdNetworkRef(DataCenterRef dataCenter, String id) {
+    public IdNetworkRef(DataCenter dataCenter, String id) {
         super(dataCenter);
         this.id = id;
     }

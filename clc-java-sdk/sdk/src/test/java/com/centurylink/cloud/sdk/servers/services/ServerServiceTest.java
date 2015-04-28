@@ -1,10 +1,10 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
@@ -122,15 +122,15 @@ public class ServerServiceTest extends AbstractServersSdkTest {
             serverService.create(anyServerConfig()
                 .name("CMOS")
                 .template(Template.refByOs()
-                    .dataCenter(DataCenters.US_EAST_STERLING)
+                    .dataCenter(DataCenter.US_EAST_STERLING)
                     .type(RHEL)
                     .edition("6")
                     .architecture(x86_64)
                 )
                 .managedOs()
-                .group(Group.refByName()
+                .group(GroupRef.matchByName()
                     .name(DEFAULT_GROUP)
-                    .dataCenter(DataCenters.US_EAST_STERLING)
+                    .dataCenter(DataCenter.US_EAST_STERLING)
                 )
             )
             .waitUntilComplete()

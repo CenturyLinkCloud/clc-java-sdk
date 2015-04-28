@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
 
@@ -66,9 +66,9 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @param dataCenterRefs is list of references to target dataCenters
      * @return {@link DataCenterFilter}
      */
-    public DataCenterFilter dataCenters(DataCenterRef... dataCenterRefs) {
+    public DataCenterFilter dataCenters(DataCenter... dataCenterRefs) {
         predicate = predicate.and(Filter.or(
-            map(dataCenterRefs, DataCenterRef::asFilter)
+            map(dataCenterRefs, DataCenter::asFilter)
         ).getPredicate());
 
         return this;

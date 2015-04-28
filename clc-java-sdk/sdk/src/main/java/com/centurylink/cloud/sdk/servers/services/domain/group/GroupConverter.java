@@ -11,28 +11,12 @@ import java.util.stream.Collectors;
  */
 public class GroupConverter {
 
-    public List<Group> newGroupList(String dataCenter, List<GroupMetadata> groups) {
-        return
-            groups.stream()
-                .map(curGroup -> newGroup(dataCenter, curGroup))
-                .collect(Collectors.toList());
-    }
-
-    public Group newGroup(String dataCenter,
-                          GroupMetadata group) {
-        return
-            new Group()
-                .id(group.getId())
-                .name(group.getName())
-                .dataCenter(new DataCenter(dataCenter));
-    }
-
     public CreateGroupRequest createGroupRequest(GroupConfig groupConfig, String parentGroupId) {
         return new CreateGroupRequest()
-                .name(groupConfig.getName())
-                .description(groupConfig.getDescription())
-                .parentGroupId(parentGroupId)
-                .customFields(groupConfig.getCustomFields());
+            .name(groupConfig.getName())
+            .description(groupConfig.getDescription())
+            .parentGroupId(parentGroupId)
+            .customFields(groupConfig.getCustomFields());
     }
 
     public UpdateGroupRequest createUpdateGroupRequest(GroupConfig groupConfig, String parentGroupId) {

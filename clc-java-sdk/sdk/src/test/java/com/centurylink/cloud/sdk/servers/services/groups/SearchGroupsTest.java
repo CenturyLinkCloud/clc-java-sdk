@@ -10,8 +10,8 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.google.inject.Inject;
 import org.mockito.Mock;
 import org.testng.annotations.Test;
@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.DE_FRANKFURT;
 import static java.util.Arrays.asList;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -85,7 +85,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
         mockDataCentersMetadata();
         mockFrankfurtDataCenterRootGroup();
 
-        GroupMetadata group = groupService.findByRef(Group.refById()
+        GroupMetadata group = groupService.findByRef(GroupRef.matchById()
             .dataCenter(DE_FRANKFURT)
             .id("1")
         );
@@ -98,7 +98,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
         mockDataCentersMetadata();
         mockFrankfurtDataCenterRootGroup();
 
-        GroupMetadata group = groupService.findByRef(Group.refByName()
+        GroupMetadata group = groupService.findByRef(GroupRef.matchByName()
             .dataCenter(DE_FRANKFURT)
             .name("Archive")
         );

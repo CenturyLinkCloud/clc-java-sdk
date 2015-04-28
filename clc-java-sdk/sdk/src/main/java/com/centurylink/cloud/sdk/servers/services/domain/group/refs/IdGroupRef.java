@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class IdGroupRef extends GroupRef {
     private final String id;
 
-    public IdGroupRef(DataCenterRef dataCenter, String id) {
+    IdGroupRef(DataCenter dataCenter, String id) {
         super(dataCenter);
         this.id = id;
     }
@@ -26,7 +26,7 @@ public class IdGroupRef extends GroupRef {
         return new IdGroupRef(dataCenter, id);
     }
 
-    public IdGroupRef dataCenter(DataCenterRef dataCenter) {
+    public IdGroupRef dataCenter(DataCenter dataCenter) {
         return new IdGroupRef(dataCenter, id);
     }
 

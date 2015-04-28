@@ -1,16 +1,14 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.CustomField;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.NameGroupRef;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
@@ -28,7 +26,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION})
     public void testFindGroupsByDataCenter() {
-        List<Group> groups = groupService.findByDataCenter(DataCenters.DE_FRANKFURT);
+        List<GroupMetadata> groups = groupService.findByDataCenter(DataCenter.DE_FRANKFURT);
 
         assert groups.size() > 0;
     }
@@ -37,10 +35,14 @@ public class GroupServiceTest extends AbstractServersSdkTest {
     public void testCreateGroup() {
         String newGroupName = "test group";
         String newGroupDescription = "test group description";
+
         IdGroupRef newGroup = groupService.create(new GroupConfig()
-                .parentGroup(new NameGroupRef(DataCenters.DE_FRANKFURT, DefaultGroups.DEFAULT_GROUP))
-                .name(newGroupName)
-                .description(newGroupDescription))
+            .parentGroup(GroupRef.matchByName()
+                    .dataCenter(DataCenter.DE_FRANKFURT)
+                    .name(DefaultGroups.DEFAULT_GROUP)
+            )
+            .name(newGroupName)
+            .description(newGroupDescription))
             .getResult().as(IdGroupRef.class);
 
         GroupMetadata createdGroup = groupService.findByRef(newGroup);
@@ -54,7 +56,9 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testUpdateGroup() throws JsonProcessingException {
-        GroupRef groupRef = new NameGroupRef(DataCenters.DE_FRANKFURT, DefaultGroups.DEFAULT_GROUP);
+        GroupRef groupRef = GroupRef.matchByName()
+            .dataCenter(DataCenter.DE_FRANKFURT)
+            .name(DefaultGroups.DEFAULT_GROUP);
         GroupMetadata groupMetadata = groupService.findByRef(groupRef);
         String parentGroupId = groupMetadata.getParentGroupId();
 
@@ -63,10 +67,11 @@ public class GroupServiceTest extends AbstractServersSdkTest {
         //TODO identify correct custom fields ids
         List<CustomField> customFields = Arrays.asList(new CustomField().id("123").value("test value"));
 
-        GroupConfig config = new GroupConfig()
+        GroupConfig config =
+            new GroupConfig()
                 .name(groupName)
                 .description(groupDescription)
-                .parentGroup(new IdGroupRef(DataCenters.DE_FRANKFURT, parentGroupId));
+                .parentGroup(GroupRef.matchById(parentGroupId));
 
         groupService.update(groupRef, config).waitUntilComplete();
 

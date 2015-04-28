@@ -8,7 +8,15 @@ import com.centurylink.cloud.sdk.core.services.refs.Reference;
  *
  * @author ilya.drabenia
  */
-public abstract class DataCenterRef implements Reference {
+public abstract class DataCenter implements Reference {
+
+    public static DataCenterByIdRef refById(String id) {
+        return new DataCenterByIdRef(id);
+    }
+
+    public static DataCenterByNameRef refByName(String name) {
+        return new DataCenterByNameRef(name);
+    }
 
     /**
      * {@inheritDoc}

@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata.MANAGED_OS_VALUE;
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.US_EAST_STERLING;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;

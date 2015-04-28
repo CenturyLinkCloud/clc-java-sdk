@@ -1,7 +1,8 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.IdDataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterByIdRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
@@ -15,7 +16,7 @@ public class ServerBean {
     private CreateServerCommand server = new CreateServerCommand()
         .machine(new Machine())
         .network(new NetworkConfig())
-        .group(new IdGroupRef(null, null))
+        .group(GroupRef.matchByName())
         .template(new NameTemplateRef(null, null));
 
     public ServerBean(CreateServerCommand server) {
@@ -78,7 +79,7 @@ public class ServerBean {
     public String getDataCenter() {
         return server
             .getGroup().as(IdGroupRef.class)
-            .getDataCenter().as(IdDataCenterRef.class)
+            .getDataCenter().as(DataCenterByIdRef.class)
             .getId();
     }
 

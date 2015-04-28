@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk.tests.fixtures;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
@@ -42,7 +42,7 @@ public class SingleServerFixture {
                 .create(new CreateServerCommand()
                     .name("TCRT")
                     .type(STANDARD)
-                    .group(Group.refByName()
+                    .group(GroupRef.matchByName()
                         .name(DEFAULT_GROUP)
                         .dataCenter(DataCenter.refByName("FranKfUrt"))
                     )

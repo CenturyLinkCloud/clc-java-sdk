@@ -2,7 +2,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.group.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -37,9 +37,9 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @param dataCenters is not null list of data center references
      * @return {@link GroupFilter}
      */
-    public GroupFilter dataCenters(DataCenterRef... dataCenters) {
+    public GroupFilter dataCenters(DataCenter... dataCenters) {
         dataCenterFilter = dataCenterFilter.and(Filter.or(
-            map(dataCenters, DataCenterRef::asFilter)
+            map(dataCenters, DataCenter::asFilter)
         ));
 
         return this;
