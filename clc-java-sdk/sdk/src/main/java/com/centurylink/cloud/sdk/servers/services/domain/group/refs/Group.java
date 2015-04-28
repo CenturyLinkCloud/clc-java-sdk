@@ -20,7 +20,7 @@ public abstract class Group implements Reference {
         return new GroupByIdRef(id);
     }
 
-    public static GroupByNameRef refByName() {
-        return new GroupByNameRef(null, null);
+    public static GroupNameRef refByName() {
+        return new GroupNameRef(null, null);
     }
 }
