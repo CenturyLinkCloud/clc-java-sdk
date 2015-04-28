@@ -37,7 +37,6 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testPublicIp() {
-        new SingleServerFixture().createServer();
         serverRef = SingleServerFixture.server();
 
         addPublicIp();
