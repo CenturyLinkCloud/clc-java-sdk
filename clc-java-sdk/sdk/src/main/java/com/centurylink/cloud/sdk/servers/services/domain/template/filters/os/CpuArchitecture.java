@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.services.domain.os;
+package com.centurylink.cloud.sdk.servers.services.domain.template.filters.os;
 
 /**
  * @author ilya.drabenia

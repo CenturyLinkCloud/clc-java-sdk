@@ -11,8 +11,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 
 /**

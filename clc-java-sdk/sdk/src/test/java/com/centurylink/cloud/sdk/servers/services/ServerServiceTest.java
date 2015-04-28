@@ -20,8 +20,8 @@ import java.time.ZonedDateTime;
 
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.RHEL;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.RHEL;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
@@ -158,6 +158,8 @@ public class ServerServiceTest extends AbstractServersSdkTest {
         ServerRef ref2 = testServer2.asRefById();
 
         serverService.delete(ref1.asFilter().id(ref2.as(IdServerRef.class).getId())).waitUntilComplete();
+
+
 
         //TODO find by non existing id throws com.fasterxml.jackson.databind.JsonMappingException
 //        //catch only 1st call of finding server

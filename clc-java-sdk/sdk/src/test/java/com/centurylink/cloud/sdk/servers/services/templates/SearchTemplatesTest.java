@@ -7,7 +7,7 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployme
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
-import com.centurylink.cloud.sdk.servers.services.domain.template.filters.OsFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.google.inject.Inject;
 import org.mockito.Mockito;
@@ -20,9 +20,9 @@ import java.util.List;
 import static com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata.MANAGED_OS_VALUE;
 import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.RHEL;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.RHEL;
 import static java.util.Arrays.asList;
 
 /**

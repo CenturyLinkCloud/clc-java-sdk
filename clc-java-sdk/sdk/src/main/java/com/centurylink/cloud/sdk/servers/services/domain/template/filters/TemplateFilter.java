@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployme
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -132,7 +133,7 @@ public class TemplateFilter implements Filter<TemplateFilter> {
      * Method allow to find templates with required image OS.
      *
      * @param osFilter is a not null instance of
-     *                 {@link com.centurylink.cloud.sdk.servers.services.domain.template.filters.OsFilter}
+     *                 {@link OsFilter}
      * @return {@link TemplateFilter}
      */
     public TemplateFilter osTypes(OsFilter... osFilter) {
