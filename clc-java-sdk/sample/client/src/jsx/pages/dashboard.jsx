@@ -20,24 +20,21 @@ export class DashboardPage extends React.Component {
     render () {
         return (
             <div className="starter-template">
+                <a type="button" href="#/server/new" className="btn btn-info">Create Server</a>
                 <table className="table">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Show groups</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.dataCenterList.map(item =>
-                            <tr>
+                            <tr key={item.get('id')}>
                                 <td>
-                                    <a key={item.get('id')} href={`#/${item.get('id')}/server/new`}>{item.get('id')}</a>
+                                    <a href={`#/${item.get('id')}/server/`}>{item.get('id')}</a>
                                 </td>
                                 <td>{item.get('name')}</td>
-                                <td>
-                                    <a key={item.get('id')} href={`#/${item.get('id')}/group`}>Group</a>
-                                </td>
                             </tr>
                         )}
                     </tbody>

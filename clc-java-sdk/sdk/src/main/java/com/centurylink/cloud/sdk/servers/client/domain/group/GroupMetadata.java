@@ -324,6 +324,7 @@ public class GroupMetadata {
         return null;
     }
 
+    @JsonIgnore
     public List<GroupMetadata> getAllGroups() {
         return
             concat(
@@ -339,6 +340,7 @@ public class GroupMetadata {
             .collect(toList());
     }
 
+    @JsonIgnore
     public List<ServerMetadata> getAllServers() {
         return
             concat(
@@ -354,6 +356,7 @@ public class GroupMetadata {
             .collect(toList());
     }
 
+    @JsonIgnore
     public String getParentGroupId() {
         return this.getLinks().stream()
                 .filter(link -> link.getRel().equals("parentGroup"))
