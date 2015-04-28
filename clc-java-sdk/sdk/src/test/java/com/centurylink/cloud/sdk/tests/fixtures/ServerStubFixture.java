@@ -213,6 +213,10 @@ public class ServerStubFixture {
         return groupMetadata;
     }
 
+    public DataCenterMetadata getDataCenterMetadata() {
+        return dataCenterMetadata;
+    }
+
     public ServerFilter getServerFilterById() {
         return new ServerFilter().id(serverMetadata1.getId(), serverMetadata2.getId());
     }

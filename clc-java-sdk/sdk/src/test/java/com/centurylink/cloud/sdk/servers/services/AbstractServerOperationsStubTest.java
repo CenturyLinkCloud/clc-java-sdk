@@ -20,6 +20,8 @@ public abstract class AbstractServerOperationsStubTest extends AbstractServersSd
     protected ServerFilter serverFilter;
     protected GroupFilter groupFilter;
 
+    protected GroupRef group;
+
     @Inject
     ServerService serverService;
 
