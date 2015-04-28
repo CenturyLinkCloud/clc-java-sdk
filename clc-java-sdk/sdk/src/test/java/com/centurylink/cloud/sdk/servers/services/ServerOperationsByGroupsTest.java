@@ -30,56 +30,56 @@ public class ServerOperationsByGroupsTest extends AbstractServerOperationsStubTe
 
     @Override
     protected void powerOnServer() {
-        serverService
+        groupService
             .powerOn(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void powerOffServer() {
-        serverService
+        groupService
             .powerOff(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void pauseServer() {
-        serverService
+        groupService
             .pause(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void shutDownServer() {
-        serverService
+        groupService
             .shutDown(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void stopServerMaintenance() {
-        serverService
+        groupService
             .stopMaintenance(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void startServerMaintenance() {
-        serverService
+        groupService
             .startMaintenance(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void archiveServer() {
-        serverService
+        groupService
             .archive(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void createServerSnapshot() {
-        serverService
+        groupService
             .createSnapshot(1, group)
             .waitUntilComplete();
     }
@@ -93,14 +93,14 @@ public class ServerOperationsByGroupsTest extends AbstractServerOperationsStubTe
 
     @Override
     protected void resetServer() {
-        serverService
+        groupService
             .reset(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void rebootServer() {
-        serverService
+        groupService
             .reboot(group)
             .waitUntilComplete();
     }

@@ -10,6 +10,8 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
@@ -58,7 +60,7 @@ public class GroupService {
 
     public GroupMetadata findByRef(GroupRef groupRef) {
         return exceptionIfNotFound(
-            findFirst(groupRef.asFilter())
+                findFirst(groupRef.asFilter())
         );
     }
 
@@ -82,8 +84,8 @@ public class GroupService {
 
     public GroupMetadata findFirst(GroupFilter criteria) {
         return getFirst(
-            findLazy(criteria).limit(1).collect(toList()),
-            null
+                findLazy(criteria).limit(1).collect(toList()),
+                null
         );
     }
 
@@ -98,8 +100,8 @@ public class GroupService {
         GroupMetadata result = client.getGroup(rootGroupId, false);
 
         return converter.newGroupList(
-            dataCenterService.findByRef(dataCenter).getId(),
-            result.getAllGroups()
+                dataCenterService.findByRef(dataCenter).getId(),
+                result.getAllGroups()
         );
     }
 
@@ -109,7 +111,7 @@ public class GroupService {
         checkNotNull(groupConfig.getParentGroup(), "ParentGroup of GroupConfig must be not null");
 
         GroupMetadata group = client.createGroup(
-            converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
+                converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
         );
 
         return new OperationFuture<>(
@@ -144,6 +146,258 @@ public class GroupService {
         } else {
             return findByRef(ref).getId();
         }
+    }
+
+    /**
+     * Power on groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOn(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.powerOn(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Power on groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOn(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.powerOn(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Power off groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOff(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.powerOff(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Power off groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> powerOff(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.powerOff(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Start servers groups maintenance
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.startMaintenance(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Start servers groups maintenance
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.startMaintenance(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Stop servers groups maintenance
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.stopMaintenance(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Stop servers groups maintenance
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.stopMaintenance(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Pause groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> pause(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.pause(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Pause groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> pause(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.pause(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Reboot groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reboot(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.reboot(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Reboot groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reboot(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.reboot(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Reset groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reset(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.reset(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Reset groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> reset(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.reset(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Shut down groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> shutDown(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.shutDown(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Shut down groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> shutDown(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.shutDown(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Archive groups of servers
+     *
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> archive(GroupFilter groupFilter) {
+        return serverService().powerOperationResponse(
+                client.archive(serverService().ids(groupFilter))
+        );
+    }
+
+    /**
+     * Archive groups of servers
+     *
+     * @param groupRefs groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> archive(GroupRef... groupRefs) {
+        return serverService().powerOperationResponse(
+                client.archive(serverService().ids(groupRefs))
+        );
+    }
+
+    /**
+     * Create snapshot of servers groups
+     *
+     * @param expirationDays expiration days (must be between 1 and 10)
+     * @param groupFilter search servers criteria by group filter
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, GroupFilter groupFilter) {
+        return
+            serverService().powerOperationResponse(
+                client.createSnapshot(
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(serverService().ids(groupFilter))
+                )
+            );
+    }
+
+    /**
+     * Create snapshot of servers groups
+     *
+     * @param expirationDays expiration days (must be between 1 and 10)
+     * @param groupRef groups references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, GroupRef... groupRef) {
+        return
+            serverService().powerOperationResponse(
+                client.createSnapshot(
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(serverService().ids(groupRef))
+                )
+            );
     }
 
 }

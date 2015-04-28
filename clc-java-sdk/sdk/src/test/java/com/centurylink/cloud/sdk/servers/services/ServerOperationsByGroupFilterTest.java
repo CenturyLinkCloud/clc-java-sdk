@@ -27,56 +27,56 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
 
     @Override
     protected void powerOnServer() {
-        serverService
+        groupService
             .powerOn(groupFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void powerOffServer() {
-        serverService
+        groupService
             .powerOff(groupFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void pauseServer() {
-        serverService
+        groupService
             .pause(groupFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void shutDownServer() {
-        serverService
+        groupService
             .shutDown(groupFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void stopServerMaintenance() {
-        serverService
+        groupService
             .stopMaintenance(groupFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void startServerMaintenance() {
-        serverService
+        groupService
             .startMaintenance(groupFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void archiveServer() {
-        serverService
+        groupService
             .archive(groupFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void createServerSnapshot() {
-        serverService
+        groupService
             .createSnapshot(1, groupFilter)
             .waitUntilComplete();
     }
@@ -90,14 +90,14 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
 
     @Override
     protected void resetServer() {
-        serverService
+        groupService
             .reset(groupFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void rebootServer() {
-        serverService
+        groupService
             .reboot(groupFilter)
             .waitUntilComplete();
     }
