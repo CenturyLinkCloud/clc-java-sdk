@@ -53,7 +53,7 @@ public interface Filter<T extends Filter<T>> {
      */
     @SafeVarargs
     static <T extends Filter<T>> T or(T... filters) {
-        return and(asList(filters));
+        return or(asList(filters));
     }
 
     /**

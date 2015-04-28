@@ -112,6 +112,23 @@ public class GroupFilter implements Filter<GroupFilter> {
     }
 
     /**
+     * Method allow to filter groups by names.
+     * Filtering will be case insensitive and will use string equality comparison.
+     *
+     * @param names is not null list of group names
+     * @return {@link GroupFilter}
+     */
+    public GroupFilter names(String... names) {
+        checkNotNull(names, "Name match criteria must be not a null");
+
+        predicate = predicate.and(combine(
+            GroupMetadata::getName, in(asList(names), Predicates::containsIgnoreCase)
+        ));
+
+        return this;
+    }
+
+    /**
      * Method allow to filter groups using predicate.
      *
      * @param filter is not null group filtering predicate
