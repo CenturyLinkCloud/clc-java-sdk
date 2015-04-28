@@ -2,15 +2,15 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
 
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.DE_FRANKFURT;
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
@@ -31,7 +31,7 @@ public class TestServerSupport {
             .name("ALTRS1")
             .type(STANDARD)
 
-            .group(GroupRef.matchByName()
+            .group(Group.refByName()
                 .name(DEFAULT_GROUP)
                 .dataCenter(DE_FRANKFURT)
             )
@@ -56,7 +56,7 @@ public class TestServerSupport {
                 .type(STANDARD)
                 .password(PASSWORD)
 
-                .group(GroupRef.matchByName()
+                .group(Group.refByName()
                     .dataCenter(DataCenter.refById(DE_FRANKFURT.getId()))
                     .name(DEFAULT_GROUP)
                 )

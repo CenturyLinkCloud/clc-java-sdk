@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
 
 import java.time.ZonedDateTime;
@@ -13,7 +13,7 @@ public class CreateServerCommand {
     private String id;
     private String name;
     private ServerType type;
-    private GroupRef group;
+    private Group group;
     private TemplateRef template;
     private Machine machine = new Machine();
     private String password;
@@ -60,15 +60,15 @@ public class CreateServerCommand {
         return this;
     }
 
-    public GroupRef getGroup() {
+    public Group getGroup() {
         return group;
     }
 
-    public void setGroup(GroupRef group) {
+    public void setGroup(Group group) {
         this.group = group;
     }
 
-    public CreateServerCommand group(GroupRef group) {
+    public CreateServerCommand group(Group group) {
         setGroup(group);
         return this;
     }

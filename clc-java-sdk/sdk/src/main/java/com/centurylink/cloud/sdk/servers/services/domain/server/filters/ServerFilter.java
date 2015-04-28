@@ -8,7 +8,7 @@ import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,9 +116,9 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
-    public ServerFilter groups(GroupRef... groups) {
+    public ServerFilter groups(Group... groups) {
         groupFilter = groupFilter.and(Filter.or(
-            map(groups, GroupRef::asFilter)
+            map(groups, Group::asFilter)
         ));
 
         return this;

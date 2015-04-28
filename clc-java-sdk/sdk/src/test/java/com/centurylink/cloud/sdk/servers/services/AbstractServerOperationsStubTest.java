@@ -1,12 +1,10 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 
@@ -20,7 +18,7 @@ public abstract class AbstractServerOperationsStubTest extends AbstractServersSd
     protected ServerFilter serverFilter;
     protected GroupFilter groupFilter;
 
-    protected GroupRef group;
+    protected Group group;
 
     @Inject
     ServerService serverService;
@@ -70,7 +68,7 @@ public abstract class AbstractServerOperationsStubTest extends AbstractServersSd
 
     protected abstract void createServerSnapshot();
 
-    protected abstract void restoreServer(GroupRef group, ServerRef server);
+    protected abstract void restoreServer(Group group, ServerRef server);
 
     protected abstract void resetServer();
 

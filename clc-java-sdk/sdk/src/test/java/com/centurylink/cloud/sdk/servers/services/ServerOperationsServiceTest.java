@@ -1,12 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
@@ -96,7 +93,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
-    private void restoreServer(GroupRef group) {
+    private void restoreServer(Group group) {
         serverService
             .restore(server, group)
             .waitUntilComplete();
@@ -170,7 +167,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         server = SingleServerFixture.server();
 
         String groupId = loadServerMetadata(server).getGroupId();
-        GroupRef group = GroupRef.matchById(groupId);
+        Group group = Group.refById(groupId);
 
         testArchive();
 

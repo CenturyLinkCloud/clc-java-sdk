@@ -1,10 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
@@ -19,7 +18,7 @@ import org.testng.annotations.Test;
 import java.time.ZonedDateTime;
 
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.RHEL;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand.Visibility.PRIVATE;
@@ -122,15 +121,15 @@ public class ServerServiceTest extends AbstractServersSdkTest {
             serverService.create(anyServerConfig()
                 .name("CMOS")
                 .template(Template.refByOs()
-                    .dataCenter(DataCenter.US_EAST_STERLING)
+                    .dataCenter(com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING)
                     .type(RHEL)
                     .edition("6")
                     .architecture(x86_64)
                 )
                 .managedOs()
-                .group(GroupRef.matchByName()
+                .group(Group.refByName()
                     .name(DEFAULT_GROUP)
-                    .dataCenter(DataCenter.US_EAST_STERLING)
+                    .dataCenter(com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING)
                 )
             )
             .waitUntilComplete()

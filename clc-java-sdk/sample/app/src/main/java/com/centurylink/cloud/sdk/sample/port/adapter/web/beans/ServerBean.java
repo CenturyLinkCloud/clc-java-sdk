@@ -2,8 +2,8 @@ package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +16,7 @@ public class ServerBean {
     private CreateServerCommand server = new CreateServerCommand()
         .machine(new Machine())
         .network(new NetworkConfig())
-        .group(GroupRef.matchByName())
+        .group(Group.refByName())
         .template(new NameTemplateRef(null, null));
 
     public ServerBean(CreateServerCommand server) {
@@ -67,18 +67,18 @@ public class ServerBean {
     }
 
     public String getGroup() {
-        return server.getGroup().as(IdGroupRef.class).getId();
+        return server.getGroup().as(GroupByIdRef.class).getId();
     }
 
     public void setGroup(String group) {
         server.group(
-            server.getGroup().as(IdGroupRef.class).id(group)
+            server.getGroup().as(GroupByIdRef.class).id(group)
         );
     }
 
     public String getDataCenter() {
         return server
-            .getGroup().as(IdGroupRef.class)
+            .getGroup().as(GroupByIdRef.class)
             .getDataCenter().as(DataCenterByIdRef.class)
             .getId();
     }
@@ -86,7 +86,7 @@ public class ServerBean {
     public void setDataCenter(String dataCenter) {
         server.group(
             server
-                .getGroup().as(IdGroupRef.class)
+                .getGroup().as(GroupByIdRef.class)
                 .dataCenter(DataCenter.refById(dataCenter))
         );
 

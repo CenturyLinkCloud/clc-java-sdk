@@ -17,7 +17,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerReque
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerCommand;
@@ -443,7 +443,7 @@ public class ServerService {
      * @param group  group reference
      * @return OperationFuture wrapper for BaseServerResponse
      */
-    public OperationFuture<Link> restore(ServerRef server, GroupRef group) {
+    public OperationFuture<Link> restore(ServerRef server, Group group) {
         return baseServerResponse(
             client.restore(
                 idByRef(server),
@@ -484,7 +484,7 @@ public class ServerService {
         );
     }
 
-    public List<String> ids(GroupRef... groups) {
+    public List<String> ids(Group... groups) {
         return ids(
             new ServerFilter()
                 .groups(groups)

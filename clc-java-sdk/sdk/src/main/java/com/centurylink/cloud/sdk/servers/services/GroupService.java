@@ -16,8 +16,8 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -59,7 +59,7 @@ public class GroupService {
         return serverServiceProvider.get();
     }
 
-    public GroupMetadata findByRef(GroupRef groupRef) {
+    public GroupMetadata findByRef(Group groupRef) {
         return exceptionIfNotFound(
                 findFirst(groupRef.asFilter())
         );
@@ -108,7 +108,7 @@ public class GroupService {
         }
     }
 
-    public OperationFuture<GroupRef> create(GroupConfig groupConfig) {
+    public OperationFuture<Group> create(GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
         checkNotNull(groupConfig.getName(), "Name of GroupConfig must be not null");
         checkNotNull(groupConfig.getParentGroup(), "ParentGroup of GroupConfig must be not null");
@@ -118,13 +118,12 @@ public class GroupService {
         );
 
         return new OperationFuture<>(
-            GroupRef.matchById()
-                .id(group.getId()),
+            Group.refById(group.getId()),
             new NoWaitingJobFuture()
         );
     }
 
-    public OperationFuture<GroupRef> update(GroupRef groupRef, GroupConfig groupConfig) {
+    public OperationFuture<Group> update(Group groupRef, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
         boolean updated = client.updateGroup(idByRef(groupRef), converter.createUpdateGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup())));
 
@@ -134,7 +133,7 @@ public class GroupService {
         );
     }
 
-    public OperationFuture<Link> delete(GroupRef groupRef) {
+    public OperationFuture<Link> delete(Group groupRef) {
         Link response = client.deleteGroup(idByRef(groupRef));
 
         return new OperationFuture<>(
@@ -144,9 +143,9 @@ public class GroupService {
         );
     }
 
-    String idByRef(GroupRef ref) {
-        if (ref.is(IdGroupRef.class)) {
-            return ref.as(IdGroupRef.class).getId();
+    String idByRef(Group ref) {
+        if (ref.is(GroupByIdRef.class)) {
+            return ref.as(GroupByIdRef.class).getId();
         } else {
             return findByRef(ref).getId();
         }
@@ -170,7 +169,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOn(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> powerOn(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.powerOn(serverService().ids(groupRefs))
         );
@@ -194,7 +193,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOff(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> powerOff(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.powerOff(serverService().ids(groupRefs))
         );
@@ -218,7 +217,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> startMaintenance(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> startMaintenance(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.startMaintenance(serverService().ids(groupRefs))
         );
@@ -242,7 +241,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> stopMaintenance(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> stopMaintenance(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.stopMaintenance(serverService().ids(groupRefs))
         );
@@ -266,7 +265,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> pause(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> pause(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.pause(serverService().ids(groupRefs))
         );
@@ -290,7 +289,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> reboot(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> reboot(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.reboot(serverService().ids(groupRefs))
         );
@@ -314,7 +313,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> reset(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> reset(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.reset(serverService().ids(groupRefs))
         );
@@ -338,7 +337,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> shutDown(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> shutDown(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.shutDown(serverService().ids(groupRefs))
         );
@@ -362,7 +361,7 @@ public class GroupService {
      * @param groupRefs groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> archive(GroupRef... groupRefs) {
+    public OperationFuture<List<BaseServerResponse>> archive(Group... groupRefs) {
         return serverService().powerOperationResponse(
                 client.archive(serverService().ids(groupRefs))
         );
@@ -393,7 +392,7 @@ public class GroupService {
      * @param groupRef groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, GroupRef... groupRef) {
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, Group... groupRef) {
         return
             serverService().powerOperationResponse(
                 client.createSnapshot(

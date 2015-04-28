@@ -4,7 +4,7 @@ import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.tests.fixtures.ServerStubFixture;
 
@@ -83,7 +83,7 @@ public class ServerOperationsByGroupsTest extends AbstractServerOperationsStubTe
     }
 
     @Override
-    protected void restoreServer(GroupRef group, ServerRef server) {
+    protected void restoreServer(Group group, ServerRef server) {
         serverService
             .restore(server, group)
             .waitUntilComplete();
@@ -114,7 +114,7 @@ public class ServerOperationsByGroupsTest extends AbstractServerOperationsStubTe
         server1 = serverMetadata1.asRefById();
         server2 = serverMetadata2.asRefById();
 
-        group = GroupRef.matchById(serverMetadata1.getGroupId());
+        group = Group.refById(serverMetadata1.getGroupId());
 
         testArchive();
         fixture.activateServers();

@@ -1,10 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.servers.client.domain.group.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author ilya.drabenia

@@ -6,7 +6,6 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCent
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.networks.AbstractNetworksSdkTest;
 import com.centurylink.cloud.sdk.networks.NetworksModule;
 import com.google.inject.AbstractModule;
@@ -53,7 +52,7 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
                 .networkId("2")
         ));
 
-        List<NetworkMetadata> networks = networkService.findByDataCenter(DataCenter.CA_TORONTO_2);
+        List<NetworkMetadata> networks = networkService.findByDataCenter(com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.CA_TORONTO_2);
 
         assert networks.size() == 2;
         assert networks.get(0).getName().equals("first_network");

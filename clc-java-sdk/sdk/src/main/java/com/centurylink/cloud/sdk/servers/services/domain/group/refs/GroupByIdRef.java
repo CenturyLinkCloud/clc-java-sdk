@@ -10,11 +10,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author ilya.drabenia
  */
-public class IdGroupRef extends GroupRef {
+public class GroupByIdRef extends Group {
     private final String id;
 
-    IdGroupRef(DataCenter dataCenter, String id) {
-        super(dataCenter);
+    GroupByIdRef(String id) {
         this.id = id;
     }
 
@@ -22,18 +21,10 @@ public class IdGroupRef extends GroupRef {
         return id;
     }
 
-    public IdGroupRef id(String id) {
-        return new IdGroupRef(dataCenter, id);
-    }
-
-    public IdGroupRef dataCenter(DataCenter dataCenter) {
-        return new IdGroupRef(dataCenter, id);
-    }
-
     @Override
     public GroupFilter asFilter() {
         checkNotNull(id, "Group ID must be not null");
 
-        return super.asFilter().id(id);
+        return new GroupFilter().id(id);
     }
 }

@@ -42,12 +42,12 @@ public class DataCenterServiceTest extends AbstractSdkTest {
     @Test
     public void testFindMultipleDataCentersByRef() {
         List<DataCenterMetadata> dataCenters = dataCenterService.findByRef(
-            com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.DE_FRANKFURT,
-            com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.CA_TORONTO_1
+            DataCenter.DE_FRANKFURT,
+            DataCenter.CA_TORONTO_1
         );
 
-        assert verifyDataCenterById(dataCenters, 0, com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.DE_FRANKFURT);
-        assert verifyDataCenterById(dataCenters, 1, com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter.CA_TORONTO_1);
+        assert verifyDataCenterById(dataCenters, 0, DataCenter.DE_FRANKFURT);
+        assert verifyDataCenterById(dataCenters, 1, DataCenter.CA_TORONTO_1);
     }
 
     public boolean verifyDataCenterById(List<DataCenterMetadata> dataCenters, int index,
