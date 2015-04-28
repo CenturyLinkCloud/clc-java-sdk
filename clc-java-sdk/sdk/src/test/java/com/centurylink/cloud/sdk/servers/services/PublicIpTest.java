@@ -11,6 +11,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortRangeConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.apache.commons.net.util.SubnetUtils;
 import org.testng.annotations.Test;
@@ -38,7 +39,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testPublicIpTest() {
-        ServerRef serverRef = Server.refById("CA1ALTDTCRT30");
+        ServerRef serverRef = SingleServerFixture.server();
 
         serverService
             .addPublicIp(serverRef,
@@ -50,6 +51,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
         List<IpAddress> ipAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
 
+        assertEquals(countOfPublicIp(ipAddresses), 1);
         ipAddresses.stream()
                 .filter(address -> address.getPublicIp() != null)
                 .forEach(address -> {
