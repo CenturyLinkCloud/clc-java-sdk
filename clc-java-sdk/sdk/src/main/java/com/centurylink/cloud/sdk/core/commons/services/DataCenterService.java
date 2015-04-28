@@ -32,10 +32,6 @@ public class DataCenterService {
         );
     }
 
-    public List<DataCenterMetadata> findByRef(DataCenter... dataCenterRefs) {
-        return map(dataCenterRefs, this::findByRef);
-    }
-
     public DataCenterMetadata findFirst(DataCenterFilter criteria) {
         return getFirst(find(criteria.getPredicate()), null);
     }
