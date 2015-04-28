@@ -19,6 +19,7 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static java.util.stream.Collectors.toList;
@@ -29,18 +30,37 @@ import static java.util.stream.Collectors.toList;
 @Test
 public class PublicIpTest extends AbstractServersSdkTest {
 
+    private ServerRef serverRef;
+
     @Inject
     ServerService serverService;
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testAddPublicIp() {
-        ServerRef serverRef = SingleServerFixture.server();
+    public void testPublicIp() {
+        new SingleServerFixture().createServer();
+        serverRef = SingleServerFixture.server();
 
-        assertEquals(serverService.findPublicIp(serverRef).size(), 0, "after server creation public ip doesn't exist");
+        addPublicIp();
 
+        modifyPublicIp();
+
+        deletePublicIp();
+    }
+
+    private void checkServerPowerOn() {
         if (!serverService.findByRef(serverRef).getDetails().getPowerState().equals("started")) {
             serverService.powerOn(serverRef);
         }
+    }
+
+    private List<IpAddress> getIpAddresses() {
+        return serverService.findByRef(serverRef).getDetails().getIpAddresses();
+    }
+
+    private void addPublicIp() {
+        assertEquals(serverService.findPublicIp(serverRef).size(), 0, "after server creation public ip doesn't exist");
+
+        checkServerPowerOn();
 
         //add public IP
         serverService
@@ -50,7 +70,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
                     .sourceRestrictions("70.100.60.140/32")
             ).waitUntilComplete();
 
-        List<IpAddress> ipAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
+        List<IpAddress> ipAddresses = getIpAddresses();
 
         ipAddresses.stream()
             .filter(address -> address.getPublicIp() != null)
@@ -71,13 +91,11 @@ public class PublicIpTest extends AbstractServersSdkTest {
         assertEquals(publicIpCount, publicIps.size());
     }
 
-    @Test(dependsOnMethods = "testAddPublicIp", groups = {INTEGRATION, LONG_RUNNING})
-    public void testModifyPublicIp() {
-        ServerRef serverRef = SingleServerFixture.server();
-        List<IpAddress> ipAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
+    private void modifyPublicIp() {
+        List<IpAddress> ipAddresses = getIpAddresses();
 
         Integer[] ports = {8081, 8888};
-        String sourceRestriction = "50.50.50.50/32";
+        String[] sourceRestrictions = new String[]{"50.50.50.50/32", "50.50.50.25/32"};
         String publicIpAddress = ipAddresses.stream()
             .filter(address -> address.getPublicIp() != null)
             .map(address -> address.getPublicIp())
@@ -86,10 +104,10 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
         ModifyPublicIpConfig config = new ModifyPublicIpConfig()
             .openPorts(ports)
-            .sourceRestrictions(sourceRestriction);
+            .sourceRestrictions(sourceRestrictions[0]);
         serverService.modifyPublicIp(serverRef.asFilter(), config).waitUntilComplete();
 
-        config.sourceRestrictions("50.50.50.25/32");
+        config.sourceRestrictions(sourceRestrictions[1]);
         serverService.modifyPublicIp(serverRef, publicIpAddress, config).waitUntilComplete();
 
         PublicIpMetadata updatedPublicIp = serverService.getPublicIp(serverRef, publicIpAddress);
@@ -104,17 +122,16 @@ public class PublicIpTest extends AbstractServersSdkTest {
             .stream()
             .map(restr -> restr.getCidr())
             .collect(toList());
-        assertTrue(updatedSourceRestrictions.contains(sourceRestriction), "added source restriction must be present");
+        assertTrue(updatedSourceRestrictions.containsAll(Arrays.asList(sourceRestrictions)), "added source restriction must be present");
     }
 
-    @Test(dependsOnMethods = "testModifyPublicIp", groups = {INTEGRATION, LONG_RUNNING})
-    public void testDeletePublicIp() {
-        ServerRef serverRef = SingleServerFixture.server();
+    private void deletePublicIp() {
         serverService.removePublicIp(serverRef).waitUntilComplete();
 
-        List<IpAddress> initialIpAddresses = serverService.findByRef(serverRef).getDetails().getIpAddresses();
+        List<IpAddress> initialIpAddresses = getIpAddresses();
 
         assertEquals(initialIpAddresses.stream()
+            .filter(notNull())
             .filter(addr -> addr.getPublicIp() != null).count(), 0, "count of public IPs must be 0 after clearing");
     }
 
