@@ -97,15 +97,15 @@ public class OsFilter {
 
             if (osType != null) {
                 if (osDescription.startsWith(osType.toUpperCase())) {
-                    osDescription = osDescription.replace(osType, "");
+                    osDescription = osDescription.replace(osType.toUpperCase(), "");
                 } else {
                     return false;
                 }
             }
 
             if (architecture != null) {
-                if (osDescription.endsWith(architecture.getCode())) {
-                    osDescription = osDescription.replace(architecture.getCode(), "");
+                if (osDescription.endsWith(architecture.getCode().toUpperCase())) {
+                    osDescription = osDescription.replace(architecture.getCode().toUpperCase(), "");
                 } else {
                     return false;
                 }
