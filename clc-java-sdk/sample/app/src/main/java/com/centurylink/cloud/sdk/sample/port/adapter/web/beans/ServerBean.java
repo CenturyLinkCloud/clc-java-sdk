@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.D
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateByNameRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,7 +18,7 @@ public class ServerBean {
         .machine(new Machine())
         .network(new NetworkConfig())
         .group(Group.refByName())
-        .template(new TemplateByNameRef(null, null));
+        .template(Template.refByName());
 
     public ServerBean(CreateServerConfig server) {
         this.server = server;
