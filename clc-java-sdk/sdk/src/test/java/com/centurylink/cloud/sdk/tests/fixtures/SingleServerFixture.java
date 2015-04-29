@@ -1,24 +1,23 @@
 package com.centurylink.cloud.sdk.tests.fixtures;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
+import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
-import org.testng.Assert;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static org.testng.Assert.assertEquals;
@@ -29,9 +28,9 @@ import static org.testng.Assert.assertEquals;
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 public class SingleServerFixture {
     private final ServerService serverService = new ClcSdk().serverService();
-    private static volatile ServerRef server;
+    private static volatile Server server;
 
-    public static ServerRef server() {
+    public static Server server() {
         return server;
     }
 
@@ -39,31 +38,31 @@ public class SingleServerFixture {
     public void createServer() {
         server =
             serverService
-                .create(new CreateServerCommand()
+                .create(new CreateServerConfig()
                         .name("TCRT")
                         .type(STANDARD)
                         .group(Group.refByName()
-                                .name(DEFAULT_GROUP)
-                                .dataCenter(DataCenter.refByName("FranKfUrt"))
+                            .name(DEFAULT_GROUP)
+                            .dataCenter(DataCenter.refByName("FranKfUrt"))
                         )
                         .timeToLive(ZonedDateTime.now().plusDays(1))
                         .machine(new Machine()
-                                .cpuCount(1)
-                                .ram(3)
-                                .disk(new DiskConfig()
-                                        .type(DiskType.RAW)
-                                        .size(14)
-                                )
+                            .cpuCount(1)
+                            .ram(3)
+                            .disk(new DiskConfig()
+                                    .type(DiskType.RAW)
+                                    .size(14)
+                            )
                         )
                         .template(Template.refByOs()
-                                .dataCenter(DE_FRANKFURT)
-                                .type(CENTOS)
-                                .version("6")
-                                .architecture(x86_64)
+                            .dataCenter(DataCenter.DE_FRANKFURT)
+                            .type(CENTOS)
+                            .version("6")
+                            .architecture(x86_64)
                         )
                         .network(new NetworkConfig()
-                                .primaryDns("172.17.1.26")
-                                .secondaryDns("172.17.1.27")
+                            .primaryDns("172.17.1.26")
+                            .secondaryDns("172.17.1.27")
                         )
                 )
                 .waitUntilComplete()
