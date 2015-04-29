@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author aliaksandr krasitski
  */
-@Test(enabled = false)
+@Test
 public class PublicIpTest extends AbstractServersSdkTest {
 
     private Server serverRef;
@@ -31,13 +31,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    private long countOfPublicIp(List<IpAddress> ipAddresses) {
-        return ipAddresses.stream()
-            .filter(address -> address.getPublicIp() != null)
-            .count();
-    }
-
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    @Test(enabled = false, groups = {INTEGRATION, LONG_RUNNING})
     public void testPublicIp() {
         serverRef = SingleServerFixture.server();
 
