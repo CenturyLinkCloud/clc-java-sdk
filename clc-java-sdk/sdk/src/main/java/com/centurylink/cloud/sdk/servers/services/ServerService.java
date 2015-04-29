@@ -15,8 +15,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
 import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-
-import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
@@ -28,7 +26,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFi
 import com.centurylink.cloud.sdk.servers.services.domain.server.future.CreateServerJobFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.google.inject.Inject;
 
 import java.util.Arrays;

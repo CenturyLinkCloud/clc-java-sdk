@@ -7,8 +7,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMet
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
-
-import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortRangeConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;

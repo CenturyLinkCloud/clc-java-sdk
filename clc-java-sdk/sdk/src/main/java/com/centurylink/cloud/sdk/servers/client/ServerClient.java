@@ -19,7 +19,6 @@ import org.apache.http.HttpStatus;
 import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;

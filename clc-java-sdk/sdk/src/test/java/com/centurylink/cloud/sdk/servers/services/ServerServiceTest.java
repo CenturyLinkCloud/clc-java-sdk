@@ -4,10 +4,8 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
-
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
@@ -68,7 +66,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 .name("CTTL")
                 .network(new NetworkConfig()
                     .publicIpConfig(new CreatePublicIpConfig()
-                        .openPorts(8080)
+                            .openPorts(8080)
                     )
                 )
             )
