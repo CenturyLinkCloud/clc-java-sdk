@@ -18,7 +18,7 @@ import java.util.List;
     "ports",
     "sourceRestrictions"
 })
-public class CreatePublicIpRequest {
+public class PublicIpRequest {
     private String internalIPAddress;
     private List<PortConfig> ports;
     private List<SourceRestriction> sourceRestrictions;
@@ -31,7 +31,7 @@ public class CreatePublicIpRequest {
         this.internalIPAddress = internalIPAddress;
     }
 
-    public CreatePublicIpRequest internalIPAddress(String internalIPAddress) {
+    public PublicIpRequest internalIPAddress(String internalIPAddress) {
         setInternalIPAddress(internalIPAddress);
         return this;
     }
@@ -44,11 +44,11 @@ public class CreatePublicIpRequest {
         this.ports = ports;
     }
 
-    public CreatePublicIpRequest ports(PortConfig... ports) {
+    public PublicIpRequest ports(PortConfig... ports) {
         return ports(Arrays.asList(ports));
     }
 
-    public CreatePublicIpRequest ports(List<PortConfig> ports) {
+    public PublicIpRequest ports(List<PortConfig> ports) {
         setPorts(ports);
         return this;
     }
@@ -70,7 +70,7 @@ public class CreatePublicIpRequest {
      * @param sourceRestrictions list of source restrictions
      * @return PublicIp configuration
      */
-    public CreatePublicIpRequest sourceRestrictions(List<String> sourceRestrictions) {
+    public PublicIpRequest sourceRestrictions(List<String> sourceRestrictions) {
         List<SourceRestriction> restrictions = new ArrayList<>(sourceRestrictions.size());
         sourceRestrictions.forEach(value -> restrictions.add(new SourceRestriction(value)));
         setSourceRestrictions(restrictions);
@@ -82,7 +82,7 @@ public class CreatePublicIpRequest {
      * @param sourceRestrictions array of source restrictions
      * @return PublicIp configuration
      */
-    public CreatePublicIpRequest sourceRestrictions(String... sourceRestrictions) {
+    public PublicIpRequest sourceRestrictions(String... sourceRestrictions) {
         return sourceRestrictions(Arrays.asList(sourceRestrictions));
     }
 }
