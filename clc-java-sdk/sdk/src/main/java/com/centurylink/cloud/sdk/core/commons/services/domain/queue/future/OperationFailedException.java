@@ -7,4 +7,15 @@ import com.centurylink.cloud.sdk.core.services.ClcServiceException;
  */
 public class OperationFailedException extends ClcServiceException {
 
+    public OperationFailedException() {
+        super();
+    }
+
+    public OperationFailedException(String message) {
+        super(message);
+    }
+
+    public OperationFailedException(String format, Object... arguments) {
+        super(format, arguments);
+    }
 }

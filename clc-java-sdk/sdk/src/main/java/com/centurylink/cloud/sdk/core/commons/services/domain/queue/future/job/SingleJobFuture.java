@@ -5,11 +5,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.waiting.SingleWaitingLoop;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.waiting.WaitingLoop;
 
-import java.time.Duration;
-import java.util.function.Supplier;
-
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.time.Instant.now;
 
 /**
  * @author Ilya Drabenia
@@ -41,7 +37,7 @@ public class SingleJobFuture extends AbstractSingleJobFuture {
 
                     case "failed":
                     case "unknown":
-                        throw new OperationFailedException();
+                        throw new OperationFailedException("The job with status %s and id %s failed", status, statusId);
 
                     default:
                         return false;

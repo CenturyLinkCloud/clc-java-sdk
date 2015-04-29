@@ -17,7 +17,8 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerReque
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
@@ -90,6 +91,11 @@ public class ServerService {
         }
     }
 
+    /**
+     * Delete existing server
+     * @param server server reference
+     * @return OperationFuture wrapper for ServerRef
+     */
     public OperationFuture<Server> delete(Server server) {
         BaseServerResponse response = client.delete(idByRef(server));
 
@@ -100,6 +106,11 @@ public class ServerService {
         );
     }
 
+    /**
+     * Delete existing servers
+     * @param servers the array of servers to delete
+     * @return OperationFuture wrapper for list of ServerRef
+     */
     public OperationFuture<List<Server>> delete(Server... servers) {
         List<JobFuture> futures = Arrays.asList(servers).stream()
             .map(serverRef -> delete(serverRef).jobFuture())
@@ -111,11 +122,16 @@ public class ServerService {
         );
     }
 
+    /**
+     * Delete existing servers
+     * @param filter server filter object
+     * @return OperationFuture wrapper for list of ServerRef
+     */
     public OperationFuture<List<Server>> delete(ServerFilter filter) {
-        List<Server> serverRefs = find(filter).stream()
-            .map(metadata -> metadata.asRefById())
-            .collect(toList());
-        return delete(serverRefs.toArray(new Server[serverRefs.size()]));
+            List<Server> serverRefs = find(filter).stream()
+                .map(metadata -> metadata.asRefById())
+                .collect(toList());
+            return delete(serverRefs.toArray(new Server[serverRefs.size()]));
     }
 
     public ServerMetadata findByRef(Server serverRef) {
@@ -124,7 +140,7 @@ public class ServerService {
                 serverRef.asFilter()
             )
             .findFirst().orElseThrow(() ->
-                            new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
+                    new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
             );
     }
 
@@ -473,10 +489,10 @@ public class ServerService {
      * Add public IP to server
      *
      * @param serverRef        server reference
-     * @param publicIpConfig publicIp metadata object
+     * @param publicIpConfig publicIp config
      * @return OperationFuture wrapper for ServerRef
      */
-    public OperationFuture<Server> addPublicIp(Server serverRef, PublicIpConfig publicIpConfig) {
+    public OperationFuture<Server> addPublicIp(Server serverRef, CreatePublicIpConfig publicIpConfig) {
         Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
 
         return new OperationFuture<>(
@@ -484,6 +500,89 @@ public class ServerService {
             response.getId(),
             queueClient
         );
+    }
+
+    /**
+     * Modify ALL existing public IPs on server
+     * @param server server reference
+     * @param config publicIp config
+     * @return OperationFuture wrapper for ServerRef
+     */
+    public OperationFuture<Server> modifyPublicIp(Server server, ModifyPublicIpConfig config) {
+        checkNotNull(config, "PublicIpConfig must be not null");
+        List<IpAddress> ipAddresses = findByRef(server).getDetails().getIpAddresses();
+        List<String> responseIds = ipAddresses.stream()
+            .map(address -> address.getPublicIp())
+            .filter(notNull())
+            .map(ipAddress ->
+                client.modifyPublicIp(idByRef(server),
+                    ipAddress,
+                    publicIpConverter.createPublicIpRequest(config)))
+            .map(link -> link.getId())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            server,
+            responseIds,
+            queueClient
+        );
+    }
+
+    /**
+     * Modify provided public IP on server
+     * @param server server reference
+     * @param publicIp public ip
+     * @param config publicIp config
+     * @return OperationFuture wrapper for ServerRef
+     */
+    public OperationFuture<Server> modifyPublicIp(Server server, String publicIp, ModifyPublicIpConfig config) {
+        checkNotNull(config, "PublicIpConfig must be not null");
+        checkNotNull(publicIp, "public ip must not be null");
+
+        Link response = client.modifyPublicIp(idByRef(server),
+            publicIp,
+            publicIpConverter.createPublicIpRequest(config)
+        );
+
+        return new OperationFuture<>(
+            server,
+            response.getId(),
+            queueClient
+        );
+    }
+
+    /**
+     * Modify ALL existing public IPs on servers
+     * @param servers The list of server references
+     * @param config  publicIp config
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> modifyPublicIp(List<Server> servers, ModifyPublicIpConfig config) {
+        List<JobFuture> futures = servers.stream()
+            .map(serverRef -> modifyPublicIp(serverRef, config).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            servers,
+            new ParallelJobsFuture(futures));
+    }
+
+    /**
+     * Modify existing public IP on servers
+     * @param filter The server filter object
+     * @param config  publicIp config
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> modifyPublicIp(ServerFilter filter, ModifyPublicIpConfig config) {
+        return modifyPublicIp(Arrays.asList(getRefsFromFilter(filter)), config);
+    }
+
+    Server[] getRefsFromFilter(ServerFilter filter) {
+        List<Server> serverRefs = find(filter).stream()
+            .map(metadata -> metadata.asRefById())
+            .collect(toList());
+
+        return serverRefs.toArray(new Server[serverRefs.size()]);
     }
 
     /**

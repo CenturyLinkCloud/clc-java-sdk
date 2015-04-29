@@ -7,8 +7,8 @@ import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.UpdateGroupRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.ip.CreatePublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
+import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
@@ -19,7 +19,6 @@ import org.apache.http.HttpStatus;
 import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
@@ -203,7 +202,7 @@ public class ServerClient extends BaseSdkClient {
                 .readEntity(BaseServerListResponse.class);
     }
 
-    public Link addPublicIp(String serverId, CreatePublicIpRequest publicIpRequest) {
+    public Link addPublicIp(String serverId, PublicIpRequest publicIpRequest) {
         return
             client("/servers/{accountAlias}/{serverId}/publicIPAddresses")
                 .resolveTemplate("serverId", serverId)
@@ -221,13 +220,13 @@ public class ServerClient extends BaseSdkClient {
                 .get(PublicIpMetadata.class);
     }
 
-    public Link updatePublicIp(String serverId, String publicIp, PublicIpMetadata publicIpMetadata) {
+    public Link modifyPublicIp(String serverId, String publicIp, PublicIpRequest publicIpRequest) {
         return
             client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
                 .resolveTemplate("serverId", serverId)
                 .resolveTemplate("publicIp", publicIp)
                 .request()
-                .put(entity(publicIpMetadata, APPLICATION_JSON_TYPE))
+                .put(entity(publicIpRequest, APPLICATION_JSON_TYPE))
                 .readEntity(Link.class);
     }
 
