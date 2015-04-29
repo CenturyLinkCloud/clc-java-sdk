@@ -1,5 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.ClcSdk;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
@@ -8,6 +10,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
+import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.IdServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.CreateTemplateCommand;
@@ -18,6 +21,7 @@ import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.CA_VANCOUVER;
 import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.DefaultGroups.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
@@ -104,7 +108,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
                 .name("CTTL")
                 .network(new NetworkConfig()
                     .publicIp(new PublicIpConfig()
-                        .openPorts(8080)
+                            .openPorts(8080)
                     )
                 )
             )
@@ -172,6 +176,15 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     void cleanUpCreatedResources(ServerRef newServer) {
         serverService
             .delete(newServer);
+    }
+
+    public static void main(String... args) {
+        new ClcSdk()
+            .serverService()
+            .delete(new ServerFilter()
+                .dataCenters(CA_VANCOUVER)
+                .status("active", "archived")
+            );
     }
 
 }
