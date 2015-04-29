@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author aliaksandr krasitski
  */
-@Test
+@Test(enabled = false)
 public class PublicIpTest extends AbstractServersSdkTest {
 
     private Server serverRef;
