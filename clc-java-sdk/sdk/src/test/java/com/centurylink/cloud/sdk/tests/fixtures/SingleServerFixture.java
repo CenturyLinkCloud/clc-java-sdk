@@ -27,51 +27,74 @@ import static org.testng.Assert.assertEquals;
  */
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 public class SingleServerFixture {
+    private static volatile SingleServerFixture instance;
+
     private final ServerService serverService = new ClcSdk().serverService();
-    private static volatile Server server;
+    private volatile Server server;
 
     public static Server server() {
+        return instance.getServer();
+    }
+
+    private Server getServer() {
+        assertThatServerProperlyStarted(loadMetadataOf(server));
+
         return server;
     }
 
     @BeforeSuite(groups = LONG_RUNNING)
     public void createServer() {
+        instance = this;
+
         server =
             serverService
                 .create(new CreateServerConfig()
-                        .name("TCRT")
-                        .type(STANDARD)
-                        .group(Group.refByName()
-                            .name(DEFAULT_GROUP)
-                            .dataCenter(DataCenter.refByName("FranKfUrt"))
+                    .name("TCRT")
+                    .type(STANDARD)
+                    .group(Group.refByName()
+                        .name(DEFAULT_GROUP)
+                        .dataCenter(DataCenter.refByName("FranKfUrt"))
+                    )
+                    .timeToLive(ZonedDateTime.now().plusDays(1))
+                    .machine(new Machine()
+                        .cpuCount(1)
+                        .ram(3)
+                        .disk(new DiskConfig()
+                            .type(DiskType.RAW)
+                            .size(14)
                         )
-                        .timeToLive(ZonedDateTime.now().plusDays(1))
-                        .machine(new Machine()
-                            .cpuCount(1)
-                            .ram(3)
-                            .disk(new DiskConfig()
-                                    .type(DiskType.RAW)
-                                    .size(14)
-                            )
-                        )
-                        .template(Template.refByOs()
-                            .dataCenter(DataCenter.DE_FRANKFURT)
-                            .type(CENTOS)
-                            .version("6")
-                            .architecture(x86_64)
-                        )
-                        .network(new NetworkConfig()
-                            .primaryDns("172.17.1.26")
-                            .secondaryDns("172.17.1.27")
-                        )
+                    )
+                    .template(Template.refByOs()
+                        .dataCenter(DataCenter.DE_FRANKFURT)
+                        .type(CENTOS)
+                        .version("6")
+                        .architecture(x86_64)
+                    )
+                    .network(new NetworkConfig()
+                        .primaryDns("172.17.1.26")
+                        .secondaryDns("172.17.1.27")
+                    )
                 )
                 .waitUntilComplete()
                 .getResult()
                 .asRefById();
 
         assertThatServerProperlyStarted(
-            serverService.findByRef(server)
+            loadMetadataOf(server)
         );
+    }
+
+    @AfterSuite(groups = LONG_RUNNING)
+    public void deleteServer() {
+        ServerMetadata serverStateBeforeDelete = loadMetadataOf(server);
+
+        serverService.delete(server);
+
+        assertThatServerProperlyStarted(serverStateBeforeDelete);
+    }
+
+    private ServerMetadata loadMetadataOf(Server curServer) {
+        return serverService.findByRef(curServer);
     }
 
     @Test(enabled = false) // it's assert
@@ -79,15 +102,6 @@ public class SingleServerFixture {
         assertEquals(metadata.getLocationId().toUpperCase(), "DE1");
         assertEquals(metadata.getDetails().getPowerState(), "started");
         assertEquals(metadata.getStatus(), "active");
-    }
-
-    @AfterSuite(groups = LONG_RUNNING)
-    public void deleteServer() {
-        ServerMetadata serverStateBeforeDelete = serverService.findByRef(server);
-
-        serverService.delete(server);
-
-        assertThatServerProperlyStarted(serverStateBeforeDelete);
     }
 
 }
