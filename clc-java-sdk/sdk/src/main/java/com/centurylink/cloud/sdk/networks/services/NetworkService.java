@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.networks.services;
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.networks.services.domain.refs.IdNetworkRef;
 import com.centurylink.cloud.sdk.networks.services.domain.refs.NetworkRef;
@@ -28,21 +28,21 @@ public class NetworkService {
         if (networkRef.is(IdNetworkRef.class)) {
             return
                 dataCentersClient
-                    .getDataCenterDeploymentCapabilities(dataCenterId(networkRef.getDataCenter()))
+                    .getDeploymentCapabilities(dataCenterId(networkRef.getDataCenter()))
                     .findNetworkById(networkRef.as(IdNetworkRef.class).getId());
         } else {
             throw new ReferenceNotSupportedException(networkRef.getClass());
         }
     }
 
-    public List<NetworkMetadata> findByDataCenter(DataCenterRef dataCenter) {
+    public List<NetworkMetadata> findByDataCenter(DataCenter dataCenter) {
         return
             dataCentersClient
-                .getDataCenterDeploymentCapabilities(dataCenterId(dataCenter))
+                .getDeploymentCapabilities(dataCenterId(dataCenter))
                 .getDeployableNetworks();
     }
 
-    private String dataCenterId(DataCenterRef dataCenter) {
+    private String dataCenterId(DataCenter dataCenter) {
         return dataCentersService
             .findByRef(dataCenter)
             .getId();

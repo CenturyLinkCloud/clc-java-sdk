@@ -8,7 +8,6 @@ import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
-import com.centurylink.cloud.sdk.servers.services.domain.template.TemplateConverter;
 import com.google.inject.AbstractModule;
 
 /**
@@ -24,7 +23,6 @@ public class ServersModule extends AbstractModule {
         bind(ServerConverter.class);
         bind(GroupConverter.class);
         bind(GroupService.class);
-        bind(TemplateConverter.class);
         bind(TemplateService.class);
 
         install(new CommonsModule());

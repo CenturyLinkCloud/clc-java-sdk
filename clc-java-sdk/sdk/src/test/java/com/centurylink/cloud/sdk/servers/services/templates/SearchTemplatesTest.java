@@ -6,9 +6,9 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployme
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
-import com.centurylink.cloud.sdk.servers.services.domain.template.Template;
-import com.centurylink.cloud.sdk.servers.services.domain.template.filters.OsFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.google.inject.Inject;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -18,11 +18,11 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata.MANAGED_OS_VALUE;
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.US_EAST_STERLING;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.CENTOS;
-import static com.centurylink.cloud.sdk.servers.services.domain.os.OsType.RHEL;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.RHEL;
 import static java.util.Arrays.asList;
 
 /**
@@ -53,7 +53,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
             .doReturn(
                 fromJson("va1_deployment_capabilities.json", DatacenterDeploymentCapabilitiesMetadata.class)
             )
-            .when(dataCentersClient).getDataCenterDeploymentCapabilities("va1");
+            .when(dataCentersClient).getDeploymentCapabilities("va1");
     }
 
     @Test

@@ -3,8 +3,9 @@ package com.centurylink.cloud.sdk.servers.services.domain.template.filters;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -59,7 +60,7 @@ public class TemplateFilter implements Filter<TemplateFilter> {
      * @return {@link TemplateFilter}
      * @throws java.lang.NullPointerException
      */
-    public TemplateFilter dataCenters(DataCenterRef... dataCenters) {
+    public TemplateFilter dataCenters(DataCenter... dataCenters) {
         dataCenter.dataCenters(dataCenters);
 
         return this;
@@ -132,7 +133,7 @@ public class TemplateFilter implements Filter<TemplateFilter> {
      * Method allow to find templates with required image OS.
      *
      * @param osFilter is a not null instance of
-     *                 {@link com.centurylink.cloud.sdk.servers.services.domain.template.filters.OsFilter}
+     *                 {@link OsFilter}
      * @return {@link TemplateFilter}
      */
     public TemplateFilter osTypes(OsFilter... osFilter) {

@@ -2,13 +2,13 @@ package com.centurylink.cloud.sdk.servers.services.domain.server.filters;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,8 @@ import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
 
 /**
+ * Class allow to select by specified search conditions needed subset of account servers
+ *
  * @author Ilya Drabenia
  */
 public class ServerFilter implements Filter<ServerFilter> {
@@ -43,7 +45,7 @@ public class ServerFilter implements Filter<ServerFilter> {
      * @param dataCenters is not null list of data center references
      * @return {@link GroupFilter}
      */
-    public ServerFilter dataCenters(DataCenterRef... dataCenters) {
+    public ServerFilter dataCenters(DataCenter... dataCenters) {
         groupFilter.dataCenters(dataCenters);
 
         return this;
@@ -110,26 +112,53 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
+    /**
+     * Method allow to specify {@link GroupFilter} for restrict server groups
+     *
+     * @param filter is not a null group filter object
+     * @return {@link GroupFilter}
+     * @throws NullPointerException
+     */
     public ServerFilter groupsWhere(GroupFilter filter) {
         groupFilter = groupFilter.and(filter);
-
         return this;
     }
 
-    public ServerFilter groups(GroupRef... groups) {
+    /**
+     * Method allow to restrict searched servers by groups
+     *
+     * @param groups is list of group references
+     * @return {@link GroupFilter}
+     */
+    public ServerFilter groups(Group... groups) {
         groupFilter = groupFilter.and(Filter.or(
-            map(groups, GroupRef::asFilter)
+            map(groups, Group::asFilter)
         ));
 
         return this;
     }
 
+    /**
+     * Method allow to specify custom search servers predicate
+     *
+     * @param filter is not null custom filtering predicate
+     * @return {@link GroupFilter}
+     * @throws NullPointerException
+     */
     public ServerFilter where(Predicate<ServerMetadata> filter) {
+        checkNotNull(filter, "Filter must be not a null");
+
         predicate = predicate.and(filter);
 
         return this;
     }
 
+    /**
+     * Method allow to restrict servers by target IDs
+     *
+     * @param ids is a list of string ID representations
+     * @return {@link GroupFilter}
+     */
     public ServerFilter id(String... ids) {
         serverIds.addAll(asList(ids));
 
@@ -142,11 +171,22 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
+    /**
+     * Method allow to select only active servers
+     *
+     * @return {@link GroupFilter}
+     */
     public ServerFilter onlyActive() {
         predicate = predicate.and(s -> s.getStatus().equals("active"));
         return this;
     }
 
+    /**
+     * Method allow to restrict status of target servers
+     *
+     * @param statuses is a list target server statuses
+     * @return {@link GroupFilter}
+     */
     public ServerFilter status(String... statuses) {
         predicate = predicate.and(combine(
             ServerMetadata::getStatus, in(statuses)
@@ -155,6 +195,9 @@ public class ServerFilter implements Filter<ServerFilter> {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServerFilter and(ServerFilter otherFilter) {
         return new ServerFilter()
@@ -170,6 +213,9 @@ public class ServerFilter implements Filter<ServerFilter> {
             );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServerFilter or(ServerFilter otherFilter) {
         return new ServerFilter()

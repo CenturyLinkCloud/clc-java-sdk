@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMet
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.ServerStubFixture;
+
 import com.google.inject.Inject;
 import org.mockito.Mock;
 import org.testng.annotations.Test;
@@ -14,7 +15,7 @@ import org.testng.annotations.Test;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
 
-public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsStubTest {
+public class ServerOperationsByGroupsTest extends AbstractServerOperationsStubTest {
 
     @Inject @Mock
     ServerClient serverClient;
@@ -28,56 +29,56 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
     @Override
     protected void powerOnServer() {
         groupService
-            .powerOn(groupFilter)
+            .powerOn(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void powerOffServer() {
         groupService
-            .powerOff(groupFilter)
+            .powerOff(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void pauseServer() {
         groupService
-            .pause(groupFilter)
+            .pause(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void shutDownServer() {
         groupService
-            .shutDown(groupFilter)
+            .shutDown(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void stopServerMaintenance() {
         groupService
-            .stopMaintenance(groupFilter)
+            .stopMaintenance(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void startServerMaintenance() {
         groupService
-            .startMaintenance(groupFilter)
+            .startMaintenance(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void archiveServer() {
         groupService
-            .archive(groupFilter)
+            .archive(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void createServerSnapshot() {
         groupService
-            .createSnapshot(1, groupFilter)
+            .createSnapshot(1, group)
             .waitUntilComplete();
     }
 
@@ -91,14 +92,14 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
     @Override
     protected void resetServer() {
         groupService
-            .reset(groupFilter)
+            .reset(group)
             .waitUntilComplete();
     }
 
     @Override
     protected void rebootServer() {
         groupService
-            .reboot(groupFilter)
+            .reboot(group)
             .waitUntilComplete();
     }
 
@@ -112,7 +113,8 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
 
         server1 = serverMetadata1.asRefById();
         server2 = serverMetadata2.asRefById();
-        groupFilter = fixture.getGroupFilterById();
+
+        group = Group.refById(serverMetadata1.getGroupId());
 
         testArchive();
         fixture.activateServers();

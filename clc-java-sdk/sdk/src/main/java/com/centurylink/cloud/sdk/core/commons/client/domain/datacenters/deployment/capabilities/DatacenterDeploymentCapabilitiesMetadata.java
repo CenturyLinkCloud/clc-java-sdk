@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities;
 
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.OsTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateByOsRef;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.annotation.Generated;
@@ -214,7 +214,7 @@ public class DatacenterDeploymentCapabilitiesMetadata {
         return null;
     }
 
-    public TemplateMetadata findByOsType(OsTemplateRef operatingSystem) {
+    public TemplateMetadata findByOsType(TemplateByOsRef operatingSystem) {
         for (TemplateMetadata curTemplate : this.getTemplates()) {
             if (templateHasOs(curTemplate, operatingSystem)) {
                 return curTemplate;
@@ -224,7 +224,7 @@ public class DatacenterDeploymentCapabilitiesMetadata {
         return null;
     }
 
-    private boolean templateHasOs(TemplateMetadata curTemplate, OsTemplateRef operatingSystem) {
+    private boolean templateHasOs(TemplateMetadata curTemplate, TemplateByOsRef operatingSystem) {
         return osTypeContains(
             curTemplate,
             operatingSystem.getType(),

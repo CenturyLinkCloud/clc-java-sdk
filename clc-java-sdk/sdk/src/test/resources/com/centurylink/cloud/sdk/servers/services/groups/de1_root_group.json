@@ -1,0 +1,1840 @@
+{
+  "id": "e9cf5a7a9fad43a8a9184d0265ae076c",
+  "name": "DE1 Hardware",
+  "description": "DE1 Hardware",
+  "locationId": "DE1",
+  "type": "default",
+  "status": "active",
+  "serversCount": 9,
+  "servers": [],
+  "groups": [
+    {
+      "id": "105eacfe6b0f4572bba834a0b7f6aa91",
+      "name": "Archive",
+      "description": "Pay only for the storage consumed by the archived server. No compute or licensing costs are incurred.",
+      "locationId": "DE1",
+      "type": "archive",
+      "status": "active",
+      "serversCount": 0,
+      "servers": [
+        {
+          "id": "de1altdcttl37",
+          "name": "DE1ALTDCTTL37",
+          "description": "",
+          "groupId": "105eacfe6b0f4572bba834a0b7f6aa91",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 5 64-bit",
+          "os": "centOS5_64Bit",
+          "status": "archived",
+          "details": {
+            "powerState": "stopped",
+            "storageGB": 16
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-24T06:12:24Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-24T06:12:24Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdcttl37",
+              "id": "de1altdcttl37",
+              "verbs": [
+                "GET",
+                "PATCH"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/105eacfe6b0f4572bba834a0b7f6aa91",
+              "id": "105eacfe6b0f4572bba834a0b7f6aa91"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdcttl37"
+            },
+            {
+              "rel": "restore",
+              "href": "/v2/servers/altd/de1altdcttl37/restore"
+            },
+            {
+              "rel": "delete",
+              "href": "/v2/servers/altd/de1altdcttl37"
+            }
+          ]
+        },
+        {
+          "id": "de1altdtcrt175",
+          "name": "DE1ALTDTCRT175",
+          "description": "",
+          "groupId": "105eacfe6b0f4572bba834a0b7f6aa91",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "archived",
+          "details": {
+            "powerState": "stopped",
+            "storageGB": 30
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T08:37:54Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T08:49:15Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdtcrt175",
+              "id": "de1altdtcrt175",
+              "verbs": [
+                "GET",
+                "PATCH"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/105eacfe6b0f4572bba834a0b7f6aa91",
+              "id": "105eacfe6b0f4572bba834a0b7f6aa91"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdtcrt175"
+            },
+            {
+              "rel": "restore",
+              "href": "/v2/servers/altd/de1altdtcrt175/restore"
+            },
+            {
+              "rel": "delete",
+              "href": "/v2/servers/altd/de1altdtcrt175"
+            }
+          ]
+        }
+      ],
+      "groups": [],
+      "links": [
+        {
+          "rel": "self",
+          "href": "/v2/groups/altd/105eacfe6b0f4572bba834a0b7f6aa91",
+          "verbs": [
+            "GET",
+            "PATCH"
+          ]
+        },
+        {
+          "rel": "parentGroup",
+          "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c",
+          "id": "e9cf5a7a9fad43a8a9184d0265ae076c"
+        },
+        {
+          "rel": "defaults",
+          "href": "/v2/groups/altd/105eacfe6b0f4572bba834a0b7f6aa91/defaults",
+          "verbs": [
+            "GET",
+            "POST"
+          ]
+        },
+        {
+          "rel": "billing",
+          "href": "/v2/groups/altd/105eacfe6b0f4572bba834a0b7f6aa91/billing"
+        }
+      ],
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-03-26T23:59:28Z",
+        "modifiedBy": "idrabenia",
+        "modifiedDate": "2015-03-26T23:59:28Z"
+      },
+      "customFields": []
+    },
+    {
+      "id": "ffd8382e1e81449d890256e628969aa8",
+      "name": "Default Group",
+      "description": "test description",
+      "locationId": "DE1",
+      "type": "default",
+      "status": "active",
+      "serversCount": 9,
+      "servers": [
+        {
+          "id": "de1altdaltrs198",
+          "name": "DE1ALTDALTRS198",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [{"internal": "10.110.37.25"}],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 3,
+            "hostName": "de1altdaltrs198",
+            "inMaintenanceMode": false,
+            "memoryMB": 2048,
+            "powerState": "started",
+            "storageGB": 17,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T10:05:24Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T10:05:24Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdaltrs198",
+              "id": "de1altdaltrs198",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdaltrs198"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdaltrs198/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/6c6807479e9340f9ad74ed138706f2d0/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/6c6807479e9340f9ad74ed138706f2d0/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdaltrs198/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdaltrs198/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdaltrs198/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdaltrs198/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdaltrs198/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdaltrs198/credentials"
+            }
+          ]
+        },
+        {
+          "id": "de1altdaltrs199",
+          "name": "DE1ALTDALTRS199",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [{"internal": "10.110.37.26"}],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 3,
+            "hostName": "de1altdaltrs199",
+            "inMaintenanceMode": false,
+            "memoryMB": 2048,
+            "powerState": "started",
+            "storageGB": 17,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T10:06:08Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T10:06:08Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdaltrs199",
+              "id": "de1altdaltrs199",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdaltrs199"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdaltrs199/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/a8054f868c704ba986df239f14dcdc4a/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/a8054f868c704ba986df239f14dcdc4a/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdaltrs199/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdaltrs199/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdaltrs199/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdaltrs199/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdaltrs199/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdaltrs199/credentials"
+            }
+          ]
+        },
+        {
+          "id": "de1altdcttl76",
+          "name": "DE1ALTDCTTL76",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [
+              {"internal": "10.110.37.23"},
+              {
+                "public": "66.155.94.21",
+                "internal": "10.110.37.24"
+              }
+            ],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 3,
+            "hostName": "de1altdcttl76",
+            "inMaintenanceMode": false,
+            "memoryMB": 2048,
+            "powerState": "started",
+            "storageGB": 17,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T09:56:36Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T09:59:47Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdcttl76",
+              "id": "de1altdcttl76",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdcttl76"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdcttl76/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/a7a5970fe7444cdeace939add2ef936a/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/a7a5970fe7444cdeace939add2ef936a/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdcttl76/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdcttl76/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdcttl76/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdcttl76/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdcttl76/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdcttl76/credentials"
+            },
+            {
+              "rel": "publicIPAddress",
+              "href": "/v2/servers/altd/de1altdcttl76/publicIPAddresses/66.155.94.21",
+              "id": "66.155.94.21",
+              "verbs": [
+                "GET",
+                "PUT",
+                "DELETE"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "de1altdtcrt173",
+          "name": "DE1ALTDTCRT173",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [
+              {"internal": "10.110.37.12"},
+              {"internal": "10.110.37.13"}
+            ],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 4,
+            "hostName": "de1altdtcrt173",
+            "inMaintenanceMode": false,
+            "memoryMB": 3072,
+            "powerState": "started",
+            "storageGB": 31,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:3",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [
+              {
+                "name": "2015-04-28.08:08:55",
+                "links": [
+                  {
+                    "rel": "self",
+                    "href": "/v2/servers/altd/de1altdtcrt173/snapshots/1"
+                  },
+                  {
+                    "rel": "delete",
+                    "href": "/v2/servers/altd/de1altdtcrt173/snapshots/1"
+                  },
+                  {
+                    "rel": "restore",
+                    "href": "/v2/servers/altd/de1altdtcrt173/snapshots/1/restore"
+                  }
+                ]
+              }
+            ],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T08:00:43Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T08:12:07Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdtcrt173",
+              "id": "de1altdtcrt173",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdtcrt173"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdtcrt173/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/04195862f85945c3aa0d87bc147eef21/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/04195862f85945c3aa0d87bc147eef21/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdtcrt173/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdtcrt173/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt173/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt173/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdtcrt173/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdtcrt173/credentials"
+            }
+          ]
+        },
+        {
+          "id": "de1altdtcrt174",
+          "name": "DE1ALTDTCRT174",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [{"internal": "10.110.37.14"}],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 4,
+            "hostName": "de1altdtcrt174",
+            "inMaintenanceMode": false,
+            "memoryMB": 3072,
+            "powerState": "paused",
+            "storageGB": 31,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:3",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T08:31:49Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T08:37:48Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdtcrt174",
+              "id": "de1altdtcrt174",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdtcrt174"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdtcrt174/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/61b21e663ed545aa8e308d341597db4b/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/61b21e663ed545aa8e308d341597db4b/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdtcrt174/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdtcrt174/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt174/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt174/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdtcrt174/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdtcrt174/credentials"
+            }
+          ]
+        },
+        {
+          "id": "de1altdtcrt176",
+          "name": "DE1ALTDTCRT176",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [
+              {"internal": "10.110.37.17"},
+              {"internal": "10.110.37.18"}
+            ],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 4,
+            "hostName": "de1altdtcrt176",
+            "inMaintenanceMode": false,
+            "memoryMB": 3072,
+            "powerState": "started",
+            "storageGB": 31,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:3",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [
+              {
+                "name": "2015-04-28.09:02:37",
+                "links": [
+                  {
+                    "rel": "self",
+                    "href": "/v2/servers/altd/de1altdtcrt176/snapshots/1"
+                  },
+                  {
+                    "rel": "delete",
+                    "href": "/v2/servers/altd/de1altdtcrt176/snapshots/1"
+                  },
+                  {
+                    "rel": "restore",
+                    "href": "/v2/servers/altd/de1altdtcrt176/snapshots/1/restore"
+                  }
+                ]
+              }
+            ],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T08:51:07Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T09:05:54Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdtcrt176",
+              "id": "de1altdtcrt176",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdtcrt176"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdtcrt176/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/1650504d02184b14bcf6aa6deacd05ff/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/1650504d02184b14bcf6aa6deacd05ff/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdtcrt176/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdtcrt176/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt176/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt176/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdtcrt176/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdtcrt176/credentials"
+            }
+          ]
+        },
+        {
+          "id": "de1altdtcrt177",
+          "name": "DE1ALTDTCRT177",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [{"internal": "10.110.37.20"}],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 4,
+            "hostName": "de1altdtcrt177",
+            "inMaintenanceMode": false,
+            "memoryMB": 3072,
+            "powerState": "started",
+            "storageGB": 31,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:3",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T09:12:14Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T09:37:41Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdtcrt177",
+              "id": "de1altdtcrt177",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdtcrt177"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdtcrt177/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/689d595e661f42c9a59718a628ca8af8/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/689d595e661f42c9a59718a628ca8af8/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdtcrt177/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdtcrt177/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt177/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt177/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdtcrt177/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdtcrt177/credentials"
+            }
+          ]
+        },
+        {
+          "id": "de1altdtcrt178",
+          "name": "DE1ALTDTCRT178",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [
+              {
+                "public": "66.155.94.23",
+                "internal": "10.110.37.21"
+              },
+              {
+                "public": "66.155.94.24",
+                "internal": "10.110.37.22"
+              }
+            ],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 4,
+            "hostName": "de1altdtcrt178",
+            "inMaintenanceMode": false,
+            "memoryMB": 3072,
+            "powerState": "started",
+            "storageGB": 31,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:3",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [
+              {
+                "name": "2015-04-28.09:25:27",
+                "links": [
+                  {
+                    "rel": "self",
+                    "href": "/v2/servers/altd/de1altdtcrt178/snapshots/1"
+                  },
+                  {
+                    "rel": "delete",
+                    "href": "/v2/servers/altd/de1altdtcrt178/snapshots/1"
+                  },
+                  {
+                    "rel": "restore",
+                    "href": "/v2/servers/altd/de1altdtcrt178/snapshots/1/restore"
+                  }
+                ]
+              }
+            ],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T09:13:45Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T09:28:50Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdtcrt178",
+              "id": "de1altdtcrt178",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdtcrt178"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdtcrt178/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/026099e29d1a463ba0488c613966c461/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/026099e29d1a463ba0488c613966c461/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdtcrt178/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdtcrt178/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt178/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt178/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdtcrt178/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdtcrt178/credentials"
+            },
+            {
+              "rel": "publicIPAddress",
+              "href": "/v2/servers/altd/de1altdtcrt178/publicIPAddresses/66.155.94.23",
+              "id": "66.155.94.23",
+              "verbs": [
+                "GET",
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "publicIPAddress",
+              "href": "/v2/servers/altd/de1altdtcrt178/publicIPAddresses/66.155.94.24",
+              "id": "66.155.94.24",
+              "verbs": [
+                "GET",
+                "PUT",
+                "DELETE"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "de1altdtcrt187",
+          "name": "DE1ALTDTCRT187",
+          "description": "",
+          "groupId": "ffd8382e1e81449d890256e628969aa8",
+          "isTemplate": false,
+          "locationId": "DE1",
+          "osType": "CentOS 6 64-bit",
+          "os": "centOS6_64Bit",
+          "status": "active",
+          "details": {
+            "ipAddresses": [
+              {"internal": "10.110.37.27"},
+              {"internal": "10.110.37.28"}
+            ],
+            "alertPolicies": [],
+            "cpu": 1,
+            "diskCount": 4,
+            "hostName": "",
+            "inMaintenanceMode": false,
+            "memoryMB": 3072,
+            "powerState": "started",
+            "storageGB": 31,
+            "disks": [
+              {
+                "id": "0:0",
+                "sizeGB": 1,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:1",
+                "sizeGB": 2,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:2",
+                "sizeGB": 14,
+                "partitionPaths": []
+              },
+              {
+                "id": "0:3",
+                "sizeGB": 14,
+                "partitionPaths": []
+              }
+            ],
+            "partitions": [
+              {
+                "sizeGB": 0.0,
+                "path": "(swap)"
+              },
+              {
+                "sizeGB": 13.655,
+                "path": "/"
+              },
+              {
+                "sizeGB": 0.482,
+                "path": "/boot"
+              }
+            ],
+            "snapshots": [],
+            "customFields": []
+          },
+          "type": "standard",
+          "storageType": "premium",
+          "changeInfo": {
+            "createdBy": "idrabenia.altd",
+            "createdDate": "2015-04-28T18:44:43Z",
+            "modifiedBy": "idrabenia.altd",
+            "modifiedDate": "2015-04-28T18:56:54Z"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "/v2/servers/altd/de1altdtcrt187",
+              "id": "de1altdtcrt187",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "group",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "account",
+              "href": "/v2/accounts/altd",
+              "id": "altd"
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/billing/altd/serverPricing/de1altdtcrt187"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/servers/altd/de1altdtcrt187/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/servers/altd/2dbd46fbfc4e4507bbe32a698abc1330/upcomingScheduledActivities"
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/servers/altd/2dbd46fbfc4e4507bbe32a698abc1330/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "publicIPAddresses",
+              "href": "/v2/servers/altd/de1altdtcrt187/publicIPAddresses",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "alertPolicyMappings",
+              "href": "/v2/servers/altd/de1altdtcrt187/alertPolicies",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "antiAffinityPolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt187/antiAffinityPolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "cpuAutoscalePolicyMapping",
+              "href": "/v2/servers/altd/de1altdtcrt187/cpuAutoscalePolicy",
+              "verbs": [
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "capabilities",
+              "href": "/v2/servers/altd/de1altdtcrt187/capabilities"
+            },
+            {
+              "rel": "credentials",
+              "href": "/v2/servers/altd/de1altdtcrt187/credentials"
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "id": "06c1d5e1b4a5469a825a91a4bf989b9b",
+          "name": "MyServer",
+          "description": "1",
+          "locationId": "DE1",
+          "type": "default",
+          "status": "active",
+          "serversCount": 0,
+          "servers": [],
+          "groups": [],
+          "links": [
+            {
+              "rel": "createGroup",
+              "href": "/v2/groups/altd",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "createServer",
+              "href": "/v2/servers/altd",
+              "verbs": ["POST"]
+            },
+            {
+              "rel": "self",
+              "href": "/v2/groups/altd/06c1d5e1b4a5469a825a91a4bf989b9b",
+              "verbs": [
+                "GET",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "parentGroup",
+              "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+              "id": "ffd8382e1e81449d890256e628969aa8"
+            },
+            {
+              "rel": "defaults",
+              "href": "/v2/groups/altd/06c1d5e1b4a5469a825a91a4bf989b9b/defaults",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            },
+            {
+              "rel": "billing",
+              "href": "/v2/groups/altd/06c1d5e1b4a5469a825a91a4bf989b9b/billing"
+            },
+            {
+              "rel": "archiveGroupAction",
+              "href": "/v2/groups/altd/06c1d5e1b4a5469a825a91a4bf989b9b/archive"
+            },
+            {
+              "rel": "statistics",
+              "href": "/v2/groups/altd/06c1d5e1b4a5469a825a91a4bf989b9b/statistics"
+            },
+            {
+              "rel": "upcomingScheduledActivities",
+              "href": "/v2/groups/altd/06c1d5e1b4a5469a825a91a4bf989b9b/upcomingScheduledActivities"
+            },
+            {
+              "rel": "horizontalAutoscalePolicyMapping",
+              "href": "/v2/groups/altd/06c1d5e1b4a5469a825a91a4bf989b9b/horizontalAutoscalePolicy",
+              "verbs": [
+                "GET",
+                "PUT",
+                "DELETE"
+              ]
+            },
+            {
+              "rel": "scheduledActivities",
+              "href": "/v2/groups/altd/06c1d5e1b4a5469a825a91a4bf989b9b/scheduledActivities",
+              "verbs": [
+                "GET",
+                "POST"
+              ]
+            }
+          ],
+          "changeInfo": {
+            "createdBy": "idrabenia",
+            "createdDate": "2015-04-25T18:23:16Z",
+            "modifiedBy": "idrabenia",
+            "modifiedDate": "2015-04-25T18:23:16Z"
+          },
+          "customFields": []
+        }
+      ],
+      "links": [
+        {
+          "rel": "createGroup",
+          "href": "/v2/groups/altd",
+          "verbs": ["POST"]
+        },
+        {
+          "rel": "createServer",
+          "href": "/v2/servers/altd",
+          "verbs": ["POST"]
+        },
+        {
+          "rel": "self",
+          "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8",
+          "verbs": [
+            "GET",
+            "PATCH",
+            "DELETE"
+          ]
+        },
+        {
+          "rel": "parentGroup",
+          "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c",
+          "id": "e9cf5a7a9fad43a8a9184d0265ae076c"
+        },
+        {
+          "rel": "defaults",
+          "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8/defaults",
+          "verbs": [
+            "GET",
+            "POST"
+          ]
+        },
+        {
+          "rel": "billing",
+          "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8/billing"
+        },
+        {
+          "rel": "archiveGroupAction",
+          "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8/archive"
+        },
+        {
+          "rel": "statistics",
+          "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8/statistics"
+        },
+        {
+          "rel": "upcomingScheduledActivities",
+          "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8/upcomingScheduledActivities"
+        },
+        {
+          "rel": "horizontalAutoscalePolicyMapping",
+          "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8/horizontalAutoscalePolicy",
+          "verbs": [
+            "GET",
+            "PUT",
+            "DELETE"
+          ]
+        },
+        {
+          "rel": "scheduledActivities",
+          "href": "/v2/groups/altd/ffd8382e1e81449d890256e628969aa8/scheduledActivities",
+          "verbs": [
+            "GET",
+            "POST"
+          ]
+        }
+      ],
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-04-23T13:44:28Z",
+        "modifiedBy": "idrabenia.altd",
+        "modifiedDate": "2015-04-28T18:48:25Z"
+      },
+      "customFields": []
+    },
+    {
+      "id": "59a044753cce443e8aae6798dde99682",
+      "name": "Templates",
+      "description": "Custom templates provide a set of hardware/software settings that can be used repeatedly to create servers configured with the same settings.",
+      "locationId": "DE1",
+      "type": "templates",
+      "status": "active",
+      "serversCount": 0,
+      "servers": [],
+      "groups": [],
+      "links": [
+        {
+          "rel": "self",
+          "href": "/v2/groups/altd/59a044753cce443e8aae6798dde99682",
+          "verbs": [
+            "GET",
+            "PATCH"
+          ]
+        },
+        {
+          "rel": "parentGroup",
+          "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c",
+          "id": "e9cf5a7a9fad43a8a9184d0265ae076c"
+        },
+        {
+          "rel": "defaults",
+          "href": "/v2/groups/altd/59a044753cce443e8aae6798dde99682/defaults",
+          "verbs": [
+            "GET",
+            "POST"
+          ]
+        },
+        {
+          "rel": "billing",
+          "href": "/v2/groups/altd/59a044753cce443e8aae6798dde99682/billing"
+        }
+      ],
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-03-26T23:59:28Z",
+        "modifiedBy": "idrabenia",
+        "modifiedDate": "2015-03-26T23:59:28Z"
+      },
+      "customFields": []
+    }
+  ],
+  "links": [
+    {
+      "rel": "createGroup",
+      "href": "/v2/groups/altd",
+      "verbs": ["POST"]
+    },
+    {
+      "rel": "createServer",
+      "href": "/v2/servers/altd",
+      "verbs": ["POST"]
+    },
+    {
+      "rel": "self",
+      "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c",
+      "verbs": [
+        "GET",
+        "PATCH"
+      ]
+    },
+    {
+      "rel": "defaults",
+      "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/defaults",
+      "verbs": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "rel": "billing",
+      "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/billing"
+    },
+    {
+      "rel": "statistics",
+      "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/statistics"
+    },
+    {
+      "rel": "upcomingScheduledActivities",
+      "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/upcomingScheduledActivities"
+    },
+    {
+      "rel": "horizontalAutoscalePolicyMapping",
+      "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/horizontalAutoscalePolicy",
+      "verbs": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "rel": "scheduledActivities",
+      "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/scheduledActivities",
+      "verbs": [
+        "GET",
+        "POST"
+      ]
+    }
+  ],
+  "changeInfo": {
+    "createdBy": "idrabenia",
+    "createdDate": "2015-03-26T23:59:28Z",
+    "modifiedBy": "idrabenia",
+    "modifiedDate": "2015-03-26T23:59:28Z"
+  },
+  "customFields": []
+}

@@ -1,15 +1,15 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 
 /**
  * @author ilya.drabenia
  */
-public class NameTemplateRef extends TemplateRef {
+public class TemplateByNameRef extends Template {
     private final String name;
 
-    public NameTemplateRef(DataCenterRef dataCenter, String name) {
+    TemplateByNameRef(DataCenter dataCenter, String name) {
         super(dataCenter);
         this.name = name;
     }
@@ -18,12 +18,12 @@ public class NameTemplateRef extends TemplateRef {
         return name;
     }
 
-    public NameTemplateRef name(String name) {
-        return new NameTemplateRef(getDataCenter(), name);
+    public TemplateByNameRef name(String name) {
+        return new TemplateByNameRef(getDataCenter(), name);
     }
 
-    public NameTemplateRef dataCenter(DataCenterRef dataCenter) {
-        return new NameTemplateRef(dataCenter, name);
+    public TemplateByNameRef dataCenter(DataCenter dataCenter) {
+        return new TemplateByNameRef(dataCenter, name);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.IdDataCenterRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterByIdRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.NameTemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateByNameRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -12,13 +14,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class ServerBean {
     @JsonIgnore
-    private CreateServerCommand server = new CreateServerCommand()
+    private CreateServerConfig server = new CreateServerConfig()
         .machine(new Machine())
         .network(new NetworkConfig())
-        .group(new IdGroupRef(null, null))
-        .template(new NameTemplateRef(null, null));
+        .group(Group.refByName())
+        .template(Template.refByName());
 
-    public ServerBean(CreateServerCommand server) {
+    public ServerBean(CreateServerConfig server) {
         this.server = server;
     }
 
@@ -66,51 +68,45 @@ public class ServerBean {
     }
 
     public String getGroup() {
-        return server.getGroup().as(IdGroupRef.class).getId();
+        return server.getGroup().as(GroupByIdRef.class).getId();
     }
 
     public void setGroup(String group) {
         server.group(
-            server.getGroup().as(IdGroupRef.class).id(group)
+            Group.refById(group)
         );
     }
 
     public String getDataCenter() {
         return server
-            .getGroup().as(IdGroupRef.class)
-            .getDataCenter().as(IdDataCenterRef.class)
+            .getTemplate()
+            .getDataCenter().as(DataCenterByIdRef.class)
             .getId();
     }
 
     public void setDataCenter(String dataCenter) {
-        server.group(
-            server
-                .getGroup().as(IdGroupRef.class)
-                .dataCenter(DataCenter.refById(dataCenter))
-        );
-
         server.template(
             server
-                .getTemplate().as(NameTemplateRef.class)
+                .getTemplate().as(TemplateByNameRef.class)
                 .dataCenter(DataCenter.refById(dataCenter))
         );
     }
 
-    public CreateServerCommand getServer() {
+    public CreateServerConfig getServer() {
         return server;
     }
 
-    public void setServer(CreateServerCommand server) {
+    public void setServer(CreateServerConfig server) {
         this.server = server;
     }
 
     public String getTemplate() {
-        return server.getTemplate().as(NameTemplateRef.class).getName();
+        return server.getTemplate().as(TemplateByNameRef.class).getName();
     }
 
     public void setTemplate(String template) {
         server.template(
-            server.getTemplate().as(NameTemplateRef.class).name(template)
+            server.getTemplate().as(TemplateByNameRef.class).name(template)
         );
     }
 

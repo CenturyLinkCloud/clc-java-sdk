@@ -1,5 +1,8 @@
 package com.centurylink.cloud.sdk.servers.services.domain.os;
 
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType;
+
 /**
  * @author ilya.drabenia
  */

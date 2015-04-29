@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 
 import java.time.ZonedDateTime;
 
@@ -9,12 +9,12 @@ import java.time.ZonedDateTime;
 /**
  * @author ilya.drabenia
  */
-public class CreateServerCommand {
+public class CreateServerConfig {
     private String id;
     private String name;
     private ServerType type;
-    private GroupRef group;
-    private TemplateRef template;
+    private Group group;
+    private Template template;
     private Machine machine = new Machine();
     private String password;
     private NetworkConfig network = new NetworkConfig();
@@ -29,7 +29,7 @@ public class CreateServerCommand {
         this.id = id;
     }
 
-    public CreateServerCommand id(String id) {
+    public CreateServerConfig id(String id) {
         setId(id);
         return this;
     }
@@ -42,7 +42,7 @@ public class CreateServerCommand {
         this.name = name;
     }
 
-    public CreateServerCommand name(String name) {
+    public CreateServerConfig name(String name) {
         setName(name);
         return this;
     }
@@ -55,33 +55,33 @@ public class CreateServerCommand {
         this.type = type;
     }
 
-    public CreateServerCommand type(ServerType type) {
+    public CreateServerConfig type(ServerType type) {
         setType(type);
         return this;
     }
 
-    public GroupRef getGroup() {
+    public Group getGroup() {
         return group;
     }
 
-    public void setGroup(GroupRef group) {
+    public void setGroup(Group group) {
         this.group = group;
     }
 
-    public CreateServerCommand group(GroupRef group) {
+    public CreateServerConfig group(Group group) {
         setGroup(group);
         return this;
     }
 
-    public TemplateRef getTemplate() {
+    public Template getTemplate() {
         return template;
     }
 
-    public void setTemplate(TemplateRef template) {
+    public void setTemplate(Template template) {
         this.template = template;
     }
 
-    public CreateServerCommand template(TemplateRef template) {
+    public CreateServerConfig template(Template template) {
         setTemplate(template);
         return this;
     }
@@ -94,7 +94,7 @@ public class CreateServerCommand {
         this.machine = machine;
     }
 
-    public CreateServerCommand machine(Machine machine) {
+    public CreateServerConfig machine(Machine machine) {
         setMachine(machine);
         return this;
     }
@@ -107,7 +107,7 @@ public class CreateServerCommand {
         this.password = password;
     }
 
-    public CreateServerCommand password(String password) {
+    public CreateServerConfig password(String password) {
         setPassword(password);
         return this;
     }
@@ -120,7 +120,7 @@ public class CreateServerCommand {
         this.network = network;
     }
 
-    public CreateServerCommand network(NetworkConfig network) {
+    public CreateServerConfig network(NetworkConfig network) {
         setNetwork(network);
         return this;
     }
@@ -133,12 +133,12 @@ public class CreateServerCommand {
         this.timeToLive = timeToLive;
     }
 
-    public CreateServerCommand timeToLive(TimeToLive timeToLive) {
+    public CreateServerConfig timeToLive(TimeToLive timeToLive) {
         setTimeToLive(timeToLive);
         return this;
     }
 
-    public CreateServerCommand timeToLive(ZonedDateTime expirationTime) {
+    public CreateServerConfig timeToLive(ZonedDateTime expirationTime) {
         setTimeToLive(new TimeToLive(expirationTime));
         return this;
     }
@@ -151,7 +151,7 @@ public class CreateServerCommand {
         this.managedOS = managedOS;
     }
 
-    public CreateServerCommand managedOs() {
+    public CreateServerConfig managedOs() {
         setManagedOS(true);
         return this;
     }

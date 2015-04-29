@@ -1,19 +1,19 @@
 package com.centurylink.cloud.sdk.networks.services.domain.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 
 /**
  * @author ilya.drabenia
  */
 public class NetworkRef implements Reference {
-    private DataCenterRef dataCenter;
+    private DataCenter dataCenter;
 
-    public NetworkRef(DataCenterRef dataCenter) {
+    public NetworkRef(DataCenter dataCenter) {
         this.dataCenter = dataCenter;
     }
 
-    public DataCenterRef getDataCenter() {
+    public DataCenter getDataCenter() {
         return dataCenter;
     }
 

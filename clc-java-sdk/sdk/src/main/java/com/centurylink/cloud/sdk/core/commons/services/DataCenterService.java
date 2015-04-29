@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.core.commons.services;
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterRef;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -26,14 +26,10 @@ public class DataCenterService {
         this.serverClient = serverClient;
     }
 
-    public DataCenterMetadata findByRef(DataCenterRef dataCenterRef) {
+    public DataCenterMetadata findByRef(DataCenter dataCenterRef) {
         return exceptionIfNotFound(
             findFirst(dataCenterRef.asFilter())
         );
-    }
-
-    public List<DataCenterMetadata> findByRef(DataCenterRef... dataCenterRefs) {
-        return map(dataCenterRefs, this::findByRef);
     }
 
     public DataCenterMetadata findFirst(DataCenterFilter criteria) {

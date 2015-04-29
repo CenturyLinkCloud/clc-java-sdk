@@ -4,8 +4,8 @@ import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.ServerStubFixture;
 import com.google.inject.Inject;
 import org.mockito.Mock;
@@ -81,7 +81,7 @@ public class ServerOperationsByServerFilterTest extends AbstractServerOperations
     }
 
     @Override
-    protected void restoreServer(GroupRef group, ServerRef server) {
+    protected void restoreServer(Group group, Server server) {
         serverService
             .restore(server, group)
             .waitUntilComplete();

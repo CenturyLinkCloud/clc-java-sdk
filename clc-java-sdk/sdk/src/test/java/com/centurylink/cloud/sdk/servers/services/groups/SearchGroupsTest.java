@@ -1,103 +1,75 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
-import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.google.inject.Inject;
-import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenters.DE_FRANKFURT;
-import static java.util.Arrays.asList;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.GB_PORTSMOUTH;
+import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.ARCHIVE;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.TEMPLATES;
+import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * @author Ilya Drabenia
  */
 public class SearchGroupsTest extends AbstractServersSdkTest {
+    final String DE_TEMPLATES_ID = "59a044753cce443e8aae6798dde99682";
+    final String GB_TEMPLATES_ID = "02c2895813a0455dafe4b1d0df71a227";
+    final String DE_ROOT_ID = "e9cf5a7a9fad43a8a9184d0265ae076c";
+    final String GB_ROOT_ID = "295108b591d3487f9f6a3363f769c6e0";
+    final String DE_MYSERVER_ID = "06c1d5e1b4a5469a825a91a4bf989b9b";
 
     @Inject
     GroupService groupService;
 
-    @Inject @Mock
+    @Inject
+    @Spy
     ServerClient serverClient;
 
-    @Inject @Mock
-    DataCenterService dataCenterService;
-
-    @Inject @Mock
+    @Inject
+    @Spy
     DataCentersClient dataCentersClient;
 
-    private void mockDataCentersMetadata() {
-        when(dataCentersClient.findAllDataCenters()).thenReturn(new GetDataCenterListResponse(asList(
-            new DataCenterMetadata("de1", "Frankfurt") {{
-                getLinks().add(new Link() {{
-                    setRel("group");
-                    setId("rootGroupId");
-                }});
-            }}))
-        );
+    @BeforeMethod
+    public void setUp() throws Exception {
+        Mockito
+            .doReturn(fromJson("data_centers_list.json", GetDataCenterListResponse.class))
+            .when(dataCentersClient).findAllDataCenters();
 
-        when(dataCenterService.findLazy(any(DataCenterFilter.class))).thenReturn(Stream.of(
-            new DataCenterMetadata("de1", "Frankfurt") {{
-                getLinks().add(new Link() {{
-                    setRel("group");
-                    setId("rootGroupId");
-                }});
-            }}
-        ));
-    }
+        Mockito
+            .doReturn(fromJson("de1_root_group.json", GroupMetadata.class))
+            .when(serverClient).getGroup(DE_ROOT_ID, false);
 
-    private void mockFrankfurtDataCenterRootGroup() {
-        when(serverClient.getGroup("rootGroupId", false)).thenReturn(
-            new GroupMetadata() {{
-                setId("rootGroupId");
-                setName("Root Group");
-                getGroups().addAll(asList(
-                    new GroupMetadata() {{
-                        setId("1");
-                        setName("Group1");
-                    }},
-                    new GroupMetadata() {{
-                        setId("2");
-                        setName("Archive");
-                    }})
-                );
-            }}
-        );
+        Mockito
+            .doReturn(fromJson("gb1_root_group.json", GroupMetadata.class))
+            .when(serverClient).getGroup(GB_ROOT_ID, false);
     }
 
     @Test
     public void testFindByIdRef() {
-        mockDataCentersMetadata();
-        mockFrankfurtDataCenterRootGroup();
+        GroupMetadata group = groupService.findByRef(Group.refById(DE_ROOT_ID));
 
-        GroupMetadata group = groupService.findByRef(Group.refById()
-            .dataCenter(DE_FRANKFURT)
-            .id("1")
-        );
-
-        assert group.getId().equals("1");
+        assert group.getDescription().equals("DE1 Hardware");
     }
 
     @Test
     public void testFindByNameRef() {
-        mockDataCentersMetadata();
-        mockFrankfurtDataCenterRootGroup();
-
         GroupMetadata group = groupService.findByRef(Group.refByName()
             .dataCenter(DE_FRANKFURT)
             .name("Archive")
@@ -108,27 +80,113 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
     @Test
     public void testFindGroupByName() {
-        mockDataCentersMetadata();
-        mockFrankfurtDataCenterRootGroup();
-
         List<GroupMetadata> groups = groupService.find(new GroupFilter()
             .dataCenters(DE_FRANKFURT)
-            .nameContains("Group1")
+            .nameContains("MyServer")
         );
 
-        assert groups.get(0).getName().equals("Group1");
+        assert groups.get(0).getName().equals("MyServer");
     }
 
     @Test
-    public void testFindGroupByNameInAllDataCenters() {
-        mockDataCentersMetadata();
-        mockFrankfurtDataCenterRootGroup();
-
+    public void testFindByNameInAllDataCenters() {
         List<GroupMetadata> groups = groupService.find(new GroupFilter()
-            .nameContains("Group1")
+            .nameContains("MyServer")
         );
 
-        assert groups.get(0).getName().equals("Group1");
+        assertEquals(groups.size(), 1);
+        assert groups.get(0).getName().equals("MyServer");
+    }
+
+    @Test
+    public void testSearchById_allDataCenters() {
+        List<GroupMetadata> groups = groupService.find(new GroupFilter()
+            .id(GB_ROOT_ID, DE_ROOT_ID)
+        );
+
+        assertEquals(groups.get(0).getName(), "GB1 Hardware");
+        assertEquals(groups.get(1).getName(), "DE1 Hardware");
+    }
+
+    @Test
+    public void testSearchById_de1DataCenter() {
+        List<GroupMetadata> groups = groupService.find(new GroupFilter()
+            .dataCenters(DE_FRANKFURT)
+            .id(GB_TEMPLATES_ID, DE_ROOT_ID)
+        );
+
+        assertEquals(groups.size(), 1);
+        assertEquals(groups.get(0).getName(), "DE1 Hardware");
+    }
+
+    @Test
+    public void testAnd_withNames() {
+        List<GroupMetadata> groups = groupService.find(Filter.and(
+            new GroupFilter()
+                .dataCenters(DE_FRANKFURT)
+                .names(ARCHIVE, TEMPLATES),
+
+            new GroupFilter()
+                .dataCenters(DE_FRANKFURT)
+                .names(TEMPLATES, DEFAULT_GROUP)
+        ));
+
+        assertEquals(groups.size(), 1);
+        assertEquals(groups.get(0).getName(), TEMPLATES);
+    }
+
+    @Test
+    public void testAnd_withIds() {
+        List<GroupMetadata> groups = groupService.find(Filter.and(
+            new GroupFilter()
+                .dataCenters(DE_FRANKFURT)
+                .id(DE_ROOT_ID, DE_MYSERVER_ID),
+
+            new GroupFilter()
+                .dataCenters(DE_FRANKFURT)
+                .id(DE_ROOT_ID, DE_TEMPLATES_ID)
+        ));
+
+        assertEquals(groups.size(), 1);
+        assertEquals(groups.get(0).getId(), DE_ROOT_ID);
+    }
+
+    @Test
+    public void testOr_withNames() {
+        List<GroupMetadata> groups = groupService.find(Filter.or(
+            new GroupFilter()
+                .dataCenters(DE_FRANKFURT)
+                .names(ARCHIVE, TEMPLATES),
+
+            new GroupFilter()
+                .dataCenters(DE_FRANKFURT)
+                .names(TEMPLATES, DEFAULT_GROUP)
+        ));
+
+        assertEquals(groups.size(), 3);
+        assertEquals(
+            newHashSet(map(groups, GroupMetadata::getName)),
+            newHashSet(ARCHIVE, TEMPLATES, DEFAULT_GROUP)
+        );
+    }
+
+    @Test(enabled = false) // require search redesign
+    public void testOr_withIds() {
+        List<GroupMetadata> groups = groupService.find(Filter.or(
+            new GroupFilter()
+                .dataCenters(GB_PORTSMOUTH)
+                .id(DE_ROOT_ID, GB_ROOT_ID),
+
+            new GroupFilter()
+                .dataCenters(DE_FRANKFURT)
+                .id(GB_TEMPLATES_ID, DE_ROOT_ID)
+        ));
+
+        assertEquals(groups.size(), 2);
+        assertEquals(
+            newHashSet(map(groups, GroupMetadata::getId)),
+            newHashSet(GB_ROOT_ID, DE_ROOT_ID)
+        );
     }
 
 }

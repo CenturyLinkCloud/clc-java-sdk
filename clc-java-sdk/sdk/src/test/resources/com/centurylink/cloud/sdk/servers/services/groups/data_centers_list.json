@@ -1,0 +1,188 @@
+[
+  {
+    "id": "de1",
+    "name": "DE1 - Germany (Frankfurt)",
+    "links": [
+      {
+        "rel": "self",
+        "href": "/v2/datacenters/altd/de1"
+      },
+      {
+        "rel": "deploymentCapabilities",
+        "href": "/v2/datacenters/altd/de1/deploymentCapabilities"
+      },
+      {
+        "rel": "loadBalancers",
+        "href": "/v2/sharedLoadBalancers/altd/de1",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "computeLimits",
+        "href": "/v2/datacenters/altd/de1/computeLimits",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "networkLimits",
+        "href": "/v2/datacenters/altd/de1/networkLimits",
+        "verbs": ["GET"]
+      },
+      {
+        "rel": "availableOvfs",
+        "href": "/v2/vmImport/altd/de1/available",
+        "verbs": ["GET"]
+      },
+      {
+        "rel": "group",
+        "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c",
+        "id": "e9cf5a7a9fad43a8a9184d0265ae076c",
+        "name": "DE1 Hardware"
+      },
+      {
+        "rel": "createGroup",
+        "href": "/v2/groups/altd",
+        "verbs": ["POST"]
+      },
+      {
+        "rel": "createServer",
+        "href": "/v2/servers/altd",
+        "verbs": ["POST"]
+      },
+      {
+        "rel": "defaults",
+        "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/defaults",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "billing",
+        "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/billing"
+      },
+      {
+        "rel": "statistics",
+        "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/statistics"
+      },
+      {
+        "rel": "upcomingScheduledActivities",
+        "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/upcomingScheduledActivities"
+      },
+      {
+        "rel": "horizontalAutoscalePolicyMapping",
+        "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/horizontalAutoscalePolicy",
+        "verbs": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ]
+      },
+      {
+        "rel": "scheduledActivities",
+        "href": "/v2/groups/altd/e9cf5a7a9fad43a8a9184d0265ae076c/scheduledActivities",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gb1",
+    "name": "GB1 - Great Britain (Portsmouth)",
+    "links": [
+      {
+        "rel": "self",
+        "href": "/v2/datacenters/altd/gb1"
+      },
+      {
+        "rel": "deploymentCapabilities",
+        "href": "/v2/datacenters/altd/gb1/deploymentCapabilities"
+      },
+      {
+        "rel": "loadBalancers",
+        "href": "/v2/sharedLoadBalancers/altd/gb1",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "computeLimits",
+        "href": "/v2/datacenters/altd/gb1/computeLimits",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "networkLimits",
+        "href": "/v2/datacenters/altd/gb1/networkLimits",
+        "verbs": ["GET"]
+      },
+      {
+        "rel": "availableOvfs",
+        "href": "/v2/vmImport/altd/gb1/available",
+        "verbs": ["GET"]
+      },
+      {
+        "rel": "group",
+        "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0",
+        "id": "295108b591d3487f9f6a3363f769c6e0",
+        "name": "GB1 Hardware"
+      },
+      {
+        "rel": "createGroup",
+        "href": "/v2/groups/altd",
+        "verbs": ["POST"]
+      },
+      {
+        "rel": "createServer",
+        "href": "/v2/servers/altd",
+        "verbs": ["POST"]
+      },
+      {
+        "rel": "defaults",
+        "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/defaults",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "billing",
+        "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/billing"
+      },
+      {
+        "rel": "statistics",
+        "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/statistics"
+      },
+      {
+        "rel": "upcomingScheduledActivities",
+        "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/upcomingScheduledActivities"
+      },
+      {
+        "rel": "horizontalAutoscalePolicyMapping",
+        "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/horizontalAutoscalePolicy",
+        "verbs": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ]
+      },
+      {
+        "rel": "scheduledActivities",
+        "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/scheduledActivities",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      }
+    ]
+  }
+]

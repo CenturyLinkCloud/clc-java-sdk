@@ -1,0 +1,251 @@
+{
+  "id": "295108b591d3487f9f6a3363f769c6e0",
+  "name": "GB1 Hardware",
+  "description": "GB1 Hardware",
+  "locationId": "GB1",
+  "type": "default",
+  "status": "active",
+  "serversCount": 0,
+  "servers": [],
+  "groups": [
+    {
+      "id": "2c2ce8553db04c25b46edc5439f1cfb6",
+      "name": "Archive",
+      "description": "Pay only for the storage consumed by the archived server. No compute or licensing costs are incurred.",
+      "locationId": "GB1",
+      "type": "archive",
+      "status": "active",
+      "serversCount": 0,
+      "servers": [],
+      "groups": [],
+      "links": [
+        {
+          "rel": "self",
+          "href": "/v2/groups/altd/2c2ce8553db04c25b46edc5439f1cfb6",
+          "verbs": [
+            "GET",
+            "PATCH"
+          ]
+        },
+        {
+          "rel": "parentGroup",
+          "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0",
+          "id": "295108b591d3487f9f6a3363f769c6e0"
+        },
+        {
+          "rel": "defaults",
+          "href": "/v2/groups/altd/2c2ce8553db04c25b46edc5439f1cfb6/defaults",
+          "verbs": [
+            "GET",
+            "POST"
+          ]
+        },
+        {
+          "rel": "billing",
+          "href": "/v2/groups/altd/2c2ce8553db04c25b46edc5439f1cfb6/billing"
+        }
+      ],
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-03-26T23:59:28Z",
+        "modifiedBy": "idrabenia",
+        "modifiedDate": "2015-03-26T23:59:28Z"
+      },
+      "customFields": []
+    },
+    {
+      "id": "0096c7352c994a85b108e0c2c30fdebe",
+      "name": "Default Group",
+      "description": "The default location for new servers created in your account.",
+      "locationId": "GB1",
+      "type": "default",
+      "status": "active",
+      "serversCount": 0,
+      "servers": [],
+      "groups": [],
+      "links": [
+        {
+          "rel": "createGroup",
+          "href": "/v2/groups/altd",
+          "verbs": ["POST"]
+        },
+        {
+          "rel": "createServer",
+          "href": "/v2/servers/altd",
+          "verbs": ["POST"]
+        },
+        {
+          "rel": "self",
+          "href": "/v2/groups/altd/0096c7352c994a85b108e0c2c30fdebe",
+          "verbs": [
+            "GET",
+            "PATCH",
+            "DELETE"
+          ]
+        },
+        {
+          "rel": "parentGroup",
+          "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0",
+          "id": "295108b591d3487f9f6a3363f769c6e0"
+        },
+        {
+          "rel": "defaults",
+          "href": "/v2/groups/altd/0096c7352c994a85b108e0c2c30fdebe/defaults",
+          "verbs": [
+            "GET",
+            "POST"
+          ]
+        },
+        {
+          "rel": "billing",
+          "href": "/v2/groups/altd/0096c7352c994a85b108e0c2c30fdebe/billing"
+        },
+        {
+          "rel": "archiveGroupAction",
+          "href": "/v2/groups/altd/0096c7352c994a85b108e0c2c30fdebe/archive"
+        },
+        {
+          "rel": "statistics",
+          "href": "/v2/groups/altd/0096c7352c994a85b108e0c2c30fdebe/statistics"
+        },
+        {
+          "rel": "upcomingScheduledActivities",
+          "href": "/v2/groups/altd/0096c7352c994a85b108e0c2c30fdebe/upcomingScheduledActivities"
+        },
+        {
+          "rel": "horizontalAutoscalePolicyMapping",
+          "href": "/v2/groups/altd/0096c7352c994a85b108e0c2c30fdebe/horizontalAutoscalePolicy",
+          "verbs": [
+            "GET",
+            "PUT",
+            "DELETE"
+          ]
+        },
+        {
+          "rel": "scheduledActivities",
+          "href": "/v2/groups/altd/0096c7352c994a85b108e0c2c30fdebe/scheduledActivities",
+          "verbs": [
+            "GET",
+            "POST"
+          ]
+        }
+      ],
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-03-26T23:59:28Z",
+        "modifiedBy": "idrabenia",
+        "modifiedDate": "2015-03-26T23:59:28Z"
+      },
+      "customFields": []
+    },
+    {
+      "id": "02c2895813a0455dafe4b1d0df71a227",
+      "name": "Templates",
+      "description": "Custom templates provide a set of hardware/software settings that can be used repeatedly to create servers configured with the same settings.",
+      "locationId": "GB1",
+      "type": "templates",
+      "status": "active",
+      "serversCount": 0,
+      "servers": [],
+      "groups": [],
+      "links": [
+        {
+          "rel": "self",
+          "href": "/v2/groups/altd/02c2895813a0455dafe4b1d0df71a227",
+          "verbs": [
+            "GET",
+            "PATCH"
+          ]
+        },
+        {
+          "rel": "parentGroup",
+          "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0",
+          "id": "295108b591d3487f9f6a3363f769c6e0"
+        },
+        {
+          "rel": "defaults",
+          "href": "/v2/groups/altd/02c2895813a0455dafe4b1d0df71a227/defaults",
+          "verbs": [
+            "GET",
+            "POST"
+          ]
+        },
+        {
+          "rel": "billing",
+          "href": "/v2/groups/altd/02c2895813a0455dafe4b1d0df71a227/billing"
+        }
+      ],
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-03-26T23:59:28Z",
+        "modifiedBy": "idrabenia",
+        "modifiedDate": "2015-03-26T23:59:28Z"
+      },
+      "customFields": []
+    }
+  ],
+  "links": [
+    {
+      "rel": "createGroup",
+      "href": "/v2/groups/altd",
+      "verbs": ["POST"]
+    },
+    {
+      "rel": "createServer",
+      "href": "/v2/servers/altd",
+      "verbs": ["POST"]
+    },
+    {
+      "rel": "self",
+      "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0",
+      "verbs": [
+        "GET",
+        "PATCH"
+      ]
+    },
+    {
+      "rel": "defaults",
+      "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/defaults",
+      "verbs": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "rel": "billing",
+      "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/billing"
+    },
+    {
+      "rel": "statistics",
+      "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/statistics"
+    },
+    {
+      "rel": "upcomingScheduledActivities",
+      "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/upcomingScheduledActivities"
+    },
+    {
+      "rel": "horizontalAutoscalePolicyMapping",
+      "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/horizontalAutoscalePolicy",
+      "verbs": [
+        "GET",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    {
+      "rel": "scheduledActivities",
+      "href": "/v2/groups/altd/295108b591d3487f9f6a3363f769c6e0/scheduledActivities",
+      "verbs": [
+        "GET",
+        "POST"
+      ]
+    }
+  ],
+  "changeInfo": {
+    "createdBy": "idrabenia",
+    "createdDate": "2015-03-26T23:59:28Z",
+    "modifiedBy": "idrabenia",
+    "modifiedDate": "2015-03-26T23:59:28Z"
+  },
+  "customFields": []
+}

@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.CustomField;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public class GroupConfig {
     private String name;
     private String description;
-    private GroupRef parentGroup;
+    private Group parentGroup;
     private List<CustomField> customFields;
 
     public String getName() {
@@ -42,15 +42,15 @@ public class GroupConfig {
         return this;
     }
 
-    public GroupRef getParentGroup() {
+    public Group getParentGroup() {
         return parentGroup;
     }
 
-    public void setParentGroup(GroupRef parentGroup) {
+    public void setParentGroup(Group parentGroup) {
         this.parentGroup = parentGroup;
     }
 
-    public GroupConfig parentGroup(GroupRef parentGroup) {
+    public GroupConfig parentGroup(Group parentGroup) {
         setParentGroup(parentGroup);
         return this;
     }

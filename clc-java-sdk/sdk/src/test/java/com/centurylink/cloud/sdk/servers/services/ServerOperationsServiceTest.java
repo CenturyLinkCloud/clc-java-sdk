@@ -1,13 +1,10 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.IdGroupRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
@@ -17,34 +14,34 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
 public class ServerOperationsServiceTest extends AbstractServersSdkTest {
 
-    private ServerRef server;
+    private Server server;
 
     @Inject
     ServerService serverService;
 
-    private ServerMetadata loadServerMetadata(ServerRef server) {
+    private ServerMetadata loadServerMetadata(Server server) {
         ServerMetadata metadata = serverService.findByRef(server);
         assertNotNull(metadata);
 
         return metadata;
     }
 
-    private Details loadServerDetails(ServerRef server) {
+    private Details loadServerDetails(Server server) {
         ServerMetadata metadata = loadServerMetadata(server);
         assertNotNull(metadata.getDetails());
 
         return metadata.getDetails();
     }
 
-    private void assertThatServerHasStatus(ServerRef server, String status) {
+    private void assertThatServerHasStatus(Server server, String status) {
         assertEquals(loadServerMetadata(server).getStatus(), status);
     }
 
-    private void assertThatServerPowerStateHasStatus(ServerRef server, String status) {
+    private void assertThatServerPowerStateHasStatus(Server server, String status) {
         assertEquals(loadServerDetails(server).getPowerState(), status);
     }
 
-    private void assertThatMaintenanceFlagIs(ServerRef server, Boolean expectedResult) {
+    private void assertThatMaintenanceFlagIs(Server server, Boolean expectedResult) {
         assertEquals(loadServerDetails(server).getInMaintenanceMode(), expectedResult);
     }
 
@@ -96,7 +93,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
             .waitUntilComplete();
     }
 
-    private void restoreServer(GroupRef group) {
+    private void restoreServer(Group group) {
         serverService
             .restore(server, group)
             .waitUntilComplete();
@@ -170,7 +167,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         server = SingleServerFixture.server();
 
         String groupId = loadServerMetadata(server).getGroupId();
-        GroupRef group = new IdGroupRef(DataCenter.refByName("FranKfUrt"), groupId);
+        Group group = Group.refById(groupId);
 
         testArchive();
 

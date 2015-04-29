@@ -8,10 +8,10 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filter
  *
  * @author ilya.drabenia
  */
-public class NameDataCenterRef extends DataCenterRef {
+public class DataCenterByNameRef extends DataCenter {
     private final String name;
 
-    public NameDataCenterRef(String name) {
+    DataCenterByNameRef(String name) {
         this.name = name;
     }
 
