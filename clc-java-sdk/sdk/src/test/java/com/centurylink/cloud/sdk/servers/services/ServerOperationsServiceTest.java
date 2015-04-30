@@ -107,7 +107,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
 
     private void deleteSnapshot() {
         serverService
-            .deleteSnapshot(server)
+            .deleteSnapshot(server.asFilter())
             .waitUntilComplete();
     }
 
