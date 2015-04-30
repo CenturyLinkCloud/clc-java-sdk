@@ -256,9 +256,9 @@ public class SearchQueriesSampleApp extends Assert {
         String keyword = "sr-de";
 
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter().where(
-                        serverMetadata -> serverMetadata.getName().contains(keyword)
-                )
+            new ServerFilter().where(
+                serverMetadata -> serverMetadata.getName().toLowerCase().contains(keyword)
+            )
         );
 
         List<String> serverIdList = new ArrayList<>();
