@@ -125,14 +125,19 @@ public class GroupService {
         }
     }
 
+    /**
+     * Create group
+     * @param groupConfig group config
+     * @return OperationFuture wrapper for Group
+     */
     public OperationFuture<Group> create(GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
         checkNotNull(groupConfig.getName(), "Name of GroupConfig must be not null");
         checkNotNull(groupConfig.getParentGroup(), "ParentGroup of GroupConfig must be not null");
 
         GroupMetadata group = client.createGroup(
-            converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
-        );
+            converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup())
+        ));
 
         return new OperationFuture<>(
             Group.refById(group.getId()),
@@ -142,12 +147,13 @@ public class GroupService {
 
     /**
      * Update group
-     * @param groupRef    c
+     * @param groupRef    group reference
      * @param groupConfig group config
      * @return OperationFuture wrapper for Group
      */
     public OperationFuture<Group> update(Group groupRef, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
+        checkNotNull(groupRef, "Group reference must be not null");
         updateGroup(idByRef(groupRef), groupConfig);
 
         return new OperationFuture<>(
@@ -165,7 +171,7 @@ public class GroupService {
     public OperationFuture<List<Group>> update(List<Group> groups, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
 
-        if (canUpdateGroups(groups, groupConfig))
+        checkUpdateGroupsRules(groups, groupConfig);
 
         groups.stream()
             .forEach(group -> update(group, groupConfig));
@@ -188,20 +194,19 @@ public class GroupService {
         return update(groups, groupConfig);
     }
 
-    private boolean canUpdateGroups(List<Group> groups, GroupConfig groupConfig) {
+    private boolean updateGroup(String groupId, GroupConfig groupConfig) {
+        return client
+            .updateGroup(
+                groupId,
+                converter.createUpdateGroupRequest(
+                    groupConfig,
+                    groupConfig.getParentGroup() != null ? idByRef(groupConfig.getParentGroup()) : null)
+            );
+    }
+
+    private boolean checkUpdateGroupsRules(List<Group> groups, GroupConfig groupConfig) {
         List<String> groupIds = groups.stream().map(group -> idByRef(group)).collect(toList());
         List<GroupMetadata> groupMetadataList = find(new GroupFilter().id(groupIds));
-
-        if (groupConfig.getParentGroup() != null) {
-            int countGroupNames = groupMetadataList.stream()
-                .map(GroupMetadata::getName)
-                .collect(toSet())
-                .size();
-            //if groups have equal names - throw exception
-            if (groupMetadataList.size() > countGroupNames) {
-                throw new ClcException("Can update groups with unique names only");
-            }
-        }
 
         if (groupConfig.getName() != null) {
             int countParentGroups = groupMetadataList.stream()
@@ -219,19 +224,12 @@ public class GroupService {
     }
 
     private Group[] getRefsFromFilter(GroupFilter groupFilter) {
+        checkNotNull(groupFilter, "Group filter must be not null");
         List<Group> groupList = find(groupFilter).stream()
             .map(metadata -> Group.refById(metadata.getId()))
             .collect(toList());
 
         return groupList.toArray(new Group[groupList.size()]);
-    }
-
-    private boolean updateGroup(String groupId, GroupConfig groupConfig) {
-        return client
-            .updateGroup(
-                groupId,
-                converter.createUpdateGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
-            );
     }
 
     /**
@@ -281,9 +279,6 @@ public class GroupService {
     }
 
     String idByRef(Group ref) {
-        if (ref == null) {
-            return null;
-        }
         if (ref.is(GroupByIdRef.class)) {
             return ref.as(GroupByIdRef.class).getId();
         } else {
