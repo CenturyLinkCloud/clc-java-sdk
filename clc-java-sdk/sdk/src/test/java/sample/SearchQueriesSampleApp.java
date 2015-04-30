@@ -81,10 +81,10 @@ public class SearchQueriesSampleApp extends Assert {
 
         List<ServerByIdRef> results =
             OperationFuture.waitUntilComplete(
-                createServer(DataCenter.DE_FRANKFURT, group1De, "uat-server-de-1"),
-                createServer(DataCenter.DE_FRANKFURT, group2De, "uat-server-de-2"),
-                createServer(DataCenter.CA_VANCOUVER, group1Va, "uat-server-va-1"),
-                createServer(DataCenter.CA_VANCOUVER, group1Va, "uat-server-va-2")
+                createServer(DataCenter.DE_FRANKFURT, group1De, "srv-de1"),
+                createServer(DataCenter.DE_FRANKFURT, group2De, "srv-de2"),
+                createServer(DataCenter.CA_VANCOUVER, group1Va, "srv-va1"),
+                createServer(DataCenter.CA_VANCOUVER, group1Va, "srv-va2")
             )
             .getResult().stream()
             .map(ServerMetadata::asRefById)
@@ -182,6 +182,94 @@ public class SearchQueriesSampleApp extends Assert {
     }
 
     /**
+     * Step 1. List all servers available for current user
+     */
+    @Test(groups = SAMPLES)
+    public void findAllServersTest() {
+        List<ServerMetadata> serverMetadataList = serverService.find(
+                new ServerFilter()
+        );
+
+        List<String> serverIdList = new ArrayList<>();
+        serverIdList.add(server1De.getId());
+        serverIdList.add(server2De.getId());
+        serverIdList.add(server1Va.getId());
+        serverIdList.add(server2Va.getId());
+
+        checkServerMetadataList(serverMetadataList, serverIdList);
+    }
+
+    /**
+     * Step 2. Find all active servers in all datacenters
+     */
+    @Test(groups = SAMPLES)
+    public void findAllActiveServersTest() {
+        List<ServerMetadata> serverMetadataList = serverService.find(
+                new ServerFilter().onlyActive()
+        );
+
+        List<String> serverIdList = new ArrayList<>();
+        serverIdList.add(server1De.getId());
+        serverIdList.add(server2De.getId());
+        serverIdList.add(server1Va.getId());
+
+        checkServerMetadataList(serverMetadataList, serverIdList);
+    }
+
+    /**
+     * Step 3. Find server within "uta1" group in all datacenters
+     */
+    @Test(groups = SAMPLES)
+    public void findGroupServersTest() {
+        List<ServerMetadata> serverMetadataList = serverService.find(
+                new ServerFilter().groupNameContains(group1Name)
+        );
+
+        List<String> serverIdList = new ArrayList<>();
+        serverIdList.add(server1De.getId());
+        serverIdList.add(server1Va.getId());
+
+        checkServerMetadataList(serverMetadataList, serverIdList);
+    }
+
+    /**
+     * Step 4. Find server that contains some value in it’s metadata
+     */
+    @Test(groups = SAMPLES)
+    public void findServersByMetadataValueTest() {
+        String keyword = "srv-de";
+
+        List<ServerMetadata> serverMetadataList = serverService.find(
+                new ServerFilter().where(
+                        serverMetadata -> serverMetadata.getDescription().contains(keyword)
+                )
+        );
+
+        List<String> serverIdList = new ArrayList<>();
+        serverIdList.add(server1De.getId());
+        serverIdList.add(server2De.getId());
+
+        checkServerMetadataList(serverMetadataList, serverIdList);
+    }
+
+    /**
+     * Step 5. Find templates of specified operating system
+     */
+    @Test(groups = SAMPLES)
+    public void findOsTemplatesTest() {
+        List<TemplateMetadata> templateMetadataList = templateService.find(
+            new TemplateFilter()
+                .dataCenters(DataCenter.DE_FRANKFURT)
+                .osTypes(new OsFilter().type(CENTOS))
+        );
+
+        assertNotNull(templateMetadataList);
+
+        /* TODO please check that this number of templates is correct */
+        assertEquals(templateMetadataList.size(), 2);
+    }
+
+    /**
      * Step 6. Find groups that contains keyword in description
      */
     @Test(groups = SAMPLES)
@@ -201,109 +289,4 @@ public class SearchQueriesSampleApp extends Assert {
 
         checkGroupMetadataList(groupMetadataList, groupIdList);
     }
-
-    /**
-     * Step 5. Find templates of specified operating system
-     */
-    public void findOsTemplatesTest() {
-        List<TemplateMetadata> templateMetadataList = templateService.find(
-            new TemplateFilter()
-                .dataCenters(DataCenter.DE_FRANKFURT)
-                .osTypes(new OsFilter().type(CENTOS))
-        );
-
-        assertNotNull(templateMetadataList);
-
-        /* TODO please check that this number of templates is correct */
-        assertEquals(templateMetadataList.size(), 2);
-
-        testFindGroupsByDescriptionKeyword();
-    }
-
-    /**
-     * Step 4. Find server that contains some value in it’s metadata
-     */
-    public void findServersByMetadataValueTest() {
-        String keyword = "server-de";
-
-        List<ServerMetadata> serverMetadataList = serverService.find(
-            new ServerFilter().where(
-                serverMetadata -> serverMetadata.getDescription().contains(keyword)
-            )
-        );
-
-        List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(server1De.getId());
-        serverIdList.add(server2De.getId());
-
-        checkServerMetadataList(serverMetadataList, serverIdList);
-
-        findOsTemplatesTest();
-    }
-
-    /**
-     * Step 3. Find server within "uta1" group in all datacenters
-     */
-    public void findGroupServersTest() {
-        List<ServerMetadata> serverMetadataList = serverService.find(
-            new ServerFilter().groupNameContains(group1Name)
-        );
-
-        List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(server1De.getId());
-        serverIdList.add(server1Va.getId());
-
-        checkServerMetadataList(serverMetadataList, serverIdList);
-
-        findServersByMetadataValueTest();
-    }
-
-    /**
-     * Step 2. Find all active servers in all datacenters
-     */
-    public void findAllActiveServersTest() {
-        List<ServerMetadata> serverMetadataList = serverService.find(
-            new ServerFilter().onlyActive()
-        );
-
-        List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(server1De.getId());
-        serverIdList.add(server2De.getId());
-        serverIdList.add(server1Va.getId());
-
-        checkServerMetadataList(serverMetadataList, serverIdList);
-
-        findGroupServersTest();
-    }
-
-    /**
-     * Step 1. List all servers available for current user
-     */
-    public void findAllServersTest() {
-        List<ServerMetadata> serverMetadataList = serverService.find(
-            new ServerFilter()
-        );
-
-        List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(server1De.getId());
-        serverIdList.add(server2De.getId());
-        serverIdList.add(server1Va.getId());
-        serverIdList.add(server2Va.getId());
-
-        checkServerMetadataList(serverMetadataList, serverIdList);
-
-        findAllActiveServersTest();
-    }
-
-    @Test(groups = SAMPLES)
-    public void runChainTests() {
-        serverService
-            .archive(server2Va)
-            .waitUntilComplete();
-
-        assertThatServerHasStatus(server2Va, "archived");
-
-        findAllServersTest();
-    }
-
 }
