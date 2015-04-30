@@ -75,7 +75,7 @@ public class DiskManagementTest extends AbstractServersSdkTest {
                     setRel("self");
                     setId("serverId");
                 }});
-            }}));
+            }}, null));
 
         serverService.create(anyServerConfig()
             .machine(new Machine()

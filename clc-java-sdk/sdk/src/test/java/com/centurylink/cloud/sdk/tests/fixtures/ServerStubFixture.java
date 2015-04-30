@@ -301,8 +301,8 @@ public class ServerStubFixture {
         List<Link> linkList = new ArrayList<>();
         linkList.add(link);
 
-        BaseServerResponse response = new BaseServerResponse(serverId, true, linkList);
-        BaseServerResponse response2 = new BaseServerResponse(serverId2, true, linkList);
+        BaseServerResponse response = new BaseServerResponse(serverId, true, linkList, null);
+        BaseServerResponse response2 = new BaseServerResponse(serverId2, true, linkList, null);
         responseList.add(response);
         responseList.add(response2);
 
