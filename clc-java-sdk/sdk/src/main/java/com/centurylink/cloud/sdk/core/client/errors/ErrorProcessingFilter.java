@@ -30,8 +30,20 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
         }
     }
 
+    /**
+     * Returns true if response contains status codes:
+     * {@code OK}
+     * {@code CREATED}
+     * {@code ACCEPTED}
+     * {@code NO_CONTENT}
+     * {@code NOT_FOUND} - added because client returns only 404 status code and response doesn't contain body,
+     * in case when requested resource not found
+     *
+     * @param responseContext
+     * @return true if response contains acceptable status codes
+     */
     private boolean isResponseSuccess(ClientResponseContext responseContext) {
-        return asList(OK, CREATED, ACCEPTED, NO_CONTENT).contains(responseContext.getStatusInfo());
+        return asList(OK, CREATED, ACCEPTED, NO_CONTENT, NOT_FOUND).contains(responseContext.getStatusInfo());
     }
 
     private ObjectMapper objectMapper() {
