@@ -7,10 +7,15 @@ public interface TestGroups {
     /**
      * Group that contains tests required access to CenturyLink Cloud API
      */
-    static String INTEGRATION = "Integration";
+    String INTEGRATION = "Integration";
 
     /**
      * Group that execution time do not allow run such tests on application build
      */
-    static String LONG_RUNNING = "LongRunning";
+    String LONG_RUNNING = "LongRunning";
+
+    /**
+     * Group of tests that contains real business scenarios
+     */
+    String SAMPLES = "Samples";
 }

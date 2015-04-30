@@ -564,7 +564,8 @@ public class ServerService {
 
         return new OperationFuture<>(
             servers,
-            new ParallelJobsFuture(futures));
+            new ParallelJobsFuture(futures)
+        );
     }
 
     /**

@@ -2,16 +2,19 @@ package com.centurylink.cloud.sdk.core.commons.services.domain.queue.future;
 
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
+import com.centurylink.cloud.sdk.core.services.function.Streams;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -69,11 +72,15 @@ public class OperationFuture<T> {
         return future;
     }
 
-    public static OperationFuture<List<?>> from(OperationFuture<?>... futures) {
-        return new OperationFuture<>(
-            map(futures, f -> f.getResult()),
-            new ParallelJobsFuture(map(futures, f -> f.waiting))
-        );
+    @SafeVarargs
+    public static <T> OperationFuture<List<T>> waitUntilComplete(OperationFuture<T>... operations) {
+        checkArgument(operations.length >= 1);
+
+        return
+            new OperationFuture<>(
+                map(operations, op -> op.waitUntilComplete().getResult()),
+                new NoWaitingJobFuture()
+            );
     }
 
     public JobFuture jobFuture() {

@@ -5,7 +5,7 @@ import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.Propertie
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterByIdRef;
-import com.centurylink.cloud.sdk.core.services.function.Predicates;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
@@ -25,9 +25,10 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdR
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
+import com.centurylink.cloud.sdk.tests.TestGroups;
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
@@ -37,7 +38,8 @@ import java.util.List;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
-import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
+import static java.util.stream.Collectors.toList;
 
 public class SearchQueriesSampleApp extends Assert {
 
@@ -63,7 +65,7 @@ public class SearchQueriesSampleApp extends Assert {
     ServerByIdRef server1Va;
     ServerByIdRef server2Va;
 
-//    @BeforeSuite(groups = {LONG_RUNNING})
+    @BeforeClass(groups = SAMPLES)
     public void init() {
         ClcSdk sdk = new ClcSdk(
             new PropertiesFileCredentialsProvider("centurylink-clc-sdk-uat.properties")
@@ -77,10 +79,21 @@ public class SearchQueriesSampleApp extends Assert {
         group1Va = createGroup(DataCenter.US_EAST_STERLING, group1Name, "uat1 group description");
         group2De = createGroup(DataCenter.DE_FRANKFURT, group2Name, "uat2 group description");
 
-        server1De = createServer(DataCenter.DE_FRANKFURT, group1De, "uat-server-de-1");
-        server2De = createServer(DataCenter.DE_FRANKFURT, group2De, "uat-server-de-2");
-        server1Va = createServer(DataCenter.DE_FRANKFURT, group1Va, "uat-server-va-1");
-        server2Va = createServer(DataCenter.DE_FRANKFURT, group1Va, "uat-server-va-2");
+        List<ServerByIdRef> results =
+            OperationFuture.waitUntilComplete(
+                createServer(DataCenter.DE_FRANKFURT, group1De, "uat-server-de-1"),
+                createServer(DataCenter.DE_FRANKFURT, group2De, "uat-server-de-2"),
+                createServer(DataCenter.CA_VANCOUVER, group1Va, "uat-server-va-1"),
+                createServer(DataCenter.CA_VANCOUVER, group1Va, "uat-server-va-2")
+            )
+            .getResult().stream()
+            .map(ServerMetadata::asRefById)
+            .collect(toList());
+
+        server1De = results.get(0);
+        server2De = results.get(1);
+        server1Va = results.get(2);
+        server2Va = results.get(3);
 
         serverService
             .archive(server2Va)
@@ -89,12 +102,12 @@ public class SearchQueriesSampleApp extends Assert {
         assertThatServerHasStatus(server2Va, "archived");
     }
 
-//    @AfterSuite(groups = {LONG_RUNNING})
+    @AfterClass(groups = SAMPLES)
     public void deleteServers() {
         serverService.delete(new ServerFilter());
     }
 
-    private ServerByIdRef createServer(DataCenterByIdRef dataCenter, Group group, String name) {
+    private OperationFuture<ServerMetadata> createServer(DataCenterByIdRef dataCenter, Group group, String name) {
         return
             serverService
                 .create(new CreateServerConfig()
@@ -116,10 +129,7 @@ public class SearchQueriesSampleApp extends Assert {
                         .version("6")
                         .architecture(x86_64)
                     )
-                )
-                .waitUntilComplete()
-                .getResult()
-                .asRefById();
+                );
     }
 
     private GroupByIdRef createGroup(DataCenterByIdRef dataCenter, String name, String description) {
@@ -127,8 +137,8 @@ public class SearchQueriesSampleApp extends Assert {
             groupService.create(
                 new GroupConfig()
                     .parentGroup(Group.refByName()
-                                    .dataCenter(dataCenter)
-                                    .name(Group.DEFAULT_GROUP)
+                        .dataCenter(dataCenter)
+                        .name(Group.DEFAULT_GROUP)
                     )
                     .name(name)
                     .description(description)
@@ -174,7 +184,8 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 6. Find groups that contains keyword in description
      */
-    public void findGroupsByDescriptionKeyword() {
+    @Test(groups = SAMPLES)
+    public void testFindGroupsByDescriptionKeyword() {
         String keyword = group1Name;
 
         List<GroupMetadata> groupMetadataList = groupService.find(
@@ -206,7 +217,7 @@ public class SearchQueriesSampleApp extends Assert {
         /* TODO please check that this number of templates is correct */
         assertEquals(templateMetadataList.size(), 2);
 
-        findGroupsByDescriptionKeyword();
+        testFindGroupsByDescriptionKeyword();
     }
 
     /**
@@ -252,7 +263,7 @@ public class SearchQueriesSampleApp extends Assert {
      */
     public void findAllActiveServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter().onlyActive()
+            new ServerFilter().onlyActive()
         );
 
         List<String> serverIdList = new ArrayList<>();
@@ -270,7 +281,7 @@ public class SearchQueriesSampleApp extends Assert {
      */
     public void findAllServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter()
+            new ServerFilter()
         );
 
         List<String> serverIdList = new ArrayList<>();
@@ -284,7 +295,7 @@ public class SearchQueriesSampleApp extends Assert {
         findAllActiveServersTest();
     }
 
-//    @Test(groups = {LONG_RUNNING})
+    @Test(groups = SAMPLES)
     public void runChainTests() {
         serverService
             .archive(server2Va)
