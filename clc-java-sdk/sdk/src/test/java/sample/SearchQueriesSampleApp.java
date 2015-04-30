@@ -15,6 +15,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupNameRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;
@@ -136,6 +137,15 @@ public class SearchQueriesSampleApp extends Assert {
 
     private void clearAll() {
         serverService.delete(new ServerFilter()).waitUntilComplete();
+        List<GroupMetadata> groupMetadataList = groupService.find(
+            new GroupFilter().nameContains("uat")
+        );
+
+        groupMetadataList.forEach(groupMetadata ->
+            groupService.delete(
+                    Group.refById(groupMetadata.getId())
+            )
+        );
     }
 
     private GroupByIdRef createGroup(DataCenterByIdRef dataCenter, String name, String description) {
@@ -247,7 +257,7 @@ public class SearchQueriesSampleApp extends Assert {
 
         List<ServerMetadata> serverMetadataList = serverService.find(
                 new ServerFilter().where(
-                        serverMetadata -> serverMetadata.getDescription().contains(keyword)
+                        serverMetadata -> serverMetadata.getName().contains(keyword)
                 )
         );
 
@@ -270,8 +280,6 @@ public class SearchQueriesSampleApp extends Assert {
         );
 
         assertNotNull(templateMetadataList);
-
-        /* TODO please check that this number of templates is correct */
         assertEquals(templateMetadataList.size(), 2);
     }
 
