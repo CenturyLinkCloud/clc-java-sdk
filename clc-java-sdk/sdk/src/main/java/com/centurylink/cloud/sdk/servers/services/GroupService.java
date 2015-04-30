@@ -9,7 +9,7 @@ import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.core.services.function.Predicates;
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -31,6 +32,7 @@ import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionI
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getFirst;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Service provide operations for query and manipulate groups of servers
@@ -136,18 +138,98 @@ public class GroupService {
         );
     }
 
+    /**
+     * Update group
+     * @param groupRef    group reference
+     * @param groupConfig group config
+     * @return OperationFuture wrapper for Group
+     */
     public OperationFuture<Group> update(Group groupRef, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
-        boolean updated = client
-            .updateGroup(
-                idByRef(groupRef),
-                converter.createUpdateGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
-            );
+        updateGroup(idByRef(groupRef), groupConfig);
 
         return new OperationFuture<>(
             groupRef,
             new NoWaitingJobFuture()
         );
+    }
+
+    /**
+     * Update provided list of groups
+     * @param groups      group list
+     * @param groupConfig group config
+     * @return OperationFuture wrapper for list of Group
+     */
+    public OperationFuture<List<Group>> update(List<Group> groups, GroupConfig groupConfig) {
+        checkNotNull(groupConfig, "GroupConfig must be not null");
+
+        if (canUpdateGroups(groups, groupConfig))
+
+        groups.stream()
+            .forEach(group -> update(group, groupConfig));
+
+        return new OperationFuture<>(
+            groups,
+            new NoWaitingJobFuture()
+        );
+    }
+
+    /**
+     * Update provided list of groups
+     * @param groupFilter search criteria
+     * @param groupConfig group config
+     * @return OperationFuture wrapper for list of Group
+     */
+    public OperationFuture<List<Group>> update(GroupFilter groupFilter, GroupConfig groupConfig) {
+        List<Group> groups = Arrays.asList(getRefsFromFilter(groupFilter));
+
+        return update(groups, groupConfig);
+    }
+
+    private boolean canUpdateGroups(List<Group> groups, GroupConfig groupConfig) {
+        List<String> groupIds = groups.stream().map(group -> idByRef(group)).collect(toList());
+        List<GroupMetadata> groupMetadataList = find(new GroupFilter().id(groupIds));
+
+        if (groupConfig.getParentGroup() != null) {
+            int countGroupNames = groupMetadataList.stream()
+                .map(GroupMetadata::getName)
+                .collect(toSet())
+                .size();
+            //if groups have equal names - throw exception
+            if (groupMetadataList.size() > countGroupNames) {
+                throw new ClcException("Can update groups with unique names only");
+            }
+        }
+
+        if (groupConfig.getName() != null) {
+            int countParentGroups = groupMetadataList.stream()
+                .map(GroupMetadata::getParentGroupId)
+                .collect(toSet())
+                .size();
+
+            //if groups have the same parent groups - throw exception
+            if (groupMetadataList.size() > countParentGroups) {
+                throw new ClcException("Can update groups with different parent groups only");
+            }
+        }
+
+        return true;
+    }
+
+    private Group[] getRefsFromFilter(GroupFilter groupFilter) {
+        List<Group> groupList = find(groupFilter).stream()
+            .map(metadata -> Group.refById(metadata.getId()))
+            .collect(toList());
+
+        return groupList.toArray(new Group[groupList.size()]);
+    }
+
+    private boolean updateGroup(String groupId, GroupConfig groupConfig) {
+        return client
+            .updateGroup(
+                groupId,
+                converter.createUpdateGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
+            );
     }
 
     public OperationFuture<Link> delete(Group groupRef) {
@@ -161,6 +243,9 @@ public class GroupService {
     }
 
     String idByRef(Group ref) {
+        if (ref == null) {
+            return null;
+        }
         if (ref.is(GroupByIdRef.class)) {
             return ref.as(GroupByIdRef.class).getId();
         } else {

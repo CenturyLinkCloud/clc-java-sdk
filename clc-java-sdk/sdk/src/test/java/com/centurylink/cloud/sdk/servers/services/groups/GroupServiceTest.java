@@ -1,10 +1,13 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
 import com.centurylink.cloud.sdk.core.commons.client.domain.CustomField;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +27,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION})
     public void testFindGroupsByDataCenter() {
-        List<GroupMetadata> groups = groupService.findByDataCenter(com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT);
+        List<GroupMetadata> groups = groupService.findByDataCenter(DataCenter.DE_FRANKFURT);
 
         assert groups.size() > 0;
     }
@@ -36,7 +39,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
         GroupByIdRef newGroup = groupService.create(new GroupConfig()
             .parentGroup(Group.refByName()
-                    .dataCenter(com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT)
+                    .dataCenter(DataCenter.DE_FRANKFURT)
                     .name(Group.DEFAULT_GROUP)
             )
             .name(newGroupName)
@@ -55,7 +58,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testUpdateGroup() throws JsonProcessingException {
         Group groupRef = Group.refByName()
-            .dataCenter(com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT)
+            .dataCenter(DataCenter.DE_FRANKFURT)
             .name(Group.DEFAULT_GROUP);
         GroupMetadata groupMetadata = groupService.findByRef(groupRef);
         String parentGroupId = groupMetadata.getParentGroupId();
@@ -77,6 +80,72 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
         assertEquals(updatedGroupMetadata.getName(), groupName);
         assertEquals(updatedGroupMetadata.getDescription(), groupDescription);
+    }
+
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    public void testUpdateGroups() {
+        Group groupRef1 = Group.refByName()
+            .dataCenter(DataCenter.DE_FRANKFURT)
+            .name(Group.DEFAULT_GROUP);
+
+        Group groupRef2 = Group.refByName()
+            .dataCenter(DataCenter.CA_TORONTO_1)
+            .name(Group.DEFAULT_GROUP);
+
+        String groupName = Group.DEFAULT_GROUP;
+        String groupDescription = "test description";
+
+        GroupConfig config =
+            new GroupConfig()
+                .name(groupName)
+                .description(groupDescription);
+
+        GroupFilter filter = toFilter(groupRef1, groupRef2);
+        groupService.update(filter, config).waitUntilComplete();
+
+        groupService.find(filter).stream()
+            .forEach(metadata -> assertEquals(metadata.getDescription(), groupDescription));
+    }
+
+    @Test(expectedExceptions = ClcException.class)
+    public void testUpdateGroupsWithEqualNames() {
+        Group groupRef1 = Group.refByName()
+            .dataCenter(DataCenter.DE_FRANKFURT)
+            .name(Group.DEFAULT_GROUP);
+
+        Group groupRef2 = Group.refByName()
+            .dataCenter(DataCenter.CA_TORONTO_1)
+            .name(Group.DEFAULT_GROUP);
+
+        String parentGroupId = groupService.findByRef(groupRef1).getParentGroupId();
+
+        groupService.update(
+            toFilter(groupRef1, groupRef2),
+            new GroupConfig().parentGroup(Group.refById(parentGroupId)));
+    }
+
+    @Test(expectedExceptions = ClcException.class)
+    public void testUpdateGroupsInSameGroup() {
+        Group groupRef1 = Group.refByName()
+            .dataCenter(DataCenter.DE_FRANKFURT)
+            .name(Group.DEFAULT_GROUP);
+
+        Group groupRef2 = Group.refByName()
+            .dataCenter(DataCenter.DE_FRANKFURT)
+            .name(Group.ARCHIVE);
+
+        groupService.update(
+            toFilter(groupRef1, groupRef2),
+            new GroupConfig().name(Group.DEFAULT_GROUP));
+    }
+
+    private GroupFilter toFilter(Group... groups) {
+        GroupFilter filter = new GroupFilter();
+        Arrays.asList(groups).stream()
+            .forEach(group ->
+                filter.id(groupService.findByRef(group).getId()));
+
+        return filter;
     }
 
 }
