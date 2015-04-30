@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,14 +10,20 @@ public class BaseServerResponse {
     private final String server;
     private final Boolean isQueued;
     private final List<Link> links;
+    private final String errorMessage;
 
     public BaseServerResponse(
-            @JsonProperty("server") String server,
-            @JsonProperty("isQueued") Boolean queued,
-            @JsonProperty("links") List<Link> links) {
+        @JsonProperty("server") String server,
+        @JsonProperty("isQueued") Boolean queued,
+        @JsonProperty("links") List<Link> links,
+        @JsonProperty("errorMessage") String errorMessage) {
         this.server = server;
-        isQueued = queued;
+        this.isQueued = queued;
+        if (!isQueued) {
+            throw new ClcClientException("The job was not queued: " + errorMessage);
+        }
         this.links = links;
+        this.errorMessage = errorMessage;
     }
 
     public String getServer() {
@@ -29,6 +36,10 @@ public class BaseServerResponse {
 
     public List<Link> getLinks() {
         return links;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     public String findServerUuid() {
