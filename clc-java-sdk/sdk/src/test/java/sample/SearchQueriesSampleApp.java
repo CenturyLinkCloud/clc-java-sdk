@@ -81,10 +81,10 @@ public class SearchQueriesSampleApp extends Assert {
 
         List<ServerByIdRef> results =
             OperationFuture.waitUntilComplete(
-                createServer(DataCenter.DE_FRANKFURT, group1De, "srv-de1"),
-                createServer(DataCenter.DE_FRANKFURT, group2De, "srv-de2"),
-                createServer(DataCenter.CA_VANCOUVER, group1Va, "srv-va1"),
-                createServer(DataCenter.CA_VANCOUVER, group1Va, "srv-va2")
+                createServer(DataCenter.DE_FRANKFURT, group1De, "sr-de1"),
+                createServer(DataCenter.DE_FRANKFURT, group2De, "sr-de2"),
+                createServer(DataCenter.CA_VANCOUVER, group1Va, "sr-va1"),
+                createServer(DataCenter.CA_VANCOUVER, group1Va, "sr-va2")
             )
             .getResult().stream()
             .map(ServerMetadata::asRefById)
@@ -237,7 +237,7 @@ public class SearchQueriesSampleApp extends Assert {
      */
     @Test(groups = SAMPLES)
     public void findServersByMetadataValueTest() {
-        String keyword = "srv-de";
+        String keyword = "sr-de";
 
         List<ServerMetadata> serverMetadataList = serverService.find(
                 new ServerFilter().where(
