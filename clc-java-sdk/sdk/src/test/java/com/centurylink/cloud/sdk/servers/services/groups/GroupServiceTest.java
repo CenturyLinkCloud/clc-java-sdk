@@ -10,7 +10,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
@@ -33,7 +32,13 @@ public class GroupServiceTest extends AbstractServersSdkTest {
     }
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testCreateGroup() {
+    public void testGroup() {
+        GroupByIdRef groupRef = createGroup();
+        updateGroup(groupRef);
+        deleteGroup(groupRef);
+    }
+
+    private GroupByIdRef createGroup() {
         String newGroupName = "test group";
         String newGroupDescription = "test group description";
 
@@ -52,19 +57,15 @@ public class GroupServiceTest extends AbstractServersSdkTest {
         assertEquals(createdGroup.getName(), newGroupName);
         assertEquals(createdGroup.getDescription(), newGroupDescription);
 
-        groupService.delete(newGroup);
+        return newGroup;
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testUpdateGroup() throws JsonProcessingException {
-        Group groupRef = Group.refByName()
-            .dataCenter(DataCenter.DE_FRANKFURT)
-            .name(Group.DEFAULT_GROUP);
+    private void updateGroup(Group groupRef) {
         GroupMetadata groupMetadata = groupService.findByRef(groupRef);
         String parentGroupId = groupMetadata.getParentGroupId();
 
-        String groupName = Group.DEFAULT_GROUP;
-        String groupDescription = "test description";
+        String groupName = groupMetadata.getName() + " test";
+        String groupDescription = groupMetadata.getDescription() + " test";
         //TODO identify correct custom fields ids
         List<CustomField> customFields = Arrays.asList(new CustomField().id("123").value("test value"));
 
@@ -80,6 +81,10 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
         assertEquals(updatedGroupMetadata.getName(), groupName);
         assertEquals(updatedGroupMetadata.getDescription(), groupDescription);
+    }
+
+    private void deleteGroup(Group groupRef) {
+        groupService.delete(groupRef.asFilter());
     }
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})

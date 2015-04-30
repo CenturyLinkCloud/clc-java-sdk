@@ -8,7 +8,9 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCent
 import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -140,7 +142,7 @@ public class GroupService {
 
     /**
      * Update group
-     * @param groupRef    group reference
+     * @param groupRef    c
      * @param groupConfig group config
      * @return OperationFuture wrapper for Group
      */
@@ -232,7 +234,16 @@ public class GroupService {
             );
     }
 
+    /**
+     * Delete provided group
+     * @param groupRef group reference
+     * @return OperationFuture wrapper for Link
+     */
     public OperationFuture<Link> delete(Group groupRef) {
+        return deleteGroup(groupRef);
+    }
+
+    private OperationFuture<Link> deleteGroup(Group groupRef) {
         Link response = client.deleteGroup(idByRef(groupRef));
 
         return new OperationFuture<>(
@@ -240,6 +251,33 @@ public class GroupService {
             response.getId(),
             queueClient
         );
+    }
+
+    /**
+     * Delete set of groups
+     * @param groups groups array
+     * @return OperationFuture wrapper for list of groups
+     */
+    public OperationFuture<List<Group>> delete(Group... groups) {
+        List<Group> groupList = Arrays.asList(groups);
+
+        List<JobFuture> jobs = groupList.stream()
+            .map(group -> deleteGroup(group).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            groupList,
+            new ParallelJobsFuture(jobs)
+        );
+    }
+
+    /**
+     * Delete all groups for group criteria
+     * @param filter search criteria
+     * @return OperationFuture wrapper for list of groups
+     */
+    public OperationFuture<List<Group>> delete(GroupFilter filter) {
+        return delete(getRefsFromFilter(filter));
     }
 
     String idByRef(Group ref) {
