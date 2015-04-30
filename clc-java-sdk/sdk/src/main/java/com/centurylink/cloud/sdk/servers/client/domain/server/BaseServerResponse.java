@@ -19,7 +19,7 @@ public class BaseServerResponse {
         @JsonProperty("errorMessage") String errorMessage) {
         this.server = server;
         this.isQueued = queued;
-        if (isQueued && !isQueued) {
+        if (isQueued != null && !isQueued) {
             throw new ClcClientException("The job was not queued: " + errorMessage);
         }
         this.links = links;
