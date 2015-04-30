@@ -18,6 +18,7 @@ import org.apache.http.HttpStatus;
 
 import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
+import java.util.HashMap;
 import java.util.List;
 
 import static javax.ws.rs.client.Entity.entity;
@@ -183,6 +184,25 @@ public class ServerClient extends BaseSdkClient {
                 .request()
                 .post(entity(request, APPLICATION_JSON_TYPE))
                 .readEntity(BaseServerListResponse.class);
+    }
+
+    public Link deleteSnapshot(String serverId, String snapshotId) {
+        return
+            client("/servers/{accountAlias}/{serverId}/snapshots/{snapshotId}")
+                .resolveTemplate("serverId", serverId)
+                .resolveTemplate("snapshotId", snapshotId)
+                .request()
+                .delete()
+                .readEntity(Link.class);
+    }
+
+    public Link revertToSnapshot(String serverId, String snapshotId) {
+        return client("/servers/{accountAlias}/{serverId}/snapshots/{snapshotId}/restore")
+            .resolveTemplate("serverId", serverId)
+            .resolveTemplate("snapshotId", snapshotId)
+            .request()
+            .post(entity(new HashMap<>(), APPLICATION_JSON_TYPE))
+            .readEntity(Link.class);
     }
 
     public Link restore(String serverId, RestoreServerRequest request) {

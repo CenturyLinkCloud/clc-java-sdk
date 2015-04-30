@@ -431,6 +431,39 @@ public class ServerService {
     }
 
     /**
+     * Delete all snapshots for provided servers
+     * @param servers server references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> deleteSnapshot(Server... servers) {
+        List<Server> serverList = Arrays.asList(servers);
+
+        List<JobFuture> futures = serverList.stream()
+            .map(serverRef -> findByRef(serverRef))
+            .flatMap(metadata -> metadata.getDetails().getSnapshots().stream())
+            .map(snapshot ->
+                baseServerResponse(
+                    client.deleteSnapshot(snapshot.getServerId(),
+                        snapshot.getId()))
+                    .jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            serverList,
+            new ParallelJobsFuture(futures)
+        );
+    }
+
+    /**
+     * Delete all snapshots for server criteria
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> deleteSnapshot(ServerFilter serverFilter) {
+        return deleteSnapshot(getRefsFromFilter(serverFilter));
+    }
+
+    /**
      * Restore a given archived server to a specified group
      *
      * @param server server reference
@@ -439,17 +472,52 @@ public class ServerService {
      */
     public OperationFuture<Link> restore(Server server, Group group) {
         return baseServerResponse(
-            client.restore(
-                idByRef(server),
-                new RestoreServerRequest()
-                    .targetGroupId(
-                            groupService.findByRef(group).getId()
-                    )
-            )
+            restore(server, groupService.findByRef(group).getId())
         );
     }
 
-    public List<String> ids(Server... serverRefs) {
+    private Link restore(Server server, String groupId) {
+        return client.restore(
+            idByRef(server),
+            new RestoreServerRequest()
+                .targetGroupId(groupId)
+        );
+    }
+
+    /**
+     * Revert a set of servers to snapshot
+     * @param servers server references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> revertToSnapshot(Server... servers) {
+        List<Server> serverList = Arrays.asList(servers);
+
+        List<JobFuture> futures = serverList.stream()
+            .map(serverRef -> findByRef(serverRef))
+            .flatMap(metadata -> metadata.getDetails().getSnapshots().stream())
+            .map(snapshot ->
+                baseServerResponse(
+                    client.revertToSnapshot(snapshot.getServerId(),
+                        snapshot.getId()))
+                    .jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+                serverList,
+                new ParallelJobsFuture(futures)
+            );
+    }
+
+    /**
+     * Revert a set of servers to snapshot
+     * @param filter search servers criteria
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> revertToSnapshot(ServerFilter filter) {
+        return revertToSnapshot(getRefsFromFilter(filter));
+    }
+
+    private List<String> ids(Server... serverRefs) {
         return
             Stream
                 .of(serverRefs)
@@ -518,7 +586,7 @@ public class ServerService {
                 client.modifyPublicIp(idByRef(server),
                     ipAddress,
                     publicIpConverter.createPublicIpRequest(config)))
-            .map(link -> link.getId())
+            .map(Link::getId)
             .collect(toList());
 
         return new OperationFuture<>(
@@ -579,8 +647,8 @@ public class ServerService {
     }
 
     Server[] getRefsFromFilter(ServerFilter filter) {
-        List<Server> serverRefs = find(filter).stream()
-            .map(metadata -> metadata.asRefById())
+        List<Server> serverRefs = filter.getServerIds().stream()
+            .map(id -> Server.refById(id))
             .collect(toList());
 
         return serverRefs.toArray(new Server[serverRefs.size()]);

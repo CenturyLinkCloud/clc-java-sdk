@@ -9,11 +9,7 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.queue.GetStatusRespo
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
-import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
@@ -23,10 +19,7 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -193,8 +186,8 @@ public class ServerStubFixture {
             .thenAnswer(
                 new Answer<BaseServerListResponse>() {
                     public BaseServerListResponse answer(InvocationOnMock invocation) {
-                        serverMetadata1.getDetails().getSnapshots().add(new Object());
-                        serverMetadata2.getDetails().getSnapshots().add(new Object());
+                        serverMetadata1.getDetails().getSnapshots().add(new Snapshot());
+                        serverMetadata2.getDetails().getSnapshots().add(new Snapshot());
                         return baseServerListResponse;
                     }
                 }
