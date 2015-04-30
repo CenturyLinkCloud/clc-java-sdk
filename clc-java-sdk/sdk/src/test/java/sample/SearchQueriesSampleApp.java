@@ -233,7 +233,7 @@ public class SearchQueriesSampleApp extends Assert {
     }
 
     /**
-     * Step 4. Find server that contains some value in it’s metadata
+     * Step 4. Find server that contains some value in it's metadata
      */
     @Test(groups = SAMPLES)
     public void findServersByMetadataValueTest() {
