@@ -75,6 +75,8 @@ public class SearchQueriesSampleApp extends Assert {
         groupService = sdk.groupService();
         templateService = sdk.templateService();
 
+        clearAll();
+
         group1De = createGroup(DataCenter.DE_FRANKFURT, group1Name, "uat1 group description");
         group1Va = createGroup(DataCenter.US_EAST_STERLING, group1Name, "uat1 group description");
         group2De = createGroup(DataCenter.DE_FRANKFURT, group2Name, "uat2 group description");
@@ -104,7 +106,7 @@ public class SearchQueriesSampleApp extends Assert {
 
     @AfterClass(groups = SAMPLES)
     public void deleteServers() {
-        serverService.delete(new ServerFilter());
+        clearAll();
     }
 
     private OperationFuture<ServerMetadata> createServer(DataCenterByIdRef dataCenter, Group group, String name) {
@@ -130,6 +132,10 @@ public class SearchQueriesSampleApp extends Assert {
                         .architecture(x86_64)
                     )
                 );
+    }
+
+    private void clearAll() {
+        serverService.delete(new ServerFilter()).waitUntilComplete();
     }
 
     private GroupByIdRef createGroup(DataCenterByIdRef dataCenter, String name, String description) {
