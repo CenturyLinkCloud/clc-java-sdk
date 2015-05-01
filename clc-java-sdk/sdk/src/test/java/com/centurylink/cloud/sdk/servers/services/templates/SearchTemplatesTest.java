@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
@@ -18,11 +19,11 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata.MANAGED_OS_VALUE;
+import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.RHEL;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.*;
 import static java.util.Arrays.asList;
 
 /**
@@ -38,22 +39,21 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        mockDataCentersList();
-        mockVa1();
-    }
-
-    private void mockDataCentersList() {
         Mockito
             .doReturn(fromJson("data_centers_list.json", GetDataCenterListResponse.class))
             .when(dataCentersClient).findAllDataCenters();
-    }
 
-    private void mockVa1() {
         Mockito
             .doReturn(
                 fromJson("va1_deployment_capabilities.json", DatacenterDeploymentCapabilitiesMetadata.class)
             )
             .when(dataCentersClient).getDeploymentCapabilities("va1");
+
+        Mockito
+            .doReturn(
+                fromJson("de1_deployment_capabilities.json", DatacenterDeploymentCapabilitiesMetadata.class)
+            )
+            .when(dataCentersClient).getDeploymentCapabilities("de1");
     }
 
     @Test
@@ -112,6 +112,61 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
         );
 
         assertEquals(results.size(), 8);
+    }
+
+    @Test
+    public void testOrOperation() {
+        List<TemplateMetadata> results = templateService.find(Filter.or(
+            new TemplateFilter()
+                .dataCenters(US_EAST_STERLING)
+                .osTypes(new OsFilter()
+                    .type(CENTOS)
+                ),
+
+            new TemplateFilter()
+                .dataCenters(DE_FRANKFURT)
+                .osTypes(new OsFilter()
+                    .type(DEBIAN)
+                )
+        ));
+
+        assertEquals(results.size(), 4);
+        assertEquals(
+            map(results, TemplateMetadata::getName),
+            asList(
+                "CENTOS-5-64-TEMPLATE", "CENTOS-6-64-TEMPLATE",
+                "DEBIAN-6-64-TEMPLATE", "DEBIAN-7-64-TEMPLATE"
+            )
+        );
+    }
+
+    @Test
+    public void testAndOperation() {
+        List<TemplateMetadata> results = templateService.find(Filter.and(
+            new TemplateFilter()
+                .dataCenters(US_EAST_STERLING)
+                .where(t -> t.getName().contains("6-64")),
+
+            Filter.or(
+                new TemplateFilter()
+                    .dataCenters(US_EAST_STERLING)
+                    .osTypes(new OsFilter()
+                        .type(CENTOS)
+                    ),
+
+                new TemplateFilter()
+                    .dataCenters(US_EAST_STERLING)
+                    .osTypes(new OsFilter()
+                        .type(DEBIAN)
+                    )
+            )
+        ));
+
+        assertEquals(results.size(), 2);
+        assertEquals(
+            map(results, TemplateMetadata::getName),
+            asList("CENTOS-6-64-TEMPLATE", "DEBIAN-6-64-TEMPLATE")
+        );
     }
 
 }

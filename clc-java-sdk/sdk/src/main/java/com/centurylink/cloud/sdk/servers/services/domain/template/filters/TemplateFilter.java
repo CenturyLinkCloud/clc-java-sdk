@@ -4,7 +4,11 @@ import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCent
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.SingleFilterEvaluation;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 
 import java.util.function.Predicate;
@@ -18,7 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Ilya Drabenia
  */
-public class TemplateFilter implements Filter<TemplateFilter> {
+public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
     private DataCenterFilter dataCenter = new DataCenterFilter(alwaysTrue());
     private Predicate<TemplateMetadata> predicate = alwaysTrue();
 
@@ -167,11 +171,18 @@ public class TemplateFilter implements Filter<TemplateFilter> {
      */
     @Override
     public TemplateFilter and(TemplateFilter otherFilter) {
-        return
-            new TemplateFilter(
-                getDataCenter().and(otherFilter.getDataCenter()),
-                getPredicate().and(otherFilter.getPredicate())
-            );
+        if (filtersChain instanceof SingleFilterEvaluation &&
+            otherFilter.filtersChain instanceof SingleFilterEvaluation) {
+            return
+                new TemplateFilter(
+                    getDataCenter().and(otherFilter.getDataCenter()),
+                    getPredicate().and(otherFilter.getPredicate())
+                );
+        } else {
+            filtersChain = new AndEvaluation<>(filtersChain, otherFilter, TemplateMetadata::getName);
+
+            return this;
+        }
     }
 
     /**
@@ -179,11 +190,9 @@ public class TemplateFilter implements Filter<TemplateFilter> {
      */
     @Override
     public TemplateFilter or(TemplateFilter otherFilter) {
-        return
-            new TemplateFilter(
-                getDataCenter().or(otherFilter.getDataCenter()),
-                getPredicate().or(otherFilter.getPredicate())
-            );
+        filtersChain = new OrEvaluation<>(filtersChain, otherFilter, TemplateMetadata::getName);
+
+        return this;
     }
 
     public DataCenterFilter getDataCenter() {

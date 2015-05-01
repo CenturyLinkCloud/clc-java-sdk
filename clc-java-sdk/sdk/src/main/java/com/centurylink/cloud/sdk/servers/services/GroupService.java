@@ -93,7 +93,7 @@ public class GroupService {
                             .flatMap(g -> g.getAllGroups().stream())
                             .filter(criteria.getPredicate())
                             .filter((criteria.getIds().size() > 0) ?
-                                    combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                                combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
                             );
                 }
             });

@@ -34,7 +34,7 @@ public class AndEvaluation<T extends Filter<T>> extends LogicalOperatorEvaluatio
             Stream
                 .concat(
                     evaluation.applyFindLazy(func),
-                    func.apply(filter)
+                    filter.applyFindLazy(func)
                 )
                 .filter(intersectionByKey());
     }

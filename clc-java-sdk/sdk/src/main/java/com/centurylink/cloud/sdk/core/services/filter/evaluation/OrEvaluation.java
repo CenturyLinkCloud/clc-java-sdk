@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class OrEvaluation<T extends Filter<T>> extends LogicalOperatorEvaluation<T> {
 
     public <K, V> OrEvaluation(FilterEvaluation<T> evaluation, T filter,
-                        Function<K, V> keyExtractor) {
+                               Function<K, V> keyExtractor) {
         super(evaluation, filter, keyExtractor);
     }
 
@@ -30,7 +30,7 @@ public class OrEvaluation<T extends Filter<T>> extends LogicalOperatorEvaluation
         return Stream
             .concat(
                 evaluation.applyFindLazy(func),
-                func.apply(filter)
+                filter.applyFindLazy(func)
             )
             .filter(distinctByKey());
     }

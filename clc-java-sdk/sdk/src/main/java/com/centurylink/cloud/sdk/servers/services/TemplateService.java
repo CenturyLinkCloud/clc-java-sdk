@@ -47,12 +47,14 @@ public class TemplateService {
         checkNotNull(filter, "Filter must be not a null");
 
         return
-            dataCenterService
-                .findLazy(filter.getDataCenter())
-                .map(DataCenterMetadata::getId)
-                .map(dataCentersClient::getDeploymentCapabilities)
-                .flatMap(c -> c.getTemplates().stream())
-                .filter(filter.getPredicate());
+            filter.applyFindLazy(criteria ->
+                dataCenterService
+                    .findLazy(criteria.getDataCenter())
+                    .map(DataCenterMetadata::getId)
+                    .map(dataCentersClient::getDeploymentCapabilities)
+                    .flatMap(c -> c.getTemplates().stream())
+                    .filter(criteria.getPredicate())
+            );
     }
 
     public List<TemplateMetadata> findByDataCenter(String dataCenterId) {
