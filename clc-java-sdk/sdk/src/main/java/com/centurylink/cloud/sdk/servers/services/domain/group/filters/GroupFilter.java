@@ -3,9 +3,14 @@ package com.centurylink.cloud.sdk.servers.services.domain.group.filters;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.SingleFilterEvaluation;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +29,7 @@ import static java.util.Arrays.asList;
  *
  * @author Ilya Drabenia
  */
-public class GroupFilter implements Filter<GroupFilter> {
+public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
     private List<String> ids = new ArrayList<>();
     private DataCenterFilter dataCenterFilter = new DataCenterFilter(Predicates.alwaysTrue());
     private Predicate<GroupMetadata> predicate = Predicates.alwaysTrue();
@@ -44,9 +49,7 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @return {@link GroupFilter}
      */
     public GroupFilter dataCenters(DataCenter... dataCenters) {
-        dataCenterFilter = dataCenterFilter.and(Filter.or(
-            map(dataCenters, DataCenter::asFilter)
-        ));
+        dataCenterFilter.dataCenters(dataCenters);
 
         return this;
     }
@@ -90,6 +93,14 @@ public class GroupFilter implements Filter<GroupFilter> {
         checkNotNull(ids, "List of ids must be not a null");
 
         this.ids.addAll(ids);
+
+        return this;
+    }
+
+    public GroupFilter groups(Group... groups) {
+        filtersChain = new AndEvaluation<>(filtersChain, Filter.or(
+            map(groups, Group::asFilter)
+        ), GroupMetadata::getId);
 
         return this;
     }
@@ -149,17 +160,24 @@ public class GroupFilter implements Filter<GroupFilter> {
     public GroupFilter and(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        return new GroupFilter()
-            .id(new ArrayList<>(intersection(
-                newHashSet(getIds()),
-                newHashSet(otherFilter.getIds())
-            )))
-            .dataCentersWhere(
-                dataCenterFilter.and(otherFilter.dataCenterFilter)
-            )
-            .where(
-                predicate.and(otherFilter.predicate)
-            );
+        if (filtersChain instanceof SingleFilterEvaluation &&
+            otherFilter.filtersChain instanceof SingleFilterEvaluation) {
+            return new GroupFilter()
+                .id(new ArrayList<>(intersection(
+                    newHashSet(getIds()),
+                    newHashSet(otherFilter.getIds())
+                )))
+                .dataCentersWhere(
+                    dataCenterFilter.and(otherFilter.dataCenterFilter)
+                )
+                .where(
+                    predicate.and(otherFilter.predicate)
+                );
+        } else {
+            filtersChain = new AndEvaluation<>(filtersChain, otherFilter, GroupMetadata::getId);
+
+            return this;
+        }
     }
 
     /**
@@ -169,17 +187,8 @@ public class GroupFilter implements Filter<GroupFilter> {
     public GroupFilter or(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        return new GroupFilter()
-            .id(new ArrayList<String>() {{
-                addAll(getIds());
-                addAll(otherFilter.getIds());
-            }})
-            .dataCentersWhere(
-                dataCenterFilter.or(otherFilter.dataCenterFilter)
-            )
-            .where(
-                predicate.or(otherFilter.predicate)
-            );
+        filtersChain = new OrEvaluation<>(filtersChain, otherFilter, GroupMetadata::getId);
+        return this;
     }
 
     public DataCenterFilter getDataCenterFilter() {

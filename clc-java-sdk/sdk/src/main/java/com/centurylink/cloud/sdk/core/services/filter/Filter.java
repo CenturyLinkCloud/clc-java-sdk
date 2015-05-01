@@ -1,6 +1,8 @@
 package com.centurylink.cloud.sdk.core.services.filter;
 
-import java.util.Arrays;
+import com.centurylink.cloud.sdk.core.services.CastMixin;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.FilterEvaluation;
+
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -8,7 +10,7 @@ import static java.util.Arrays.asList;
 /**
  * @author Ilya Drabenia
  */
-public interface Filter<T extends Filter<T>> {
+public interface Filter<T extends Filter<T>> extends CastMixin, FilterEvaluation<T> {
 
     /**
      * Method allow to compose two filter in one that filtering results equals to sequencial applying

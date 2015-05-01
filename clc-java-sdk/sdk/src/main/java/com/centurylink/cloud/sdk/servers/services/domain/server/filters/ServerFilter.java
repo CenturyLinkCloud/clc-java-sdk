@@ -9,6 +9,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 
 import java.util.ArrayList;
 import java.util.List;

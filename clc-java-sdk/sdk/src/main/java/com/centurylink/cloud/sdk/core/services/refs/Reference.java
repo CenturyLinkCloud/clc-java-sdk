@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.core.services.refs;
 
+import com.centurylink.cloud.sdk.core.services.CastMixin;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 
 import java.util.function.Supplier;
@@ -10,16 +11,7 @@ import java.util.function.Supplier;
  *
  * @author ilya.drabenia
  */
-public interface Reference {
-
-    @SuppressWarnings("unchecked")
-    default <T extends Reference> T as(Class<T> type) {
-        return (T) this;
-    }
-
-    default <T extends Reference> boolean is(Class<T> type) {
-        return type == getClass();
-    }
+public interface Reference extends CastMixin {
 
     static Supplier<ResourceNotFoundException> notFound(Reference reference) {
         return () -> new  ResourceNotFoundException("Reference %s not resolved", reference);

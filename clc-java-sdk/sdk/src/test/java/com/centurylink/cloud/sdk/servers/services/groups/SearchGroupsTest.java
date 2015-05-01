@@ -126,9 +126,15 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
                 .dataCenters(DE_FRANKFURT)
                 .names(ARCHIVE, TEMPLATES),
 
-            new GroupFilter()
-                .dataCenters(DE_FRANKFURT)
-                .names(TEMPLATES, DEFAULT_GROUP)
+            Filter.or(
+                new GroupFilter()
+                    .dataCenters(DE_FRANKFURT)
+                    .names(TEMPLATES),
+
+                new GroupFilter()
+                    .dataCenters(DE_FRANKFURT)
+                    .names(DEFAULT_GROUP)
+            )
         ));
 
         assertEquals(groups.size(), 1);
@@ -170,7 +176,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
         );
     }
 
-    @Test(enabled = false) // require search redesign
+    @Test
     public void testOr_withIds() {
         List<GroupMetadata> groups = groupService.find(Filter.or(
             new GroupFilter()

@@ -71,29 +71,32 @@ public class GroupService {
         return findLazy(criteria).collect(toList());
     }
 
-    public Stream<GroupMetadata> findLazy(GroupFilter criteria) {
-        checkNotNull(criteria, "Criteria must be not null");
+    public Stream<GroupMetadata> findLazy(GroupFilter groupCriteria) {
+        checkNotNull(groupCriteria, "Criteria must be not null");
 
-        if (isAlwaysTruePredicate(criteria.getPredicate()) &&
-            isAlwaysTruePredicate(criteria.getDataCenterFilter().getPredicate()) &&
-            criteria.getIds().size() > 0) {
-            return
-                criteria.getIds().stream()
-                    .map(curId -> client.getGroup(curId, false));
-        } else{
-            Stream<DataCenterMetadata> dataCenters =
-                dataCenterService
-                    .findLazy(criteria.getDataCenterFilter());
+        return
+            groupCriteria.applyFindLazy(criteria -> {
+                if (isAlwaysTruePredicate(criteria.getPredicate()) &&
+                    isAlwaysTruePredicate(criteria.getDataCenterFilter().getPredicate()) &&
+                    criteria.getIds().size() > 0) {
+                    return
+                        criteria.getIds().stream()
+                            .map(curId -> client.getGroup(curId, false));
+                } else {
+                    Stream<DataCenterMetadata> dataCenters =
+                        dataCenterService
+                            .findLazy(criteria.getDataCenterFilter());
 
-            return
-                dataCenters
-                    .map(d -> client.getGroup(d.getGroup().getId(), false))
-                    .flatMap(g -> g.getAllGroups().stream())
-                    .filter(criteria.getPredicate())
-                    .filter((criteria.getIds().size() > 0) ?
-                        combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
-                    );
-        }
+                    return
+                        dataCenters
+                            .map(d -> client.getGroup(d.getGroup().getId(), false))
+                            .flatMap(g -> g.getAllGroups().stream())
+                            .filter(criteria.getPredicate())
+                            .filter((criteria.getIds().size() > 0) ?
+                                    combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                            );
+                }
+            });
     }
 
     public GroupMetadata findFirst(GroupFilter criteria) {
