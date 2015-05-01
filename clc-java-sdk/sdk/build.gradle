@@ -39,6 +39,16 @@ task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
     }
 }
 
+task runSamples(type: Test, dependsOn: 'compileTestJava') {
+    useTestNG() {
+        includeGroups 'Samples'
+    }
+
+    testLogging {
+        exceptionFormat = 'full' // full information about failed tests
+    }
+}
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.7'

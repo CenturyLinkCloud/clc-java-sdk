@@ -143,7 +143,7 @@ public class SearchQueriesSampleApp extends Assert {
 
         groupMetadataList.forEach(groupMetadata ->
             groupService.delete(
-                    Group.refById(groupMetadata.getId())
+                Group.refById(groupMetadata.getId())
             )
         );
     }
@@ -203,7 +203,7 @@ public class SearchQueriesSampleApp extends Assert {
     @Test(groups = SAMPLES)
     public void findAllServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter()
+            new ServerFilter()
         );
 
         List<String> serverIdList = new ArrayList<>();
@@ -221,7 +221,7 @@ public class SearchQueriesSampleApp extends Assert {
     @Test(groups = SAMPLES)
     public void findAllActiveServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter().onlyActive()
+            new ServerFilter().onlyActive()
         );
 
         List<String> serverIdList = new ArrayList<>();
@@ -238,7 +238,7 @@ public class SearchQueriesSampleApp extends Assert {
     @Test(groups = SAMPLES)
     public void findGroupServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter().groupNameContains(group1Name)
+            new ServerFilter().groupNameContains(group1Name)
         );
 
         List<String> serverIdList = new ArrayList<>();
