@@ -7,7 +7,6 @@ import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
-import com.centurylink.cloud.sdk.core.services.filter.evaluation.SingleFilterEvaluation;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
@@ -19,8 +18,6 @@ import java.util.function.Predicate;
 import static com.centurylink.cloud.sdk.core.services.function.Predicates.*;
 import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Sets.intersection;
-import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
 
 
@@ -160,24 +157,9 @@ public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
     public GroupFilter and(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        if (filtersChain instanceof SingleFilterEvaluation &&
-            otherFilter.filtersChain instanceof SingleFilterEvaluation) {
-            return new GroupFilter()
-                .id(new ArrayList<>(intersection(
-                    newHashSet(getIds()),
-                    newHashSet(otherFilter.getIds())
-                )))
-                .dataCentersWhere(
-                    dataCenterFilter.and(otherFilter.dataCenterFilter)
-                )
-                .where(
-                    predicate.and(otherFilter.predicate)
-                );
-        } else {
-            filtersChain = new AndEvaluation<>(filtersChain, otherFilter, GroupMetadata::getId);
+        filtersChain = new AndEvaluation<>(filtersChain, otherFilter, GroupMetadata::getId);
 
-            return this;
-        }
+        return this;
     }
 
     /**

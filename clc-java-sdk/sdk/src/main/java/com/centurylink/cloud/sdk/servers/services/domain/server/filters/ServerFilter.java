@@ -13,6 +13,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 
 import java.util.ArrayList;
@@ -159,7 +160,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
     }
 
     /**
-     * Method allow to restrict servers by target IDs
+     * Method allow to restrict servers by target IDs. Matching is case insensitive.
      *
      * @param ids is a list of string ID representations
      * @return {@link GroupFilter}
@@ -172,6 +173,16 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
         serverIds.addAll(map(ids, String::toLowerCase));
 
         return this;
+    }
+
+    /**
+     * Method allow to restrict servers by names. Matching is case insensitive.
+     *
+     * @param names is a list of server names
+     * @return {@link GroupFilter}
+     */
+    public ServerFilter names(String... names) {
+        return id(names);
     }
 
     /**
@@ -193,6 +204,20 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
     public ServerFilter status(String... statuses) {
         predicate = predicate.and(combine(
             ServerMetadata::getStatus, in(statuses)
+        ));
+
+        return this;
+    }
+
+    /**
+     * Method allow to restrict status of target servers
+     *
+     * @param statuses is a list target server statuses
+     * @return {@link GroupFilter}
+     */
+    public ServerFilter status(ServerStatus... statuses) {
+        predicate = predicate.and(combine(
+            ServerMetadata::getStatus, in(map(statuses, ServerStatus::getCode))
         ));
 
         return this;

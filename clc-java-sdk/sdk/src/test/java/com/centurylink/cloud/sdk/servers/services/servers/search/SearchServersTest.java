@@ -9,6 +9,7 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.google.inject.Inject;
 import org.mockito.Mockito;
@@ -57,7 +58,7 @@ public class SearchServersTest extends AbstractServersSdkTest {
     @Test
     public void testSearchActiveServers() {
         List<ServerMetadata> results = serverService.find(new ServerFilter()
-            .status("archived")
+            .status(ServerStatus.ARCHIVED)
         );
 
         assertEquals(results.size(), 1);
