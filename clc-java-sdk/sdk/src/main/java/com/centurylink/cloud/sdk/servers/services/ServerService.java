@@ -153,27 +153,30 @@ public class ServerService {
         }
     }
 
-    public Stream<ServerMetadata> findLazy(ServerFilter serverFilter) {
-        if (isAlwaysTruePredicate(serverFilter.getPredicate())
-            && isAlwaysTruePredicate(serverFilter.getGroupFilter().getPredicate())
-            && isAlwaysTruePredicate(serverFilter.getGroupFilter().getDataCenterFilter().getPredicate())
-            && serverFilter.getServerIds().size() > 0) {
-            return
-                serverFilter
-                    .getServerIds()
-                    .stream()
-                    .map(nullable(client::findServerById))
-                    .filter(notNull());
-        } else {
-            return
-                groupService
-                    .findLazy(serverFilter.getGroupFilter())
-                    .flatMap(group -> group.getServers().stream())
-                    .filter(serverFilter.getPredicate())
-                    .filter((serverFilter.getServerIds().size() > 0) ?
-                        combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
-                    );
-        }
+    public Stream<ServerMetadata> findLazy(ServerFilter filter) {
+        return filter
+            .applyFindLazy(serverFilter -> {
+                if (isAlwaysTruePredicate(serverFilter.getPredicate())
+                    && isAlwaysTruePredicate(serverFilter.getGroupFilter().getPredicate())
+                    && isAlwaysTruePredicate(serverFilter.getGroupFilter().getDataCenterFilter().getPredicate())
+                    && serverFilter.getServerIds().size() > 0) {
+                    return
+                        serverFilter
+                            .getServerIds()
+                            .stream()
+                            .map(nullable(client::findServerById))
+                            .filter(notNull());
+                } else {
+                    return
+                        groupService
+                            .findLazy(serverFilter.getGroupFilter())
+                            .flatMap(group -> group.getServers().stream())
+                            .filter(serverFilter.getPredicate())
+                            .filter((serverFilter.getServerIds().size() > 0) ?
+                                    combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
+                            );
+                }
+            });
     }
 
     public List<ServerMetadata> find(ServerFilter serverFilter) {

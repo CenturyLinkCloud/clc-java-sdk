@@ -3,7 +3,11 @@ package com.centurylink.cloud.sdk.servers.services.domain.server.filters;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.SingleFilterEvaluation;
 import com.centurylink.cloud.sdk.core.services.function.Predicates;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
@@ -28,7 +32,7 @@ import static java.util.Arrays.asList;
  *
  * @author Ilya Drabenia
  */
-public class ServerFilter implements Filter<ServerFilter> {
+public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
     private List<String> serverIds = new ArrayList<>();
     private GroupFilter groupFilter = new GroupFilter(Predicates.alwaysTrue());
     private Predicate<ServerMetadata> predicate = Predicates.alwaysTrue();
@@ -201,17 +205,25 @@ public class ServerFilter implements Filter<ServerFilter> {
      */
     @Override
     public ServerFilter and(ServerFilter otherFilter) {
-        return new ServerFilter()
-            .id(new ArrayList<>(intersection(
-                newHashSet(getServerIds()),
-                newHashSet(otherFilter.getServerIds())
-            )))
-            .groupsWhere(
-                groupFilter.and(otherFilter.groupFilter)
-            )
-            .where(
-                predicate.and((otherFilter.predicate))
-            );
+        if (this.filtersChain instanceof SingleFilterEvaluation &&
+            otherFilter.filtersChain instanceof SingleFilterEvaluation) {
+            return
+                new ServerFilter()
+                    .id(new ArrayList<>(intersection(
+                        newHashSet(getServerIds()),
+                        newHashSet(otherFilter.getServerIds())
+                    )))
+                    .groupsWhere(
+                        groupFilter.and(otherFilter.groupFilter)
+                    )
+                    .where(
+                        predicate.and((otherFilter.predicate))
+                    );
+        } else {
+            filtersChain = new AndEvaluation<>(filtersChain, otherFilter, ServerMetadata::getId);
+
+            return this;
+        }
     }
 
     /**
@@ -219,17 +231,9 @@ public class ServerFilter implements Filter<ServerFilter> {
      */
     @Override
     public ServerFilter or(ServerFilter otherFilter) {
-        return new ServerFilter()
-            .id(new ArrayList<String>() {{
-                addAll(getServerIds());
-                addAll(otherFilter.getServerIds());
-            }})
-            .groupsWhere(
-                groupFilter.or(otherFilter.groupFilter)
-            )
-            .where(
-                predicate.or(otherFilter.predicate)
-            );
+        filtersChain = new OrEvaluation<ServerFilter>(filtersChain, otherFilter, ServerMetadata::getId);
+
+        return this;
     }
 
     public GroupFilter getGroupFilter() {
