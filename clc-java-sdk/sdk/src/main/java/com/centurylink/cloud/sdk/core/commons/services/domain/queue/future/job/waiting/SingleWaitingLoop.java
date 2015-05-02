@@ -36,14 +36,19 @@ public class SingleWaitingLoop implements WaitingLoop {
             onIterationStarted.accept(null);
 
             if (TRUE.equals(checkStatus.get())) {
+                sleep();
                 return null;
             }
 
-            try {
-                Thread.sleep(STATUS_POLLING_DELAY);
-            } catch (InterruptedException ex) {
-                throw Throwables.propagate(ex);
-            }
+            sleep();
+        }
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(STATUS_POLLING_DELAY);
+        } catch (InterruptedException ex) {
+            throw Throwables.propagate(ex);
         }
     }
 
