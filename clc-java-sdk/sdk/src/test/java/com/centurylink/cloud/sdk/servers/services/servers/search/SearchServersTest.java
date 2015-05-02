@@ -7,7 +7,9 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
+import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -16,6 +18,8 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.eq;
 
@@ -50,7 +54,7 @@ public class SearchServersTest extends AbstractServersSdkTest {
             .when(serverClient).getGroup(eq(IL1_ROOT_ID), anyBoolean());
     }
 
-    @Test(enabled = false)
+    @Test
     public void testSearchActiveServers() {
         List<ServerMetadata> results = serverService.find(new ServerFilter()
             .status("archived")
@@ -58,6 +62,23 @@ public class SearchServersTest extends AbstractServersSdkTest {
 
         assertEquals(results.size(), 1);
         assertEquals(results.get(0).getName(), "CA2ALTDARCHIV01");
+    }
+
+    @Test
+    public void testSearchServerInGroup1() {
+        List<ServerMetadata> results = serverService.find(new ServerFilter()
+            .groupNameContains("Group1")
+        );
+
+        assertEquals(results.size(), 3);
+        assertThatResultContains(results, "CA2ALTDCENT201", "CA2ALTDCENTS101", "IL1ALTDDEB101");
+    }
+
+    private void assertThatResultContains(List<ServerMetadata> servers, String... serverIds) {
+        assertEquals(
+            newHashSet(map(servers, ServerMetadata::getName)),
+            newHashSet(serverIds)
+        );
     }
 
 }
