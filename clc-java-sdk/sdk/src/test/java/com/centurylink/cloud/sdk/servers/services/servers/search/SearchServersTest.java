@@ -9,9 +9,7 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
-import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -81,14 +79,29 @@ public class SearchServersTest extends AbstractServersSdkTest {
         List<ServerMetadata> results = serverService.find(Filter.or(
             new ServerFilter()
                 .dataCenters(DataCenter.CA_TORONTO_1)
-                .id("CA2ALTDCENT201".toLowerCase()),
+                .id("CA2ALTDCENT201"),
 
             new ServerFilter()
                 .dataCenters(DataCenter.US_CENTRAL_CHICAGO)
-                .id("IL1ALTDDEB101".toLowerCase())
+                .id("IL1ALTDDEB101")
         ));
 
         assertThatResultContains(results, "CA2ALTDCENT201", "IL1ALTDDEB101");
+    }
+
+    @Test
+    public void testAndOperation() {
+        List<ServerMetadata> results = serverService.find(Filter.and(
+            new ServerFilter()
+                .dataCenters(DataCenter.CA_TORONTO_1)
+                .id("CA2ALTDCENT201", "CA2ALTDCENTS101"),
+
+            new ServerFilter()
+                .dataCenters(DataCenter.CA_TORONTO_1)
+                .id("CA2ALTDCENTS101", "CA2ALTDARCHIV01")
+        ));
+
+        assertThatResultContains(results, "CA2ALTDCENTS101");
     }
 
     private void assertThatResultContains(List<ServerMetadata> servers, String... serverIds) {

@@ -173,7 +173,7 @@ public class ServerService {
                             .flatMap(group -> group.getServers().stream())
                             .filter(serverFilter.getPredicate())
                             .filter((serverFilter.getServerIds().size() > 0) ?
-                                    combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
+                                combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
                             );
                 }
             });

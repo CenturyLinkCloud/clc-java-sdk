@@ -165,13 +165,11 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * @return {@link GroupFilter}
      */
     public ServerFilter id(String... ids) {
-        serverIds.addAll(asList(ids));
-
-        return this;
+        return this.id(asList(ids));
     }
 
     public ServerFilter id(List<String> ids) {
-        serverIds.addAll(ids);
+        serverIds.addAll(map(ids, String::toLowerCase));
 
         return this;
     }
@@ -205,25 +203,9 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      */
     @Override
     public ServerFilter and(ServerFilter otherFilter) {
-        if (this.filtersChain instanceof SingleFilterEvaluation &&
-            otherFilter.filtersChain instanceof SingleFilterEvaluation) {
-            return
-                new ServerFilter()
-                    .id(new ArrayList<>(intersection(
-                        newHashSet(getServerIds()),
-                        newHashSet(otherFilter.getServerIds())
-                    )))
-                    .groupsWhere(
-                        groupFilter.and(otherFilter.groupFilter)
-                    )
-                    .where(
-                        predicate.and((otherFilter.predicate))
-                    );
-        } else {
-            filtersChain = new AndEvaluation<>(filtersChain, otherFilter, ServerMetadata::getId);
+        filtersChain = new AndEvaluation<>(filtersChain, otherFilter, ServerMetadata::getId);
 
-            return this;
-        }
+        return this;
     }
 
     /**
@@ -231,7 +213,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      */
     @Override
     public ServerFilter or(ServerFilter otherFilter) {
-        filtersChain = new OrEvaluation<ServerFilter>(filtersChain, otherFilter, ServerMetadata::getId);
+        filtersChain = new OrEvaluation<>(filtersChain, otherFilter, ServerMetadata::getId);
 
         return this;
     }
