@@ -54,11 +54,11 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
         Mockito
             .doReturn(fromJson("de1_root_group.json", GroupMetadata.class))
-            .when(serverClient).getGroup(DE_ROOT_ID, false);
+            .when(serverClient).getGroup(DE_ROOT_ID, true);
 
         Mockito
             .doReturn(fromJson("gb1_root_group.json", GroupMetadata.class))
-            .when(serverClient).getGroup(GB_ROOT_ID, false);
+            .when(serverClient).getGroup(GB_ROOT_ID, true);
     }
 
     @Test

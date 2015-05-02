@@ -81,7 +81,7 @@ public class GroupService {
                     criteria.getIds().size() > 0) {
                     return
                         criteria.getIds().stream()
-                            .map(curId -> client.getGroup(curId, false));
+                            .map(curId -> client.getGroup(curId, true));
                 } else {
                     Stream<DataCenterMetadata> dataCenters =
                         dataCenterService
@@ -89,7 +89,7 @@ public class GroupService {
 
                     return
                         dataCenters
-                            .map(d -> client.getGroup(d.getGroup().getId(), false))
+                            .map(d -> client.getGroup(d.getGroup().getId(), true))
                             .flatMap(g -> g.getAllGroups().stream())
                             .filter(criteria.getPredicate())
                             .filter((criteria.getIds().size() > 0) ?

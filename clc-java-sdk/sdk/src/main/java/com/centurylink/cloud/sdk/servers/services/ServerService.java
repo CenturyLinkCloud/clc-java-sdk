@@ -167,7 +167,6 @@ public class ServerService {
             return
                 groupService
                     .findLazy(serverFilter.getGroupFilter())
-                    .map(group -> client.getGroup(group.getId(), true))
                     .flatMap(group -> group.getServers().stream())
                     .filter(serverFilter.getPredicate());
         }

@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.services.servers;
+package com.centurylink.cloud.sdk.servers.services.servers.search;
 
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;

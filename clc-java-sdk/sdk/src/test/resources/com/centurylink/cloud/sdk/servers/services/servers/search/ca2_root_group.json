@@ -1,0 +1,657 @@
+{
+  "id": "8c8a2e29f1f24bbaa347c5b2c3d4b791",
+  "name": "CA2 Hardware",
+  "description": "CA2 Hardware",
+  "locationId": "CA2",
+  "type": "default",
+  "status": "active",
+  "serversCount": 3,
+  "servers": [],
+  "groups": [{
+    "id": "31d16c8207614e63b99cd13929f1c386",
+    "name": "Archive",
+    "description": "Pay only for the storage consumed by the archived server. No compute or licensing costs are incurred.",
+    "locationId": "CA2",
+    "type": "archive",
+    "status": "active",
+    "serversCount": 0,
+    "servers": [{
+      "id": "ca2altdarchiv01",
+      "name": "CA2ALTDARCHIV01",
+      "description": "Archived server description",
+      "groupId": "31d16c8207614e63b99cd13929f1c386",
+      "isTemplate": false,
+      "locationId": "CA2",
+      "osType": "Debian 7 64-bit",
+      "os": "debian7_64Bit",
+      "status": "archived",
+      "details": {
+        "powerState": "stopped",
+        "storageGB": 18
+      },
+      "type": "standard",
+      "storageType": "standard",
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-05-02T07:28:28Z",
+        "modifiedBy": "idrabenia",
+        "modifiedDate": "2015-05-02T07:28:28Z"
+      },
+      "links": [{
+        "rel": "self",
+        "href": "/v2/servers/altd/ca2altdarchiv01",
+        "id": "ca2altdarchiv01",
+        "verbs": ["GET", "PATCH"]
+      }, {
+        "rel": "group",
+        "href": "/v2/groups/altd/31d16c8207614e63b99cd13929f1c386",
+        "id": "31d16c8207614e63b99cd13929f1c386"
+      }, {
+        "rel": "account",
+        "href": "/v2/accounts/altd",
+        "id": "altd"
+      }, {
+        "rel": "billing",
+        "href": "/v2/billing/altd/serverPricing/ca2altdarchiv01"
+      }, {
+        "rel": "restore",
+        "href": "/v2/servers/altd/ca2altdarchiv01/restore"
+      }, {
+        "rel": "delete",
+        "href": "/v2/servers/altd/ca2altdarchiv01"
+      }
+      ]
+    }
+    ],
+    "groups": [],
+    "links": [{
+      "rel": "self",
+      "href": "/v2/groups/altd/31d16c8207614e63b99cd13929f1c386",
+      "verbs": ["GET", "PATCH"]
+    }, {
+      "rel": "parentGroup",
+      "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791",
+      "id": "8c8a2e29f1f24bbaa347c5b2c3d4b791"
+    }, {
+      "rel": "defaults",
+      "href": "/v2/groups/altd/31d16c8207614e63b99cd13929f1c386/defaults",
+      "verbs": ["GET", "POST"]
+    }, {
+      "rel": "billing",
+      "href": "/v2/groups/altd/31d16c8207614e63b99cd13929f1c386/billing"
+    }
+    ],
+    "changeInfo": {
+      "createdBy": "idrabenia",
+      "createdDate": "2015-03-26T23:59:27Z",
+      "modifiedBy": "idrabenia",
+      "modifiedDate": "2015-03-26T23:59:27Z"
+    },
+    "customFields": []
+  }, {
+    "id": "77b68fb5b80f4f809e25d50f57cb11a2",
+    "name": "Default Group",
+    "description": "test description",
+    "locationId": "CA2",
+    "type": "default",
+    "status": "active",
+    "serversCount": 3,
+    "servers": [],
+    "groups": [{
+      "id": "3a8b95416fab46289dfb40e2bd92260d",
+      "name": "Group1",
+      "description": "Group one description",
+      "locationId": "CA2",
+      "type": "default",
+      "status": "active",
+      "serversCount": 2,
+      "servers": [{
+        "id": "ca2altdcent201",
+        "name": "CA2ALTDCENT201",
+        "description": "Second CentOs server description",
+        "groupId": "3a8b95416fab46289dfb40e2bd92260d",
+        "isTemplate": false,
+        "locationId": "CA2",
+        "osType": "CentOS 6 64-bit",
+        "os": "centOS6_64Bit",
+        "status": "active",
+        "details": {
+          "ipAddresses": [{
+            "internal": "10.56.119.15"
+          }
+          ],
+          "alertPolicies": [],
+          "cpu": 2,
+          "diskCount": 3,
+          "hostName": "",
+          "inMaintenanceMode": false,
+          "memoryMB": 4096,
+          "powerState": "started",
+          "storageGB": 17,
+          "disks": [{
+            "id": "0:0",
+            "sizeGB": 1,
+            "partitionPaths": []
+          }, {
+            "id": "0:1",
+            "sizeGB": 2,
+            "partitionPaths": []
+          }, {
+            "id": "0:2",
+            "sizeGB": 14,
+            "partitionPaths": []
+          }
+          ],
+          "partitions": [],
+          "snapshots": [],
+          "customFields": []
+        },
+        "type": "standard",
+        "storageType": "standard",
+        "changeInfo": {
+          "createdBy": "idrabenia",
+          "createdDate": "2015-05-02T07:30:14Z",
+          "modifiedBy": "idrabenia",
+          "modifiedDate": "2015-05-02T07:30:14Z"
+        },
+        "links": [{
+          "rel": "self",
+          "href": "/v2/servers/altd/ca2altdcent201",
+          "id": "ca2altdcent201",
+          "verbs": ["GET", "PATCH", "DELETE"]
+        }, {
+          "rel": "group",
+          "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d",
+          "id": "3a8b95416fab46289dfb40e2bd92260d"
+        }, {
+          "rel": "account",
+          "href": "/v2/accounts/altd",
+          "id": "altd"
+        }, {
+          "rel": "billing",
+          "href": "/v2/billing/altd/serverPricing/ca2altdcent201"
+        }, {
+          "rel": "statistics",
+          "href": "/v2/servers/altd/ca2altdcent201/statistics"
+        }, {
+          "rel": "upcomingScheduledActivities",
+          "href": "/v2/servers/altd/74699044aff74ecb94ecbfbd61390590/upcomingScheduledActivities"
+        }, {
+          "rel": "scheduledActivities",
+          "href": "/v2/servers/altd/74699044aff74ecb94ecbfbd61390590/scheduledActivities",
+          "verbs": ["GET", "POST"]
+        }, {
+          "rel": "publicIPAddresses",
+          "href": "/v2/servers/altd/ca2altdcent201/publicIPAddresses",
+          "verbs": ["POST"]
+        }, {
+          "rel": "alertPolicyMappings",
+          "href": "/v2/servers/altd/ca2altdcent201/alertPolicies",
+          "verbs": ["POST"]
+        }, {
+          "rel": "antiAffinityPolicyMapping",
+          "href": "/v2/servers/altd/ca2altdcent201/antiAffinityPolicy",
+          "verbs": ["PUT", "DELETE"]
+        }, {
+          "rel": "cpuAutoscalePolicyMapping",
+          "href": "/v2/servers/altd/ca2altdcent201/cpuAutoscalePolicy",
+          "verbs": ["PUT", "DELETE"]
+        }, {
+          "rel": "capabilities",
+          "href": "/v2/servers/altd/ca2altdcent201/capabilities"
+        }, {
+          "rel": "credentials",
+          "href": "/v2/servers/altd/ca2altdcent201/credentials"
+        }
+        ]
+      }, {
+        "id": "ca2altdcents101",
+        "name": "CA2ALTDCENTS101",
+        "description": "CentOs server in Group1",
+        "groupId": "3a8b95416fab46289dfb40e2bd92260d",
+        "isTemplate": false,
+        "locationId": "CA2",
+        "osType": "CentOS 6 64-bit",
+        "os": "centOS6_64Bit",
+        "status": "active",
+        "details": {
+          "ipAddresses": [{
+            "internal": "10.56.119.12"
+          }
+          ],
+          "alertPolicies": [],
+          "cpu": 2,
+          "diskCount": 3,
+          "hostName": "ca2altdcents101",
+          "inMaintenanceMode": false,
+          "memoryMB": 4096,
+          "powerState": "started",
+          "storageGB": 17,
+          "disks": [{
+            "id": "0:0",
+            "sizeGB": 1,
+            "partitionPaths": []
+          }, {
+            "id": "0:1",
+            "sizeGB": 2,
+            "partitionPaths": []
+          }, {
+            "id": "0:2",
+            "sizeGB": 14,
+            "partitionPaths": []
+          }
+          ],
+          "partitions": [{
+            "sizeGB": 0.0,
+            "path": "(swap)"
+          }, {
+            "sizeGB": 0.0,
+            "path": "/"
+          }, {
+            "sizeGB": 0.0,
+            "path": "/boot"
+          }
+          ],
+          "snapshots": [],
+          "customFields": []
+        },
+        "type": "standard",
+        "storageType": "standard",
+        "changeInfo": {
+          "createdBy": "idrabenia",
+          "createdDate": "2015-05-02T07:25:58Z",
+          "modifiedBy": "idrabenia",
+          "modifiedDate": "2015-05-02T07:25:58Z"
+        },
+        "links": [{
+          "rel": "self",
+          "href": "/v2/servers/altd/ca2altdcents101",
+          "id": "ca2altdcents101",
+          "verbs": ["GET", "PATCH", "DELETE"]
+        }, {
+          "rel": "group",
+          "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d",
+          "id": "3a8b95416fab46289dfb40e2bd92260d"
+        }, {
+          "rel": "account",
+          "href": "/v2/accounts/altd",
+          "id": "altd"
+        }, {
+          "rel": "billing",
+          "href": "/v2/billing/altd/serverPricing/ca2altdcents101"
+        }, {
+          "rel": "statistics",
+          "href": "/v2/servers/altd/ca2altdcents101/statistics"
+        }, {
+          "rel": "upcomingScheduledActivities",
+          "href": "/v2/servers/altd/801122de097b4486b76b1fa2aec59b03/upcomingScheduledActivities"
+        }, {
+          "rel": "scheduledActivities",
+          "href": "/v2/servers/altd/801122de097b4486b76b1fa2aec59b03/scheduledActivities",
+          "verbs": ["GET", "POST"]
+        }, {
+          "rel": "publicIPAddresses",
+          "href": "/v2/servers/altd/ca2altdcents101/publicIPAddresses",
+          "verbs": ["POST"]
+        }, {
+          "rel": "alertPolicyMappings",
+          "href": "/v2/servers/altd/ca2altdcents101/alertPolicies",
+          "verbs": ["POST"]
+        }, {
+          "rel": "antiAffinityPolicyMapping",
+          "href": "/v2/servers/altd/ca2altdcents101/antiAffinityPolicy",
+          "verbs": ["PUT", "DELETE"]
+        }, {
+          "rel": "cpuAutoscalePolicyMapping",
+          "href": "/v2/servers/altd/ca2altdcents101/cpuAutoscalePolicy",
+          "verbs": ["PUT", "DELETE"]
+        }, {
+          "rel": "capabilities",
+          "href": "/v2/servers/altd/ca2altdcents101/capabilities"
+        }, {
+          "rel": "credentials",
+          "href": "/v2/servers/altd/ca2altdcents101/credentials"
+        }
+        ]
+      }
+      ],
+      "groups": [],
+      "links": [{
+        "rel": "createGroup",
+        "href": "/v2/groups/altd",
+        "verbs": ["POST"]
+      }, {
+        "rel": "createServer",
+        "href": "/v2/servers/altd",
+        "verbs": ["POST"]
+      }, {
+        "rel": "self",
+        "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d",
+        "verbs": ["GET", "PATCH", "DELETE"]
+      }, {
+        "rel": "parentGroup",
+        "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2",
+        "id": "77b68fb5b80f4f809e25d50f57cb11a2"
+      }, {
+        "rel": "defaults",
+        "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d/defaults",
+        "verbs": ["GET", "POST"]
+      }, {
+        "rel": "billing",
+        "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d/billing"
+      }, {
+        "rel": "archiveGroupAction",
+        "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d/archive"
+      }, {
+        "rel": "statistics",
+        "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d/statistics"
+      }, {
+        "rel": "upcomingScheduledActivities",
+        "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d/upcomingScheduledActivities"
+      }, {
+        "rel": "horizontalAutoscalePolicyMapping",
+        "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d/horizontalAutoscalePolicy",
+        "verbs": ["GET", "PUT", "DELETE"]
+      }, {
+        "rel": "scheduledActivities",
+        "href": "/v2/groups/altd/3a8b95416fab46289dfb40e2bd92260d/scheduledActivities",
+        "verbs": ["GET", "POST"]
+      }
+      ],
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-05-02T07:16:02Z",
+        "modifiedBy": "idrabenia",
+        "modifiedDate": "2015-05-02T07:16:02Z"
+      },
+      "customFields": []
+    }, {
+      "id": "d213a362974a45c3abb42b59df619372",
+      "name": "Group2",
+      "description": "",
+      "locationId": "CA2",
+      "type": "default",
+      "status": "active",
+      "serversCount": 1,
+      "servers": [{
+        "id": "ca2altddeb201",
+        "name": "CA2ALTDDEB201",
+        "description": "Debian server in group2",
+        "groupId": "d213a362974a45c3abb42b59df619372",
+        "isTemplate": false,
+        "locationId": "CA2",
+        "osType": "Debian 7 64-bit",
+        "os": "debian7_64Bit",
+        "status": "active",
+        "details": {
+          "ipAddresses": [{
+            "internal": "10.56.119.14"
+          }
+          ],
+          "alertPolicies": [],
+          "cpu": 2,
+          "diskCount": 3,
+          "hostName": "",
+          "inMaintenanceMode": false,
+          "memoryMB": 4096,
+          "powerState": "started",
+          "storageGB": 19,
+          "disks": [{
+            "id": "0:0",
+            "sizeGB": 1,
+            "partitionPaths": []
+          }, {
+            "id": "0:1",
+            "sizeGB": 2,
+            "partitionPaths": []
+          }, {
+            "id": "0:2",
+            "sizeGB": 16,
+            "partitionPaths": []
+          }
+          ],
+          "partitions": [],
+          "snapshots": [],
+          "customFields": []
+        },
+        "type": "standard",
+        "storageType": "standard",
+        "changeInfo": {
+          "createdBy": "idrabenia",
+          "createdDate": "2015-05-02T07:29:26Z",
+          "modifiedBy": "idrabenia",
+          "modifiedDate": "2015-05-02T07:29:26Z"
+        },
+        "links": [{
+          "rel": "self",
+          "href": "/v2/servers/altd/ca2altddeb201",
+          "id": "ca2altddeb201",
+          "verbs": ["GET", "PATCH", "DELETE"]
+        }, {
+          "rel": "group",
+          "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372",
+          "id": "d213a362974a45c3abb42b59df619372"
+        }, {
+          "rel": "account",
+          "href": "/v2/accounts/altd",
+          "id": "altd"
+        }, {
+          "rel": "billing",
+          "href": "/v2/billing/altd/serverPricing/ca2altddeb201"
+        }, {
+          "rel": "statistics",
+          "href": "/v2/servers/altd/ca2altddeb201/statistics"
+        }, {
+          "rel": "upcomingScheduledActivities",
+          "href": "/v2/servers/altd/2261a09fbf374e928905e5951b996c62/upcomingScheduledActivities"
+        }, {
+          "rel": "scheduledActivities",
+          "href": "/v2/servers/altd/2261a09fbf374e928905e5951b996c62/scheduledActivities",
+          "verbs": ["GET", "POST"]
+        }, {
+          "rel": "publicIPAddresses",
+          "href": "/v2/servers/altd/ca2altddeb201/publicIPAddresses",
+          "verbs": ["POST"]
+        }, {
+          "rel": "alertPolicyMappings",
+          "href": "/v2/servers/altd/ca2altddeb201/alertPolicies",
+          "verbs": ["POST"]
+        }, {
+          "rel": "antiAffinityPolicyMapping",
+          "href": "/v2/servers/altd/ca2altddeb201/antiAffinityPolicy",
+          "verbs": ["PUT", "DELETE"]
+        }, {
+          "rel": "cpuAutoscalePolicyMapping",
+          "href": "/v2/servers/altd/ca2altddeb201/cpuAutoscalePolicy",
+          "verbs": ["PUT", "DELETE"]
+        }, {
+          "rel": "capabilities",
+          "href": "/v2/servers/altd/ca2altddeb201/capabilities"
+        }, {
+          "rel": "credentials",
+          "href": "/v2/servers/altd/ca2altddeb201/credentials"
+        }
+        ]
+      }
+      ],
+      "groups": [],
+      "links": [{
+        "rel": "createGroup",
+        "href": "/v2/groups/altd",
+        "verbs": ["POST"]
+      }, {
+        "rel": "createServer",
+        "href": "/v2/servers/altd",
+        "verbs": ["POST"]
+      }, {
+        "rel": "self",
+        "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372",
+        "verbs": ["GET", "PATCH", "DELETE"]
+      }, {
+        "rel": "parentGroup",
+        "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2",
+        "id": "77b68fb5b80f4f809e25d50f57cb11a2"
+      }, {
+        "rel": "defaults",
+        "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372/defaults",
+        "verbs": ["GET", "POST"]
+      }, {
+        "rel": "billing",
+        "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372/billing"
+      }, {
+        "rel": "archiveGroupAction",
+        "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372/archive"
+      }, {
+        "rel": "statistics",
+        "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372/statistics"
+      }, {
+        "rel": "upcomingScheduledActivities",
+        "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372/upcomingScheduledActivities"
+      }, {
+        "rel": "horizontalAutoscalePolicyMapping",
+        "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372/horizontalAutoscalePolicy",
+        "verbs": ["GET", "PUT", "DELETE"]
+      }, {
+        "rel": "scheduledActivities",
+        "href": "/v2/groups/altd/d213a362974a45c3abb42b59df619372/scheduledActivities",
+        "verbs": ["GET", "POST"]
+      }
+      ],
+      "changeInfo": {
+        "createdBy": "idrabenia",
+        "createdDate": "2015-05-02T07:26:55Z",
+        "modifiedBy": "idrabenia",
+        "modifiedDate": "2015-05-02T07:26:55Z"
+      },
+      "customFields": []
+    }
+    ],
+    "links": [{
+      "rel": "createGroup",
+      "href": "/v2/groups/altd",
+      "verbs": ["POST"]
+    }, {
+      "rel": "createServer",
+      "href": "/v2/servers/altd",
+      "verbs": ["POST"]
+    }, {
+      "rel": "self",
+      "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2",
+      "verbs": ["GET", "PATCH", "DELETE"]
+    }, {
+      "rel": "parentGroup",
+      "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791",
+      "id": "8c8a2e29f1f24bbaa347c5b2c3d4b791"
+    }, {
+      "rel": "defaults",
+      "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2/defaults",
+      "verbs": ["GET", "POST"]
+    }, {
+      "rel": "billing",
+      "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2/billing"
+    }, {
+      "rel": "archiveGroupAction",
+      "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2/archive"
+    }, {
+      "rel": "statistics",
+      "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2/statistics"
+    }, {
+      "rel": "upcomingScheduledActivities",
+      "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2/upcomingScheduledActivities"
+    }, {
+      "rel": "horizontalAutoscalePolicyMapping",
+      "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2/horizontalAutoscalePolicy",
+      "verbs": ["GET", "PUT", "DELETE"]
+    }, {
+      "rel": "scheduledActivities",
+      "href": "/v2/groups/altd/77b68fb5b80f4f809e25d50f57cb11a2/scheduledActivities",
+      "verbs": ["GET", "POST"]
+    }
+    ],
+    "changeInfo": {
+      "createdBy": "idrabenia",
+      "createdDate": "2015-03-26T23:59:27Z",
+      "modifiedBy": "idrabenia.altd",
+      "modifiedDate": "2015-04-30T09:18:29Z"
+    },
+    "customFields": []
+  }, {
+    "id": "72efa706294548688583b47e23910aaa",
+    "name": "Templates",
+    "description": "Custom templates provide a set of hardware/software settings that can be used repeatedly to create servers configured with the same settings.",
+    "locationId": "CA2",
+    "type": "templates",
+    "status": "active",
+    "serversCount": 0,
+    "servers": [],
+    "groups": [],
+    "links": [{
+      "rel": "self",
+      "href": "/v2/groups/altd/72efa706294548688583b47e23910aaa",
+      "verbs": ["GET", "PATCH"]
+    }, {
+      "rel": "parentGroup",
+      "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791",
+      "id": "8c8a2e29f1f24bbaa347c5b2c3d4b791"
+    }, {
+      "rel": "defaults",
+      "href": "/v2/groups/altd/72efa706294548688583b47e23910aaa/defaults",
+      "verbs": ["GET", "POST"]
+    }, {
+      "rel": "billing",
+      "href": "/v2/groups/altd/72efa706294548688583b47e23910aaa/billing"
+    }
+    ],
+    "changeInfo": {
+      "createdBy": "idrabenia",
+      "createdDate": "2015-03-26T23:59:27Z",
+      "modifiedBy": "idrabenia",
+      "modifiedDate": "2015-03-26T23:59:27Z"
+    },
+    "customFields": []
+  }
+  ],
+  "links": [{
+    "rel": "createGroup",
+    "href": "/v2/groups/altd",
+    "verbs": ["POST"]
+  }, {
+    "rel": "createServer",
+    "href": "/v2/servers/altd",
+    "verbs": ["POST"]
+  }, {
+    "rel": "self",
+    "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791",
+    "verbs": ["GET", "PATCH"]
+  }, {
+    "rel": "defaults",
+    "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/defaults",
+    "verbs": ["GET", "POST"]
+  }, {
+    "rel": "billing",
+    "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/billing"
+  }, {
+    "rel": "statistics",
+    "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/statistics"
+  }, {
+    "rel": "upcomingScheduledActivities",
+    "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/upcomingScheduledActivities"
+  }, {
+    "rel": "horizontalAutoscalePolicyMapping",
+    "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/horizontalAutoscalePolicy",
+    "verbs": ["GET", "PUT", "DELETE"]
+  }, {
+    "rel": "scheduledActivities",
+    "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/scheduledActivities",
+    "verbs": ["GET", "POST"]
+  }
+  ],
+  "changeInfo": {
+    "createdBy": "idrabenia",
+    "createdDate": "2015-03-26T23:59:27Z",
+    "modifiedBy": "idrabenia",
+    "modifiedDate": "2015-03-26T23:59:27Z"
+  },
+  "customFields": []
+}
+
