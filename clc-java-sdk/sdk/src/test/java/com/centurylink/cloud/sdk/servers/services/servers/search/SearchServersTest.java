@@ -2,6 +2,8 @@ package com.centurylink.cloud.sdk.servers.services.servers.search;
 
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -72,6 +74,21 @@ public class SearchServersTest extends AbstractServersSdkTest {
 
         assertEquals(results.size(), 3);
         assertThatResultContains(results, "CA2ALTDCENT201", "CA2ALTDCENTS101", "IL1ALTDDEB101");
+    }
+
+    @Test
+    public void testOrOperation() {
+        List<ServerMetadata> results = serverService.find(Filter.or(
+            new ServerFilter()
+                .dataCenters(DataCenter.CA_TORONTO_1)
+                .id("CA2ALTDCENT201".toLowerCase()),
+
+            new ServerFilter()
+                .dataCenters(DataCenter.US_CENTRAL_CHICAGO)
+                .id("IL1ALTDDEB101".toLowerCase())
+        ));
+
+        assertThatResultContains(results, "CA2ALTDCENT201", "IL1ALTDDEB101");
     }
 
     private void assertThatResultContains(List<ServerMetadata> servers, String... serverIds) {

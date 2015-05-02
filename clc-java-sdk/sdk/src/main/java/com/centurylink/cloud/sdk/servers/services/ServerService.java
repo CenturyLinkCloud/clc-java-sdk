@@ -9,6 +9,7 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.P
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
@@ -33,8 +34,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.isAlwaysTruePredicate;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.services.function.Predicates.alwaysTrue;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -168,7 +169,10 @@ public class ServerService {
                 groupService
                     .findLazy(serverFilter.getGroupFilter())
                     .flatMap(group -> group.getServers().stream())
-                    .filter(serverFilter.getPredicate());
+                    .filter(serverFilter.getPredicate())
+                    .filter((serverFilter.getServerIds().size() > 0) ?
+                        combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
+                    );
         }
     }
 
