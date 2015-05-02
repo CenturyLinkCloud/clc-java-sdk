@@ -513,7 +513,7 @@ public class ServerService {
      * @param filter search servers criteria
      * @return OperationFuture wrapper for list of ServerRef
      */
-    OperationFuture<List<Server>> revertToSnapshot(ServerFilter filter) {
+    public OperationFuture<List<Server>> revertToSnapshot(ServerFilter filter) {
         return revertToSnapshot(getRefsFromFilter(filter));
     }
 

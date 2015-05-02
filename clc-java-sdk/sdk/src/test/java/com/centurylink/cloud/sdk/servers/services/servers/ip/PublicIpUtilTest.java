@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.services;
+package com.centurylink.cloud.sdk.servers.services.servers.ip;
 
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;

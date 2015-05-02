@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.services;
+package com.centurylink.cloud.sdk.servers.services.servers.operations;
 
 import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
 import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
@@ -13,8 +13,7 @@ import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
-
-public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsStubTest {
+public class ServerOperationsByServerFilterTest extends AbstractServerOperationsStubTest {
 
     @Inject @Mock
     ServerClient serverClient;
@@ -27,57 +26,57 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
 
     @Override
     protected void powerOnServer() {
-        groupService
-            .powerOn(groupFilter)
+        serverService
+            .powerOn(serverFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void powerOffServer() {
-        groupService
-            .powerOff(groupFilter)
+        serverService
+            .powerOff(serverFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void pauseServer() {
-        groupService
-            .pause(groupFilter)
+        serverService
+            .pause(serverFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void shutDownServer() {
-        groupService
-            .shutDown(groupFilter)
+        serverService
+            .shutDown(serverFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void stopServerMaintenance() {
-        groupService
-            .stopMaintenance(groupFilter)
+        serverService
+            .stopMaintenance(serverFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void startServerMaintenance() {
-        groupService
-            .startMaintenance(groupFilter)
+        serverService
+            .startMaintenance(serverFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void archiveServer() {
-        groupService
-            .archive(groupFilter)
+        serverService
+            .archive(serverFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void createServerSnapshot() {
-        groupService
-            .createSnapshot(1, groupFilter)
+        serverService
+            .createSnapshot(1, serverFilter)
             .waitUntilComplete();
     }
 
@@ -90,15 +89,15 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
 
     @Override
     protected void resetServer() {
-        groupService
-            .reset(groupFilter)
+        serverService
+            .reset(serverFilter)
             .waitUntilComplete();
     }
 
     @Override
     protected void rebootServer() {
-        groupService
-            .reboot(groupFilter)
+        serverService
+            .reboot(serverFilter)
             .waitUntilComplete();
     }
 
@@ -112,7 +111,7 @@ public class ServerOperationsByGroupFilterTest extends AbstractServerOperationsS
 
         server1 = serverMetadata1.asRefById();
         server2 = serverMetadata2.asRefById();
-        groupFilter = fixture.getGroupFilterById();
+        serverFilter = fixture.getServerFilterById();
 
         testArchive();
         fixture.activateServers();

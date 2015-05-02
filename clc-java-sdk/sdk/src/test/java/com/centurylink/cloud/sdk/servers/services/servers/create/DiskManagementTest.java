@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.services;
+package com.centurylink.cloud.sdk.servers.services.servers.create;
 
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
@@ -12,8 +12,12 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.GroupService;
+import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
+import com.centurylink.cloud.sdk.servers.services.servers.TestServerSupport;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
@@ -24,7 +28,6 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.servers.services.TestServerSupport.anyServerConfig;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.DiskType.PARTITIONED;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.DiskType.RAW;
 import static org.mockito.Matchers.any;
@@ -77,7 +80,7 @@ public class DiskManagementTest extends AbstractServersSdkTest {
                 }});
             }}, null));
 
-        serverService.create(anyServerConfig()
+        serverService.create(TestServerSupport.anyServerConfig()
             .machine(new Machine()
                 .cpuCount(2)
                 .ram(4)
