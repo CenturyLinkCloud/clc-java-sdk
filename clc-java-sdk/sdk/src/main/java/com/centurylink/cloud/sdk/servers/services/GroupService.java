@@ -1,7 +1,5 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
-import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
 import com.centurylink.cloud.sdk.common.management.client.QueueClient;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
@@ -9,7 +7,9 @@ import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.core.services.refs.Reference;
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -27,17 +27,15 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
-import static com.centurylink.cloud.sdk.core.services.refs.Reference.evalUsingFindByFilter;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.getFirst;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Service provide operations for query and manipulate groups of servers
  *
  * @author ilya.drabenia
  */
-public class GroupService {
+public class GroupService implements QueryService<Group, GroupFilter, GroupMetadata> {
+
     private final ServerClient client;
     private final GroupConverter converter;
     private final DataCentersClient dataCentersClient;
@@ -61,14 +59,10 @@ public class GroupService {
         return serverServiceProvider.get();
     }
 
-    public GroupMetadata findByRef(Group groupRef) {
-        return evalUsingFindByFilter(groupRef, this::find);
-    }
-
-    public List<GroupMetadata> find(GroupFilter criteria) {
-        return findLazy(criteria).collect(toList());
-    }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Stream<GroupMetadata> findLazy(GroupFilter groupCriteria) {
         checkNotNull(groupCriteria, "Criteria must be not null");
 
@@ -91,17 +85,10 @@ public class GroupService {
                             .flatMap(g -> g.getAllGroups().stream())
                             .filter(criteria.getPredicate())
                             .filter((criteria.getIds().size() > 0) ?
-                                combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                                    combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
                             );
                 }
             });
-    }
-
-    public GroupMetadata findFirst(GroupFilter criteria) {
-        return getFirst(
-            findLazy(criteria).limit(1).collect(toList()),
-            null
-        );
     }
 
     public List<GroupMetadata> findByDataCenter(DataCenter dataCenter) {

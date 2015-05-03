@@ -8,7 +8,7 @@ import com.centurylink.cloud.sdk.core.services.refs.Reference;
  *
  * @author ilya.drabenia
  */
-public abstract class DataCenter implements Reference {
+public abstract class DataCenter implements Reference<DataCenterFilter> {
     public static final DataCenterByIdRef CA_VANCOUVER = refById("ca1");
     public static final DataCenterByIdRef CA_TORONTO_1 = refById("ca2");
     public static final DataCenterByIdRef CA_TORONTO_2 = refById("ca3");
@@ -29,12 +29,6 @@ public abstract class DataCenter implements Reference {
     public static DataCenterByNameRef refByName(String name) {
         return new DataCenterByNameRef(name);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public abstract DataCenterFilter asFilter();
 
     @Override
     public String toString() {

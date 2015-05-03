@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.tests.mocks;
 
-import com.centurylink.cloud.sdk.servers.TestModule;
+import com.centurylink.cloud.sdk.tests.TestModule;
 import org.mockito.Spy;
 
 import java.lang.reflect.Field;

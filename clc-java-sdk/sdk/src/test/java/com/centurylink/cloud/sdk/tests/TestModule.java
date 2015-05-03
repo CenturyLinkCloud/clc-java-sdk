@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers;
+package com.centurylink.cloud.sdk.tests;
 
 import com.google.inject.AbstractModule;
 import org.mockito.Mockito;

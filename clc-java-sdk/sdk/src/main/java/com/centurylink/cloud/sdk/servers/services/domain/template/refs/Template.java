@@ -8,7 +8,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.Templa
 /**
  * @author ilya.drabenia
  */
-public abstract class Template implements Reference {
+public abstract class Template implements Reference<TemplateFilter> {
     private final DataCenter dataCenter;
 
     Template(DataCenter dataCenter) {
@@ -30,9 +30,6 @@ public abstract class Template implements Reference {
     public DataCenter getDataCenter() {
         return dataCenter;
     }
-
-    @Override
-    public abstract TemplateFilter asFilter();
 
     @Override
     public String toString() {

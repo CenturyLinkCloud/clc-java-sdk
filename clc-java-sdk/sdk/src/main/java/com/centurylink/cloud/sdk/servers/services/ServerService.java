@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.SequentialJobsFuture;
+import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.core.services.refs.ReferenceNotResolvedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
@@ -41,7 +42,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author ilya.drabenia
  */
-public class ServerService {
+public class ServerService implements QueryService<Server, ServerFilter, ServerMetadata> {
     private final ServerConverter serverConverter;
     private final GroupService groupService;
     private final ServerClient client;
@@ -134,16 +135,6 @@ public class ServerService {
             return delete(serverRefs.toArray(new Server[serverRefs.size()]));
     }
 
-    public ServerMetadata findByRef(Server serverRef) {
-        return
-            findLazy(
-                serverRef.asFilter()
-            )
-            .findFirst().orElseThrow(() ->
-                    new ReferenceNotResolvedException("Server by reference %s not found", serverRef.toString())
-            );
-    }
-
     String idByRef(Server ref) {
         if (ref.is(ServerByIdRef.class)) {
             return ref.as(ServerByIdRef.class).getId();
@@ -152,6 +143,10 @@ public class ServerService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Stream<ServerMetadata> findLazy(ServerFilter filter) {
         return filter
             .applyFindLazy(serverFilter -> {
@@ -176,10 +171,6 @@ public class ServerService {
                             );
                 }
             });
-    }
-
-    public List<ServerMetadata> find(ServerFilter serverFilter) {
-        return findLazy(serverFilter).collect(toList());
     }
 
     /**

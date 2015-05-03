@@ -9,13 +9,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author ilya.drabenia
  */
-public abstract class Group implements Reference {
+public abstract class Group implements Reference<GroupFilter> {
     public final static String ARCHIVE = "Archive";
     public final static String TEMPLATES = "Templates";
     public final static String DEFAULT_GROUP = "Default Group";
-
-    @Override
-    public abstract GroupFilter asFilter();
 
     public static GroupByIdRef refById(String id) {
         return new GroupByIdRef(id);
