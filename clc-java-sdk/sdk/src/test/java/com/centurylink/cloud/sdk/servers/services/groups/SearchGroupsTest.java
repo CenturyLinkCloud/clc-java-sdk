@@ -20,9 +20,7 @@ import java.util.List;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.GB_PORTSMOUTH;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.ARCHIVE;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.TEMPLATES;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.*;
 import static com.google.common.collect.Sets.newHashSet;
 
 /**

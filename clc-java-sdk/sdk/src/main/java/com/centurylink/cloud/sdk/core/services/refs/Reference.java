@@ -4,10 +4,6 @@ import com.centurylink.cloud.sdk.core.CastMixin;
 import com.centurylink.cloud.sdk.core.ToStringMixin;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 /**
  * Class represent reference on existing resource.
  *

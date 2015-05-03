@@ -9,7 +9,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilt
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-
 import com.google.inject.Inject;
 
 public abstract class AbstractServerOperationsStubTest extends AbstractServersSdkTest {

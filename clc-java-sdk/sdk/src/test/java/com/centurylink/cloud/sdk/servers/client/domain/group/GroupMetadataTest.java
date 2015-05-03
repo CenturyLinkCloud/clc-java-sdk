@@ -7,7 +7,7 @@ import java.util.List;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 public class GroupMetadataTest {
 

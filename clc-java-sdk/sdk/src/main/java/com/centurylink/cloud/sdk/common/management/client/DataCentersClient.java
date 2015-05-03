@@ -1,10 +1,10 @@
 package com.centurylink.cloud.sdk.common.management.client;
 
-import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
+import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.google.inject.Inject;
 
 /**

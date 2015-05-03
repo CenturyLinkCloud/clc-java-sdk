@@ -7,9 +7,9 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.CA_VANCOUVER;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
 /**
  * @author ilya.drabenia

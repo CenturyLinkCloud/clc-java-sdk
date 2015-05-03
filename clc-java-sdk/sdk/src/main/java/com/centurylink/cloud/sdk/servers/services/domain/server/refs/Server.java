@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server.refs;
 
-import com.centurylink.cloud.sdk.core.ToStringMixin;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 

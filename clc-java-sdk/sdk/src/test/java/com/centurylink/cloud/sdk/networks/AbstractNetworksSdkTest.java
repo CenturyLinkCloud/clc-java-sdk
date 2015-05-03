@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.networks;
 
-import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 import com.google.inject.Module;
 
 import java.util.List;

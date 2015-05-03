@@ -1,15 +1,15 @@
 package com.centurylink.cloud.sdk.common.management.services.datacenters;
 
+import com.centurylink.cloud.sdk.common.management.CommonManagementModule;
 import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
-import com.centurylink.cloud.sdk.core.auth.AuthModule;
-import com.centurylink.cloud.sdk.common.management.CommonManagementModule;
-import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
+import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 import org.mockito.Mockito;

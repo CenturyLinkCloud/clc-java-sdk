@@ -7,7 +7,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMet
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.ServerStubFixture;
-
 import com.google.inject.Inject;
 import org.mockito.Mock;
 import org.testng.annotations.Test;

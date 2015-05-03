@@ -1,8 +1,8 @@
 package com.centurylink.cloud.sdk.common.management.client;
 
+import com.centurylink.cloud.sdk.common.management.client.domain.queue.GetStatusResponse;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
-import com.centurylink.cloud.sdk.common.management.client.domain.queue.GetStatusResponse;
 import com.google.inject.Inject;
 
 /**

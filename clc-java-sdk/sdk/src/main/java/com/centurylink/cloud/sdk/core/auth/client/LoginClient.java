@@ -1,8 +1,8 @@
 package com.centurylink.cloud.sdk.core.auth.client;
 
-import com.centurylink.cloud.sdk.core.client.ClcApiConstants;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginRequest;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
+import com.centurylink.cloud.sdk.core.client.ClcApiConstants;
 
 import static com.centurylink.cloud.sdk.core.client.ClcApiConstants.CLC_API_URL;
 import static javax.ws.rs.client.Entity.entity;

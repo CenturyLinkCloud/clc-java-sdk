@@ -1,10 +1,10 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.refs;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture;
-import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType;
-import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 
