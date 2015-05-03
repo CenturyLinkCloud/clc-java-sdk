@@ -87,7 +87,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter nameContains(String... names) {
-        allItemsNotNull(names, "Name substrings");
+        allItemsNotNull(names, "Name keywords");
 
         predicate = predicate.and(combine(
             DataCenterMetadata::getName, in(asList(names), Predicates::containsIgnoreCase)
