@@ -73,7 +73,7 @@ public class DataCenterServiceTest extends AbstractSdkTest {
         List<DataCenterMetadata> results =
             dataCenterService
                 .find(new DataCenterFilter()
-                    .id("de1", "va1")
+                    .id("DE1", "va1")
                 );
 
         verifyDataCenterById(results, 0, DE_FRANKFURT);

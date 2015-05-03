@@ -36,7 +36,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
     /**
      * Method allow to provide custom filter predicate
      *
-     * @param predicate
+     * @param predicate is not null filtering predicate
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter where(Predicate<DataCenterMetadata> predicate) {
@@ -48,16 +48,17 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
     }
 
     /**
-     * Method allow to filter data centers by IDs. Filtering is strong case sensitive.
+     * Method allow to filter data centers by IDs. Filtering is by full match.
+     * Comparison is case insensitive.
      *
-     * @param ids
+     * @param ids is not null target datacenter IDs
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter id(String... ids) {
         allItemsNotNull(ids, "Data center ID list");
 
         this.predicate = this.predicate.and(combine(
-            DataCenterMetadata::getId, Predicates.in(ids)
+            DataCenterMetadata::getId, in(asList(ids), Predicates::equalsIgnoreCase)
         ));
 
         return this;

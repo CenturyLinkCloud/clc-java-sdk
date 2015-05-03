@@ -21,7 +21,8 @@ public abstract class DataCenter implements Reference<DataCenterFilter> {
     public static final DataCenterByIdRef US_WEST_SEATTLE = refById("wa1");
 
     /**
-     * Method allow to refer datacenter by it's ID. Filtering is strong case sensitive.
+     * Method allow to refer datacenter by it's ID. Filtering is by full match.
+     * Comparison is case insensitive.
      *
      * @param id is not null reference to datacenter
      * @return {@link DataCenterByIdRef}

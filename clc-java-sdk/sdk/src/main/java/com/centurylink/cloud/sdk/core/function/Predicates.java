@@ -76,6 +76,10 @@ public abstract class Predicates {
         return upperCase(source).contains(upperCase(substring));
     }
 
+    public static boolean equalsIgnoreCase(String firstString, String secondString) {
+        return upperCase(firstString).equals(upperCase(secondString));
+    }
+
     private static String upperCase(String source) {
         return nullToEmpty(source).toUpperCase();
     }
