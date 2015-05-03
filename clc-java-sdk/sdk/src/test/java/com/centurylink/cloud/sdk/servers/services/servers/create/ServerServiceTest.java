@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.servers.create;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
+import com.centurylink.cloud.sdk.core.services.refs.ReferenceNotResolvedException;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
@@ -23,7 +23,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    @Test(enabled = false, expectedExceptions = ResourceNotFoundException.class)
+    @Test(enabled = false, expectedExceptions = ReferenceNotResolvedException.class)
     public void testDeleteServers() {
         OperationFuture<ServerMetadata> future1 = serverService.create(TestServerSupport.anyServerConfig());
         OperationFuture<ServerMetadata> future2 = serverService.create(TestServerSupport.anyServerConfig());

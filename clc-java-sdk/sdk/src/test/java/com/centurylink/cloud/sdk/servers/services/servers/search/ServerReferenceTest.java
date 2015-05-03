@@ -9,11 +9,11 @@ public class ServerReferenceTest {
 
     @Test
     public void testToServerReferenceStringRepresentation() {
-        Server newServer = Server.refById("ID");
+        Server newServer = Server.refById("ca2altddeb201");
 
         String representation = newServer.toString();
 
-        assertEquals(representation, "{\"id\":\"ID\"}");
+        assertTrue(representation.contains("\"id\":\"ca2altddeb201\"}"));
     }
 
 }

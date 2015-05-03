@@ -9,6 +9,7 @@ import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
-import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionIfNotFound;
+import static com.centurylink.cloud.sdk.core.services.refs.Reference.evalUsingFindByFilter;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getFirst;
 import static java.util.stream.Collectors.toList;
@@ -61,9 +62,7 @@ public class GroupService {
     }
 
     public GroupMetadata findByRef(Group groupRef) {
-        return exceptionIfNotFound(
-            findFirst(groupRef.asFilter())
-        );
+        return evalUsingFindByFilter(groupRef, this::find);
     }
 
     public List<GroupMetadata> find(GroupFilter criteria) {

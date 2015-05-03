@@ -7,7 +7,7 @@ import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.SequentialJobsFuture;
-import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
+import com.centurylink.cloud.sdk.core.services.refs.ReferenceNotResolvedException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -140,7 +140,7 @@ public class ServerService {
                 serverRef.asFilter()
             )
             .findFirst().orElseThrow(() ->
-                    new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
+                    new ReferenceNotResolvedException("Server by reference %s not found", serverRef.toString())
             );
     }
 

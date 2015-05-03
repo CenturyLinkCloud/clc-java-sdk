@@ -2,8 +2,10 @@ package com.centurylink.cloud.sdk.core.services.refs;
 
 import com.centurylink.cloud.sdk.core.CastMixin;
 import com.centurylink.cloud.sdk.core.ToStringMixin;
-import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
+import com.centurylink.cloud.sdk.core.services.filter.Filter;
 
+import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -12,10 +14,28 @@ import java.util.function.Supplier;
  *
  * @author ilya.drabenia
  */
+@SuppressWarnings("unchecked")
 public interface Reference extends CastMixin, ToStringMixin {
 
-    static Supplier<ResourceNotFoundException> notFound(Reference reference) {
-        return () -> new  ResourceNotFoundException("Reference %s not resolved", reference);
+    static Supplier<ReferenceNotResolvedException> notFound(Reference reference) {
+        return () -> new ReferenceNotResolvedException("Reference %s not resolved", reference);
+    }
+
+    static <T, K extends Filter<K>> T evalUsingFindByFilter(Reference ref,
+                                                            Function<K, List<T>> findOperation) {
+        List<T> results = findOperation.apply((K) ref.asFilter());
+
+        if (results.size() == 1) {
+            return results.get(1);
+        } else if (results.size() > 1) {
+            throw new ReferenceNotResolvedException(
+                "Resource by reference %s not found", ref.toReadableString()
+            );
+        } else {
+            throw new ReferenceNotResolvedException(
+                "Reference %s point to multiple resource", ref.toReadableString()
+            );
+        }
     }
 
     /**
@@ -23,6 +43,6 @@ public interface Reference extends CastMixin, ToStringMixin {
      *
      * @return filter object
      */
-    Object asFilter();
+    Filter asFilter();
 
 }
