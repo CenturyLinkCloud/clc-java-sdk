@@ -51,7 +51,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to restrict target groups using data centers in which this groups exists.
      *
      * @param dataCenters is not null list of data center references
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter dataCenters(DataCenter... dataCenters) {
         groupFilter.dataCenters(dataCenters);
@@ -63,7 +63,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to provide filtering predicate that restrict group by data centers that contains its.
      *
      * @param predicate is not null filtering predicate
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter dataCentersWhere(Predicate<DataCenterMetadata> predicate) {
         groupFilter.dataCentersWhere(predicate);
@@ -75,7 +75,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to provide data center filter that allow to restrict groups by data centers that contains its
      *
      * @param filter is not null data center filter
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter dataCentersWhere(DataCenterFilter filter) {
         groupFilter.dataCentersWhere(filter);
@@ -87,10 +87,10 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to filter groups by its IDs. Matching will be strong and case sensitive.
      *
      * @param ids is not null list of group IDs
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter groupId(String... ids) {
-        allItemsNotNull(ids);
+        allItemsNotNull(ids, "Group ID list");
 
         groupFilter.id(ids);
 
@@ -102,10 +102,10 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Filtering will be case insensitive and will use substring matching.
      *
      * @param subStrings is not null list of target group names
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter groupNameContains(String... subStrings) {
-        allItemsNotNull(subStrings);
+        allItemsNotNull(subStrings, "Group name keywords");
 
         groupFilter.nameContains(subStrings);
 
@@ -116,7 +116,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to filter groups using predicate.
      *
      * @param filter is not null group filtering predicate
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter groupsWhere(Predicate<GroupMetadata> filter) {
         groupFilter.where(filter);
@@ -128,7 +128,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to specify {@link GroupFilter} for restrict server groups
      *
      * @param filter is not a null group filter object
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      * @throws NullPointerException
      */
     public ServerFilter groupsWhere(GroupFilter filter) {
@@ -141,10 +141,10 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to restrict searched servers by groups
      *
      * @param groups is list of group references
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter groups(Group... groups) {
-        allItemsNotNull(groups);
+        allItemsNotNull(groups, "Groups");
 
         groupFilter = groupFilter.and(Filter.or(
             map(groups, Group::asFilter)
@@ -157,7 +157,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to specify custom search servers predicate
      *
      * @param filter is not null custom filtering predicate
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      * @throws NullPointerException
      */
     public ServerFilter where(Predicate<ServerMetadata> filter) {
@@ -172,7 +172,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to restrict servers by target IDs. Matching is case insensitive.
      *
      * @param ids is a list of string ID representations
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter id(String... ids) {
         return this.id(asList(ids));
@@ -180,7 +180,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
 
     public ServerFilter id(List<String> ids) {
         checkNotNull(ids, "List of server ID must be not null");
-        allItemsNotNull(ids);
+        allItemsNotNull(ids, "List of ID");
 
         serverIds.addAll(map(ids, String::toLowerCase));
 
@@ -191,10 +191,44 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to restrict servers by names. Matching is case insensitive.
      *
      * @param names is a list of server names
-     * @return {@link GroupFilter}
+     * @return {@link ServerFilter}
      */
     public ServerFilter names(String... names) {
         return id(names);
+    }
+
+    /**
+     * Method allow to restrict servers by keywords that contains in target server name.
+     * Matching is case insensitive. Comparison use search substring algorithms.
+     *
+     * @param subStrings is a list of server name keywords
+     * @return {@link ServerFilter}
+     */
+    public ServerFilter nameContains(String... subStrings) {
+        allItemsNotNull(subStrings, "Name keywords");
+
+        predicate = predicate.and(combine(
+            ServerMetadata::getName, in(asList(subStrings), Predicates::containsIgnoreCase)
+        ));
+
+        return this;
+    }
+
+    /**
+     * Method allow to find server that description contains one of specified keywords.
+     * Matching is case insensitive.
+     *
+     * @param subStrings is list of not null keywords
+     * @return {@link ServerFilter}
+     */
+    public ServerFilter descriptionContains(String... subStrings) {
+        allItemsNotNull(subStrings, "Description keywords");
+
+        predicate = predicate.and(combine(
+            ServerMetadata::getDescription, in(asList(subStrings), Predicates::containsIgnoreCase)
+        ));
+
+        return this;
     }
 
     /**
@@ -214,7 +248,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * @return {@link GroupFilter}
      */
     public ServerFilter status(String... statuses) {
-        allItemsNotNull(statuses);
+        allItemsNotNull(statuses, "Statuses");
 
         predicate = predicate.and(combine(
             ServerMetadata::getStatus, in(statuses)
@@ -230,7 +264,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * @return {@link GroupFilter}
      */
     public ServerFilter status(ServerStatus... statuses) {
-        allItemsNotNull(statuses);
+        allItemsNotNull(statuses, "Statuses");
 
         predicate = predicate.and(combine(
             ServerMetadata::getStatus, in(map(statuses, ServerStatus::getCode))

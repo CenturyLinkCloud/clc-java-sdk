@@ -29,19 +29,20 @@ public abstract class ArgumentPreconditions {
         return Preconditions.checkNotNull(value, message);
     }
 
-    public static <T> T[] allItemsNotNull(T[] items) {
-        allItemsNotNull(asList(items));
+    public static <T> T[] allItemsNotNull(T[] items, String containerName) {
+        allItemsNotNull(asList(items), containerName);
+
         return items;
     }
 
-    public static <T> List<T> allItemsNotNull(List<T> items) {
+    public static <T> List<T> allItemsNotNull(List<T> items, String containerName) {
         if (items == null) {
-            throw nullPointerException();
+            throw nullPointerException("%s must be not null", containerName);
         }
 
         for (int i = 0; i < items.size(); i += 1) {
             if (isNull(items.get(i))) {
-                throw nullPointerException("Element at position %s is null", i);
+                throw nullPointerException("%s at position %s is null", containerName, i);
             }
         }
 

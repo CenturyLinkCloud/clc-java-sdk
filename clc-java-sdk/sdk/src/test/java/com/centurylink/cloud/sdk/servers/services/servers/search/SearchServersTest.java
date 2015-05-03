@@ -105,6 +105,27 @@ public class SearchServersTest extends AbstractServersSdkTest {
         assertThatResultContains(results, "CA2ALTDCENTS101");
     }
 
+    @Test
+    public void testSearchByNameSubstring() {
+        List<ServerMetadata> results = serverService.find(new ServerFilter()
+            .dataCenters(DataCenter.CA_TORONTO_1)
+            .nameContains("CENT", "ARCHIV")
+        );
+
+        assertThatResultContains(results, "CA2ALTDCENTS101", "CA2ALTDCENT201", "CA2ALTDARCHIV01");
+    }
+
+    @Test
+    public void testSearchByDescription() {
+        List<ServerMetadata> results = serverService.find(new ServerFilter()
+            .dataCenters(DataCenter.CA_TORONTO_1)
+            .descriptionContains("CENTos")
+        );
+
+        assertThatResultContains(results, "CA2ALTDCENTS101", "CA2ALTDCENT201");
+
+    }
+
     private void assertThatResultContains(List<ServerMetadata> servers, String... serverIds) {
         assertEquals(
             newHashSet(map(servers, ServerMetadata::getName)),

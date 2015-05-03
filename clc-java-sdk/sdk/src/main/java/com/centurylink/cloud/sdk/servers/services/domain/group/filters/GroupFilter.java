@@ -97,7 +97,7 @@ public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
     }
 
     public GroupFilter groups(Group... groups) {
-        allItemsNotNull(groups);
+        allItemsNotNull(groups, "Groups");
 
         filtersChain = new AndEvaluation<>(filtersChain, Filter.or(
             map(groups, Group::asFilter)

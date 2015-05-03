@@ -57,7 +57,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @return {@link TemplateFilter}
      */
     public TemplateFilter dataCenters(String... ids) {
-        allItemsNotNull(ids);
+        allItemsNotNull(ids, "Datacenter ID list");
 
         dataCenter.id(ids);
 
@@ -72,7 +72,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @throws java.lang.NullPointerException
      */
     public TemplateFilter dataCenters(DataCenter... dataCenters) {
-        allItemsNotNull(dataCenters);
+        allItemsNotNull(dataCenters, "Datacenter references");
 
         dataCenter.dataCenters(dataCenters);
 
@@ -88,7 +88,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @throws java.lang.NullPointerException
      */
     public TemplateFilter dataCenterNameContains(String... names) {
-        allItemsNotNull(names);
+        allItemsNotNull(names, "Name substrings");
 
         dataCenter.nameContains(names);
 
@@ -104,7 +104,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @throws java.lang.NullPointerException
      */
     public TemplateFilter nameContains(String... names) {
-        allItemsNotNull(names);
+        allItemsNotNull(names, "Name substrings");
 
         predicate = predicate.and(combine(
             TemplateMetadata::getName, in(asList(names), Predicates::containsIgnoreCase)
@@ -121,7 +121,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @return {@link TemplateFilter}
      */
     public TemplateFilter names(String... names) {
-        allItemsNotNull(names);
+        allItemsNotNull(names, "Template names");
 
         predicate = predicate.and(combine(
             TemplateMetadata::getName, in(names)
@@ -138,7 +138,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @return {@link TemplateFilter}
      */
     public TemplateFilter descriptionContains(String... substrings) {
-        allItemsNotNull(substrings);
+        allItemsNotNull(substrings, "Template description substrings");
 
         predicate = predicate.and(combine(
             TemplateMetadata::getDescription, in(asList(substrings), Predicates::containsIgnoreCase)
@@ -155,7 +155,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @return {@link TemplateFilter}
      */
     public TemplateFilter osTypes(OsFilter... osFilter) {
-        allItemsNotNull(osFilter);
+        allItemsNotNull(osFilter, "OS templates");
 
         predicate = predicate.and(
             Stream.of(osFilter)

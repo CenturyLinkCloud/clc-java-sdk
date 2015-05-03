@@ -54,7 +54,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter id(String... ids) {
-        allItemsNotNull(ids);
+        allItemsNotNull(ids, "Data center ID list");
 
         this.predicate = this.predicate.and(combine(
             DataCenterMetadata::getId, Predicates.in(ids)
@@ -70,7 +70,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter dataCenters(DataCenter... dataCenterRefs) {
-        allItemsNotNull(dataCenterRefs);
+        allItemsNotNull(dataCenterRefs, "Datacenter references");
 
         predicate = predicate.and(Filter.or(
             map(dataCenterRefs, DataCenter::asFilter)
@@ -87,7 +87,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter nameContains(String... names) {
-        allItemsNotNull(names);
+        allItemsNotNull(names, "Name substrings");
 
         predicate = predicate.and(combine(
             DataCenterMetadata::getName, in(asList(names), Predicates::containsIgnoreCase)
