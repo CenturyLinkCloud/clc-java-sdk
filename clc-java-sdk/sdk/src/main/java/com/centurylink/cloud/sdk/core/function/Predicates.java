@@ -44,7 +44,7 @@ public abstract class Predicates {
         return
             values
                 .filter(notNull())
-                .map(curValue -> (Predicate<T>) t -> matcher.test(curValue, t))
+                .map(curValue -> (Predicate<T>) t -> matcher.test(t, curValue))
                 .reduce(Predicates.alwaysFalse(), Predicate::or);
     }
 
