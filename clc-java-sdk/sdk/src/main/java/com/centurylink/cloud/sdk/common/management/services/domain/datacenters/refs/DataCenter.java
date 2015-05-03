@@ -20,10 +20,23 @@ public abstract class DataCenter implements Reference<DataCenterFilter> {
     public static final DataCenterByIdRef US_WEST_SANTA_CLARA = refById("uc1");
     public static final DataCenterByIdRef US_WEST_SEATTLE = refById("wa1");
 
+    /**
+     * Method allow to refer datacenter by it's ID. Filtering is strong case sensitive.
+     *
+     * @param id is not null reference to datacenter
+     * @return {@link DataCenterByIdRef}
+     */
     public static DataCenterByIdRef refById(String id) {
         return new DataCenterByIdRef(id);
     }
 
+    /**
+     * Method allow to refer datacenter by keyword in it's name.
+     * Matching use substring search. Comparison is case insensitive.
+     *
+     * @param name is not null keyword contains in target datacenter name
+     * @return {@link DataCenterByNameRef}
+     */
     public static DataCenterByNameRef refByName(String name) {
         return new DataCenterByNameRef(name);
     }
