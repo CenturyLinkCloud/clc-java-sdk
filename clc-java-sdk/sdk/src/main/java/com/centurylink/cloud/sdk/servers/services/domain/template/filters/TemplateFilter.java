@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.Dat
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.function.Predicates;
 import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
@@ -14,7 +15,9 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Arrays.asList;
 
 /**
  * Class that specify filter for search server templates
@@ -41,6 +44,8 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @throws java.lang.NullPointerException
      */
     public TemplateFilter dataCentersWhere(Predicate<DataCenterMetadata> predicate) {
+        checkNotNull(predicate, "Predicate must be not a null");
+
         dataCenter.where(predicate);
         return this;
     }
@@ -52,7 +57,10 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @return {@link TemplateFilter}
      */
     public TemplateFilter dataCenters(String... ids) {
+        allItemsNotNull(ids);
+
         dataCenter.id(ids);
+
         return this;
     }
 
@@ -64,6 +72,8 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @throws java.lang.NullPointerException
      */
     public TemplateFilter dataCenters(DataCenter... dataCenters) {
+        allItemsNotNull(dataCenters);
+
         dataCenter.dataCenters(dataCenters);
 
         return this;
@@ -73,12 +83,15 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * Method allow to filter data centers by name.
      * Filtering is case insensitive and occurs using substring search.
      *
-     * @param name is a not null name substring
+     * @param names is a not null list of name substrings
      * @return {@link TemplateFilter}
      * @throws java.lang.NullPointerException
      */
-    public TemplateFilter dataCenterNameContains(String name) {
-        dataCenter.nameContains(name);
+    public TemplateFilter dataCenterNameContains(String... names) {
+        allItemsNotNull(names);
+
+        dataCenter.nameContains(names);
+
         return this;
     }
 
@@ -86,16 +99,16 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * Method allow to find templates that contains some substring in name.
      * Filtering is case insensitive.
      *
-     * @param name is not null name substring
+     * @param names is not null list of name substrings
      * @return {@link TemplateFilter}
      * @throws java.lang.NullPointerException
      */
-    public TemplateFilter nameContains(String name) {
-        checkNotNull(name, "Name must be not a null");
+    public TemplateFilter nameContains(String... names) {
+        allItemsNotNull(names);
 
         predicate = predicate.and(combine(
-            TemplateMetadata::getName, containsIgnoreCase(name)
-        ));
+            TemplateMetadata::getName, in(asList(names), Predicates::containsIgnoreCase)
+            ));
 
         return this;
     }
@@ -108,6 +121,8 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @return {@link TemplateFilter}
      */
     public TemplateFilter names(String... names) {
+        allItemsNotNull(names);
+
         predicate = predicate.and(combine(
             TemplateMetadata::getName, in(names)
         ));
@@ -119,14 +134,14 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * Method allow to find templates that contains {@code substring} in description
      * Filtering is case insensitive.
      *
-     * @param substring is a set of names
+     * @param substrings is a set of descriptions
      * @return {@link TemplateFilter}
      */
-    public TemplateFilter descriptionContains(String substring) {
-        checkNotNull(substring, "Substring must be not a null");
+    public TemplateFilter descriptionContains(String... substrings) {
+        allItemsNotNull(substrings);
 
         predicate = predicate.and(combine(
-            TemplateMetadata::getDescription, containsIgnoreCase(substring)
+            TemplateMetadata::getDescription, in(asList(substrings), Predicates::containsIgnoreCase)
         ));
 
         return this;
@@ -140,6 +155,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      * @return {@link TemplateFilter}
      */
     public TemplateFilter osTypes(OsFilter... osFilter) {
+        allItemsNotNull(osFilter);
 
         predicate = predicate.and(
             Stream.of(osFilter)
@@ -170,6 +186,8 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      */
     @Override
     public TemplateFilter and(TemplateFilter otherFilter) {
+        checkNotNull(otherFilter, "Other filter must be not a null");
+
         if (filtersChain instanceof SingleFilterEvaluation &&
             otherFilter.filtersChain instanceof SingleFilterEvaluation) {
             return
@@ -189,6 +207,8 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      */
     @Override
     public TemplateFilter or(TemplateFilter otherFilter) {
+        checkNotNull(otherFilter, "Other filter must be not a null");
+
         filtersChain = new OrEvaluation<>(filtersChain, otherFilter, TemplateMetadata::getName);
 
         return this;

@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.server.filters;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions;
 import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
@@ -21,6 +22,8 @@ import java.util.function.Predicate;
 import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
 import static com.centurylink.cloud.sdk.core.function.Predicates.in;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
@@ -39,6 +42,8 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
     }
 
     public ServerFilter(Predicate<ServerMetadata> predicate) {
+        checkNotNull(predicate);
+
         this.predicate = predicate;
     }
 
@@ -85,6 +90,8 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * @return {@link GroupFilter}
      */
     public ServerFilter groupId(String... ids) {
+        allItemsNotNull(ids);
+
         groupFilter.id(ids);
 
         return this;
@@ -94,11 +101,13 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * Method allow to filter groups by key phrase that contains in its name.
      * Filtering will be case insensitive and will use substring matching.
      *
-     * @param subString is not null name of target group
+     * @param subStrings is not null list of target group names
      * @return {@link GroupFilter}
      */
-    public ServerFilter groupNameContains(String subString) {
-        groupFilter.nameContains(subString);
+    public ServerFilter groupNameContains(String... subStrings) {
+        allItemsNotNull(subStrings);
+
+        groupFilter.nameContains(subStrings);
 
         return this;
     }
@@ -124,6 +133,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      */
     public ServerFilter groupsWhere(GroupFilter filter) {
         groupFilter = groupFilter.and(filter);
+
         return this;
     }
 
@@ -134,6 +144,8 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * @return {@link GroupFilter}
      */
     public ServerFilter groups(Group... groups) {
+        allItemsNotNull(groups);
+
         groupFilter = groupFilter.and(Filter.or(
             map(groups, Group::asFilter)
         ));
@@ -167,6 +179,9 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
     }
 
     public ServerFilter id(List<String> ids) {
+        checkNotNull(ids, "List of server ID must be not null");
+        allItemsNotNull(ids);
+
         serverIds.addAll(map(ids, String::toLowerCase));
 
         return this;
@@ -199,6 +214,8 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * @return {@link GroupFilter}
      */
     public ServerFilter status(String... statuses) {
+        allItemsNotNull(statuses);
+
         predicate = predicate.and(combine(
             ServerMetadata::getStatus, in(statuses)
         ));
@@ -213,6 +230,8 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * @return {@link GroupFilter}
      */
     public ServerFilter status(ServerStatus... statuses) {
+        allItemsNotNull(statuses);
+
         predicate = predicate.and(combine(
             ServerMetadata::getStatus, in(map(statuses, ServerStatus::getCode))
         ));
@@ -225,6 +244,8 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      */
     @Override
     public ServerFilter and(ServerFilter otherFilter) {
+        checkNotNull(otherFilter, "Other filter must be not null");
+
         filtersChain = new AndEvaluation<>(filtersChain, otherFilter, ServerMetadata::getId);
 
         return this;
@@ -235,6 +256,8 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      */
     @Override
     public ServerFilter or(ServerFilter otherFilter) {
+        checkNotNull(otherFilter, "Other filter must be not null");
+
         filtersChain = new OrEvaluation<>(filtersChain, otherFilter, ServerMetadata::getId);
 
         return this;

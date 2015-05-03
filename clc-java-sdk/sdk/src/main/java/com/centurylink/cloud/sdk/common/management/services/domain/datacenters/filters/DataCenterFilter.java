@@ -96,6 +96,9 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DataCenterFilter and(DataCenterFilter otherFilter) {
         notNull(otherFilter, "Other filter must be not a null");
@@ -105,6 +108,9 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DataCenterFilter or(DataCenterFilter otherFilter) {
         notNull(otherFilter, "Other filter must be not a null");

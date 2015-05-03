@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.group.filters;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions;
 import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
@@ -17,6 +18,7 @@ import java.util.function.Predicate;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Arrays.asList;
 
@@ -95,6 +97,8 @@ public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
     }
 
     public GroupFilter groups(Group... groups) {
+        allItemsNotNull(groups);
+
         filtersChain = new AndEvaluation<>(filtersChain, Filter.or(
             map(groups, Group::asFilter)
         ), GroupMetadata::getId);
@@ -106,14 +110,14 @@ public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
      * Method allow to filter groups by key phrase that contains in its name.
      * Filtering will be case insensitive and will use substring matching.
      *
-     * @param subString is not null name of target group
+     * @param subStrings is not null list of target group names
      * @return {@link GroupFilter}
      */
-    public GroupFilter nameContains(String subString) {
-        checkNotNull(subString, "Name match criteria must be not a null");
+    public GroupFilter nameContains(String... subStrings) {
+        checkNotNull(subStrings, "Name match criteria must be not a null");
 
         predicate = predicate.and(combine(
-            GroupMetadata::getName, containsIgnoreCase(subString)
+            GroupMetadata::getName, in(asList(subStrings), Predicates::containsIgnoreCase)
         ));
 
         return this;
@@ -170,6 +174,7 @@ public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
         filtersChain = new OrEvaluation<>(filtersChain, otherFilter, GroupMetadata::getId);
+
         return this;
     }
 
