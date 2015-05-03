@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.tests.mocks;
 
-import com.centurylink.cloud.sdk.base.services.ClcServiceException;
+import com.centurylink.cloud.sdk.core.services.ClcServiceException;
 import com.centurylink.cloud.sdk.servers.TestModule;
 import org.mockito.Mock;
 import org.mockito.Mockito;

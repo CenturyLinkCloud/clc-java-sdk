@@ -1,14 +1,14 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.base.client.ClcClientException;
-import com.centurylink.cloud.sdk.base.client.domain.Link;
-import com.centurylink.cloud.sdk.common.services.client.DataCentersClient;
-import com.centurylink.cloud.sdk.common.services.client.QueueClient;
-import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.common.services.services.DataCenterService;
-import com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.common.services.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.common.services.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.management.client.QueueClient;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.base.function.Predicates.*;
-import static com.centurylink.cloud.sdk.base.services.refs.References.exceptionIfNotFound;
+import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionIfNotFound;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getFirst;
 import static java.util.stream.Collectors.toList;

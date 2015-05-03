@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.servers;
 
-import com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
@@ -8,8 +8,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConf
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 
-import static com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
-import static com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;

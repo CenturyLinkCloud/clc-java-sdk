@@ -1,11 +1,11 @@
 package com.centurylink.cloud.sdk.networks.services;
 
-import com.centurylink.cloud.sdk.base.auth.AuthModule;
-import com.centurylink.cloud.sdk.common.services.client.DataCentersClient;
-import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
-import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
+import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
 import com.centurylink.cloud.sdk.networks.AbstractNetworksSdkTest;
 import com.centurylink.cloud.sdk.networks.NetworksModule;
 import com.google.inject.AbstractModule;
@@ -52,7 +52,7 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
                 .networkId("2")
         ));
 
-        List<NetworkMetadata> networks = networkService.findByDataCenter(com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.CA_TORONTO_2);
+        List<NetworkMetadata> networks = networkService.findByDataCenter(com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.CA_TORONTO_2);
 
         assert networks.size() == 2;
         assert networks.get(0).getName().equals("first_network");

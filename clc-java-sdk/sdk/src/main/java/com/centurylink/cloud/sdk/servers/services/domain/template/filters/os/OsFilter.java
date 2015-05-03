@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.filters.os;
 
-import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 
 import java.util.function.Predicate;
 

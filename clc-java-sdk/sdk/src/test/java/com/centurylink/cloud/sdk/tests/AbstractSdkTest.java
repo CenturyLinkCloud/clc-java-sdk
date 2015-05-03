@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.tests;
 
-import com.centurylink.cloud.sdk.base.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.tests.mocks.BindMocksModule;
 import com.centurylink.cloud.sdk.tests.mocks.BindSpiesModule;
 import com.fasterxml.jackson.databind.ObjectMapper;

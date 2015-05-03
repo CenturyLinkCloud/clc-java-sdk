@@ -1,11 +1,11 @@
 package com.centurylink.cloud.sdk.tests.fixtures;
 
-import com.centurylink.cloud.sdk.base.client.domain.Link;
-import com.centurylink.cloud.sdk.common.services.client.DataCentersClient;
-import com.centurylink.cloud.sdk.common.services.client.QueueClient;
-import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.common.services.client.domain.queue.GetStatusResponse;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.management.client.QueueClient;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.common.management.client.domain.queue.GetStatusResponse;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;

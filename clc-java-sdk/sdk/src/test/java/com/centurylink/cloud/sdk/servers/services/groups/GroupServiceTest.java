@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
-import com.centurylink.cloud.sdk.common.services.client.domain.CustomField;
+import com.centurylink.cloud.sdk.common.management.client.domain.CustomField;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
@@ -24,7 +24,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION})
     public void testFindGroupsByDataCenter() {
-        List<GroupMetadata> groups = groupService.findByDataCenter(com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT);
+        List<GroupMetadata> groups = groupService.findByDataCenter(com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT);
 
         assert groups.size() > 0;
     }
@@ -36,7 +36,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
         GroupByIdRef newGroup = groupService.create(new GroupConfig()
             .parentGroup(Group.refByName()
-                    .dataCenter(com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT)
+                    .dataCenter(com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT)
                     .name(Group.DEFAULT_GROUP)
             )
             .name(newGroupName)
@@ -55,7 +55,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testUpdateGroup() throws JsonProcessingException {
         Group groupRef = Group.refByName()
-            .dataCenter(com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT)
+            .dataCenter(com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT)
             .name(Group.DEFAULT_GROUP);
         GroupMetadata groupMetadata = groupService.findByRef(groupRef);
         String parentGroupId = groupMetadata.getParentGroupId();

@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.networks.client;
 
-import com.centurylink.cloud.sdk.base.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.base.client.BaseSdkClient;
+import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
 import com.google.inject.Inject;
 
 /**

@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk;
 
-import com.centurylink.cloud.sdk.base.auth.AuthModule;
-import com.centurylink.cloud.sdk.base.auth.services.domain.credentials.CredentialsProvider;
-import com.centurylink.cloud.sdk.base.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
-import com.centurylink.cloud.sdk.common.services.services.DataCenterService;
+import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.servers.ServersModule;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;

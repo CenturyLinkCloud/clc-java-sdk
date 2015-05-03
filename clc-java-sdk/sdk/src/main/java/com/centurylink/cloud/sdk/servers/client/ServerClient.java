@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk.servers.client;
 
-import com.centurylink.cloud.sdk.base.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.base.client.BaseSdkClient;
-import com.centurylink.cloud.sdk.base.client.InvocationFuture;
-import com.centurylink.cloud.sdk.base.client.domain.Link;
+import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
+import com.centurylink.cloud.sdk.core.client.InvocationFuture;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.UpdateGroupRequest;

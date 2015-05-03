@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.servers.operations;
 
-import com.centurylink.cloud.sdk.common.services.client.DataCentersClient;
-import com.centurylink.cloud.sdk.common.services.client.QueueClient;
+import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.management.client.QueueClient;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
