@@ -13,6 +13,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.server.PowerState;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus;
 
 import java.util.ArrayList;
@@ -268,6 +269,22 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
 
         predicate = predicate.and(combine(
             ServerMetadata::getStatus, in(map(statuses, ServerStatus::getCode))
+        ));
+
+        return this;
+    }
+
+    /**
+     * Method allow to find servers with specified power state of target servers
+     *
+     * @param states is a list target server power states
+     * @return {@link GroupFilter}
+     */
+    public ServerFilter powerStates(PowerState... states) {
+        allItemsNotNull(states, "Power states");
+
+        predicate = predicate.and(combine(
+            s -> s.getDetails().getPowerState(), in(map(states, PowerState::getCode))
         ));
 
         return this;

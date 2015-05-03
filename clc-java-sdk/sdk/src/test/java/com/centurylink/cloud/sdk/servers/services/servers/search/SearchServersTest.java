@@ -9,6 +9,7 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.domain.server.PowerState;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.google.inject.Inject;
@@ -123,7 +124,16 @@ public class SearchServersTest extends AbstractServersSdkTest {
         );
 
         assertThatResultContains(results, "CA2ALTDCENTS101", "CA2ALTDCENT201");
+    }
 
+    @Test
+    public void testSearchByPowerState() {
+        List<ServerMetadata> results = serverService.find(new ServerFilter()
+            .dataCenters(DataCenter.CA_TORONTO_1)
+            .powerStates(PowerState.STARTED)
+        );
+
+        assertThatResultContains(results, "CA2ALTDCENTS101", "CA2ALTDCENT201", "CA2ALTDDEB201");
     }
 
     private void assertThatResultContains(List<ServerMetadata> servers, String... serverIds) {
