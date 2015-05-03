@@ -188,15 +188,15 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
     public TemplateFilter and(TemplateFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        if (filtersChain instanceof SingleFilterEvaluation &&
-            otherFilter.filtersChain instanceof SingleFilterEvaluation) {
+        if (evaluation instanceof SingleFilterEvaluation &&
+            otherFilter.evaluation instanceof SingleFilterEvaluation) {
             return
                 new TemplateFilter(
                     getDataCenter().and(otherFilter.getDataCenter()),
                     getPredicate().and(otherFilter.getPredicate())
                 );
         } else {
-            filtersChain = new AndEvaluation<>(filtersChain, otherFilter, TemplateMetadata::getName);
+            evaluation = new AndEvaluation<>(evaluation, otherFilter, TemplateMetadata::getName);
 
             return this;
         }
@@ -209,7 +209,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
     public TemplateFilter or(TemplateFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        filtersChain = new OrEvaluation<>(filtersChain, otherFilter, TemplateMetadata::getName);
+        evaluation = new OrEvaluation<>(evaluation, otherFilter, TemplateMetadata::getName);
 
         return this;
     }

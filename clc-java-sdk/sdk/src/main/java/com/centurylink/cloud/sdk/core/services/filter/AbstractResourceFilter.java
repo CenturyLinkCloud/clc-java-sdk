@@ -11,17 +11,17 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractResourceFilter<T extends AbstractResourceFilter<T>> implements Filter<T> {
-    protected FilterEvaluation<T> filtersChain = new SingleFilterEvaluation<T>((T) this);
+    protected FilterEvaluation<T> evaluation = new SingleFilterEvaluation<T>((T) this);
 
     public AbstractResourceFilter() {
     }
 
-    public FilterEvaluation<T> getFiltersChain() {
-        return filtersChain;
+    public FilterEvaluation<T> getEvaluation() {
+        return evaluation;
     }
 
     @Override
     public <K> Stream<K> applyFindLazy(Function<T, Stream<K>> func) {
-        return filtersChain.applyFindLazy(func);
+        return evaluation.applyFindLazy(func);
     }
 }

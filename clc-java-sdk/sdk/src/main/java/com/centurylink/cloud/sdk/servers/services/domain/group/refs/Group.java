@@ -4,7 +4,7 @@ import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 
 /**
- * @author ilya.drabenia
+ * {@inheritDoc}
  */
 public abstract class Group implements Reference<GroupFilter> {
     public final static String ARCHIVE = "Archive";

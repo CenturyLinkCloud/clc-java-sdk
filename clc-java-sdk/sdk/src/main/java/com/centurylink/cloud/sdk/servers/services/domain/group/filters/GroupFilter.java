@@ -99,7 +99,7 @@ public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
     public GroupFilter groups(Group... groups) {
         allItemsNotNull(groups, "Groups");
 
-        filtersChain = new AndEvaluation<>(filtersChain, Filter.or(
+        evaluation = new AndEvaluation<>(evaluation, Filter.or(
             map(groups, Group::asFilter)
         ), GroupMetadata::getId);
 
@@ -161,7 +161,7 @@ public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
     public GroupFilter and(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        filtersChain = new AndEvaluation<>(filtersChain, otherFilter, GroupMetadata::getId);
+        evaluation = new AndEvaluation<>(evaluation, otherFilter, GroupMetadata::getId);
 
         return this;
     }
@@ -173,7 +173,7 @@ public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
     public GroupFilter or(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        filtersChain = new OrEvaluation<>(filtersChain, otherFilter, GroupMetadata::getId);
+        evaluation = new OrEvaluation<>(evaluation, otherFilter, GroupMetadata::getId);
 
         return this;
     }

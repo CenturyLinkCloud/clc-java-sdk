@@ -5,8 +5,6 @@ import com.centurylink.cloud.sdk.core.services.refs.Reference;
 
 /**
  * {@inheritDoc}
- *
- * @author ilya.drabenia
  */
 public abstract class DataCenter implements Reference<DataCenterFilter> {
     public static final DataCenterByIdRef CA_VANCOUVER = refById("ca1");

@@ -294,7 +294,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
     public ServerFilter and(ServerFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not null");
 
-        filtersChain = new AndEvaluation<>(filtersChain, otherFilter, ServerMetadata::getId);
+        evaluation = new AndEvaluation<>(evaluation, otherFilter, ServerMetadata::getId);
 
         return this;
     }
@@ -306,7 +306,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
     public ServerFilter or(ServerFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not null");
 
-        filtersChain = new OrEvaluation<>(filtersChain, otherFilter, ServerMetadata::getId);
+        evaluation = new OrEvaluation<>(evaluation, otherFilter, ServerMetadata::getId);
 
         return this;
     }

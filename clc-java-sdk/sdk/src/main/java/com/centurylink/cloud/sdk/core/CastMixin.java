@@ -5,9 +5,8 @@ package com.centurylink.cloud.sdk.core;
  */
 public interface CastMixin {
 
-    @SuppressWarnings("unchecked")
     default <T> T as(Class<T> type) {
-        return (T) this;
+        return type.cast(this);
     }
 
     default <T> boolean is(Class<T> type) {

@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.core.services;
 
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
+import com.centurylink.cloud.sdk.core.services.filter.FilterService;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.core.services.refs.ReferenceNotResolvedException;
 
@@ -13,7 +14,8 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author Ilya Drabenia
  */
-public interface QueryService<R extends Reference<F>, F extends Filter<F>, M> {
+public interface QueryService<R extends Reference<F>, F extends Filter<F>, M>
+        extends FilterService<F, M> {
 
     /**
      * Method allow to resolve resource metadata by reference.
@@ -41,25 +43,5 @@ public interface QueryService<R extends Reference<F>, F extends Filter<F>, M> {
             );
         }
     }
-
-    /**
-     * Method find all resources satisfied by specified filter
-     *
-     * @param filter is not null search filter
-     * @return list of found resource
-     */
-    default List<M> find(F filter) {
-        checkNotNull(filter, "Filter must be not a null");
-
-        return findLazy(filter).collect(toList());
-    }
-
-    /**
-     * Method find all resources satisfied by specified filter
-     *
-     * @param filter is not null search filter
-     * @return stream of found resource
-     */
-    Stream<M> findLazy(F filter);
 
 }

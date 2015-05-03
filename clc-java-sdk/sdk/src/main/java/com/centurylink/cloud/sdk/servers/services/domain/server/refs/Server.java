@@ -4,7 +4,7 @@ import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 
 /**
- * @author ilya.drabenia
+ * {@inheritDoc}
  */
 public abstract class Server implements Reference<ServerFilter> {
 
