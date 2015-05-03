@@ -37,6 +37,6 @@ public class GroupNameRef extends Group {
 
         return new GroupFilter()
             .dataCenters(dataCenter)
-            .nameContains(name);
+            .names(name);
     }
 }

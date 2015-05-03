@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.template.refs;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.ToStringMixin;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 
@@ -32,4 +33,9 @@ public abstract class Template implements Reference {
 
     @Override
     public abstract TemplateFilter asFilter();
+
+    @Override
+    public String toString() {
+        return this.toReadableString();
+    }
 }

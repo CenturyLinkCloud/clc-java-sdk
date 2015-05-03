@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.core.services.filter;
 
-import com.centurylink.cloud.sdk.core.services.CastMixin;
+import com.centurylink.cloud.sdk.core.CastMixin;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.FilterEvaluation;
 
 import java.util.List;

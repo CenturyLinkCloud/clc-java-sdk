@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
+import com.centurylink.cloud.sdk.core.ToStringMixin;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 
@@ -22,5 +23,10 @@ public abstract class Group implements Reference {
 
     public static GroupNameRef refByName() {
         return new GroupNameRef(null, null);
+    }
+
+    @Override
+    public String toString() {
+        return this.toReadableString();
     }
 }

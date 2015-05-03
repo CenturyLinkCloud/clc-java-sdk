@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.core.services.refs;
 
-import com.centurylink.cloud.sdk.core.services.CastMixin;
+import com.centurylink.cloud.sdk.core.CastMixin;
+import com.centurylink.cloud.sdk.core.ToStringMixin;
 import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
 
 import java.util.function.Supplier;
@@ -11,7 +12,7 @@ import java.util.function.Supplier;
  *
  * @author ilya.drabenia
  */
-public interface Reference extends CastMixin {
+public interface Reference extends CastMixin, ToStringMixin {
 
     static Supplier<ResourceNotFoundException> notFound(Reference reference) {
         return () -> new  ResourceNotFoundException("Reference %s not resolved", reference);

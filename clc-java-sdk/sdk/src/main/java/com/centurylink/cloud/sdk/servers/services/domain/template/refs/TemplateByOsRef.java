@@ -6,6 +6,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsT
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
+
 /**
  * @author ilya.drabenia
  */
@@ -71,7 +73,7 @@ public class TemplateByOsRef extends Template {
                 .dataCenters(getDataCenter())
                 .osTypes(new OsFilter()
                     .type(type != null ? type : "")
-                    .architecture(architecture)
+                    .architecture(architecture != null ? architecture : x86_64)
                     .version(version != null ? version : "")
                     .edition(edition != null ? edition : "")
                 );

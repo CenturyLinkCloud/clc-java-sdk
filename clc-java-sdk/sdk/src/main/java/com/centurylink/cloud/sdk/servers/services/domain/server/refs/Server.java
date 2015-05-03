@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server.refs;
 
+import com.centurylink.cloud.sdk.core.ToStringMixin;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 
@@ -15,4 +16,8 @@ public abstract class Server implements Reference {
     @Override
     public abstract ServerFilter asFilter();
 
+    @Override
+    public String toString() {
+        return this.toReadableString();
+    }
 }

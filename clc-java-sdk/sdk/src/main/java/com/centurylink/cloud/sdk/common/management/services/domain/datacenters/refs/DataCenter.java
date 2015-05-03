@@ -36,4 +36,8 @@ public abstract class DataCenter implements Reference {
     @Override
     public abstract DataCenterFilter asFilter();
 
+    @Override
+    public String toString() {
+        return this.toReadableString();
+    }
 }
