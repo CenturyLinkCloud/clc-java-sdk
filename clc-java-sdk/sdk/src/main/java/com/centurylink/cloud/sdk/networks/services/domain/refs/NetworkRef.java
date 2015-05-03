@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.networks.services.domain.refs;
 
-import com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.base.services.refs.Reference;
 
 /**

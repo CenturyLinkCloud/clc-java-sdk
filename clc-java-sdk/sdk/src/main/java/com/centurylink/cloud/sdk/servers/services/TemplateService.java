@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
-import com.centurylink.cloud.sdk.commons.services.DataCenterService;
+import com.centurylink.cloud.sdk.common.services.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.common.services.services.DataCenterService;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.google.inject.Inject;

@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
-import com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 
 import static com.google.common.base.Preconditions.checkNotNull;

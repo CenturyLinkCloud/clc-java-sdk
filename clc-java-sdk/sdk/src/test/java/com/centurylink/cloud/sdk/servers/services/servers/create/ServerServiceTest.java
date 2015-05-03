@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.servers.create;
 
-import com.centurylink.cloud.sdk.commons.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.common.services.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;

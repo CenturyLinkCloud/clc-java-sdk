@@ -1,12 +1,12 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.base.client.domain.Link;
-import com.centurylink.cloud.sdk.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.commons.services.domain.queue.future.job.JobFuture;
-import com.centurylink.cloud.sdk.commons.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.commons.services.domain.queue.future.job.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.commons.services.domain.queue.future.job.SequentialJobsFuture;
+import com.centurylink.cloud.sdk.common.services.client.QueueClient;
+import com.centurylink.cloud.sdk.common.services.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.common.services.services.domain.queue.future.job.JobFuture;
+import com.centurylink.cloud.sdk.common.services.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.common.services.services.domain.queue.future.job.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.common.services.services.domain.queue.future.job.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.base.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;

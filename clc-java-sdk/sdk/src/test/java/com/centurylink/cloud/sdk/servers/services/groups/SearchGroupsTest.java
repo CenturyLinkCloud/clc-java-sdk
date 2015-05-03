@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
-import com.centurylink.cloud.sdk.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.commons.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.common.services.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.base.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
@@ -17,8 +17,8 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
-import static com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter.GB_PORTSMOUTH;
+import static com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.GB_PORTSMOUTH;
 import static com.centurylink.cloud.sdk.base.function.Streams.map;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.ARCHIVE;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;

@@ -1,15 +1,15 @@
 package com.centurylink.cloud.sdk.servers.client;
 
-import com.centurylink.cloud.sdk.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.commons.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
+import com.centurylink.cloud.sdk.common.services.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter.CA_VANCOUVER;
-import static com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.CA_VANCOUVER;
+import static com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 
 /**
  * @author ilya.drabenia

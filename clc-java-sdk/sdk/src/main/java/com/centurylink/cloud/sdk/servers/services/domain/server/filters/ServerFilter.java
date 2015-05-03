@@ -1,8 +1,8 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server.filters;
 
-import com.centurylink.cloud.sdk.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.services.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.services.services.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.common.services.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.base.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.base.services.filter.Filter;
 import com.centurylink.cloud.sdk.base.services.filter.evaluation.AndEvaluation;
