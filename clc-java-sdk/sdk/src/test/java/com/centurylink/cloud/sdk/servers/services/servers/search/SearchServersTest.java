@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services.servers.search;
 
-import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.services.filter.Filter;
+import com.centurylink.cloud.sdk.commons.client.DataCentersClient;
+import com.centurylink.cloud.sdk.commons.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.base.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
+import static com.centurylink.cloud.sdk.base.function.Streams.map;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.eq;

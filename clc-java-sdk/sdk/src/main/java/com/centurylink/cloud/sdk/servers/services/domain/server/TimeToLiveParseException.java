@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
-import com.centurylink.cloud.sdk.core.services.ClcServiceException;
+import com.centurylink.cloud.sdk.base.services.ClcServiceException;
 
 /**
  * @author Ilya Drabenia

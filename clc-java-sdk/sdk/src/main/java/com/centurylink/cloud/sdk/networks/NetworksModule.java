@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.networks;
 
-import com.centurylink.cloud.sdk.core.commons.CommonsModule;
+import com.centurylink.cloud.sdk.commons.CommonsModule;
 import com.centurylink.cloud.sdk.networks.client.NetworksClient;
 import com.centurylink.cloud.sdk.networks.services.NetworkService;
 import com.google.inject.AbstractModule;

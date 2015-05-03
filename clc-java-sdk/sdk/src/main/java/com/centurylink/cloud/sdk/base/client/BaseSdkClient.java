@@ -1,0 +1,29 @@
+package com.centurylink.cloud.sdk.base.client;
+
+import com.centurylink.cloud.sdk.base.auth.services.BearerAuthentication;
+
+import javax.ws.rs.client.WebTarget;
+
+import static com.centurylink.cloud.sdk.base.client.ClcApiConstants.CLC_API_URL;
+
+/**
+ * @author ilya.drabenia
+ */
+public class BaseSdkClient {
+    protected final BearerAuthentication authentication;
+
+    public BaseSdkClient(BearerAuthentication authFilter) {
+        this.authentication = authFilter;
+    }
+
+    protected WebTarget client(String target) {
+        return
+            ClcApiConstants
+                .CLIENT_BUILDER
+                    .build()
+                    .register(authentication)
+                    .target(CLC_API_URL + target)
+                    .resolveTemplate("accountAlias", authentication.getAccountAlias());
+    }
+
+}

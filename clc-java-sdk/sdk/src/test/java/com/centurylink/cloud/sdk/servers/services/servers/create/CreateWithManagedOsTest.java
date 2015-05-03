@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
+import static com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.RHEL;

@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
-import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.base.client.domain.Link;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 

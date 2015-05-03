@@ -1,31 +1,18 @@
 package com.centurylink.cloud.sdk.servers.services.servers.create;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
+import com.centurylink.cloud.sdk.commons.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.base.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.centurylink.cloud.sdk.servers.services.servers.TestServerSupport;
-import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
-import java.time.ZonedDateTime;
-
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.RHEL;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author ilya.drabenia

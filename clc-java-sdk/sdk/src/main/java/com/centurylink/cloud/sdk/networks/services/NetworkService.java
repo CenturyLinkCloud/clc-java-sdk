@@ -1,10 +1,10 @@
 package com.centurylink.cloud.sdk.networks.services;
 
-import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
-import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
+import com.centurylink.cloud.sdk.commons.client.DataCentersClient;
+import com.centurylink.cloud.sdk.commons.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
+import com.centurylink.cloud.sdk.commons.services.DataCenterService;
+import com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.base.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.networks.services.domain.refs.IdNetworkRef;
 import com.centurylink.cloud.sdk.networks.services.domain.refs.NetworkRef;
 import com.google.inject.Inject;

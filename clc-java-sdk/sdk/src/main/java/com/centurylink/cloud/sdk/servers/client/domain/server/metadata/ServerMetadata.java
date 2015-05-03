@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server.metadata;
 
-import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.base.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;

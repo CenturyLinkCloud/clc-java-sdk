@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
 import com.centurylink.cloud.sdk.sample.port.adapter.web.beans.ServerBean;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;

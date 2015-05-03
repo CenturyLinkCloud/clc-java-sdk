@@ -1,15 +1,14 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
-import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
+import com.centurylink.cloud.sdk.base.client.domain.Link;
+import com.centurylink.cloud.sdk.commons.client.QueueClient;
+import com.centurylink.cloud.sdk.commons.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.commons.services.domain.queue.future.job.JobFuture;
+import com.centurylink.cloud.sdk.commons.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.commons.services.domain.queue.future.job.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.commons.services.domain.queue.future.job.SequentialJobsFuture;
+import com.centurylink.cloud.sdk.base.services.ResourceNotFoundException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
@@ -33,9 +32,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.*;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.alwaysTrue;
+import static com.centurylink.cloud.sdk.base.services.filter.Filters.nullable;
+import static com.centurylink.cloud.sdk.base.function.Predicates.*;
+import static com.centurylink.cloud.sdk.base.function.Predicates.alwaysTrue;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -173,7 +172,7 @@ public class ServerService {
                             .flatMap(group -> group.getServers().stream())
                             .filter(serverFilter.getPredicate())
                             .filter((serverFilter.getServerIds().size() > 0) ?
-                                combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
+                                    combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
                             );
                 }
             });

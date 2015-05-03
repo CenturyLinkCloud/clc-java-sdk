@@ -1,7 +1,6 @@
 package com.centurylink.cloud.sdk.tests;
 
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
+import com.centurylink.cloud.sdk.base.client.ClcClientException;
 import com.centurylink.cloud.sdk.tests.mocks.BindMocksModule;
 import com.centurylink.cloud.sdk.tests.mocks.BindSpiesModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.mockito.Mockito.when;
 
 /**
  * @author ilya.drabenia

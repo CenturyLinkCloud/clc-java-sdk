@@ -7,7 +7,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.ip.port.SinglePortConfi
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
+import static com.centurylink.cloud.sdk.base.function.Streams.map;
 import static java.util.Arrays.asList;
 
 /**

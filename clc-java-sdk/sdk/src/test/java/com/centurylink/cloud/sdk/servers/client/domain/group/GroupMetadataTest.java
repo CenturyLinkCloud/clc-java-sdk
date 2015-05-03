@@ -1,11 +1,10 @@
 package com.centurylink.cloud.sdk.servers.client.domain.group;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
+import static com.centurylink.cloud.sdk.base.function.Streams.map;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
 import static org.testng.Assert.*;

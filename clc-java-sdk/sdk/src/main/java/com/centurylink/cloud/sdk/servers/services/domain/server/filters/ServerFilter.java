@@ -1,30 +1,27 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server.filters;
 
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
-import com.centurylink.cloud.sdk.core.services.filter.Filter;
-import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
-import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
-import com.centurylink.cloud.sdk.core.services.filter.evaluation.SingleFilterEvaluation;
-import com.centurylink.cloud.sdk.core.services.function.Predicates;
+import com.centurylink.cloud.sdk.commons.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.commons.services.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.base.services.filter.AbstractResourceFilter;
+import com.centurylink.cloud.sdk.base.services.filter.Filter;
+import com.centurylink.cloud.sdk.base.services.filter.evaluation.AndEvaluation;
+import com.centurylink.cloud.sdk.base.services.filter.evaluation.OrEvaluation;
+import com.centurylink.cloud.sdk.base.function.Predicates;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.combine;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.in;
-import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
+import static com.centurylink.cloud.sdk.base.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.base.function.Predicates.in;
+import static com.centurylink.cloud.sdk.base.function.Streams.map;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Sets.intersection;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
 

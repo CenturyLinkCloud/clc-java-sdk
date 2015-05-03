@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.sample.domain;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
+import com.centurylink.cloud.sdk.base.auth.services.domain.credentials.StaticCredentialsProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;
