@@ -26,7 +26,7 @@ public interface Reference extends CastMixin, ToStringMixin {
         List<T> results = findOperation.apply((K) ref.asFilter());
 
         if (results.size() == 1) {
-            return results.get(1);
+            return results.get(0);
         } else if (results.size() > 1) {
             throw new ReferenceNotResolvedException(
                 "Resource by reference %s not found", ref.toReadableString()
