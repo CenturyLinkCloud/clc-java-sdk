@@ -85,7 +85,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                             .flatMap(g -> g.getAllGroups().stream())
                             .filter(criteria.getPredicate())
                             .filter((criteria.getIds().size() > 0) ?
-                                    combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                                combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
                             );
                 }
             });
@@ -124,7 +124,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
         );
     }
 
-    public OperationFuture<Group> update(Group groupRef, GroupConfig groupConfig) {
+    public OperationFuture<Group> modify(Group groupRef, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
         boolean updated = client
             .updateGroup(

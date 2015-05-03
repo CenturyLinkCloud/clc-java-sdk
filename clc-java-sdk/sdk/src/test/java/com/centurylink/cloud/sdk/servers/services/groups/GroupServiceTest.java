@@ -71,7 +71,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
                 .description(groupDescription)
                 .parentGroup(Group.refById(parentGroupId));
 
-        groupService.update(groupRef, config).waitUntilComplete();
+        groupService.modify(groupRef, config).waitUntilComplete();
 
         GroupMetadata updatedGroupMetadata = groupService.findByRef(groupRef);
 
