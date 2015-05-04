@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.networks.services.domain.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 
 /**
@@ -18,7 +19,7 @@ public class NetworkRef implements Reference {
     }
 
     @Override
-    public Object asFilter() {
+    public Filter asFilter() {
         // TODO: hey, implement me!
         throw new UnsupportedOperationException();
     }

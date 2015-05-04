@@ -3,14 +3,8 @@ package com.centurylink.cloud.sdk.core.services.filter;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-
-import static com.google.common.base.Strings.nullToEmpty;
-import static java.util.Arrays.copyOfRange;
 
 /**
  * @author Ilya Drabenia

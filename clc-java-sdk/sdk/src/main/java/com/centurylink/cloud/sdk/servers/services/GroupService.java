@@ -1,16 +1,18 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.management.client.QueueClient;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.JobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
+
+import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -28,10 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.*;
-import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionIfNotFound;
+import static com.centurylink.cloud.sdk.core.function.Predicates.*;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.getFirst;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -39,7 +39,8 @@ import static java.util.stream.Collectors.toList;
  *
  * @author ilya.drabenia
  */
-public class GroupService {
+public class GroupService implements QueryService<Group, GroupFilter, GroupMetadata> {
+
     private final ServerClient client;
     private final GroupConverter converter;
     private final DataCentersClient dataCentersClient;
@@ -63,46 +64,36 @@ public class GroupService {
         return serverServiceProvider.get();
     }
 
-    public GroupMetadata findByRef(Group groupRef) {
-        return exceptionIfNotFound(
-            findFirst(groupRef.asFilter())
-        );
-    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Stream<GroupMetadata> findLazy(GroupFilter groupCriteria) {
+        checkNotNull(groupCriteria, "Criteria must be not null");
 
-    public List<GroupMetadata> find(GroupFilter criteria) {
-        return findLazy(criteria).collect(toList());
-    }
+        return
+            groupCriteria.applyFindLazy(criteria -> {
+                if (isAlwaysTruePredicate(criteria.getPredicate()) &&
+                    isAlwaysTruePredicate(criteria.getDataCenterFilter().getPredicate()) &&
+                    criteria.getIds().size() > 0) {
+                    return
+                        criteria.getIds().stream()
+                            .map(curId -> client.getGroup(curId, true));
+                } else {
+                    Stream<DataCenterMetadata> dataCenters =
+                        dataCenterService
+                            .findLazy(criteria.getDataCenterFilter());
 
-    public Stream<GroupMetadata> findLazy(GroupFilter criteria) {
-        checkNotNull(criteria, "Criteria must be not null");
-
-        if (isAlwaysTruePredicate(criteria.getPredicate()) &&
-            isAlwaysTruePredicate(criteria.getDataCenterFilter().getPredicate()) &&
-            criteria.getIds().size() > 0) {
-            return
-                criteria.getIds().stream()
-                    .map(curId -> client.getGroup(curId, false));
-        } else{
-            Stream<DataCenterMetadata> dataCenters =
-                dataCenterService
-                    .findLazy(criteria.getDataCenterFilter());
-
-            return
-                dataCenters
-                    .map(d -> client.getGroup(d.getGroup().getId(), false))
-                    .flatMap(g -> g.getAllGroups().stream())
-                    .filter(criteria.getPredicate())
-                    .filter((criteria.getIds().size() > 0) ?
-                        combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
-                    );
-        }
-    }
-
-    public GroupMetadata findFirst(GroupFilter criteria) {
-        return getFirst(
-            findLazy(criteria).limit(1).collect(toList()),
-            null
-        );
+                    return
+                        dataCenters
+                            .map(d -> client.getGroup(d.getGroup().getId(), true))
+                            .flatMap(g -> g.getAllGroups().stream())
+                            .filter(criteria.getPredicate())
+                            .filter((criteria.getIds().size() > 0) ?
+                                    combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                            );
+                }
+            });
     }
 
     public List<GroupMetadata> findByDataCenter(DataCenter dataCenter) {
@@ -149,7 +140,7 @@ public class GroupService {
      * @param groupConfig group config
      * @return OperationFuture wrapper for Group
      */
-    public OperationFuture<Group> update(Group groupRef, GroupConfig groupConfig) {
+    public OperationFuture<Group> modify(Group groupRef, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
         checkNotNull(groupRef, "Group reference must be not null");
         updateGroup(idByRef(groupRef), groupConfig);
@@ -166,11 +157,11 @@ public class GroupService {
      * @param groupConfig group config
      * @return OperationFuture wrapper for list of Group
      */
-    public OperationFuture<List<Group>> update(List<Group> groups, GroupConfig groupConfig) {
+    public OperationFuture<List<Group>> modify(List<Group> groups, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
 
         groups.stream()
-            .forEach(group -> update(group, groupConfig));
+            .forEach(group -> modify(group, groupConfig));
 
         return new OperationFuture<>(
             groups,
@@ -184,10 +175,10 @@ public class GroupService {
      * @param groupConfig group config
      * @return OperationFuture wrapper for list of Group
      */
-    public OperationFuture<List<Group>> update(GroupFilter groupFilter, GroupConfig groupConfig) {
+    public OperationFuture<List<Group>> modify(GroupFilter groupFilter, GroupConfig groupConfig) {
         List<Group> groups = Arrays.asList(getRefsFromFilter(groupFilter));
 
-        return update(groups, groupConfig);
+        return modify(groups, groupConfig);
     }
 
     private boolean updateGroup(String groupId, GroupConfig groupConfig) {

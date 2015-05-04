@@ -1,9 +1,10 @@
 package com.centurylink.cloud.sdk.servers.services;
 
-import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
-import com.centurylink.cloud.sdk.core.commons.services.DataCenterService;
+import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
+import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.google.inject.Inject;
@@ -11,14 +12,12 @@ import com.google.inject.Inject;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.services.refs.Reference.notFound;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author ilya.drabenia
  */
-public class TemplateService {
+public class TemplateService implements QueryService<Template, TemplateFilter, TemplateMetadata> {
     private final DataCenterService dataCenterService;
     private final DataCentersClient dataCentersClient;
 
@@ -28,31 +27,22 @@ public class TemplateService {
         this.dataCentersClient = dataCentersClient;
     }
 
-    public TemplateMetadata findByRef(Template templateRef) {
-        checkNotNull(templateRef, "Reference must be not a null");
-
-        return
-            findLazy(templateRef.asFilter())
-                .findFirst()
-                .orElseThrow(notFound(templateRef));
-    }
-
-    public List<TemplateMetadata> find(TemplateFilter filter) {
-        checkNotNull(filter, "Filter must be not a null");
-
-        return findLazy(filter).collect(toList());
-    }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Stream<TemplateMetadata> findLazy(TemplateFilter filter) {
         checkNotNull(filter, "Filter must be not a null");
 
         return
-            dataCenterService
-                .findLazy(filter.getDataCenter())
-                .map(DataCenterMetadata::getId)
-                .map(dataCentersClient::getDeploymentCapabilities)
-                .flatMap(c -> c.getTemplates().stream())
-                .filter(filter.getPredicate());
+            filter.applyFindLazy(criteria ->
+                dataCenterService
+                    .findLazy(criteria.getDataCenter())
+                    .map(DataCenterMetadata::getId)
+                    .map(dataCentersClient::getDeploymentCapabilities)
+                    .flatMap(c -> c.getTemplates().stream())
+                    .filter(criteria.getPredicate())
+            );
     }
 
     public List<TemplateMetadata> findByDataCenter(String dataCenterId) {

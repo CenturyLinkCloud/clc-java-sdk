@@ -1,21 +1,25 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.filters;
 
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.filters.DataCenterFilter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.function.Predicates;
+import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
-import com.centurylink.cloud.sdk.core.services.function.Predicates;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
+import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.*;
-import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
+import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.function.Predicates.in;
+import static com.centurylink.cloud.sdk.core.function.Streams.map;
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Sets.intersection;
-import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
 
 
@@ -24,7 +28,7 @@ import static java.util.Arrays.asList;
  *
  * @author Ilya Drabenia
  */
-public class GroupFilter implements Filter<GroupFilter> {
+public class GroupFilter extends AbstractResourceFilter<GroupFilter> {
     private List<String> ids = new ArrayList<>();
     private DataCenterFilter dataCenterFilter = new DataCenterFilter(Predicates.alwaysTrue());
     private Predicate<GroupMetadata> predicate = Predicates.alwaysTrue();
@@ -44,9 +48,7 @@ public class GroupFilter implements Filter<GroupFilter> {
      * @return {@link GroupFilter}
      */
     public GroupFilter dataCenters(DataCenter... dataCenters) {
-        dataCenterFilter = dataCenterFilter.and(Filter.or(
-            map(dataCenters, DataCenter::asFilter)
-        ));
+        dataCenterFilter.dataCenters(dataCenters);
 
         return this;
     }
@@ -94,18 +96,28 @@ public class GroupFilter implements Filter<GroupFilter> {
         return this;
     }
 
+    public GroupFilter groups(Group... groups) {
+        allItemsNotNull(groups, "Groups");
+
+        evaluation = new AndEvaluation<>(evaluation, Filter.or(
+            map(groups, Group::asFilter)
+        ), GroupMetadata::getId);
+
+        return this;
+    }
+
     /**
      * Method allow to filter groups by key phrase that contains in its name.
      * Filtering will be case insensitive and will use substring matching.
      *
-     * @param subString is not null name of target group
+     * @param subStrings is not null list of target group names
      * @return {@link GroupFilter}
      */
-    public GroupFilter nameContains(String subString) {
-        checkNotNull(subString, "Name match criteria must be not a null");
+    public GroupFilter nameContains(String... subStrings) {
+        checkNotNull(subStrings, "Name match criteria must be not a null");
 
         predicate = predicate.and(combine(
-            GroupMetadata::getName, containsIgnoreCase(subString)
+            GroupMetadata::getName, in(asList(subStrings), Predicates::containsIgnoreCase)
         ));
 
         return this;
@@ -149,17 +161,9 @@ public class GroupFilter implements Filter<GroupFilter> {
     public GroupFilter and(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        return new GroupFilter()
-            .id(new ArrayList<>(intersection(
-                newHashSet(getIds()),
-                newHashSet(otherFilter.getIds())
-            )))
-            .dataCentersWhere(
-                dataCenterFilter.and(otherFilter.dataCenterFilter)
-            )
-            .where(
-                predicate.and(otherFilter.predicate)
-            );
+        evaluation = new AndEvaluation<>(evaluation, otherFilter, GroupMetadata::getId);
+
+        return this;
     }
 
     /**
@@ -169,17 +173,9 @@ public class GroupFilter implements Filter<GroupFilter> {
     public GroupFilter or(GroupFilter otherFilter) {
         checkNotNull(otherFilter, "Other filter must be not a null");
 
-        return new GroupFilter()
-            .id(new ArrayList<String>() {{
-                addAll(getIds());
-                addAll(otherFilter.getIds());
-            }})
-            .dataCentersWhere(
-                dataCenterFilter.or(otherFilter.dataCenterFilter)
-            )
-            .where(
-                predicate.or(otherFilter.predicate)
-            );
+        evaluation = new OrEvaluation<>(evaluation, otherFilter, GroupMetadata::getId);
+
+        return this;
     }
 
     public DataCenterFilter getDataCenterFilter() {

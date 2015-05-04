@@ -4,15 +4,23 @@ import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 
 /**
- * @author ilya.drabenia
+ * {@inheritDoc}
  */
-public abstract class Server implements Reference {
+public abstract class Server implements Reference<ServerFilter> {
 
+    /**
+     * Method allow to refer server by it's ID. Matching is case insensitive.
+     * Comparison by full match.
+     *
+     * @param id is ID of needed server
+     * @return {@link com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef}
+     */
     public static ServerByIdRef refById(String id) {
         return new ServerByIdRef(id);
     }
 
     @Override
-    public abstract ServerFilter asFilter();
-
+    public String toString() {
+        return this.toReadableString();
+    }
 }

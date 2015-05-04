@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
-import com.centurylink.cloud.sdk.core.commons.client.DataCentersClient;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
@@ -17,12 +17,10 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
-import static com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter.GB_PORTSMOUTH;
-import static com.centurylink.cloud.sdk.core.services.function.Streams.map;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.ARCHIVE;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.TEMPLATES;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.GB_PORTSMOUTH;
+import static com.centurylink.cloud.sdk.core.function.Streams.map;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.*;
 import static com.google.common.collect.Sets.newHashSet;
 
 /**
@@ -54,11 +52,11 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
 
         Mockito
             .doReturn(fromJson("de1_root_group.json", GroupMetadata.class))
-            .when(serverClient).getGroup(DE_ROOT_ID, false);
+            .when(serverClient).getGroup(DE_ROOT_ID, true);
 
         Mockito
             .doReturn(fromJson("gb1_root_group.json", GroupMetadata.class))
-            .when(serverClient).getGroup(GB_ROOT_ID, false);
+            .when(serverClient).getGroup(GB_ROOT_ID, true);
     }
 
     @Test
@@ -126,9 +124,15 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
                 .dataCenters(DE_FRANKFURT)
                 .names(ARCHIVE, TEMPLATES),
 
-            new GroupFilter()
-                .dataCenters(DE_FRANKFURT)
-                .names(TEMPLATES, DEFAULT_GROUP)
+            Filter.or(
+                new GroupFilter()
+                    .dataCenters(DE_FRANKFURT)
+                    .names(TEMPLATES),
+
+                new GroupFilter()
+                    .dataCenters(DE_FRANKFURT)
+                    .names(DEFAULT_GROUP)
+            )
         ));
 
         assertEquals(groups.size(), 1);
@@ -170,7 +174,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
         );
     }
 
-    @Test(enabled = false) // require search redesign
+    @Test
     public void testOr_withIds() {
         List<GroupMetadata> groups = groupService.find(Filter.or(
             new GroupFilter()

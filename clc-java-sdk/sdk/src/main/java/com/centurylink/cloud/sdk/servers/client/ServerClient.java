@@ -1,8 +1,7 @@
 package com.centurylink.cloud.sdk.servers.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.client.BaseSdkClient;
-import com.centurylink.cloud.sdk.core.client.InvocationFuture;
+import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -12,11 +11,9 @@ import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
-import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 import org.apache.http.HttpStatus;
 
-import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +24,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 /**
  * @author ilya.drabenia
  */
-public class ServerClient extends BaseSdkClient {
+public class ServerClient extends SdkHttpClient {
 
     @Inject
     public ServerClient(BearerAuthentication authFilter) {
@@ -62,28 +59,6 @@ public class ServerClient extends BaseSdkClient {
                 .resolveTemplate("serverId", uuid)
                 .request()
                 .get(ServerMetadata.class);
-    }
-
-    public SettableFuture<ServerMetadata> findServerByUuidAsync(String uuid) {
-        final InvocationFuture<ServerMetadata> future = new InvocationFuture<>();
-
-        client("/servers/{accountAlias}/{serverId}?uuid=true")
-            .resolveTemplate("serverId", uuid)
-            .request()
-            .buildGet()
-            .submit(new InvocationCallback<ServerMetadata>() {
-                @Override
-                public void completed(ServerMetadata serverMetadata) {
-                    future.toListenableFuture().set(serverMetadata);
-                }
-
-                @Override
-                public void failed(Throwable throwable) {
-                    future.toListenableFuture().setException(throwable);
-                }
-            });
-
-        return future.toListenableFuture();
     }
 
     public ServerMetadata findServerById(String id) {

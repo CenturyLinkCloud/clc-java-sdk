@@ -1,0 +1,204 @@
+[
+  {
+    "id": "ca2",
+    "name": "CA2 - Canada (Toronto)",
+    "links": [
+      {
+        "rel": "self",
+        "href": "/v2/datacenters/altd/ca2"
+      },
+      {
+        "rel": "deploymentCapabilities",
+        "href": "/v2/datacenters/altd/ca2/deploymentCapabilities"
+      },
+      {
+        "rel": "loadBalancers",
+        "href": "/v2/sharedLoadBalancers/altd/ca2",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "computeLimits",
+        "href": "/v2/datacenters/altd/ca2/computeLimits",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "networkLimits",
+        "href": "/v2/datacenters/altd/ca2/networkLimits",
+        "verbs": [
+          "GET"
+        ]
+      },
+      {
+        "rel": "availableOvfs",
+        "href": "/v2/vmImport/altd/ca2/available",
+        "verbs": [
+          "GET"
+        ]
+      },
+      {
+        "rel": "group",
+        "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791",
+        "id": "8c8a2e29f1f24bbaa347c5b2c3d4b791",
+        "name": "CA2 Hardware"
+      },
+      {
+        "rel": "createGroup",
+        "href": "/v2/groups/altd",
+        "verbs": [
+          "POST"
+        ]
+      },
+      {
+        "rel": "createServer",
+        "href": "/v2/servers/altd",
+        "verbs": [
+          "POST"
+        ]
+      },
+      {
+        "rel": "defaults",
+        "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/defaults",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "billing",
+        "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/billing"
+      },
+      {
+        "rel": "statistics",
+        "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/statistics"
+      },
+      {
+        "rel": "upcomingScheduledActivities",
+        "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/upcomingScheduledActivities"
+      },
+      {
+        "rel": "horizontalAutoscalePolicyMapping",
+        "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/horizontalAutoscalePolicy",
+        "verbs": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ]
+      },
+      {
+        "rel": "scheduledActivities",
+        "href": "/v2/groups/altd/8c8a2e29f1f24bbaa347c5b2c3d4b791/scheduledActivities",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "il1",
+    "name": "IL1 - US Central (Chicago)",
+    "links": [
+      {
+        "rel": "self",
+        "href": "/v2/datacenters/altd/il1"
+      },
+      {
+        "rel": "deploymentCapabilities",
+        "href": "/v2/datacenters/altd/il1/deploymentCapabilities"
+      },
+      {
+        "rel": "loadBalancers",
+        "href": "/v2/sharedLoadBalancers/altd/il1",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "computeLimits",
+        "href": "/v2/datacenters/altd/il1/computeLimits",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "networkLimits",
+        "href": "/v2/datacenters/altd/il1/networkLimits",
+        "verbs": [
+          "GET"
+        ]
+      },
+      {
+        "rel": "availableOvfs",
+        "href": "/v2/vmImport/altd/il1/available",
+        "verbs": [
+          "GET"
+        ]
+      },
+      {
+        "rel": "group",
+        "href": "/v2/groups/altd/6949dfcbcb0c459289d91821b04f6eab",
+        "id": "6949dfcbcb0c459289d91821b04f6eab",
+        "name": "IL1 Hardware"
+      },
+      {
+        "rel": "createGroup",
+        "href": "/v2/groups/altd",
+        "verbs": [
+          "POST"
+        ]
+      },
+      {
+        "rel": "createServer",
+        "href": "/v2/servers/altd",
+        "verbs": [
+          "POST"
+        ]
+      },
+      {
+        "rel": "defaults",
+        "href": "/v2/groups/altd/6949dfcbcb0c459289d91821b04f6eab/defaults",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "rel": "billing",
+        "href": "/v2/groups/altd/6949dfcbcb0c459289d91821b04f6eab/billing"
+      },
+      {
+        "rel": "statistics",
+        "href": "/v2/groups/altd/6949dfcbcb0c459289d91821b04f6eab/statistics"
+      },
+      {
+        "rel": "upcomingScheduledActivities",
+        "href": "/v2/groups/altd/6949dfcbcb0c459289d91821b04f6eab/upcomingScheduledActivities"
+      },
+      {
+        "rel": "horizontalAutoscalePolicyMapping",
+        "href": "/v2/groups/altd/6949dfcbcb0c459289d91821b04f6eab/horizontalAutoscalePolicy",
+        "verbs": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ]
+      },
+      {
+        "rel": "scheduledActivities",
+        "href": "/v2/groups/altd/6949dfcbcb0c459289d91821b04f6eab/scheduledActivities",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      }
+    ]
+  }
+]

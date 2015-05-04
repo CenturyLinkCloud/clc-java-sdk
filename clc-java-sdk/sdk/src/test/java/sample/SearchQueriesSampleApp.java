@@ -1,11 +1,11 @@
 package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
-import com.centurylink.cloud.sdk.core.commons.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenterByIdRef;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
@@ -15,7 +15,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupNameRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;
@@ -26,7 +25,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdR
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
-import com.centurylink.cloud.sdk.tests.TestGroups;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -143,7 +141,7 @@ public class SearchQueriesSampleApp extends Assert {
 
         groupMetadataList.forEach(groupMetadata ->
             groupService.delete(
-                    Group.refById(groupMetadata.getId())
+                Group.refById(groupMetadata.getId())
             )
         );
     }
@@ -203,7 +201,7 @@ public class SearchQueriesSampleApp extends Assert {
     @Test(groups = SAMPLES)
     public void findAllServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter()
+            new ServerFilter()
         );
 
         List<String> serverIdList = new ArrayList<>();
@@ -221,7 +219,7 @@ public class SearchQueriesSampleApp extends Assert {
     @Test(groups = SAMPLES)
     public void findAllActiveServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter().onlyActive()
+            new ServerFilter().onlyActive()
         );
 
         List<String> serverIdList = new ArrayList<>();
@@ -238,7 +236,7 @@ public class SearchQueriesSampleApp extends Assert {
     @Test(groups = SAMPLES)
     public void findGroupServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-                new ServerFilter().groupNameContains(group1Name)
+            new ServerFilter().groupNameContains(group1Name)
         );
 
         List<String> serverIdList = new ArrayList<>();

@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group.refs;
 
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -37,6 +37,6 @@ public class GroupNameRef extends Group {
 
         return new GroupFilter()
             .dataCenters(dataCenter)
-            .nameContains(name);
+            .names(name);
     }
 }

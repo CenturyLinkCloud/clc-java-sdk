@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.tests.fixtures;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.core.commons.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;

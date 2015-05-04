@@ -1,13 +1,13 @@
 package com.centurylink.cloud.sdk.servers.services;
 
+import com.centurylink.cloud.sdk.common.management.client.QueueClient;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.JobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SequentialJobsFuture;
-import com.centurylink.cloud.sdk.core.services.ResourceNotFoundException;
+import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -32,16 +32,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.centurylink.cloud.sdk.core.function.Predicates.*;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.isAlwaysTruePredicate;
-import static com.centurylink.cloud.sdk.core.services.function.Predicates.notNull;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
  * @author ilya.drabenia
  */
-public class ServerService {
+public class ServerService implements QueryService<Server, ServerFilter, ServerMetadata> {
     private final ServerConverter serverConverter;
     private final GroupService groupService;
     private final ServerClient client;
@@ -134,16 +133,6 @@ public class ServerService {
             return delete(serverRefs.toArray(new Server[serverRefs.size()]));
     }
 
-    public ServerMetadata findByRef(Server serverRef) {
-        return
-            findLazy(
-                serverRef.asFilter()
-            )
-            .findFirst().orElseThrow(() ->
-                    new ResourceNotFoundException("Server by reference %s not found", serverRef.toString())
-            );
-    }
-
     String idByRef(Server ref) {
         if (ref.is(ServerByIdRef.class)) {
             return ref.as(ServerByIdRef.class).getId();
@@ -152,29 +141,34 @@ public class ServerService {
         }
     }
 
-    public Stream<ServerMetadata> findLazy(ServerFilter serverFilter) {
-        if (isAlwaysTruePredicate(serverFilter.getPredicate())
-            && isAlwaysTruePredicate(serverFilter.getGroupFilter().getPredicate())
-            && isAlwaysTruePredicate(serverFilter.getGroupFilter().getDataCenterFilter().getPredicate())
-            && serverFilter.getServerIds().size() > 0) {
-            return
-                serverFilter
-                    .getServerIds()
-                    .stream()
-                    .map(nullable(client::findServerById))
-                    .filter(notNull());
-        } else {
-            return
-                groupService
-                    .findLazy(serverFilter.getGroupFilter())
-                    .map(group -> client.getGroup(group.getId(), true))
-                    .flatMap(group -> group.getServers().stream())
-                    .filter(serverFilter.getPredicate());
-        }
-    }
-
-    public List<ServerMetadata> find(ServerFilter serverFilter) {
-        return findLazy(serverFilter).collect(toList());
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Stream<ServerMetadata> findLazy(ServerFilter filter) {
+        return filter
+            .applyFindLazy(serverFilter -> {
+                if (isAlwaysTruePredicate(serverFilter.getPredicate())
+                    && isAlwaysTruePredicate(serverFilter.getGroupFilter().getPredicate())
+                    && isAlwaysTruePredicate(serverFilter.getGroupFilter().getDataCenterFilter().getPredicate())
+                    && serverFilter.getServerIds().size() > 0) {
+                    return
+                        serverFilter
+                            .getServerIds()
+                            .stream()
+                            .map(nullable(client::findServerById))
+                            .filter(notNull());
+                } else {
+                    return
+                        groupService
+                            .findLazy(serverFilter.getGroupFilter())
+                            .flatMap(group -> group.getServers().stream())
+                            .filter(serverFilter.getPredicate())
+                            .filter((serverFilter.getServerIds().size() > 0) ?
+                                    combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
+                            );
+                }
+            });
     }
 
     /**
@@ -185,7 +179,7 @@ public class ServerService {
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(Server... serverRefs) {
         return powerOperationResponse(
-            client.powerOn(ids(serverRefs))
+                client.powerOn(ids(serverRefs))
         );
     }
 
@@ -405,9 +399,9 @@ public class ServerService {
         return
             powerOperationResponse(
                 client.createSnapshot(
-                    new CreateSnapshotRequest()
-                        .snapshotExpirationDays(expirationDays)
-                        .serverIds(ids(serverRefs))
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(ids(serverRefs))
                 )
             );
     }
@@ -472,15 +466,48 @@ public class ServerService {
      */
     public OperationFuture<Link> restore(Server server, Group group) {
         return baseServerResponse(
-            restore(server, groupService.findByRef(group).getId())
+                restore(server, groupService.findByRef(group).getId())
         );
     }
 
     private Link restore(Server server, String groupId) {
         return client.restore(
-            idByRef(server),
-            new RestoreServerRequest()
-                .targetGroupId(groupId)
+                idByRef(server),
+                new RestoreServerRequest()
+                        .targetGroupId(groupId)
+        );
+    }
+
+    /**
+     * Restore a group of archived servers to a specified group
+     * @param servers servers references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> restore(String groupId, Server... servers) {
+        return restore(Arrays.asList(servers), groupId);
+    }
+
+    /**
+     * Restore a list of archived servers to a specified group
+     * @param serverList server List references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> restore(List<Server> serverList, String groupId) {
+        List<JobFuture> futures = serverList.stream()
+            .map(server ->
+                baseServerResponse(
+                    client.restore(
+                        idByRef(server),
+                        new RestoreServerRequest()
+                            .targetGroupId(groupId))
+                )
+                .jobFuture()
+            )
+            .collect(toList());
+
+        return new OperationFuture<>(
+                serverList,
+                new ParallelJobsFuture(futures)
         );
     }
 
@@ -496,10 +523,10 @@ public class ServerService {
             .map(serverRef -> findByRef(serverRef))
             .flatMap(metadata -> metadata.getDetails().getSnapshots().stream())
             .map(snapshot ->
-                baseServerResponse(
-                    client.revertToSnapshot(snapshot.getServerId(),
-                        snapshot.getId()))
-                    .jobFuture())
+                    baseServerResponse(
+                            client.revertToSnapshot(snapshot.getServerId(),
+                                    snapshot.getId()))
+                            .jobFuture())
             .collect(toList());
 
         return new OperationFuture<>(
@@ -513,7 +540,7 @@ public class ServerService {
      * @param filter search servers criteria
      * @return OperationFuture wrapper for list of ServerRef
      */
-    OperationFuture<List<Server>> revertToSnapshot(ServerFilter filter) {
+    public OperationFuture<List<Server>> revertToSnapshot(ServerFilter filter) {
         return revertToSnapshot(getRefsFromFilter(filter));
     }
 

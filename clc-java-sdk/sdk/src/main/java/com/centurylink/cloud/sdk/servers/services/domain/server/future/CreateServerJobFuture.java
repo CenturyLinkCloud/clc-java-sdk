@@ -1,9 +1,9 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server.future;
 
-import com.centurylink.cloud.sdk.core.commons.client.QueueClient;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.SingleJobFuture;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.waiting.SingleWaitingLoop;
-import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.waiting.WaitingLoop;
+import com.centurylink.cloud.sdk.common.management.client.QueueClient;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.SingleJobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.waiting.SingleWaitingLoop;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.waiting.WaitingLoop;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 
 /**
