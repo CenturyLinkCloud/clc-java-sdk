@@ -1,6 +1,8 @@
 package com.centurylink.cloud.sdk.core.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import org.apache.http.impl.client.AutoRetryHttpClient;
+import org.jboss.resteasy.client.jaxrs.engines.ApacheHttpClient4Engine;
 
 import javax.ws.rs.client.WebTarget;
 

@@ -12,8 +12,8 @@ public interface ClcApiConstants {
 
     static final String CLC_API_URL = "https://api.tier3.com/v2";
 
-    static final ResteasyClientBuilder CLIENT_BUILDER =
-        (ResteasyClientBuilder) ClientBuilder
+    static final SdkClientBuilder CLIENT_BUILDER =
+        (SdkClientBuilder) ClientBuilder
             .newBuilder()
             .register(new ErrorProcessingFilter());
 

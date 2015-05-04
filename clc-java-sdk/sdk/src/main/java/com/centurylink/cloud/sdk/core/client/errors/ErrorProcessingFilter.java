@@ -25,7 +25,12 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
             ErrorMessageResponse response = objectMapper().readValue(entityStream, ErrorMessageResponse.class);
 
             if (response.getMessage() != null) {
-                throw new ClcClientException(response.getMessage(), new ClcException(objectMapper().writeValueAsString(response.getModelState())));
+                throw new ClcClientException(
+                    response.getMessage(),
+                    new ClcException(
+                        objectMapper().writeValueAsString(response.getModelState())
+                    )
+                );
             }
         }
     }
