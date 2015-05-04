@@ -4,6 +4,7 @@ package com.centurylink.cloud.sdk.core.client;
  * @author Ilya Drabenia
  */
 
+import com.centurylink.cloud.sdk.core.client.retry.ClcRetryStrategy;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.HttpClientParams;
@@ -17,7 +18,6 @@ import org.apache.http.conn.ssl.StrictHostnameVerifier;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.AutoRetryHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
 import org.apache.http.impl.conn.BasicClientConnectionManager;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.BasicHttpParams;
@@ -482,7 +482,7 @@ public class SdkClientBuilder extends ClientBuilder
 
             httpClient = new AutoRetryHttpClient(
                 new DefaultHttpClient(cm, params),
-                new DefaultServiceUnavailableRetryStrategy(3, 1000)
+                new ClcRetryStrategy(3, 1000)
             );
 
             ApacheHttpClient4Engine engine = new ApacheHttpClient4Engine(httpClient, true);
