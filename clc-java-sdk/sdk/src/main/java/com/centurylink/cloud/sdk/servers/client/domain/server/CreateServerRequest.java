@@ -9,6 +9,8 @@ import java.util.List;
 public class CreateServerRequest {
     private String name;
 
+    private String description;
+
     private String groupId;
 
     private String sourceServerId;
@@ -85,7 +87,18 @@ public class CreateServerRequest {
         return this;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public CreateServerRequest description(String description) {
+        setDescription(description);
+        return this;
+    }
 
     /**
      * Name of the server to create. Alphanumeric characters and dashes only. Must be between 1-7 characters depending on the length of the account alias. (This name will be appended with a two digit number and prepended with the dataCenter code and account alias to make up the final server name.)

@@ -32,6 +32,7 @@ public class ServerConverter {
         return
             new CreateServerRequest()
                 .name(newServer.getName())
+                .description(newServer.getDescription())
                 .cpu(newServer.getMachine().getCpuCount())
                 .memoryGB(newServer.getMachine().getRam())
                 .additionalDisks(buildDiskRequestList(newServer.getMachine().getDisks()))

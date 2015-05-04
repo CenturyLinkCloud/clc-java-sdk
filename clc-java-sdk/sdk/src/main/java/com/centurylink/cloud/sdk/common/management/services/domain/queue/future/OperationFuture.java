@@ -6,6 +6,7 @@ import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.SingleJobFuture;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -46,6 +47,11 @@ public class OperationFuture<T> {
 
     public OperationFuture<T> waitUntilComplete() {
         waiting.waitUntilComplete();
+        return this;
+    }
+
+    public OperationFuture<T> waitUntilComplete(Duration timeout) {
+        waiting.waitUntilComplete(timeout);
         return this;
     }
 

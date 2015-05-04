@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 public class CreateServerConfig {
     private String id;
     private String name;
+    private String description;
     private ServerType type;
     private Group group;
     private Template template;
@@ -40,6 +41,19 @@ public class CreateServerConfig {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public CreateServerConfig description(String description) {
+        setDescription(description);
+        return this;
     }
 
     public CreateServerConfig name(String name) {
