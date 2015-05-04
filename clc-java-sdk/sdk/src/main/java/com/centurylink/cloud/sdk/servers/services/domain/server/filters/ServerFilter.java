@@ -110,6 +110,14 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
         return this;
     }
 
+    public ServerFilter groupNames(String... names) {
+        allItemsNotNull(names, "Group names");
+
+        groupFilter.names(names);
+
+        return this;
+    }
+
     /**
      * Method allow to filter groups using predicate.
      *

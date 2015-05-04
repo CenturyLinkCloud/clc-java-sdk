@@ -36,6 +36,10 @@ public abstract class Server implements Reference<ServerFilter> {
         return new ServerByDescriptionRef(null, keyword);
     }
 
+    public static ServerByDescriptionRef refByDescription() {
+        return new ServerByDescriptionRef(null, null);
+    }
+
     @Override
     public String toString() {
         return this.toReadableString();
