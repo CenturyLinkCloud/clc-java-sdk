@@ -11,7 +11,6 @@ import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.Opera
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.JobFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.core.commons.services.domain.queue.future.job.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
@@ -34,7 +33,6 @@ import static com.centurylink.cloud.sdk.core.services.refs.References.exceptionI
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getFirst;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 /**
  * Service provide operations for query and manipulate groups of servers
@@ -171,8 +169,6 @@ public class GroupService {
     public OperationFuture<List<Group>> update(List<Group> groups, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
 
-        checkUpdateGroupsRules(groups, groupConfig);
-
         groups.stream()
             .forEach(group -> update(group, groupConfig));
 
@@ -202,25 +198,6 @@ public class GroupService {
                     groupConfig,
                     groupConfig.getParentGroup() != null ? idByRef(groupConfig.getParentGroup()) : null)
             );
-    }
-
-    private boolean checkUpdateGroupsRules(List<Group> groups, GroupConfig groupConfig) {
-        List<String> groupIds = groups.stream().map(group -> idByRef(group)).collect(toList());
-        List<GroupMetadata> groupMetadataList = find(new GroupFilter().id(groupIds));
-
-        if (groupConfig.getName() != null) {
-            int countParentGroups = groupMetadataList.stream()
-                .map(GroupMetadata::getParentGroupId)
-                .collect(toSet())
-                .size();
-
-            //if groups have the same parent groups - throw exception
-            if (groupMetadataList.size() > countParentGroups) {
-                throw new ClcException("Can update groups with different parent groups only");
-            }
-        }
-
-        return true;
     }
 
     private Group[] getRefsFromFilter(GroupFilter groupFilter) {
