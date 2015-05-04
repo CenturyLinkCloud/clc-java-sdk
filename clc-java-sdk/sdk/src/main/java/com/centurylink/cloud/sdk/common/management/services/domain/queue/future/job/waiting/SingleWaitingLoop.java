@@ -36,12 +36,18 @@ public class SingleWaitingLoop implements WaitingLoop {
             onIterationStarted.accept(null);
 
             if (TRUE.equals(checkStatus.get())) {
-                sleep();
+                waitingForBackendConsistentState();
                 return null;
             }
 
             sleep();
         }
+    }
+
+    private void waitingForBackendConsistentState() {
+        sleep();
+        sleep();
+        sleep();
     }
 
     private void sleep() {
