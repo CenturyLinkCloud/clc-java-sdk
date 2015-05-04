@@ -1,13 +1,12 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
-import com.centurylink.cloud.sdk.common.management.client.domain.CustomField;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
@@ -24,13 +23,22 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION})
     public void testFindGroupsByDataCenter() {
+
         List<GroupMetadata> groups = groupService.findByDataCenter(com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT);
 
         assert groups.size() > 0;
     }
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testCreateGroup() {
+    public void testGroup() {
+        GroupByIdRef groupRef1 = createGroup();
+        GroupByIdRef groupRef2 = createGroup();
+
+        updateGroups(groupRef1, groupRef2);
+        deleteGroups(groupRef1, groupRef2);
+    }
+
+    private GroupByIdRef createGroup() {
         String newGroupName = "test group";
         String newGroupDescription = "test group description";
 
@@ -49,34 +57,42 @@ public class GroupServiceTest extends AbstractServersSdkTest {
         assertEquals(createdGroup.getName(), newGroupName);
         assertEquals(createdGroup.getDescription(), newGroupDescription);
 
-        groupService.delete(newGroup);
+        return newGroup;
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testUpdateGroup() throws JsonProcessingException {
-        Group groupRef = Group.refByName()
-            .dataCenter(com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT)
-            .name(Group.DEFAULT_GROUP);
-        GroupMetadata groupMetadata = groupService.findByRef(groupRef);
-        String parentGroupId = groupMetadata.getParentGroupId();
-
-        String groupName = Group.DEFAULT_GROUP;
+    private void updateGroups(Group groupRef1, Group groupRef2) {
+        String groupName = Group.DEFAULT_GROUP + " test";
         String groupDescription = "test description";
-        //TODO identify correct custom fields ids
-        List<CustomField> customFields = Arrays.asList(new CustomField().id("123").value("test value"));
 
         GroupConfig config =
             new GroupConfig()
                 .name(groupName)
-                .description(groupDescription)
-                .parentGroup(Group.refById(parentGroupId));
+                .description(groupDescription);
 
-        groupService.modify(groupRef, config).waitUntilComplete();
+        GroupFilter filter = toFilter(groupRef1, groupRef2);
+        groupService.modify(filter, config).waitUntilComplete();
 
-        GroupMetadata updatedGroupMetadata = groupService.findByRef(groupRef);
+        groupService.find(filter).stream()
+            .forEach(metadata -> {
+                assertEquals(metadata.getDescription(), groupDescription);
+                assertEquals(metadata.getName(), groupName);
+            });
+    }
 
-        assertEquals(updatedGroupMetadata.getName(), groupName);
-        assertEquals(updatedGroupMetadata.getDescription(), groupDescription);
+    private void deleteGroups(Group groupRef1, Group groupRef2) {
+        groupService.delete(groupRef1.asFilter().or(groupRef2.asFilter())).waitUntilComplete();
+
+        //if try to check findByRef() - return 403 status code
+        //groupService.findByRef(groupRef1);
+    }
+
+    private GroupFilter toFilter(Group... groups) {
+        GroupFilter filter = new GroupFilter();
+        Arrays.asList(groups).stream()
+            .forEach(group ->
+                filter.id(groupService.findByRef(group).getId()));
+
+        return filter;
     }
 
 }

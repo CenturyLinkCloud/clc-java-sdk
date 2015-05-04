@@ -6,9 +6,12 @@ import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.Dat
 import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.JobFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -23,11 +26,13 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Service provide operations for query and manipulate groups of servers
@@ -85,7 +90,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                             .flatMap(g -> g.getAllGroups().stream())
                             .filter(criteria.getPredicate())
                             .filter((criteria.getIds().size() > 0) ?
-                                combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                                    combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
                             );
                 }
             });
@@ -109,14 +114,19 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
         }
     }
 
+    /**
+     * Create group
+     * @param groupConfig group config
+     * @return OperationFuture wrapper for Group
+     */
     public OperationFuture<Group> create(GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
         checkNotNull(groupConfig.getName(), "Name of GroupConfig must be not null");
         checkNotNull(groupConfig.getParentGroup(), "ParentGroup of GroupConfig must be not null");
 
         GroupMetadata group = client.createGroup(
-            converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
-        );
+            converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup())
+        ));
 
         return new OperationFuture<>(
             Group.refById(group.getId()),
@@ -124,13 +134,16 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
         );
     }
 
+    /**
+     * Update group
+     * @param groupRef    group reference
+     * @param groupConfig group config
+     * @return OperationFuture wrapper for Group
+     */
     public OperationFuture<Group> modify(Group groupRef, GroupConfig groupConfig) {
         checkNotNull(groupConfig, "GroupConfig must be not null");
-        boolean updated = client
-            .updateGroup(
-                idByRef(groupRef),
-                converter.createUpdateGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()))
-            );
+        checkNotNull(groupRef, "Group reference must be not null");
+        updateGroup(idByRef(groupRef), groupConfig);
 
         return new OperationFuture<>(
             groupRef,
@@ -138,7 +151,65 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
         );
     }
 
+    /**
+     * Update provided list of groups
+     * @param groups      group list
+     * @param groupConfig group config
+     * @return OperationFuture wrapper for list of Group
+     */
+    public OperationFuture<List<Group>> modify(List<Group> groups, GroupConfig groupConfig) {
+        checkNotNull(groupConfig, "GroupConfig must be not null");
+
+        groups.stream()
+            .forEach(group -> modify(group, groupConfig));
+
+        return new OperationFuture<>(
+            groups,
+            new NoWaitingJobFuture()
+        );
+    }
+
+    /**
+     * Update provided list of groups
+     * @param groupFilter search criteria
+     * @param groupConfig group config
+     * @return OperationFuture wrapper for list of Group
+     */
+    public OperationFuture<List<Group>> modify(GroupFilter groupFilter, GroupConfig groupConfig) {
+        List<Group> groups = Arrays.asList(getRefsFromFilter(groupFilter));
+
+        return modify(groups, groupConfig);
+    }
+
+    private boolean updateGroup(String groupId, GroupConfig groupConfig) {
+        return client
+            .updateGroup(
+                groupId,
+                converter.createUpdateGroupRequest(
+                    groupConfig,
+                    groupConfig.getParentGroup() != null ? idByRef(groupConfig.getParentGroup()) : null)
+            );
+    }
+
+    private Group[] getRefsFromFilter(GroupFilter groupFilter) {
+        checkNotNull(groupFilter, "Group filter must be not null");
+        List<Group> groupList = find(groupFilter).stream()
+            .map(metadata -> Group.refById(metadata.getId()))
+            .collect(toList());
+
+        return groupList.toArray(new Group[groupList.size()]);
+    }
+
+    /**
+     * Delete provided group
+     * @param groupRef group reference
+     * @return OperationFuture wrapper for Link
+     */
     public OperationFuture<Link> delete(Group groupRef) {
+        return deleteGroup(groupRef);
+    }
+
+    private OperationFuture<Link> deleteGroup(Group groupRef) {
         Link response = client.deleteGroup(idByRef(groupRef));
 
         return new OperationFuture<>(
@@ -146,6 +217,33 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             response.getId(),
             queueClient
         );
+    }
+
+    /**
+     * Delete set of groups
+     * @param groups groups array
+     * @return OperationFuture wrapper for list of groups
+     */
+    public OperationFuture<List<Group>> delete(Group... groups) {
+        List<Group> groupList = Arrays.asList(groups);
+
+        List<JobFuture> jobs = groupList.stream()
+            .map(group -> deleteGroup(group).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            groupList,
+            new ParallelJobsFuture(jobs)
+        );
+    }
+
+    /**
+     * Delete all groups for group criteria
+     * @param filter search criteria
+     * @return OperationFuture wrapper for list of groups
+     */
+    public OperationFuture<List<Group>> delete(GroupFilter filter) {
+        return delete(getRefsFromFilter(filter));
     }
 
     String idByRef(Group ref) {

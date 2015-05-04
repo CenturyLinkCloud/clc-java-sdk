@@ -179,7 +179,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(Server... serverRefs) {
         return powerOperationResponse(
-            client.powerOn(ids(serverRefs))
+                client.powerOn(ids(serverRefs))
         );
     }
 
@@ -399,9 +399,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return
             powerOperationResponse(
                 client.createSnapshot(
-                    new CreateSnapshotRequest()
-                        .snapshotExpirationDays(expirationDays)
-                        .serverIds(ids(serverRefs))
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(ids(serverRefs))
                 )
             );
     }
@@ -466,15 +466,48 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<Link> restore(Server server, Group group) {
         return baseServerResponse(
-            restore(server, groupService.findByRef(group).getId())
+                restore(server, groupService.findByRef(group).getId())
         );
     }
 
     private Link restore(Server server, String groupId) {
         return client.restore(
-            idByRef(server),
-            new RestoreServerRequest()
-                .targetGroupId(groupId)
+                idByRef(server),
+                new RestoreServerRequest()
+                        .targetGroupId(groupId)
+        );
+    }
+
+    /**
+     * Restore a group of archived servers to a specified group
+     * @param servers servers references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> restore(String groupId, Server... servers) {
+        return restore(Arrays.asList(servers), groupId);
+    }
+
+    /**
+     * Restore a list of archived servers to a specified group
+     * @param serverList server List references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> restore(List<Server> serverList, String groupId) {
+        List<JobFuture> futures = serverList.stream()
+            .map(server ->
+                baseServerResponse(
+                    client.restore(
+                        idByRef(server),
+                        new RestoreServerRequest()
+                            .targetGroupId(groupId))
+                )
+                .jobFuture()
+            )
+            .collect(toList());
+
+        return new OperationFuture<>(
+                serverList,
+                new ParallelJobsFuture(futures)
         );
     }
 
@@ -490,10 +523,10 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             .map(serverRef -> findByRef(serverRef))
             .flatMap(metadata -> metadata.getDetails().getSnapshots().stream())
             .map(snapshot ->
-                baseServerResponse(
-                    client.revertToSnapshot(snapshot.getServerId(),
-                        snapshot.getId()))
-                    .jobFuture())
+                    baseServerResponse(
+                            client.revertToSnapshot(snapshot.getServerId(),
+                                    snapshot.getId()))
+                            .jobFuture())
             .collect(toList());
 
         return new OperationFuture<>(
