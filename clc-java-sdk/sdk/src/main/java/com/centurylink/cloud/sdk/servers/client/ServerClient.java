@@ -69,6 +69,15 @@ public class ServerClient extends SdkHttpClient {
                 .get(ServerMetadata.class);
     }
 
+    public BaseServerResponse modify(String serverId, List<ModifyServerRequest> request) {
+        return
+            client("servers/{accountAlias}/{serverId}")
+                .resolveTemplate("serverId", serverId)
+                .request()
+                .method("PATCH", entity(request, APPLICATION_JSON_TYPE))
+                .readEntity(BaseServerResponse.class);
+    }
+
     public GroupMetadata getGroup(String rootGroupId, boolean includeServerDetails) {
         WebTarget webTarget =
             client("/groups/{accountAlias}/{rootGroupId}")

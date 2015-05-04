@@ -13,6 +13,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
+import com.centurylink.cloud.sdk.servers.client.domain.server.ModifyServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
@@ -21,6 +22,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig
 import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ModifyServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.future.CreateServerJobFuture;
@@ -73,6 +75,19 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 () ->
                     addPublicIpIfNeeded(command, serverInfo)
             )
+        );
+    }
+
+    public OperationFuture<ServerMetadata> modify(Server server, ModifyServerConfig modifyServerConfig) {
+        List<ModifyServerRequest> request = serverConverter.buildModifyServerRequest(modifyServerConfig);
+
+        BaseServerResponse response = client.modify(idByRef(server), request);
+        ServerMetadata serverInfo = client.findServerById(idByRef(server));
+
+        return new OperationFuture<>(
+                serverInfo,
+                response.findStatusId(),
+                queueClient
         );
     }
 
@@ -399,9 +414,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return
             powerOperationResponse(
                 client.createSnapshot(
-                        new CreateSnapshotRequest()
-                                .snapshotExpirationDays(expirationDays)
-                                .serverIds(ids(serverRefs))
+                    new CreateSnapshotRequest()
+                        .snapshotExpirationDays(expirationDays)
+                        .serverIds(ids(serverRefs))
                 )
             );
     }
@@ -472,9 +487,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
     private Link restore(Server server, String groupId) {
         return client.restore(
-                idByRef(server),
-                new RestoreServerRequest()
-                        .targetGroupId(groupId)
+            idByRef(server),
+            new RestoreServerRequest()
+                .targetGroupId(groupId)
         );
     }
 
@@ -495,13 +510,13 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     OperationFuture<List<Server>> restore(List<Server> serverList, String groupId) {
         List<JobFuture> futures = serverList.stream()
             .map(server ->
-                baseServerResponse(
-                    client.restore(
-                        idByRef(server),
-                        new RestoreServerRequest()
-                            .targetGroupId(groupId))
-                )
-                .jobFuture()
+                            baseServerResponse(
+                                    client.restore(
+                                            idByRef(server),
+                                            new RestoreServerRequest()
+                                                    .targetGroupId(groupId))
+                            )
+                                    .jobFuture()
             )
             .collect(toList());
 
@@ -588,6 +603,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @return OperationFuture wrapper for ServerRef
      */
     public OperationFuture<Server> addPublicIp(Server serverRef, CreatePublicIpConfig publicIpConfig) {
+        checkNotNull(serverRef, "Server reference must be not null");
+        checkNotNull(publicIpConfig, "PublicIpConfig must be not null");
         Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
 
         return new OperationFuture<>(
@@ -595,6 +612,38 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             response.getId(),
             queueClient
         );
+    }
+
+    /**
+     * Add public IP to list servers
+     *
+     * @param servers        servers reference list
+     * @param publicIpConfig publicIp config
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> addPublicIp(List<Server> servers, CreatePublicIpConfig publicIpConfig) {
+        checkNotNull(servers, "Server list must be not null");
+        checkNotNull(publicIpConfig, "PublicIpConfig must be not null");
+
+        List<JobFuture> futures = servers.stream()
+            .map(serverRef -> addPublicIp(serverRef, publicIpConfig).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            servers,
+            new ParallelJobsFuture(futures)
+        );
+    }
+
+    /**
+     * Add public IP to list servers
+     *
+     * @param serverFilter   server search criteria
+     * @param publicIpConfig publicIp config
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> addPublicIp(ServerFilter serverFilter,  CreatePublicIpConfig publicIpConfig) {
+        return addPublicIp(Arrays.asList(getRefsFromFilter(serverFilter)), publicIpConfig);
     }
 
     /**
@@ -731,9 +780,10 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Remove all public IPs from server
      *
      * @param serverRef server reference
-     * @return server reference
+     * @return OperationFuture wrapper for ServerRef
      */
     public OperationFuture<Server> removePublicIp(Server serverRef) {
+        checkNotNull(serverRef, "Server reference must be not null");
         ServerMetadata serverMetadata = findByRef(serverRef);
         List<JobFuture> jobFutures = serverMetadata.getDetails().getIpAddresses()
             .stream()
@@ -746,6 +796,36 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             serverRef,
             new ParallelJobsFuture(jobFutures)
         );
+    }
+
+    /**
+     * Remove all public IPs from servers array
+     *
+     * @param servers server references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> removePublicIp(Server... servers) {
+        checkNotNull(servers, "Server references must be not null");
+        List<Server> serverList = Arrays.asList(servers);
+
+        List<JobFuture> futures = serverList.stream()
+            .map(serverRef -> removePublicIp(serverRef).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            serverList,
+            new ParallelJobsFuture(futures)
+        );
+    }
+
+    /**
+     * Remove all public IPs
+     *
+     * @param serverFilter server serach criteria
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    public OperationFuture<List<Server>> removePublicIp(ServerFilter serverFilter) {
+        return removePublicIp(getRefsFromFilter(serverFilter));
     }
 
     public OperationFuture<List<BaseServerResponse>> powerOperationResponse(List<BaseServerResponse> apiResponse) {

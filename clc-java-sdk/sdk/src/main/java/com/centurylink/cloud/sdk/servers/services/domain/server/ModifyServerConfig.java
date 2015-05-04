@@ -4,21 +4,21 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
 public class ModifyServerConfig {
 
-    private Group group;
+    private String groupId;
     private String description;
     private Machine machineConfig = new Machine();
     private CredentialsConfig credentialsConfig = new CredentialsConfig();
 
-    public Group getGroup() {
-        return group;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroupId(String group) {
+        this.groupId = group;
     }
 
-    public ModifyServerConfig group(Group group) {
-        setGroup(group);
+    public ModifyServerConfig groupId(String group) {
+        setGroupId(group);
         return this;
     }
 
