@@ -35,7 +35,7 @@ public class ServerByDescriptionRef extends Server {
         return new ServerByDescriptionRef(dataCenter, this.keyword);
     }
 
-    public ServerByDescriptionRef keyword(String keyword) {
+    public ServerByDescriptionRef description(String keyword) {
         notNull(keyword, "Keyword must be not null");
 
         return new ServerByDescriptionRef(this.dataCenter, keyword);

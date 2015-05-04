@@ -481,7 +481,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<Link> restore(Server server, Group group) {
         return baseServerResponse(
-                restore(server, groupService.findByRef(group).getId())
+            restore(server, groupService.findByRef(group).getId())
         );
     }
 

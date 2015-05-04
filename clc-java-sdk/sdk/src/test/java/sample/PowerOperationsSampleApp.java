@@ -1,12 +1,9 @@
 package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
@@ -16,14 +13,9 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilt
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -31,8 +23,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
@@ -40,7 +30,6 @@ import static com.centurylink.cloud.sdk.servers.services.domain.server.refs.Serv
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
-import static java.util.stream.Collectors.toList;
 
 @Test(groups = SAMPLES)
 public class PowerOperationsSampleApp extends Assert {
@@ -151,12 +140,11 @@ public class PowerOperationsSampleApp extends Assert {
 
         assertEquals(
             serverService
-                .findLazy(new ServerFilter()
-                    .dataCenters(US_EAST_STERLING)
-                    .descriptionContains("a_apache")
+                .findByRef(Server.refByDescription()
+                    .dataCenter(US_EAST_STERLING)
+                    .description("a_apache")
                 )
-                .filter(s -> s.getDetails().getSnapshots().size() > 0)
-                .count(), 2
+                .getDetails().getSnapshots().size(), 1
         );
     }
 
