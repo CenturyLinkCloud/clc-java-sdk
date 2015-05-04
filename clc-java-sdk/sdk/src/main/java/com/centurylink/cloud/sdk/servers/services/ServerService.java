@@ -480,12 +480,19 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
     /**
      * Restore a group of archived servers to a specified group
-     * @param servers server references
+     * @param servers servers references
      * @return OperationFuture wrapper for list of ServerRef
      */
     OperationFuture<List<Server>> restore(String groupId, Server... servers) {
-        List<Server> serverList = Arrays.asList(servers);
+        return restore(Arrays.asList(servers), groupId);
+    }
 
+    /**
+     * Restore a list of archived servers to a specified group
+     * @param serverList server List references
+     * @return OperationFuture wrapper for list of ServerRef
+     */
+    OperationFuture<List<Server>> restore(List<Server> serverList, String groupId) {
         List<JobFuture> futures = serverList.stream()
             .map(server ->
                 baseServerResponse(
