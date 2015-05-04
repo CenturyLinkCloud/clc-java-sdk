@@ -64,7 +64,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
         //add public IP
         serverService
-            .addPublicIp(serverRef,
+            .addPublicIp(serverRef.asFilter(),
                 new CreatePublicIpConfig()
                     .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
                     .sourceRestrictions("70.100.60.140/32")
@@ -129,7 +129,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
     }
 
     private void deletePublicIp() {
-        serverService.removePublicIp(serverRef).waitUntilComplete();
+        serverService.removePublicIp(serverRef.asFilter()).waitUntilComplete();
 
         List<IpAddress> initialIpAddresses = getIpAddresses();
 
