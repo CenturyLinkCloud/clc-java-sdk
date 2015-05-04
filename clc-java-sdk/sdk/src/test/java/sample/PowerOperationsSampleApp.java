@@ -36,6 +36,7 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server.refByDescription;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
@@ -43,8 +44,6 @@ import static java.util.stream.Collectors.toList;
 
 @Test(groups = SAMPLES)
 public class PowerOperationsSampleApp extends Assert {
-    private final static String MY_SERVERS_GROUP = "MyServer";
-
     private final ServerService serverService;
     private final GroupService groupService;
     private final TemplateService templateService;
@@ -120,15 +119,8 @@ public class PowerOperationsSampleApp extends Assert {
             .as(GroupByIdRef.class);
     }
 
-    private ServerMetadata loadServerMetadata(Server server) {
-        ServerMetadata metadata = serverService.findByRef(server);
-        assertNotNull(metadata);
-
-        return metadata;
-    }
-
     @Test
-    public void testGroupReboot() {
+    public void testWholeGroupReboot() {
         groupService
             .reboot(Group.refByName()
                 .dataCenter(US_EAST_STERLING)
@@ -137,7 +129,8 @@ public class PowerOperationsSampleApp extends Assert {
             .waitUntilComplete();
 
         assertEquals(
-            loadServerMetadata(Server.refByDescription(US_EAST_STERLING, "a_nginx"))
+            serverService
+                .findByRef(refByDescription(US_EAST_STERLING, "a_nginx"))
                 .getDetails()
                 .getPowerState(),
             "started"
