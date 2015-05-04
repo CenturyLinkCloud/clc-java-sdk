@@ -85,9 +85,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         ServerMetadata serverInfo = client.findServerById(idByRef(server));
 
         return new OperationFuture<>(
-                serverInfo,
-                response.findStatusId(),
-                queueClient
+            serverInfo,
+            response.findStatusId(),
+            queueClient
         );
     }
 
@@ -142,10 +142,10 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @return OperationFuture wrapper for list of ServerRef
      */
     public OperationFuture<List<Server>> delete(ServerFilter filter) {
-            List<Server> serverRefs = find(filter).stream()
-                .map(metadata -> metadata.asRefById())
-                .collect(toList());
-            return delete(serverRefs.toArray(new Server[serverRefs.size()]));
+        List<Server> serverRefs = find(filter).stream()
+            .map(metadata -> metadata.asRefById())
+            .collect(toList());
+        return delete(serverRefs.toArray(new Server[serverRefs.size()]));
     }
 
     String idByRef(Server ref) {
@@ -180,7 +180,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                             .flatMap(group -> group.getServers().stream())
                             .filter(serverFilter.getPredicate())
                             .filter((serverFilter.getServerIds().size() > 0) ?
-                                    combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
+                                combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
                             );
                 }
             });
@@ -510,19 +510,19 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     OperationFuture<List<Server>> restore(List<Server> serverList, String groupId) {
         List<JobFuture> futures = serverList.stream()
             .map(server ->
-                            baseServerResponse(
-                                    client.restore(
-                                            idByRef(server),
-                                            new RestoreServerRequest()
-                                                    .targetGroupId(groupId))
-                            )
-                                    .jobFuture()
+                baseServerResponse(
+                    client.restore(
+                        idByRef(server),
+                        new RestoreServerRequest()
+                            .targetGroupId(groupId))
+                )
+                .jobFuture()
             )
             .collect(toList());
 
         return new OperationFuture<>(
-                serverList,
-                new ParallelJobsFuture(futures)
+            serverList,
+            new ParallelJobsFuture(futures)
         );
     }
 
@@ -538,10 +538,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             .map(serverRef -> findByRef(serverRef))
             .flatMap(metadata -> metadata.getDetails().getSnapshots().stream())
             .map(snapshot ->
-                    baseServerResponse(
-                            client.revertToSnapshot(snapshot.getServerId(),
-                                    snapshot.getId()))
-                            .jobFuture())
+                baseServerResponse(
+                    client.revertToSnapshot(snapshot.getServerId(), snapshot.getId())
+                )
+                .jobFuture()
+            )
             .collect(toList());
 
         return new OperationFuture<>(
