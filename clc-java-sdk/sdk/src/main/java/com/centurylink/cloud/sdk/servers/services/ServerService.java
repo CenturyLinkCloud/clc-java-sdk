@@ -13,6 +13,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
+import com.centurylink.cloud.sdk.servers.client.domain.server.ModifyServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
@@ -21,6 +22,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig
 import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ModifyServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.future.CreateServerJobFuture;
@@ -73,6 +75,19 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 () ->
                     addPublicIpIfNeeded(command, serverInfo)
             )
+        );
+    }
+
+    public OperationFuture<ServerMetadata> modify(Server server, ModifyServerConfig modifyServerConfig) {
+        List<ModifyServerRequest> request = serverConverter.buildModifyServerRequest(modifyServerConfig);
+
+        BaseServerResponse response = client.modify(idByRef(server), request);
+        ServerMetadata serverInfo = client.findServerById(idByRef(server));
+
+        return new OperationFuture<>(
+                serverInfo,
+                response.findStatusId(),
+                queueClient
         );
     }
 
@@ -495,13 +510,13 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     OperationFuture<List<Server>> restore(List<Server> serverList, String groupId) {
         List<JobFuture> futures = serverList.stream()
             .map(server ->
-                baseServerResponse(
-                    client.restore(
-                        idByRef(server),
-                        new RestoreServerRequest()
-                            .targetGroupId(groupId))
-                )
-                .jobFuture()
+                            baseServerResponse(
+                                    client.restore(
+                                            idByRef(server),
+                                            new RestoreServerRequest()
+                                                    .targetGroupId(groupId))
+                            )
+                                    .jobFuture()
             )
             .collect(toList());
 
