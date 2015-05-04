@@ -5,6 +5,7 @@ Search DataCenters Functionality
 ----------------------------------
 
 Implemented:
+
 1. Case insensitive search by ID 
 
 ``` java
@@ -25,6 +26,7 @@ Search Groups Functionality
 -----------------------------
 
 Implemented:
+
 1. Possibilities to search by full group name match.
 
 ``` java
@@ -42,6 +44,7 @@ Search Servers Functionality
 -----------------------------
 
 Implemented:
+
 1. Possibilities to search by server status - **active**, **archived**, **underConstruction**
 2. Possibilities to search by server power state - **started**, **paused**, **stopped**
 
@@ -62,6 +65,7 @@ Add public IP functionality
 ---------------------------
 
 Implemented:
+
 1. Possibilities to add public IP for multiple servers specified by reference
 2. Possibilities to add public IP for multiple servers specified by server filter
 
@@ -102,6 +106,7 @@ Modify public IP functionality
 ------------------------------
 
 Implemented:
+
 1. Possibilities to modify public IP for multiple servers specified by reference
 2. Possibilities to modify public IP for multiple servers specified by server filter
 
@@ -146,6 +151,7 @@ Delete public IP functionality
 ------------------------------
 
 Implemented:
+
 1. Possibilities to delete public IP by server reference
 2. Possibilities to delete public IP by server filter
 
@@ -162,6 +168,7 @@ Modify Group Functionality
 --------------------------
 
 Implemented:
+
 1. Possibilities to modify multiple groups specified by references
 2. Possibilities to modify multiple groups specified by group filter
 
