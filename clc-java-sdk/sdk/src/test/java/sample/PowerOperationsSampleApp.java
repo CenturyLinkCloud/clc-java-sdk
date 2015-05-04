@@ -85,21 +85,21 @@ public class PowerOperationsSampleApp extends Assert {
         return
             serverService
                 .create(new CreateServerConfig()
-                        .name("PWROPS")
-                        .description(name)
-                        .type(STANDARD)
-                        .group(Group.refByName(US_EAST_STERLING, "MyServers"))
-                        .timeToLive(ZonedDateTime.now().plusDays(1))
-                        .machine(new Machine()
-                                .cpuCount(1)
-                                .ram(3)
-                        )
-                        .template(Template.refByOs()
-                                .dataCenter(US_EAST_STERLING)
-                                .type(CENTOS)
-                                .version("6")
-                                .architecture(x86_64)
-                        )
+                    .name("PWROPS")
+                    .description(name)
+                    .type(STANDARD)
+                    .group(Group.refByName(US_EAST_STERLING, "MyServers"))
+                    .timeToLive(ZonedDateTime.now().plusDays(1))
+                    .machine(new Machine()
+                        .cpuCount(1)
+                        .ram(3)
+                    )
+                    .template(Template.refByOs()
+                        .dataCenter(US_EAST_STERLING)
+                        .type(CENTOS)
+                        .version("6")
+                        .architecture(x86_64)
+                    )
                 );
     }
 
@@ -130,10 +130,12 @@ public class PowerOperationsSampleApp extends Assert {
 
         assertEquals(
             serverService
-                .findByRef(refByDescription(US_EAST_STERLING, "a_nginx"))
-                .getDetails()
-                .getPowerState(),
-            "started"
+                .findLazy(new ServerFilter()
+                    .dataCenters(US_EAST_STERLING)
+                    .groupNames("MyServers")
+                )
+                .filter(s -> s.getDetails().getPowerState().equals("started"))
+                .count(), 3
         );
     }
 
@@ -149,14 +151,12 @@ public class PowerOperationsSampleApp extends Assert {
 
         assertEquals(
             serverService
-                .findByRef(Server.refByDescription()
-                    .dataCenter(US_EAST_STERLING)
-                    .keyword("a_apache")
+                .findLazy(new ServerFilter()
+                    .dataCenters(US_EAST_STERLING)
+                    .descriptionContains("a_apache")
                 )
-                .getDetails()
-                .getSnapshots()
-                .size(),
-            1
+                .filter(s -> s.getDetails().getSnapshots().size() > 0)
+                .count(), 2
         );
     }
 
