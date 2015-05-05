@@ -1,6 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
 import com.centurylink.cloud.sdk.servers.client.domain.group.*;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
 /**
  * @author ilya.drabenia
@@ -31,5 +32,11 @@ public class GroupConverter {
             req.add(new CustomFieldPatchOperation(groupConfig.getCustomFields()));
         }
         return req;
+    }
+
+    public GroupConfig createGroupConfig(GroupHierarchyConfig hierarchyConfig, String parentGroupId) {
+        return new GroupConfig()
+            .name(hierarchyConfig.getName())
+            .parentGroup(Group.refById(parentGroupId));
     }
 }
