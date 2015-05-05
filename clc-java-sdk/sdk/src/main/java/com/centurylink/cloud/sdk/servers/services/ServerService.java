@@ -422,6 +422,16 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     }
 
     /**
+     * Create snapshot of a single server or group of servers. Default expiration time is 10 days.
+     *
+     * @param serverRefs     server references list
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Server... serverRefs) {
+        return createSnapshot(10, serverRefs);
+    }
+
+    /**
      * Create snapshot of a single server or group of servers
      *
      * @param expirationDays expiration days (must be between 1 and 10)
@@ -437,6 +447,16 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                         .serverIds(ids(serverFilter))
                 )
             );
+    }
+
+    /**
+     * Create snapshot of a single server or group of servers. Default expiration time is 10 days.
+     *
+     * @param serverFilter search servers criteria
+     * @return OperationFuture wrapper for BaseServerResponse list
+     */
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(ServerFilter serverFilter) {
+        return createSnapshot(10, serverFilter);
     }
 
     /**

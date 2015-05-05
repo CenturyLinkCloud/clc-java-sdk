@@ -131,7 +131,7 @@ public class PowerOperationsSampleApp extends Assert {
     @Test
     public void testCreateSnapshots() {
         serverService
-            .createSnapshot(10, new ServerFilter()
+            .createSnapshot(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
                 .groupNames("MyServers")
                 .descriptionContains("a_")
@@ -148,4 +148,50 @@ public class PowerOperationsSampleApp extends Assert {
         );
     }
 
+    @Test
+    public void testResetMyServersGroup() {
+        serverService
+            .reset(new ServerFilter()
+                .dataCenters(US_EAST_STERLING)
+                .groupNames("MyServers")
+                .descriptionContains("a_")
+            )
+            .waitUntilComplete();
+
+        assert
+            serverService
+                .findByRef(Server.refByDescription()
+                    .dataCenter(US_EAST_STERLING)
+                    .description("a_nginx")
+                )
+                .getDetails()
+                .getPowerState()
+                .equals("started");
+    }
+
+    @Test
+    public void testPowerOffMySqlServer() {
+        ServerFilter mysqlServer = new ServerFilter()
+            .dataCenters(US_EAST_STERLING)
+            .groupNames("MyServers")
+            .descriptionContains("b_");
+
+        serverService
+            .powerOff(mysqlServer)
+            .waitUntilComplete();
+
+        assert
+            serverService
+                .findByRef(Server.refByDescription()
+                    .dataCenter(US_EAST_STERLING)
+                    .description("b_mysql")
+                )
+                .getDetails()
+                .getPowerState()
+                .equals("stopped");
+
+        serverService
+            .powerOn(mysqlServer)
+            .waitUntilComplete();
+    }
 }
