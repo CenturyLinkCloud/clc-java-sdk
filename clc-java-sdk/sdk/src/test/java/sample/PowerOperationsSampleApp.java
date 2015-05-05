@@ -12,6 +12,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupNameRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
@@ -108,24 +109,30 @@ public class PowerOperationsSampleApp extends Assert {
             .as(GroupByIdRef.class);
     }
 
+    private GroupNameRef myServersGroup() {
+        return Group.refByName()
+            .dataCenter(US_EAST_STERLING)
+            .name("MyServers");
+    }
+
+    private Server mysqlServer() {
+        return
+            Server.refByDescription()
+                .dataCenter(US_EAST_STERLING)
+                .description("b_mysql");
+    }
+
     @Test
     public void testWholeGroupReboot() {
         groupService
-            .reboot(Group.refByName()
-                .dataCenter(US_EAST_STERLING)
-                .name("MyServers")
-            )
+            .reboot(myServersGroup())
             .waitUntilComplete();
 
-        assertEquals(
+        assert
             serverService
-                .findLazy(new ServerFilter()
-                    .dataCenters(US_EAST_STERLING)
-                    .groupNames("MyServers")
-                )
+                .findLazy(new ServerFilter().groups(myServersGroup()))
                 .filter(s -> s.getDetails().getPowerState().equals("started"))
-                .count(), 3
-        );
+                .count() == 3L;
     }
 
     @Test
@@ -138,18 +145,17 @@ public class PowerOperationsSampleApp extends Assert {
             )
             .waitUntilComplete();
 
-        assertEquals(
+        assert
             serverService
                 .findByRef(Server.refByDescription()
                     .dataCenter(US_EAST_STERLING)
                     .description("a_apache")
                 )
-                .getDetails().getSnapshots().size(), 1
-        );
+                .getDetails().getSnapshots().size() == 1;
     }
 
     @Test
-    public void testResetMyServersGroup() {
+    public void testResetSubGroup() {
         serverService
             .reset(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
@@ -176,13 +182,6 @@ public class PowerOperationsSampleApp extends Assert {
         testStartMySql();
     }
 
-    private Server mysqlServer() {
-        return
-            Server.refByDescription()
-                .dataCenter(US_EAST_STERLING)
-                .description("b_mysql");
-    }
-
     private void testStartMySql() {
         serverService
             .powerOn(mysqlServer())
@@ -201,7 +200,8 @@ public class PowerOperationsSampleApp extends Assert {
             .powerOff(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
                 .groupNames("MyServers")
-                .descriptionContains("b_"))
+                .descriptionContains("b_")
+            )
             .waitUntilComplete();
 
         assert
