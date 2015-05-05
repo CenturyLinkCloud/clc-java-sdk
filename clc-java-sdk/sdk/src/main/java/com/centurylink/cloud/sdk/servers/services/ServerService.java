@@ -550,7 +550,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @param servers server references
      * @return OperationFuture wrapper for list of ServerRef
      */
-    OperationFuture<List<Server>> revertToSnapshot(Server... servers) {
+    public OperationFuture<List<Server>> revertToSnapshot(Server... servers) {
         List<Server> serverList = Arrays.asList(servers);
 
         List<JobFuture> futures = serverList.stream()
@@ -565,9 +565,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             .collect(toList());
 
         return new OperationFuture<>(
-                serverList,
-                new ParallelJobsFuture(futures)
-            );
+            serverList,
+            new ParallelJobsFuture(futures)
+        );
     }
 
     /**

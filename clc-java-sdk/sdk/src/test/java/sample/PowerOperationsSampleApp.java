@@ -31,6 +31,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.server.refs.Serv
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
+import static java.lang.Boolean.TRUE;
 
 @Test(groups = SAMPLES)
 public class PowerOperationsSampleApp extends Assert {
@@ -109,7 +110,7 @@ public class PowerOperationsSampleApp extends Assert {
             .as(GroupByIdRef.class);
     }
 
-    private GroupNameRef myServersGroup() {
+    private Group myServersGroup() {
         return Group.refByName()
             .dataCenter(US_EAST_STERLING)
             .name("MyServers");
@@ -132,7 +133,7 @@ public class PowerOperationsSampleApp extends Assert {
             serverService
                 .findLazy(new ServerFilter().groups(myServersGroup()))
                 .filter(s -> s.getDetails().getPowerState().equals("started"))
-                .count() == 3L;
+                .count() == 3;
     }
 
     @Test
@@ -154,48 +155,37 @@ public class PowerOperationsSampleApp extends Assert {
                 .getDetails().getSnapshots().size() == 1;
     }
 
-    @Test
-    public void testResetSubGroup() {
-        serverService
-            .reset(new ServerFilter()
-                .dataCenters(US_EAST_STERLING)
-                .groupNames("MyServers")
-                .descriptionContains("a_")
-            )
+    @Test(enabled = false)
+    public void testStartMaintenanceMode() {
+        groupService
+            .startMaintenance(myServersGroup())
             .waitUntilComplete();
 
         assert
             serverService
-                .findByRef(Server.refByDescription()
-                    .dataCenter(US_EAST_STERLING)
-                    .description("a_nginx")
-                )
-                .getDetails()
-                .getPowerState()
-                .equals("started");
+                .findLazy(new ServerFilter().groups(myServersGroup()))
+                .filter(s -> TRUE.equals(s.getDetails().getInMaintenanceMode()))
+                .count() == 3;
     }
 
     @Test
-    public void testPowerOperations() {
-        testStopMySql();
+    public void testStopMaintenanceMode() {
+        testStartMaintenanceMode();
 
-        testStartMySql();
-    }
-
-    private void testStartMySql() {
-        serverService
-            .powerOn(mysqlServer())
+        groupService
+            .stopMaintenance(myServersGroup())
             .waitUntilComplete();
 
         assert
             serverService
-                .findByRef(mysqlServer())
-                .getDetails()
-                .getPowerState()
-                .equals("started");
+                .findLazy(new ServerFilter().groups(myServersGroup()))
+                .filter(s -> !TRUE.equals(s.getDetails().getInMaintenanceMode()))
+                .count() == 3;
     }
 
-    private void testStopMySql() {
+
+    @Test(enabled = false)
+    public void testStopMySql() {
         serverService
             .powerOff(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
@@ -211,4 +201,21 @@ public class PowerOperationsSampleApp extends Assert {
                 .getPowerState()
                 .equals("stopped");
     }
+
+    @Test
+    public void testStartMySql() {
+        testStopMySql();
+
+        serverService
+            .powerOn(mysqlServer())
+            .waitUntilComplete();
+
+        assert
+            serverService
+                .findByRef(mysqlServer())
+                .getDetails()
+                .getPowerState()
+                .equals("started");
+    }
+
 }
