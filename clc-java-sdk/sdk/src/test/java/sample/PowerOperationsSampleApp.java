@@ -196,7 +196,7 @@ public class PowerOperationsSampleApp extends Assert {
                 .equals("started");
     }
 
-    private ServerFilter testStopMySql() {
+    private void testStopMySql() {
         serverService
             .powerOff(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
