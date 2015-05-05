@@ -1,14 +1,12 @@
 package com.centurylink.cloud.sdk.core.client.errors;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
-import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 import java.io.IOException;
-import java.io.InputStream;
 
 import static java.util.Arrays.asList;
 import static javax.ws.rs.core.Response.Status.*;
@@ -20,18 +18,8 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
 
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
-        if (!isResponseSuccess(responseContext)) {
-            InputStream entityStream = responseContext.getEntityStream();
-            ErrorMessageResponse response = objectMapper().readValue(entityStream, ErrorMessageResponse.class);
-
-            if (response.getMessage() != null) {
-                throw new ClcClientException(
-                    response.getMessage(),
-                    new ClcException(
-                        objectMapper().writeValueAsString(response.getModelState())
-                    )
-                );
-            }
+        if (BAD_REQUEST.getStatusCode() == responseContext.getStatusInfo().getStatusCode()) {
+            throw new ClcClientException(objectMapper().writeValueAsString(responseContext.getEntityStream()));
         }
     }
 

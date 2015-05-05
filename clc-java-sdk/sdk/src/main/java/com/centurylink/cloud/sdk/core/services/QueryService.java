@@ -6,10 +6,8 @@ import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.core.services.refs.ReferenceNotResolvedException;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author Ilya Drabenia
@@ -35,11 +33,11 @@ public interface QueryService<R extends Reference<F>, F extends Filter<F>, M>
             return results.get(0);
         } else if (results.size() > 1) {
             throw new ReferenceNotResolvedException(
-                "Resource by reference %s not found", reference.toReadableString()
+                "Reference %s point to multiple resource", reference.toReadableString()
             );
         } else {
             throw new ReferenceNotResolvedException(
-                "Reference %s point to multiple resource", reference.toReadableString()
+                "Resource by reference %s not found", reference.toReadableString()
             );
         }
     }

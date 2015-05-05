@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -78,7 +79,8 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                     criteria.getIds().size() > 0) {
                     return
                         criteria.getIds().stream()
-                            .map(curId -> client.getGroup(curId, true));
+                            .map(nullable(curId -> client.getGroup(curId, true)))
+                            .filter(notNull());
                 } else {
                     Stream<DataCenterMetadata> dataCenters =
                         dataCenterService

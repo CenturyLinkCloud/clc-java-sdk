@@ -1,7 +1,9 @@
 package com.centurylink.cloud.sdk.core.services.filter;
 
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import org.apache.http.HttpStatus;
 
+import javax.ws.rs.ClientErrorException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -10,6 +12,12 @@ import java.util.function.Function;
  * @author Ilya Drabenia
  */
 public abstract class Filters {
+
+    //Forbidden added because of access denied for deleted groups
+    private static List<Integer> processedCodes = Arrays.asList(new Integer[] {
+        HttpStatus.SC_NOT_FOUND,
+        HttpStatus.SC_FORBIDDEN}
+    );
 
     static <T extends Filter<T>> T reduce(List<T> filters, BinaryOperator<T> operator) {
         int length = filters.size();
@@ -29,8 +37,11 @@ public abstract class Filters {
         return (T val) -> {
             try {
                 return supplier.apply(val);
-            } catch (ClcClientException ex) {
-                return null;
+            } catch (ClientErrorException ex) {
+                if (processedCodes.contains(ex.getResponse().getStatus())) {
+                    return null;
+                }
+                throw new ClientErrorException(ex.getResponse());
             }
         };
     }

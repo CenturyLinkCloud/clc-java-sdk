@@ -44,7 +44,7 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
     @AfterMethod
     public void deleteServer() {
-        serverService.delete(server.asRefById());
+        serverService.delete(server.asRefById().asFilter());
     }
 
 }
