@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.core.services.filter;
 
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import org.apache.http.HttpStatus;
 
 import javax.ws.rs.ClientErrorException;
@@ -38,8 +37,6 @@ public abstract class Filters {
         return (T val) -> {
             try {
                 return supplier.apply(val);
-            } catch (ClcClientException ex) {
-                return null;
             } catch (ClientErrorException ex) {
                 if (processedCodes.contains(ex.getResponse().getStatus())) {
                     return null;
