@@ -78,15 +78,14 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         );
     }
 
-    public OperationFuture<ServerMetadata> modify(Server server, ModifyServerConfig modifyServerConfig) {
+    public OperationFuture<Server> modify(Server server, ModifyServerConfig modifyServerConfig) {
         List<ModifyServerRequest> request = serverConverter.buildModifyServerRequest(modifyServerConfig);
 
-        BaseServerResponse response = client.modify(idByRef(server), request);
-        ServerMetadata serverInfo = client.findServerById(idByRef(server));
+        Link response = client.modify(idByRef(server), request);
 
         return new OperationFuture<>(
-            serverInfo,
-            response.findStatusId(),
+            server,
+            response.getId(),
             queueClient
         );
     }
