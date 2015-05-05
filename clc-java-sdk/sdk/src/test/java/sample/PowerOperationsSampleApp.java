@@ -170,28 +170,45 @@ public class PowerOperationsSampleApp extends Assert {
     }
 
     @Test
-    public void testPowerOffMySqlServer() {
-        ServerFilter mysqlServer = new ServerFilter()
-            .dataCenters(US_EAST_STERLING)
-            .groupNames("MyServers")
-            .descriptionContains("b_");
+    public void testPowerOperations() {
+        testStopMySql();
 
+        testStartMySql();
+    }
+
+    private Server mysqlServer() {
+        return
+            Server.refByDescription()
+                .dataCenter(US_EAST_STERLING)
+                .description("b_mysql");
+    }
+
+    private void testStartMySql() {
         serverService
-            .powerOff(mysqlServer)
+            .powerOn(mysqlServer())
             .waitUntilComplete();
 
         assert
             serverService
-                .findByRef(Server.refByDescription()
-                    .dataCenter(US_EAST_STERLING)
-                    .description("b_mysql")
-                )
+                .findByRef(mysqlServer())
+                .getDetails()
+                .getPowerState()
+                .equals("started");
+    }
+
+    private ServerFilter testStopMySql() {
+        serverService
+            .powerOff(new ServerFilter()
+                .dataCenters(US_EAST_STERLING)
+                .groupNames("MyServers")
+                .descriptionContains("b_"))
+            .waitUntilComplete();
+
+        assert
+            serverService
+                .findByRef(mysqlServer())
                 .getDetails()
                 .getPowerState()
                 .equals("stopped");
-
-        serverService
-            .powerOn(mysqlServer)
-            .waitUntilComplete();
     }
 }
