@@ -81,9 +81,6 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     private void deleteGroups(Group groupRef1, Group groupRef2) {
         groupService.delete(groupRef1.asFilter().or(groupRef2.asFilter())).waitUntilComplete();
-
-        //if try to check findByRef() - return 403 status code
-        //groupService.findByRef(groupRef1);
     }
 
     private GroupFilter toFilter(Group... groups) {
