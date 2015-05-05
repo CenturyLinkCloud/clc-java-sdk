@@ -37,7 +37,6 @@ import static java.lang.Boolean.TRUE;
 public class PowerOperationsSampleApp extends Assert {
     private final ServerService serverService;
     private final GroupService groupService;
-    private final TemplateService templateService;
 
     public PowerOperationsSampleApp() {
         ClcSdk sdk = new ClcSdk(
@@ -46,7 +45,6 @@ public class PowerOperationsSampleApp extends Assert {
 
         serverService = sdk.serverService();
         groupService = sdk.groupService();
-        templateService = sdk.templateService();
     }
 
     @BeforeClass
@@ -180,7 +178,7 @@ public class PowerOperationsSampleApp extends Assert {
             serverService
                 .findLazy(new ServerFilter().groups(myServersGroup()))
                 .filter(s -> !TRUE.equals(s.getDetails().getInMaintenanceMode()))
-                .count() == 3;
+                .count() == 3L;
     }
 
 
