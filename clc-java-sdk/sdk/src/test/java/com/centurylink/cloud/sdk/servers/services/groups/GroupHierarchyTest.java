@@ -13,6 +13,7 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -23,7 +24,7 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
     @Inject
     GroupService groupService;
 
-    @Test(groups = {INTEGRATION})
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testGroupHierarchy() {
         GroupHierarchyConfig config = initConfig();
         GroupMetadata parentGroup = defineGroupHierarchy(config);

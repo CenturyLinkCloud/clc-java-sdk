@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.core.services.filter;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 
+import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -29,7 +30,7 @@ public abstract class Filters {
         return (T val) -> {
             try {
                 return supplier.apply(val);
-            } catch (ClcClientException ex) {
+            } catch (ClcClientException | NotFoundException ex) {
                 return null;
             }
         };

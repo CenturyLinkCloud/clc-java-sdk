@@ -23,7 +23,7 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    @Test(enabled = false, expectedExceptions = ReferenceNotResolvedException.class)
+    @Test(expectedExceptions = ReferenceNotResolvedException.class)
     public void testDeleteServers() {
         OperationFuture<ServerMetadata> future1 = serverService.create(TestServerSupport.anyServerConfig());
         OperationFuture<ServerMetadata> future2 = serverService.create(TestServerSupport.anyServerConfig());
@@ -41,15 +41,12 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
         serverService.delete(ref1.asFilter().id(ref2.as(ServerByIdRef.class).getId())).waitUntilComplete();
 
-
-
-        //TODO find by non existing id throws com.fasterxml.jackson.databind.JsonMappingException
-//        //catch only 1st call of finding server
-//        try {
-//            serverService.findByRef(ref1);
-//        } catch (ResourceNotFoundException e) {
-//            serverService.findByRef(ref2);
-//        }
+        //catch only 1st call of finding server
+        try {
+            serverService.findByRef(ref1);
+        } catch (ReferenceNotResolvedException e) {
+            serverService.findByRef(ref2);
+        }
 
     }
 
