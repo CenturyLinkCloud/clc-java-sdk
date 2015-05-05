@@ -11,7 +11,6 @@ import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
@@ -19,6 +18,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
@@ -132,6 +132,60 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             Group.refById(group.getId()),
             new NoWaitingJobFuture()
         );
+    }
+
+    /**
+     * Create group hierarchy based on {@code GroupHierarchyConfig} instance
+     * Existing groups are not override!
+     *
+     * @param dataCenter datacenter in which will be placed group hierarchy
+     * @param config group hierarchy config
+     * @return OperationFuture wrapper for parent Group
+     */
+    public OperationFuture<Group> defineGroupHierarchy(DataCenter dataCenter, GroupHierarchyConfig config) {
+        checkNotNull(dataCenter, "DataCenter must be not null");
+        checkNotNull(config, "GroupHierarchyConfig must be not null");
+
+        String parentGroupId = dataCenterService.findByRef(dataCenter).getGroup().getId();
+
+        OperationFuture<Group> root;
+
+        GroupMetadata rootGroup = findGroup(config, parentGroupId);
+
+        if (rootGroup != null) {
+            root = new OperationFuture<>(Group.refById(rootGroup.getId()), new NoWaitingJobFuture());
+        } else {
+            root = create(converter.createGroupConfig(config, parentGroupId));
+        }
+
+        createSubgroups(config, root.getResult().as(GroupByIdRef.class).getId());
+
+        return root;
+    }
+
+    private GroupMetadata findGroup(GroupHierarchyConfig config, String parentGroupId) {
+        GroupMetadata parentGroup = findByRef(Group.refById(parentGroupId));
+
+        return parentGroup.getGroups().stream()
+            .filter(group -> group.getName().equals(config.getName()))
+            .findFirst()
+            .orElse(null);
+    }
+
+    private void createSubgroups(GroupHierarchyConfig config, String parentGroupId) {
+        config.getSubgroups().forEach(subgroup -> {
+            GroupMetadata curGroup = findGroup(subgroup, parentGroupId);
+            String parentSubGroupId;
+            if (curGroup != null) {
+                parentSubGroupId = curGroup.getId();
+            } else {
+                parentSubGroupId = create(converter.createGroupConfig(subgroup, parentGroupId))
+                    .getResult()
+                    .as(GroupByIdRef.class)
+                    .getId();
+            }
+            createSubgroups(subgroup, parentSubGroupId);
+        });
     }
 
     /**
