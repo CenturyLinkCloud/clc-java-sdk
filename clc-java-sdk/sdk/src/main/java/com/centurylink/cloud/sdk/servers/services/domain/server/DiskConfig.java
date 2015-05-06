@@ -4,9 +4,24 @@ package com.centurylink.cloud.sdk.servers.services.domain.server;
  * @author Ilya Drabenia
  */
 public class DiskConfig {
+
+    private String diskId;
     private DiskType diskType;
     private Integer size;
     private String path;
+
+    public String getDiskId() {
+        return diskId;
+    }
+
+    public void setDiskId(String diskId) {
+        this.diskId = diskId;
+    }
+
+    public DiskConfig diskId(String diskId) {
+        setDiskId(diskId);
+        return this;
+    }
 
     public DiskConfig type(DiskType type) {
         diskType = type;

@@ -78,6 +78,12 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         );
     }
 
+    /**
+     * Modify existing server
+     * @param server server reference
+     * @param modifyServerConfig server config
+     * @return OperationFuture wrapper for ServerRef
+     */
     public OperationFuture<Server> modify(Server server, ModifyServerConfig modifyServerConfig) {
         List<ModifyServerRequest> request = serverConverter.buildModifyServerRequest(modifyServerConfig);
 

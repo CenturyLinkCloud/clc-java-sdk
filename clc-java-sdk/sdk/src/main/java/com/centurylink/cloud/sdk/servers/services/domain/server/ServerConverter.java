@@ -116,9 +116,9 @@ public class ServerConverter {
 
         if (!machineConfig.getDisks().isEmpty()) {
             result.add(
-                new ModifyServerRequest<List<DiskConfig>>()
+                new ModifyServerRequest<List<DiskRequest>>()
                     .member("disks")
-                    .value(machineConfig.getDisks())
+                    .value(buildDiskRequestList(machineConfig.getDisks()))
             );
         }
 
@@ -128,6 +128,7 @@ public class ServerConverter {
     public DiskRequest buildDisk(DiskConfig diskConfig) {
         return
             new DiskRequest()
+                .diskId(diskConfig.getDiskId())
                 .type(diskConfig.getDiskType() == DiskType.RAW ? "raw" : "partitioned")
                 .path(diskConfig.getPath())
                 .sizeGB(diskConfig.getSize());

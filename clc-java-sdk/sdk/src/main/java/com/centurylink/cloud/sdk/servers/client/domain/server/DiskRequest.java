@@ -4,9 +4,24 @@ package com.centurylink.cloud.sdk.servers.client.domain.server;
  * @author Ilya Drabenia
  */
 public class DiskRequest {
+
+    private String diskId;
     private String path;
     private String type;
     private Integer sizeGB;
+
+    public String getDiskId() {
+        return diskId;
+    }
+
+    public void setDiskId(String diskId) {
+        this.diskId = diskId;
+    }
+
+    public DiskRequest diskId(String diskId) {
+        setDiskId(diskId);
+        return this;
+    }
 
     public String getPath() {
         return path;
