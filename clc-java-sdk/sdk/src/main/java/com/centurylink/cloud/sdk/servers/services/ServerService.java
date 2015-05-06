@@ -100,7 +100,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Modify list of servers
      * @param serverList server list
      * @param modifyServerConfig server config
-     * @return  OperationFuture wrapper for list of Servers
+     * @return OperationFuture wrapper for list of Servers
      */
     OperationFuture<List<Server>> modify(List<Server> serverList, ModifyServerConfig modifyServerConfig) {
         List<JobFuture> futures = serverList.stream()
@@ -120,6 +120,22 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             serverList,
             new ParallelJobsFuture(futures)
         );
+    }
+
+
+    /**
+     * Modify servers by filter
+     * @param serverFilter server filter
+     * @param modifyServerConfig server config
+     * @return OperationFuture wrapper for list of Servers
+     */
+    OperationFuture<List<Server>> modify(ServerFilter serverFilter, ModifyServerConfig modifyServerConfig) {
+        List<Server> serverList = find(serverFilter)
+            .stream()
+            .map(ServerMetadata::asRefById)
+            .collect(toList());
+
+        return modify(serverList, modifyServerConfig);
     }
 
     private JobFuture addPublicIpIfNeeded(CreateServerConfig command, ServerMetadata serverInfo) {
