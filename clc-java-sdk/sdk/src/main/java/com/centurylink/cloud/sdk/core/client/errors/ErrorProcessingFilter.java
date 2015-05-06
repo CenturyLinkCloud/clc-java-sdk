@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.core.client.errors;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientResponseContext;
@@ -19,7 +20,9 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
         if (BAD_REQUEST.getStatusCode() == responseContext.getStatusInfo().getStatusCode()) {
-            throw new ClcClientException(objectMapper().writeValueAsString(responseContext.getEntityStream()));
+            String response = IOUtils.toString(responseContext.getEntityStream(), "UTF-8");
+
+            throw new ClcClientException(response);
         }
     }
 
