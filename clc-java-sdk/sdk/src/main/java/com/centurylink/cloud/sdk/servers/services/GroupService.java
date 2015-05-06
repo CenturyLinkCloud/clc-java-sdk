@@ -172,7 +172,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     }
 
     private void createSubgroups(GroupHierarchyConfig config, String parentGroupId) {
-        config.getServers().forEach(serverConfig -> serverConfig.group(Group.refById(parentGroupId)));
+        config.getSubitems().forEach(serverConfig -> serverConfig.group(Group.refById(parentGroupId)));
         config.getSubgroups().forEach(subgroupConfig -> {
             GroupMetadata curGroup = findGroup(subgroupConfig, parentGroupId);
             String subGroupId;
@@ -189,29 +189,13 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     }
 
     private OperationFuture<Group> createServers(GroupHierarchyConfig config, String rootGroupId) {
-        List<CreateServerConfig> configs = getCreateServerConfig(config);
+        List<CreateServerConfig> configs = config.getServerConfigs();
 
         List<JobFuture> futures = configs.stream()
             .map(serverConfig -> serverService().create(serverConfig).jobFuture())
             .collect(toList());
 
         return new OperationFuture<>(Group.refById(rootGroupId), new ParallelJobsFuture(futures));
-    }
-
-    private List<CreateServerConfig> getCreateServerConfig(GroupHierarchyConfig config) {
-        List<CreateServerConfig> serverConfigs = new ArrayList<>();
-        collectConfigs(config, serverConfigs);
-        return serverConfigs;
-    }
-
-    private void collectConfigs(GroupHierarchyConfig config, List<CreateServerConfig> serverConfigs) {
-        config.getServers().stream().forEach(serverConfig -> {
-            for (int i=0;i<serverConfig.getCount();i++) {
-                serverConfigs.add(serverConfig);
-            }
-        });
-        config.getSubgroups().stream()
-            .forEach(subgroupConfig -> collectConfigs(subgroupConfig, serverConfigs));
     }
 
     /**

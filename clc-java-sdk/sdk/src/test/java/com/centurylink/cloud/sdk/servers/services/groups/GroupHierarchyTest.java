@@ -41,14 +41,14 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
             .subgroups(
                 group("Group1-1").subgroups(
                     group("Group1-1-1")
-                    .servers(
+                    .subitems(
                         mysqlServer().count(2),
                         apacheHttpServer()),
                     group("Group1-1-2")
                         .subgroups(
                             group("Group1-1-2-1")
                         )
-                        .servers(nginxServer())
+                        .subitems(nginxServer())
                 ),
                 group("Group1-2")
             );
