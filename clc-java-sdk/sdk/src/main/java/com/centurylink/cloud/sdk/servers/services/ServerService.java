@@ -96,6 +96,32 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         );
     }
 
+    /**
+     * Modify list of servers
+     * @param serverList server list
+     * @param modifyServerConfig server config
+     * @return  OperationFuture wrapper for list of Servers
+     */
+    OperationFuture<List<Server>> modify(List<Server> serverList, ModifyServerConfig modifyServerConfig) {
+        List<JobFuture> futures = serverList.stream()
+            .map(
+                server ->
+                    baseServerResponse(
+                        client.modify(
+                            idByRef(server),
+                            serverConverter.buildModifyServerRequest(modifyServerConfig)
+                        )
+                    )
+                    .jobFuture()
+            )
+            .collect(toList());
+
+        return new OperationFuture<>(
+            serverList,
+            new ParallelJobsFuture(futures)
+        );
+    }
+
     private JobFuture addPublicIpIfNeeded(CreateServerConfig command, ServerMetadata serverInfo) {
         if (command.getNetwork().getPublicIpConfig() != null) {
             return
