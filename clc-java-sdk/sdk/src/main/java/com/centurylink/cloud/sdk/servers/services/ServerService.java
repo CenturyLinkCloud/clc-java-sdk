@@ -122,7 +122,6 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         );
     }
 
-
     /**
      * Modify servers by filter
      * @param serverFilter server filter
