@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class GroupHierarchyConfig {
     private String name;
     private String description;
     private List<GroupHierarchyConfig> subgroups = new ArrayList<>();
+    private List<CreateServerConfig> servers = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -33,6 +35,16 @@ public class GroupHierarchyConfig {
     public GroupHierarchyConfig subgroups(GroupHierarchyConfig... subgroups) {
         checkNotNull(subgroups, "List of subgroups must be not a null");
         this.subgroups.addAll(asList(subgroups));
+        return this;
+    }
+
+    public List<CreateServerConfig> getServers() {
+        return servers;
+    }
+
+    public GroupHierarchyConfig servers(CreateServerConfig... servers) {
+        checkNotNull(servers, "List of server configs must be not a null");
+        this.servers.addAll(asList(servers));
         return this;
     }
 

@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static java.util.stream.Collectors.toList;
@@ -39,18 +40,22 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
             .name("Parent Group")
             .subgroups(
                 group("Group1-1").subgroups(
-                    group("Group1-1-1"),
+                    group("Group1-1-1")
+                    .servers(
+                        mysqlServer().count(2),
+                        apacheHttpServer()),
                     group("Group1-1-2")
                         .subgroups(
                             group("Group1-1-2-1")
                         )
+                        .servers(nginxServer())
                 ),
                 group("Group1-2")
             );
     }
 
     private GroupMetadata defineGroupHierarchy(GroupHierarchyConfig config) {
-        groupService.defineGroupHierarchy(DataCenter.DE_FRANKFURT, config);
+        groupService.defineGroupHierarchy(DataCenter.DE_FRANKFURT, config).waitUntilComplete();
 
         return groupService.findByDataCenter(DataCenter.DE_FRANKFURT).stream()
             .filter(group -> group.getName().equals(config.getName()))
@@ -71,6 +76,11 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
             .collect(toList());
 
         assertTrue(metadataNames.containsAll(configNames), "group must have all groups from config");
+
+        //TODO GroupMetadata.getServers() returns empty list. should it be filled?
+//        assertEquals(groupMetadata.getServers().size(), hierarchyConfig.getServers().size(),
+//            "check server count"
+//        );
 
         groupMetadata.getGroups().stream()
             .forEach(group -> {

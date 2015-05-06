@@ -5,6 +5,13 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 
 import java.time.ZonedDateTime;
 
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
+
 
 /**
  * @author ilya.drabenia
@@ -21,6 +28,54 @@ public class CreateServerConfig {
     private NetworkConfig network = new NetworkConfig();
     private TimeToLive timeToLive;
     private boolean managedOS = false;
+    private int count = 1;
+
+    //TODO temporary config
+    private static CreateServerConfig loadTestConfig() {
+        return new CreateServerConfig()
+            .name("ALTR")
+            .type(STANDARD)
+
+            .group(Group.refByName()
+                    .name(DEFAULT_GROUP)
+                    .dataCenter(DE_FRANKFURT)
+            )
+
+            .machine(new Machine()
+                    .cpuCount(1)
+                    .ram(2)
+            )
+
+            .template(Template.refByOs()
+                    .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
+                    .type(CENTOS)
+                    .version("6")
+                    .architecture(x86_64)
+            )
+            .timeToLive(ZonedDateTime.now().plusHours(2));
+    }
+
+    public static CreateServerConfig mysqlServer() {
+        return loadTestConfig();
+    }
+
+    public static CreateServerConfig nginxServer() {
+        return loadTestConfig();
+    }
+
+    public static CreateServerConfig apacheHttpServer() {
+        return loadTestConfig();
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public CreateServerConfig count(int count) {
+        assert count > 0;
+        this.count = count;
+        return this;
+    }
 
     public String getId() {
         return id;
