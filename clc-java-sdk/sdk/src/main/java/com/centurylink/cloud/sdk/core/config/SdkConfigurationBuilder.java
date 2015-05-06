@@ -4,7 +4,7 @@ package com.centurylink.cloud.sdk.core.config;
  * @author Ilya Drabenia
  */
 public class SdkConfigurationBuilder {
-    private Integer maxRetries = 3;
+    private Integer maxRetries = 7;
 
     public SdkConfigurationBuilder maxRetries(Integer retries) {
         maxRetries = retries;
