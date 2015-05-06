@@ -9,6 +9,7 @@ import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.f
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 import com.google.inject.Inject;
 import com.google.inject.Module;

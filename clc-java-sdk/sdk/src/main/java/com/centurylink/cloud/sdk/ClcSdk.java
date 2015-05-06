@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.servers.ServersModule;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
@@ -15,7 +16,7 @@ import com.google.inject.Inject;
  * @author ilya.drabenia
  */
 // TODO: 1. need to implement support of integration with Spring
-// TODO: 2. need to add network service to this root object
+// TODO: 2. need to add network service to this root object (network service delayed)
 public class ClcSdk {
     @Inject
     ServerService serverService;
@@ -34,8 +35,13 @@ public class ClcSdk {
     }
 
     public ClcSdk(CredentialsProvider credentialsProvider) {
+        this(credentialsProvider, SdkConfiguration.builder().build());
+    }
+
+    public ClcSdk(CredentialsProvider credentialsProvider, SdkConfiguration config) {
         Guice
             .createInjector(
+                config.asModule(),
                 new AuthModule(credentialsProvider),
                 new ServersModule()
             )

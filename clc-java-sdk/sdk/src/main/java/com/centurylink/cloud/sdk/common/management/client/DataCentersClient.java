@@ -5,6 +5,7 @@ import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.Get
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.google.inject.Inject;
 
 /**
@@ -13,8 +14,8 @@ import com.google.inject.Inject;
 public class DataCentersClient extends SdkHttpClient {
 
     @Inject
-    public DataCentersClient(BearerAuthentication authFilter) {
-        super(authFilter);
+    public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {
+        super(authFilter, config);
     }
 
     public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(String dataCenterId) {

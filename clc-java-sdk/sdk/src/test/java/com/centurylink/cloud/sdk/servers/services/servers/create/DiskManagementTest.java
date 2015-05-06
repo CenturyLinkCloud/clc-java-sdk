@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.servers.create;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.ServersModule;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;

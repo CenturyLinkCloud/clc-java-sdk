@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.UpdateGroupRequest;
@@ -27,8 +28,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 public class ServerClient extends SdkHttpClient {
 
     @Inject
-    public ServerClient(BearerAuthentication authFilter) {
-        super(authFilter);
+    public ServerClient(BearerAuthentication authFilter, SdkConfiguration config) {
+        super(authFilter, config);
     }
 
     /**
