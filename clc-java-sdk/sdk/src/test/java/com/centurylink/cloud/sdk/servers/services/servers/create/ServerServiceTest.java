@@ -20,6 +20,6 @@ public class ServerServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION}, expectedExceptions = ReferenceNotResolvedException.class)
     public void testGetServer() {
-            serverService.findByRef(Server.refById("randomString"));
+        serverService.findByRef(Server.refById("randomString"));
     }
 }

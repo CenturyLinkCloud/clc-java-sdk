@@ -3,7 +3,10 @@ package com.centurylink.cloud.sdk.core.client.errors;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpStatus;
 
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.RedirectionException;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
@@ -11,6 +14,7 @@ import java.io.IOException;
 
 import static java.util.Arrays.asList;
 import static javax.ws.rs.core.Response.Status.*;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 
 /**
  * @author ilya.drabenia
@@ -19,31 +23,11 @@ public class ErrorProcessingFilter implements ClientResponseFilter {
 
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
-        if (BAD_REQUEST.getStatusCode() == responseContext.getStatusInfo().getStatusCode()) {
-            String response = IOUtils.toString(responseContext.getEntityStream(), "UTF-8");
-
-            throw new ClcClientException(response);
+        if (responseContext.getStatus() == SC_BAD_REQUEST) {
+            throw new ClcBadRequestException(responseContext);
+        } else if (responseContext.getStatus() >= 400) {
+            throw new ClcHttpClientException(responseContext);
         }
-    }
-
-    /**
-     * Returns true if response contains status codes:
-     * {@code OK}
-     * {@code CREATED}
-     * {@code ACCEPTED}
-     * {@code NO_CONTENT}
-     * {@code NOT_FOUND} - added because client returns only 404 status code and response doesn't contain body,
-     * in case when requested resource not found
-     *
-     * @param responseContext
-     * @return true if response contains acceptable status codes
-     */
-    private boolean isResponseSuccess(ClientResponseContext responseContext) {
-        return asList(OK, CREATED, ACCEPTED, NO_CONTENT, NOT_FOUND).contains(responseContext.getStatusInfo());
-    }
-
-    private ObjectMapper objectMapper() {
-        return new ObjectMapper();
     }
 
 }

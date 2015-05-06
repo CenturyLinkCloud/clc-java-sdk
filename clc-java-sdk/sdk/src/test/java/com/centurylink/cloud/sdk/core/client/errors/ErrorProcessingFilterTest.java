@@ -18,18 +18,14 @@ import javax.ws.rs.client.ResponseProcessingException;
 @Test(groups = TestGroups.INTEGRATION)
 public class ErrorProcessingFilterTest {
 
-    @Test(expectedExceptions = ClcClientException.class)
+    @Test(expectedExceptions = ClcBadRequestException.class)
     public void testIncorrectLogin() throws Throwable {
-        try {
-            Guice
-                .createInjector(
-                    new AuthModule(new StaticCredentialsProvider("12345", "456789"))
-                )
-                .getInstance(BearerAuthentication.class)
-                .filter(Mockito.mock(ClientRequestContext.class));
-        } catch (ResponseProcessingException exception) {
-            throw exception.getCause();
-        }
+        Guice
+            .createInjector(
+                new AuthModule(new StaticCredentialsProvider("12345", "456789"))
+            )
+            .getInstance(BearerAuthentication.class)
+            .filter(Mockito.mock(ClientRequestContext.class));
     }
 
 }
