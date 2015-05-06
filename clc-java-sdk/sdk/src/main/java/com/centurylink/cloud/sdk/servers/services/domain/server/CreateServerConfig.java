@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
+import com.centurylink.cloud.sdk.servers.services.domain.group.ISubItemConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 
@@ -16,7 +17,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.filters
 /**
  * @author ilya.drabenia
  */
-public class CreateServerConfig {
+public class CreateServerConfig implements ISubItemConfig {
     private String id;
     private String name;
     private String description;

@@ -171,20 +171,23 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             .orElse(null);
     }
 
-    private void createSubgroups(GroupHierarchyConfig config, String parentGroupId) {
-        config.getSubitems().forEach(serverConfig -> serverConfig.group(Group.refById(parentGroupId)));
-        config.getSubgroups().forEach(subgroupConfig -> {
-            GroupMetadata curGroup = findGroup(subgroupConfig, parentGroupId);
-            String subGroupId;
-            if (curGroup != null) {
-                subGroupId = curGroup.getId();
+    private void createSubgroups(GroupHierarchyConfig config, String curGroupId) {
+        config.getSubitems().forEach(cfg -> {
+            if (cfg instanceof GroupHierarchyConfig) {
+                GroupMetadata curGroup = findGroup((GroupHierarchyConfig)cfg, curGroupId);
+                String subGroupId;
+                if (curGroup != null) {
+                    subGroupId = curGroup.getId();
+                } else {
+                    subGroupId = create(converter.createGroupConfig((GroupHierarchyConfig)cfg, curGroupId))
+                        .getResult()
+                        .as(GroupByIdRef.class)
+                        .getId();
+                }
+                createSubgroups((GroupHierarchyConfig)cfg, subGroupId);
             } else {
-                subGroupId = create(converter.createGroupConfig(subgroupConfig, parentGroupId))
-                    .getResult()
-                    .as(GroupByIdRef.class)
-                    .getId();
+                ((CreateServerConfig)cfg).group(Group.refById(curGroupId));
             }
-            createSubgroups(subgroupConfig, subGroupId);
         });
     }
 
