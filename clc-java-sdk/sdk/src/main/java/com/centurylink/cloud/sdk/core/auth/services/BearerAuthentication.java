@@ -35,7 +35,9 @@ public class BearerAuthentication implements ClientRequestFilter {
     }
 
     private void requestSessionCredentialsIfNeeded() {
-        if (session == null || session.getToken().isExpired()) {
+        if (session == null
+                || !session.getCredentials().isEqualTo(curCredentials())
+                || session.getToken().isExpired()) {
             session = requestNewSessionCredentials();
         }
     }
@@ -50,18 +52,21 @@ public class BearerAuthentication implements ClientRequestFilter {
     }
 
     private SessionCredentials requestNewSessionCredentials() {
+        Credentials credentials = curCredentials();
+
         LoginResponse result = client.login(new LoginRequest(
-            credentials().getUsername(),
-            credentials().getPassword()
+            credentials.getUsername(),
+            credentials.getPassword()
         ));
 
         return new SessionCredentials(
             new AuthToken(result.getBearerToken()),
-            result.getAccountAlias()
+            result.getAccountAlias(),
+            credentials
         );
     }
 
-    private Credentials credentials() {
+    private Credentials curCredentials() {
         return
             credentialsProvider
                 .refresh()
