@@ -22,6 +22,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyCon
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -150,19 +151,15 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
         String parentGroupId = dataCenterService.findByRef(dataCenter).getGroup().getId();
 
-        OperationFuture<Group> root;
-
         GroupMetadata rootGroup = findGroup(config, parentGroupId);
 
-        if (rootGroup != null) {
-            root = new OperationFuture<>(Group.refById(rootGroup.getId()), new NoWaitingJobFuture());
-        } else {
-            root = create(converter.createGroupConfig(config, parentGroupId));
+        if (rootGroup == null) {
+            rootGroup = findByRef(create(converter.createGroupConfig(config, parentGroupId)).getResult());
         }
 
-        createSubgroups(config, root.getResult().as(GroupByIdRef.class).getId());
+        createSubgroups(config, rootGroup.getId());
 
-        return root;
+        return createServers(config, rootGroup.getId());
     }
 
     private GroupMetadata findGroup(GroupHierarchyConfig config, String parentGroupId) {
@@ -174,20 +171,34 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             .orElse(null);
     }
 
-    private void createSubgroups(GroupHierarchyConfig config, String parentGroupId) {
-        config.getSubgroups().forEach(subgroup -> {
-            GroupMetadata curGroup = findGroup(subgroup, parentGroupId);
-            String parentSubGroupId;
-            if (curGroup != null) {
-                parentSubGroupId = curGroup.getId();
+    private void createSubgroups(GroupHierarchyConfig config, String curGroupId) {
+        config.getSubitems().forEach(cfg -> {
+            if (cfg instanceof GroupHierarchyConfig) {
+                GroupMetadata curGroup = findGroup((GroupHierarchyConfig)cfg, curGroupId);
+                String subGroupId;
+                if (curGroup != null) {
+                    subGroupId = curGroup.getId();
+                } else {
+                    subGroupId = create(converter.createGroupConfig((GroupHierarchyConfig)cfg, curGroupId))
+                        .getResult()
+                        .as(GroupByIdRef.class)
+                        .getId();
+                }
+                createSubgroups((GroupHierarchyConfig)cfg, subGroupId);
             } else {
-                parentSubGroupId = create(converter.createGroupConfig(subgroup, parentGroupId))
-                    .getResult()
-                    .as(GroupByIdRef.class)
-                    .getId();
+                ((CreateServerConfig)cfg).group(Group.refById(curGroupId));
             }
-            createSubgroups(subgroup, parentSubGroupId);
         });
+    }
+
+    private OperationFuture<Group> createServers(GroupHierarchyConfig config, String rootGroupId) {
+        List<CreateServerConfig> configs = config.getServerConfigs();
+
+        List<JobFuture> futures = configs.stream()
+            .map(serverConfig -> serverService().create(serverConfig).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(Group.refById(rootGroupId), new ParallelJobsFuture(futures));
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +11,10 @@ import static java.util.Arrays.asList;
 /**
  * @author Aliaksandr Krasitski
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupHierarchyConfig {
+public class GroupHierarchyConfig implements ISubItemConfig{
     private String name;
     private String description;
-    private List<GroupHierarchyConfig> subgroups = new ArrayList<>();
+    private List<ISubItemConfig> subitems = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -26,13 +25,13 @@ public class GroupHierarchyConfig {
         return this;
     }
 
-    public List<GroupHierarchyConfig> getSubgroups() {
-        return subgroups;
+    public List<ISubItemConfig> getSubitems() {
+        return subitems;
     }
 
-    public GroupHierarchyConfig subgroups(GroupHierarchyConfig... subgroups) {
-        checkNotNull(subgroups, "List of subgroups must be not a null");
-        this.subgroups.addAll(asList(subgroups));
+    public GroupHierarchyConfig subitems(ISubItemConfig... subitems) {
+        checkNotNull(subitems, "List of server configs must be not a null");
+        this.subitems.addAll(asList(subitems));
         return this;
     }
 
@@ -47,5 +46,24 @@ public class GroupHierarchyConfig {
 
     public static GroupHierarchyConfig group(String name) {
         return new GroupHierarchyConfig().name(name);
+    }
+
+    public List<CreateServerConfig> getServerConfigs() {
+        List<CreateServerConfig> serverConfigs = new ArrayList<>();
+        collectConfigs(this, serverConfigs);
+        return serverConfigs;
+    }
+
+    private void collectConfigs(GroupHierarchyConfig hierarchyConfig, List<CreateServerConfig> serverConfigs) {
+        hierarchyConfig.getSubitems().stream().forEach(config -> {
+            if (config instanceof CreateServerConfig) {
+                CreateServerConfig cfg = (CreateServerConfig) config;
+                for (int i = 0; i < cfg.getCount(); i++) {
+                    serverConfigs.add(cfg);
+                }
+            } else {
+                collectConfigs((GroupHierarchyConfig) config, serverConfigs);
+            }
+        });
     }
 }

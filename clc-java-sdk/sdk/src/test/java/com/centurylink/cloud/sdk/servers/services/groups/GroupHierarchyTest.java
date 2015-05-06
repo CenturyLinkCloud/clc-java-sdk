@@ -11,7 +11,9 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static java.util.stream.Collectors.toList;
@@ -37,12 +39,16 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
     private GroupHierarchyConfig initConfig() {
         return new GroupHierarchyConfig()
             .name("Parent Group")
-            .subgroups(
-                group("Group1-1").subgroups(
-                    group("Group1-1-1"),
+            .subitems(
+                group("Group1-1").subitems(
+                    group("Group1-1-1")
+                        .subitems(
+                            mysqlServer().count(2),
+                            apacheHttpServer()),
                     group("Group1-1-2")
-                        .subgroups(
-                            group("Group1-1-2-1")
+                        .subitems(
+                            group("Group1-1-2-1"),
+                            nginxServer()
                         )
                 ),
                 group("Group1-2")
@@ -50,7 +56,7 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
     }
 
     private GroupMetadata defineGroupHierarchy(GroupHierarchyConfig config) {
-        groupService.defineGroupHierarchy(DataCenter.DE_FRANKFURT, config);
+        groupService.defineGroupHierarchy(DataCenter.DE_FRANKFURT, config).waitUntilComplete();
 
         return groupService.findByDataCenter(DataCenter.DE_FRANKFURT).stream()
             .filter(group -> group.getName().equals(config.getName()))
@@ -66,16 +72,24 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
             .map(GroupMetadata::getName)
             .collect(toList());
 
-        List<String> configNames = hierarchyConfig.getSubgroups().stream()
-            .map(GroupHierarchyConfig::getName)
+        List<String> configNames = hierarchyConfig.getSubitems().stream()
+            .filter(cfg -> cfg instanceof GroupHierarchyConfig)
+            .map(cfg -> ((GroupHierarchyConfig) cfg).getName())
+            .filter(notNull())
             .collect(toList());
 
         assertTrue(metadataNames.containsAll(configNames), "group must have all groups from config");
 
+        //TODO GroupMetadata.getServers() returns empty list. should it be filled?
+//        assertEquals(groupMetadata.getServers().size(), hierarchyConfig.getServers().size(),
+//            "check server count"
+//        );
+
         groupMetadata.getGroups().stream()
             .forEach(group -> {
-                GroupHierarchyConfig nextConfig = hierarchyConfig.getSubgroups().stream()
-                    .filter(subgroup -> subgroup.getName().equals(group.getName()))
+                GroupHierarchyConfig nextConfig = (GroupHierarchyConfig)hierarchyConfig.getSubitems().stream()
+                    .filter(cfg -> cfg instanceof GroupHierarchyConfig)
+                    .filter(subgroup -> ((GroupHierarchyConfig)subgroup).getName().equals(group.getName()))
                     .findFirst()
                     .orElse(null);
                 checkGroup(group, nextConfig);
