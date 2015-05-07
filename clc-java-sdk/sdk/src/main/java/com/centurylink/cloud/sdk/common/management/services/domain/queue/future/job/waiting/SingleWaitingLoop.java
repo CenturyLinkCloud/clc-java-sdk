@@ -32,17 +32,13 @@ public class SingleWaitingLoop implements WaitingLoop {
 
     @Override
     public Void get() {
-        onIterationStarted.accept(null);
-
-        if (TRUE.equals(checkStatus.get())) {
-            return null;
-        }
+        int i = 0;
 
         for (;;) {
             onIterationStarted.accept(null);
 
             if (TRUE.equals(checkStatus.get())) {
-                waitingForBackendConsistentState();
+                waitingForBackendConsistentState(++i);
                 return null;
             }
 
@@ -50,7 +46,12 @@ public class SingleWaitingLoop implements WaitingLoop {
         }
     }
 
-    private void waitingForBackendConsistentState() {
+    private void waitingForBackendConsistentState(int iterationCount) {
+        // this check allow to speed up unit tests
+        if (iterationCount < 2) {
+            return;
+        }
+
         sleep(10_000L);
     }
 
