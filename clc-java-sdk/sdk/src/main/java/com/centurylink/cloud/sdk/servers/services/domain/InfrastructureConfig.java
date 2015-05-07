@@ -1,6 +1,7 @@
-package com.centurylink.cloud.sdk.servers.services.domain.group;
+package com.centurylink.cloud.sdk.servers.services.domain;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import static java.util.Arrays.asList;
 /**
  * Hierarchy configuration with groups and servers for provided data centers.
  * Should contain data center {@code dataCenters}
- * and {@link GroupHierarchyConfig} {@code subitems}.
+ * and {@link com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig} {@code subitems}.
  * 
  * @author Aliaksandr Krasitski
  */

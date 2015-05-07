@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
+import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureItem;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConfig;
 

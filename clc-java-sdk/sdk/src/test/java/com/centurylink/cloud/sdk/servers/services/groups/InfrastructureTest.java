@@ -4,8 +4,8 @@ import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.r
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
+import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.group.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;

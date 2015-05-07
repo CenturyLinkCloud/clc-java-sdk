@@ -1,15 +1,12 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
-import com.centurylink.cloud.sdk.servers.services.domain.group.InfrastructureItem;
-
-
 /**
  * Represents multiple identical server configs.<br/>
  * Store {@code count} number of copies of {@code server}
  *
  * @author Aliaksandr Krasitski
  */
-public class CompositeServerConfig implements InfrastructureItem, ServerConfig {
+public class CompositeServerConfig implements ServerConfig {
     private int count = 1;
     private CreateServerConfig server;
 
