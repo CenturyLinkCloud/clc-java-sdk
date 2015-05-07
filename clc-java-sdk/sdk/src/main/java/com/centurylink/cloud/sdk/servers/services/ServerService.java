@@ -102,7 +102,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @param modifyServerConfig server config
      * @return OperationFuture wrapper for list of Servers
      */
-    OperationFuture<List<Server>> modify(List<Server> serverList, ModifyServerConfig modifyServerConfig) {
+    public OperationFuture<List<Server>> modify(List<Server> serverList, ModifyServerConfig modifyServerConfig) {
         List<JobFuture> futures = serverList.stream()
             .map(
                 server ->
@@ -128,7 +128,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @param modifyServerConfig server config
      * @return OperationFuture wrapper for list of Servers
      */
-    OperationFuture<List<Server>> modify(ServerFilter serverFilter, ModifyServerConfig modifyServerConfig) {
+    public OperationFuture<List<Server>> modify(ServerFilter serverFilter, ModifyServerConfig modifyServerConfig) {
         List<Server> serverList = find(serverFilter)
             .stream()
             .map(ServerMetadata::asRefById)
