@@ -45,14 +45,16 @@ public class SingleWaitingLoop implements WaitingLoop {
     }
 
     private void waitingForBackendConsistentState() {
-        sleep();
-        sleep();
-        sleep();
+        sleep(10_000L);
     }
 
     private void sleep() {
+        sleep(STATUS_POLLING_DELAY);
+    }
+
+    private void sleep(long delay) {
         try {
-            Thread.sleep(STATUS_POLLING_DELAY);
+            Thread.sleep(delay);
         } catch (InterruptedException ex) {
             throw Throwables.propagate(ex);
         }

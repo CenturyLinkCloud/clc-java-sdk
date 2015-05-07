@@ -18,6 +18,7 @@ import com.google.inject.Inject;
 // TODO: 1. need to implement support of integration with Spring
 // TODO: 2. need to add network service to this root object (network service delayed)
 public class ClcSdk {
+
     @Inject
     ServerService serverService;
 
@@ -29,6 +30,9 @@ public class ClcSdk {
 
     @Inject
     DataCenterService dataCenterService;
+
+    @Inject
+    CredentialsProvider credentialsProvider;
 
     public ClcSdk() {
         this(new PropertiesFileCredentialsProvider());
@@ -62,5 +66,9 @@ public class ClcSdk {
 
     public DataCenterService dataCenterService() {
         return dataCenterService;
+    }
+
+    public CredentialsProvider getCredentialsProvider() {
+        return credentialsProvider;
     }
 }
