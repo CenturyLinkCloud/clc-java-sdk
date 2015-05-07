@@ -32,6 +32,12 @@ public class SingleWaitingLoop implements WaitingLoop {
 
     @Override
     public Void get() {
+        onIterationStarted.accept(null);
+
+        if (TRUE.equals(checkStatus.get())) {
+            return null;
+        }
+
         for (;;) {
             onIterationStarted.accept(null);
 
