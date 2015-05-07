@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.groups;
 
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConfig;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
@@ -55,8 +55,8 @@ public class GroupHierarchyConfigTest {
 
     private int getServersCount(GroupHierarchyConfig config) {
         return config.getSubitems().stream()
-            .filter(cfg -> cfg instanceof CreateServerConfig)
-            .collect(summingInt(cfg -> ((CreateServerConfig)cfg).getCount()));
+            .filter(cfg -> cfg instanceof ServerConfig)
+            .collect(summingInt(cfg -> ((ServerConfig)cfg).getServerConfig().length));
     }
 
 }

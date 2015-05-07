@@ -23,6 +23,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.InfrastructureCon
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CompositeServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -139,14 +140,15 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     }
 
     /**
-     * Create group hierarchy based on {@code GroupHierarchyConfig} instance
+     * Create group hierarchy based on {@link InfrastructureConfig} instance.<br/>
      * Existing groups are not override!
      *
-     * @param config group hierarchy config
-     * @return OperationFuture wrapper for parent Group
+     * @param configs group hierarchy configs
+     * @return OperationFuture wrapper for list of root groups in each data center
      */
-    public OperationFuture<List<Group>> defineInfrastructure(InfrastructureConfig... config) {
-        List<OperationFuture<Group>> operationFutures = Arrays.asList(config).stream()
+    public OperationFuture<List<Group>> defineInfrastructure(InfrastructureConfig... configs) {
+        checkNotNull(configs, "array of InfrastructureConfig must be not null");
+        List<OperationFuture<Group>> operationFutures = Arrays.asList(configs).stream()
             .map(cfg ->
                     cfg.getDataCenters().stream()
                         .map(dc ->
@@ -172,10 +174,10 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     }
 
     /**
-     * Create group hierarchy based on {@code GroupHierarchyConfig} instance
+     * Create group hierarchy based on {@link GroupHierarchyConfig} instance
      * Existing groups are not override!
      *
-     * @param dataCenter datacenter in which will be placed group hierarchy
+     * @param dataCenter datacenter in which will be created group hierarchy
      * @param config group hierarchy config
      * @return OperationFuture wrapper for parent Group
      */
@@ -196,6 +198,12 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
         return createServers(config, rootGroup.getId());
     }
 
+    /**
+     * Find group based on config instance and parent group identifier
+     * @param config        group hierarchy config
+     * @param parentGroupId parent group id
+     * @return
+     */
     private GroupMetadata findGroup(GroupHierarchyConfig config, String parentGroupId) {
         GroupMetadata parentGroup = findByRef(Group.refById(parentGroupId));
 
@@ -205,26 +213,39 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             .orElse(null);
     }
 
-    private void createSubgroups(GroupHierarchyConfig config, String curGroupId) {
+    /**
+     * Create sub groups in group with {@code groupId}
+     * @param config  group hierarchy config
+     * @param groupId group id
+     */
+    private void createSubgroups(GroupHierarchyConfig config, String groupId) {
         config.getSubitems().forEach(cfg -> {
             if (cfg instanceof GroupHierarchyConfig) {
-                GroupMetadata curGroup = findGroup((GroupHierarchyConfig)cfg, curGroupId);
+                GroupMetadata curGroup = findGroup((GroupHierarchyConfig) cfg, groupId);
                 String subGroupId;
                 if (curGroup != null) {
                     subGroupId = curGroup.getId();
                 } else {
-                    subGroupId = create(converter.createGroupConfig((GroupHierarchyConfig)cfg, curGroupId))
+                    subGroupId = create(converter.createGroupConfig((GroupHierarchyConfig) cfg, groupId))
                         .getResult()
                         .as(GroupByIdRef.class)
                         .getId();
                 }
-                createSubgroups((GroupHierarchyConfig)cfg, subGroupId);
+                createSubgroups((GroupHierarchyConfig) cfg, subGroupId);
+            } else if (cfg instanceof CreateServerConfig){
+                ((CreateServerConfig) cfg).group(Group.refById(groupId));
             } else {
-                ((CreateServerConfig)cfg).group(Group.refById(curGroupId));
+                ((CompositeServerConfig) cfg).getServer().group(Group.refById(groupId));
             }
         });
     }
 
+    /**
+     * Create servers based on {@link CreateServerConfig}
+     * @param config      group hierarchy config
+     * @param rootGroupId root group id
+     * @return OperationFuture wrapper for root group
+     */
     private OperationFuture<Group> createServers(GroupHierarchyConfig config, String rootGroupId) {
         List<CreateServerConfig> configs = config.getServerConfigs();
 
@@ -282,6 +303,13 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
         return modify(groups, groupConfig);
     }
 
+    /**
+     * Update group
+     * @param groupId group id to update
+     * @param groupConfig group config
+     * @return <tt>true</tt> if update was successful, <br/>
+     * <tt>false</tt> otherwise
+     */
     private boolean updateGroup(String groupId, GroupConfig groupConfig) {
         return client
             .updateGroup(
@@ -292,6 +320,11 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             );
     }
 
+    /**
+     * Extract {@link Group} from {@link GroupFilter}
+     * @param groupFilter group search criteria
+     * @return array of groups
+     */
     private Group[] getRefsFromFilter(GroupFilter groupFilter) {
         checkNotNull(groupFilter, "Group filter must be not null");
         List<Group> groupList = find(groupFilter).stream()

@@ -34,7 +34,11 @@ public class InfrastructureTest extends AbstractServersSdkTest {
     public void testInfrastructure() {
 
         List<GroupMetadata> groups = checkInfrastructure(
-            initConfig(DataCenter.CA_TORONTO_1, DataCenter.US_CENTRAL_SALT_LAKE_CITY));
+            initConfig(
+                DataCenter.CA_TORONTO_1,
+                DataCenter.US_CENTRAL_SALT_LAKE_CITY
+            )
+        );
 
         deleteGroups(groups);
     }
