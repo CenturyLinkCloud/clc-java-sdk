@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
-import com.centurylink.cloud.sdk.servers.services.domain.group.ISubItemConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 
@@ -17,7 +16,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.filters
 /**
  * @author ilya.drabenia
  */
-public class CreateServerConfig implements ISubItemConfig {
+public class CreateServerConfig implements ServerConfig {
     private String id;
     private String name;
     private String description;
@@ -29,7 +28,6 @@ public class CreateServerConfig implements ISubItemConfig {
     private NetworkConfig network = new NetworkConfig();
     private TimeToLive timeToLive;
     private boolean managedOS = false;
-    private int count = 1;
 
     //TODO temporary config
     private static CreateServerConfig loadTestConfig() {
@@ -57,25 +55,25 @@ public class CreateServerConfig implements ISubItemConfig {
     }
 
     public static CreateServerConfig mysqlServer() {
-        return loadTestConfig();
+        return loadTestConfig()
+            .name("MySQL")
+            .description("MySQL");
     }
 
     public static CreateServerConfig nginxServer() {
-        return loadTestConfig();
+        return loadTestConfig()
+            .name("Nginx")
+            .description("Nginx");
     }
 
     public static CreateServerConfig apacheHttpServer() {
-        return loadTestConfig();
+        return loadTestConfig()
+            .name("Apache")
+            .description("Apache");
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public CreateServerConfig count(int count) {
-        assert count > 0;
-        this.count = count;
-        return this;
+    public CompositeServerConfig count(int count) {
+        return new CompositeServerConfig().server(this).count(count);
     }
 
     public String getId() {
@@ -224,5 +222,10 @@ public class CreateServerConfig implements ISubItemConfig {
     public CreateServerConfig managedOs() {
         setManagedOS(true);
         return this;
+    }
+
+    @Override
+    public CreateServerConfig[] getServerConfig() {
+        return new CreateServerConfig[]{this};
     }
 }
