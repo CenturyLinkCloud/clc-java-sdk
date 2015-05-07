@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class GroupHierarchyConfig implements ISubItemConfig{
     private String name;
     private String description;
     private List<ISubItemConfig> subitems = new ArrayList<>();
+    private List<DataCenter> dataCenters = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -41,6 +43,16 @@ public class GroupHierarchyConfig implements ISubItemConfig{
 
     public GroupHierarchyConfig description(String description) {
         this.description = description;
+        return this;
+    }
+
+    public List<DataCenter> getDataCenters() {
+        return dataCenters;
+    }
+
+    public GroupHierarchyConfig datacenter(DataCenter... datacenters) {
+        checkNotNull(datacenters, "List of dataCenters must be not a null");
+        this.dataCenters.addAll(asList(datacenters));
         return this;
     }
 

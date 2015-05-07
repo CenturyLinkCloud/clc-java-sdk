@@ -19,6 +19,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequ
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
@@ -135,6 +136,39 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             Group.refById(group.getId()),
             new NoWaitingJobFuture()
         );
+    }
+
+    /**
+     * Create group hierarchy based on {@code GroupHierarchyConfig} instance
+     * Existing groups are not override!
+     *
+     * @param config group hierarchy config
+     * @return OperationFuture wrapper for parent Group
+     */
+    public OperationFuture<List<Group>> defineInfrastructure(InfrastructureConfig... config) {
+        List<OperationFuture<Group>> operationFutures = Arrays.asList(config).stream()
+            .map(cfg ->
+                    cfg.getDataCenters().stream()
+                        .map(dc ->
+                                cfg.getSubitems().stream()
+                                    .map(subCfg -> defineGroupHierarchy(dc, subCfg))
+                                    .collect(toList())
+                        )
+                        .collect(toList())
+            )
+            .flatMap(list -> list.stream())
+            .flatMap(list -> list.stream())
+            .collect(toList());
+
+        List<Group> groups = operationFutures.stream()
+            .map(OperationFuture::getResult)
+            .collect(toList());
+
+        List<JobFuture> futures = operationFutures.stream()
+            .map(OperationFuture::jobFuture)
+            .collect(toList());
+
+        return new OperationFuture<>(groups, new ParallelJobsFuture(futures));
     }
 
     /**

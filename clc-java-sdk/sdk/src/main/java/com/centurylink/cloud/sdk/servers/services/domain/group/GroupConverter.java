@@ -37,6 +37,7 @@ public class GroupConverter {
     public GroupConfig createGroupConfig(GroupHierarchyConfig hierarchyConfig, String parentGroupId) {
         return new GroupConfig()
             .name(hierarchyConfig.getName())
+            .description(hierarchyConfig.getDescription())
             .parentGroup(Group.refById(parentGroupId));
     }
 }
