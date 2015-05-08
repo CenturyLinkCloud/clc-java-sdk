@@ -87,7 +87,7 @@ public class SearchQueriesSampleApp extends Assert {
                 createServer(DataCenter.CA_VANCOUVER, group1Va, "sr-va1"),
                 createServer(DataCenter.CA_VANCOUVER, group1Va, "sr-va2")
             )
-            .getResult().stream()
+            .getResultAsStream()
             .map(ServerMetadata::asRefById)
             .collect(toList());
 

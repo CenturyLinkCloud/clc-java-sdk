@@ -2,6 +2,8 @@ package com.centurylink.cloud.sdk.servers.client.domain.server;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.exceptions.fails.SingleCallResult;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -19,9 +21,6 @@ public class BaseServerResponse {
         @JsonProperty("errorMessage") String errorMessage) {
         this.server = server;
         this.isQueued = queued;
-        if (isQueued != null && !isQueued) {
-            throw new ClcClientException("The job was not queued: " + errorMessage);
-        }
         this.links = links;
         this.errorMessage = errorMessage;
     }
@@ -62,5 +61,20 @@ public class BaseServerResponse {
         }
 
         return null;
+    }
+
+    public SingleCallResult<Server, BaseServerResponse> toCallResult() {
+        SingleCallResult<Server, BaseServerResponse> launch
+                = new SingleCallResult<>(Server.refById(server), this);
+
+        if (errorMessage != null) {
+            launch.addException(new ClcClientException(errorMessage));
+        }
+
+        if (!isQueued) {
+            launch.addException(new ClcClientException("Job for server %s didn't queued", server));
+        }
+
+        return launch;
     }
 }

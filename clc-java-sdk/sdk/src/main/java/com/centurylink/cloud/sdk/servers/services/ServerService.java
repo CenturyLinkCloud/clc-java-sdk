@@ -2,11 +2,9 @@ package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.common.management.client.QueueClient;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.JobFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.SequentialJobsFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.*;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.exceptions.fails.SingleCallResult;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
@@ -240,7 +238,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(Server... serverRefs) {
         return powerOperationResponse(
-                client.powerOn(ids(serverRefs))
+            client.powerOn(ids(serverRefs))
         );
     }
 
@@ -888,7 +886,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     /**
      * Remove all public IPs
      *
-     * @param serverFilter server serach criteria
+     * @param serverFilter server search criteria
      * @return OperationFuture wrapper for list of ServerRef
      */
     public OperationFuture<List<Server>> removePublicIp(ServerFilter serverFilter) {
@@ -903,6 +901,20 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                     .stream()
                     .filter(notNull())
                     .map(BaseServerResponse::findStatusId)
+                    .collect(toList()),
+                queueClient
+            );
+    }
+
+    public OperationFuture<Server> powerOperationResponseWithErrorsChain(
+            List<BaseServerResponse> apiResponse) {
+        return
+            new OperationFuture<>(
+                apiResponse.stream()
+                    .map(i -> new JobInfo<>(
+                        new SingleCallResult<>((Server) Server.refById(i.getServer())),
+                        i.findStatusId()
+                    ))
                     .collect(toList()),
                 queueClient
             );

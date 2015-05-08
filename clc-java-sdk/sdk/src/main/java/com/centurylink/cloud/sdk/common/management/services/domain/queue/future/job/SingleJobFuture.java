@@ -10,34 +10,48 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * @author Ilya Drabenia
  */
-public class SingleJobFuture extends AbstractSingleJobFuture {
+public class SingleJobFuture<T> extends AbstractSingleJobFuture {
     private final QueueClient queueClient;
-    private final String statusId;
+    private final JobInfo<T> jobInfo;
+
+    public SingleJobFuture(JobInfo<T> jobInfo, QueueClient queueClient) {
+        this.jobInfo = jobInfo;
+        this.queueClient = queueClient;
+    }
 
     public SingleJobFuture(String statusId, QueueClient queueClient) {
         this.queueClient = checkNotNull(queueClient, "Queue client must be not a null");
-        this.statusId = checkNotNull(statusId, "Status ID must be not a null");
+        this.jobInfo = new JobInfo<>(null, checkNotNull(statusId, "Status ID must be not a null"));
     }
 
     @Override
     public WaitingLoop waitingLoop() {
         return
             new SingleWaitingLoop(() -> {
-                if (statusId == null) {
-                    throw new OperationFailedException();
+                if (jobInfo.getStatusId() == null) {
+                    throw new OperationFailedException(
+                        "Job for resource %s failed because statusId is null",
+                        jobInfo.getResource()
+                    );
                 }
 
                 String status = queueClient
-                    .getJobStatus(statusId)
+                    .getJobStatus(jobInfo.getStatusId())
                     .getStatus();
 
                 switch (status) {
                     case "succeeded":
+                        if (jobInfo.getResource() != null)
+                            jobInfo.getResource().future()
+                                .complete(jobInfo.getResource().getArgument());
                         return true;
 
                     case "failed":
                     case "unknown":
-                        throw new OperationFailedException("The job with status %s and id %s failed", status, statusId);
+                        throw new OperationFailedException(
+                            "The job %s for resource %s is failed",
+                            jobInfo.getStatusId(), jobInfo.getResource()
+                        );
 
                     default:
                         return false;
@@ -47,6 +61,6 @@ public class SingleJobFuture extends AbstractSingleJobFuture {
 
     @Override
     protected String operationInfo() {
-        return statusId;
+        return jobInfo.getResource().toString();
     }
 }
