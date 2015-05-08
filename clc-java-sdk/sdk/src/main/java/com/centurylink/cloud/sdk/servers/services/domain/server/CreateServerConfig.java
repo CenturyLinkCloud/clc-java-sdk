@@ -49,20 +49,21 @@ public class CreateServerConfig implements ServerConfig {
     }
 
     public static CreateServerConfig mysqlServer() {
-        return baseServerConfig()
+        CreateServerConfig mySqlSrv = baseServerConfig();
+
+        mySqlSrv.getMachine()
+            .disk(new DiskConfig()
+                .type(DiskType.RAW)
+                .size(10));
+
+        return mySqlSrv
             .name("MySQL")
             .description("MySQL");
     }
 
     public static CreateServerConfig nginxServer() {
-        CreateServerConfig nginx = baseServerConfig();
 
-        nginx.getMachine()
-            .disk(new DiskConfig()
-                .type(DiskType.RAW)
-                .size(10));
-
-        return nginx
+        return baseServerConfig()
             .name("Nginx")
             .description("Nginx")
             .network(new NetworkConfig()
