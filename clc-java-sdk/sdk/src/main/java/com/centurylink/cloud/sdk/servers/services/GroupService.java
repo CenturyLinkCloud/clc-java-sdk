@@ -13,6 +13,7 @@ import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupBillingStats;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
@@ -640,4 +641,36 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             );
     }
 
+    /**
+     * Get billing stats by Groups
+     * @param groups groups array
+     * @return List of Group billing stats
+     */
+    public List<GroupBillingStats> getBillingStats(Group... groups) {
+        List<GroupBillingStats> result = new ArrayList<>();
+        List<Group> groupList = Arrays.asList(groups);
+
+        groupList.forEach(
+            group -> result.add(
+                client.getGroupBillingStats(idByRef(group))
+            )
+        );
+
+        return result;
+    }
+
+    /**
+     * Get billing stats by GroupFilter
+     * @param groupFilter group filter
+     * @return List of Group billing stats
+     */
+    public List<GroupBillingStats> getBillingStats(GroupFilter groupFilter) {
+        return findLazy(groupFilter)
+            .map(
+                groupMetadata -> client.getGroupBillingStats(
+                    groupMetadata.getId()
+                )
+            )
+            .collect(toList());
+    }
 }
