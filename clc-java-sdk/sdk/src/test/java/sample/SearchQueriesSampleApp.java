@@ -29,6 +29,7 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.CA_VANCOUVER;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus.ACTIVE;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus.ARCHIVED;
 
@@ -200,6 +201,8 @@ public class SearchQueriesSampleApp extends Assert {
     public void findAllServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter()
+                .dataCenters(DE_FRANKFURT, CA_VANCOUVER)
+                .groupNames(DEFAULT_GROUP)
         );
 
         List<String> serverIdList = new ArrayList<>();

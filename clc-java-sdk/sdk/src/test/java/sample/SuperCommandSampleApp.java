@@ -40,7 +40,7 @@ public class SuperCommandSampleApp extends Assert {
     ServerByIdRef apache;
     ServerByIdRef mysql;
 
-    @BeforeClass(groups = SAMPLES)
+    @BeforeClass
     public void init() {
         ClcSdk sdk = new ClcSdk(
             new PropertiesFileCredentialsProvider("centurylink-clc-sdk-uat.properties")
@@ -83,7 +83,7 @@ public class SuperCommandSampleApp extends Assert {
             .get().asRefById();
     }
 
-    @AfterClass(groups = SAMPLES)
+    @AfterClass
     public void deleteServers() {
         clearAll();
     }

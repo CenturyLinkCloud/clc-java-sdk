@@ -23,6 +23,10 @@ public class GroupNameRef extends Group {
         return name;
     }
 
+    public DataCenter getDataCenter() {
+        return dataCenter;
+    }
+
     public GroupNameRef name(String name) {
         return new GroupNameRef(dataCenter, name);
     }
