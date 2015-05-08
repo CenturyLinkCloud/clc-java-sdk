@@ -35,6 +35,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.CA_VANCOUVER;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
@@ -77,16 +79,16 @@ public class SearchQueriesSampleApp extends Assert {
 
         clearAll();
 
-        group1De = createGroup(DataCenter.DE_FRANKFURT, group1Name, "uat1 group description");
+        group1De = createGroup(DE_FRANKFURT, group1Name, "uat1 group description");
         group1Va = createGroup(DataCenter.US_EAST_STERLING, group1Name, "uat1 group description");
-        group2De = createGroup(DataCenter.DE_FRANKFURT, group2Name, "uat2 group description");
+        group2De = createGroup(DE_FRANKFURT, group2Name, "uat2 group description");
 
         List<ServerByIdRef> results =
             OperationFuture.waitUntilComplete(
-                createServer(DataCenter.DE_FRANKFURT, group1De, "sr-de1"),
-                createServer(DataCenter.DE_FRANKFURT, group2De, "sr-de2"),
-                createServer(DataCenter.CA_VANCOUVER, group1Va, "sr-va1"),
-                createServer(DataCenter.CA_VANCOUVER, group1Va, "sr-va2")
+                createServer(DE_FRANKFURT, group1De, "sr-de1"),
+                createServer(DE_FRANKFURT, group2De, "sr-de2"),
+                createServer(CA_VANCOUVER, group1Va, "sr-va1"),
+                createServer(CA_VANCOUVER, group1Va, "sr-va2")
             )
             .getResult().stream()
             .map(ServerMetadata::asRefById)
@@ -135,6 +137,12 @@ public class SearchQueriesSampleApp extends Assert {
     }
 
     private void clearAll() {
+        serverService
+            .delete(new ServerFilter()
+                .dataCenters(DE_FRANKFURT, CA_VANCOUVER)
+            )
+            .waitUntilComplete();
+
         groupService
             .delete(new GroupFilter().nameContains("uat"))
             .waitUntilComplete();
@@ -267,7 +275,7 @@ public class SearchQueriesSampleApp extends Assert {
     public void findOsTemplatesTest() {
         List<TemplateMetadata> templateMetadataList = templateService.find(
             new TemplateFilter()
-                .dataCenters(DataCenter.DE_FRANKFURT)
+                .dataCenters(DE_FRANKFURT)
                 .osTypes(new OsFilter().type(CENTOS))
         );
 
@@ -284,7 +292,7 @@ public class SearchQueriesSampleApp extends Assert {
 
         List<GroupMetadata> groupMetadataList = groupService.find(
             new GroupFilter()
-                .dataCenters(DataCenter.DE_FRANKFURT)
+                .dataCenters(DE_FRANKFURT)
                 .where(
                     groupMetadata -> groupMetadata.getDescription().contains(keyword)
                 )
