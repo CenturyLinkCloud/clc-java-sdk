@@ -8,11 +8,7 @@ import com.centurylink.cloud.sdk.core.exceptions.fails.SingleCallResult;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
-import com.centurylink.cloud.sdk.servers.client.domain.server.ModifyServerRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
@@ -893,7 +889,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return removePublicIp(getRefsFromFilter(serverFilter));
     }
 
-    public OperationFuture<List<BaseServerResponse>> powerOperationResponse(List<BaseServerResponse> apiResponse) {
+    public OperationFuture<List<BaseServerResponse>> powerOperationResponse(BaseServerListResponse apiResponse) {
+        if (apiResponse.hasErrors()) {
+            throw apiResponse.summaryException();
+        }
+
         return
             new OperationFuture<>(
                 apiResponse,
