@@ -62,6 +62,13 @@ public class PowerOperationsSampleApp extends Assert {
 
     @AfterClass
     public void deleteServers() {
+        serverService
+            .delete(new ServerFilter()
+                .dataCenters(US_EAST_STERLING)
+                .groupNames("MyServers")
+            )
+            .waitUntilComplete();
+
         groupService
             .delete(new GroupFilter()
                 .dataCenters(US_EAST_STERLING)
