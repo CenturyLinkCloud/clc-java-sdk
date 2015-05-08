@@ -49,8 +49,6 @@ public class PowerOperationsSampleApp extends Assert {
 
     @BeforeClass
     public void init() {
-        deleteServers();
-
         createGroup(US_EAST_STERLING, "MyServers", "MyServers Group Description");
 
         OperationFuture.waitUntilComplete(
