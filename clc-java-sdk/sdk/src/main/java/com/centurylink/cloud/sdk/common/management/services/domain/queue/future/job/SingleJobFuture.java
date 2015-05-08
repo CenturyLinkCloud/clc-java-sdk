@@ -31,7 +31,7 @@ public class SingleJobFuture<T> extends AbstractSingleJobFuture {
                 if (jobInfo.getStatusId() == null) {
                     throw new OperationFailedException(
                         "Job for resource %s failed because statusId is null",
-                        jobInfo.getResource()
+                        jobInfo.getResource().getArgument()
                     );
                 }
 

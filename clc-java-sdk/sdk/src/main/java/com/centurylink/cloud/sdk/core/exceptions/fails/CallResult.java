@@ -17,7 +17,9 @@ public interface CallResult<T, R> extends CastMixin {
 
     Stream<Exception> getExceptions();
 
-    CallResult<T, R> compose(CallResult<T, R> otherCallResult);
+    default CallResult<T, R> compose(CallResult<T, R> otherCallResult) {
+        return new CompositeCallResult<>(this, otherCallResult);
+    }
 
     CompletableFuture<Stream<R>> future();
 

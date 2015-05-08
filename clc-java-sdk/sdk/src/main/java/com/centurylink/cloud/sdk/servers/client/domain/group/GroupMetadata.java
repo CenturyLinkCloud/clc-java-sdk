@@ -2,6 +2,8 @@ package com.centurylink.cloud.sdk.servers.client.domain.group;
 
 import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.annotation.Generated;
@@ -362,6 +364,10 @@ public class GroupMetadata {
                 .filter(link -> link.getRel().equals("parentGroup"))
                 .map(Link::getId)
                 .findFirst().get();
+    }
+
+    public GroupByIdRef asRefById() {
+        return Group.refById(id);
     }
 
 }

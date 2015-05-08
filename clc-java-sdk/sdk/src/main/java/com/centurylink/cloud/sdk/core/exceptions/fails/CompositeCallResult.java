@@ -43,11 +43,6 @@ public class CompositeCallResult<T, R> implements CallResult<T, R> {
     }
 
     @Override
-    public CallResult<T, R> compose(CallResult<T, R> otherCallResult) {
-        return new CompositeCallResult<>(this, otherCallResult);
-    }
-
-    @Override
     public CompletableFuture<Stream<R>> future() {
         CompletableFuture<Stream<R>> future = new CompletableFuture<>();
 

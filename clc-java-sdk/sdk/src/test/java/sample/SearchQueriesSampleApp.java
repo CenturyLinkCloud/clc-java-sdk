@@ -6,6 +6,7 @@ import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.r
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.function.Streams;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
@@ -134,16 +135,9 @@ public class SearchQueriesSampleApp extends Assert {
     }
 
     private void clearAll() {
-        serverService.delete(new ServerFilter()).waitUntilComplete();
-        List<GroupMetadata> groupMetadataList = groupService.find(
-            new GroupFilter().nameContains("uat")
-        );
-
-        groupMetadataList.forEach(groupMetadata ->
-            groupService.delete(
-                Group.refById(groupMetadata.getId())
-            )
-        );
+        groupService
+            .delete(new GroupFilter().nameContains("uat"))
+            .waitUntilComplete();
     }
 
     private GroupByIdRef createGroup(DataCenterByIdRef dataCenter, String name, String description) {

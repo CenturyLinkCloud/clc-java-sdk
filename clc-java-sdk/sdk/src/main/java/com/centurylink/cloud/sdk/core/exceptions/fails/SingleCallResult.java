@@ -50,11 +50,6 @@ public class SingleCallResult<X, R> implements CallResult<X, R> {
     }
 
     @Override
-    public CallResult<X, R> compose(CallResult<X, R> otherCallResult) {
-        return null;
-    }
-
-    @Override
     public CompletableFuture<Stream<R>> future() {
         return result.thenApply(Stream::of);
     }
