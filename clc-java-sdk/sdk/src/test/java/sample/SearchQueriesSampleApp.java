@@ -16,10 +16,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
+import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
@@ -37,6 +34,8 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.CA_VANCOUVER;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus.ACTIVE;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus.ARCHIVED;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
@@ -140,6 +139,7 @@ public class SearchQueriesSampleApp extends Assert {
         serverService
             .delete(new ServerFilter()
                 .dataCenters(DE_FRANKFURT, CA_VANCOUVER)
+                .status(ACTIVE, ARCHIVED)
             )
             .waitUntilComplete();
 
