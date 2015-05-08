@@ -906,20 +906,6 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             );
     }
 
-    public OperationFuture<Server> powerOperationResponseWithErrorsChain(
-            List<BaseServerResponse> apiResponse) {
-        return
-            new OperationFuture<>(
-                apiResponse.stream()
-                    .map(i -> new JobInfo<>(
-                        new SingleCallResult<>((Server) Server.refById(i.getServer())),
-                        i.findStatusId()
-                    ))
-                    .collect(toList()),
-                queueClient
-            );
-    }
-
     private OperationFuture<Link> baseServerResponse(Link response) {
         return new OperationFuture<>(
             response,
