@@ -2,7 +2,6 @@ package com.centurylink.cloud.sdk.core.exceptions.fails;
 
 import com.centurylink.cloud.sdk.core.CastMixin;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 

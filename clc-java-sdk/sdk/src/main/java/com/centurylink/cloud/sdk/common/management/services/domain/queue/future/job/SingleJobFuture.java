@@ -29,10 +29,18 @@ public class SingleJobFuture<T> extends AbstractSingleJobFuture {
         return
             new SingleWaitingLoop(() -> {
                 if (jobInfo.getStatusId() == null) {
-                    throw new OperationFailedException(
+                    OperationFailedException ex = new OperationFailedException(
                         "Job for resource %s failed because statusId is null",
                         jobInfo.getResource().getArgument()
                     );
+
+                    if (jobInfo.getResource() != null) {
+                        jobInfo.getResource().future()
+                            .completeExceptionally(ex);
+                        return true;
+                    } else {
+                        throw ex;
+                    }
                 }
 
                 String status = queueClient
@@ -47,11 +55,21 @@ public class SingleJobFuture<T> extends AbstractSingleJobFuture {
                         return true;
 
                     case "failed":
-                    case "unknown":
-                        throw new OperationFailedException(
+                    case "unknown": {
+                        OperationFailedException ex = new OperationFailedException(
                             "The job %s for resource %s is failed",
                             jobInfo.getStatusId(), jobInfo.getResource()
                         );
+
+                        if (jobInfo.getResource() != null) {
+                            jobInfo.getResource().future()
+                                .completeExceptionally(ex);
+                            return true;
+                        } else {
+                            throw ex;
+                        }
+                    }
+
 
                     default:
                         return false;

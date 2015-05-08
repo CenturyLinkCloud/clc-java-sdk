@@ -12,16 +12,16 @@ import java.util.stream.Stream;
  * @author Ilya Drabenia
  */
 public class SingleCallResult<X, R> implements CallResult<X, R> {
-    private final X resource;
+    private final X argument;
     private final CompletableFuture<R> result = new CompletableFuture<>();
     private final List<Exception> exceptions = new CopyOnWriteArrayList<>();
 
     public SingleCallResult(X resource) {
-        this.resource = resource;
+        this.argument = resource;
     }
 
     public SingleCallResult(X resource, R resultValue) {
-        this.resource = resource;
+        this.argument = resource;
         this.result.complete(resultValue);
     }
 
@@ -32,7 +32,7 @@ public class SingleCallResult<X, R> implements CallResult<X, R> {
 
     @Override
     public Stream<X> getArgument() {
-        return Stream.of(resource);
+        return Stream.of(argument);
     }
 
     @Override
