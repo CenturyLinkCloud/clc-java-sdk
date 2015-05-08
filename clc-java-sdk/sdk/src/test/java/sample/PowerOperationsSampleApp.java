@@ -1,35 +1,22 @@
 package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
-import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.TemplateService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupNameRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.time.ZonedDateTime;
-
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server.refByDescription;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
 import static java.lang.Boolean.TRUE;
 
@@ -51,13 +38,16 @@ public class PowerOperationsSampleApp extends Assert {
     public void init() {
         deleteServers();
 
-        createGroup(US_EAST_STERLING, "MyServers", "MyServers Group Description");
-
-        OperationFuture.waitUntilComplete(
-            createServer("a_nginx"),
-            createServer("a_apache"),
-            createServer("b_mysql")
-        );
+        groupService.defineInfrastructure(
+            new InfrastructureConfig()
+                .datacenter(US_EAST_STERLING)
+                .subitems(group("MyServers")
+                    .description("MyServers Group Description")
+                    .subitems(nginxServer().description("a_nginx"),
+                        apacheHttpServer().description("a_apache"),
+                        mysqlServer().description("b_mysql"))
+                )
+        ).waitUntilComplete();
     }
 
     @AfterClass
@@ -70,51 +60,13 @@ public class PowerOperationsSampleApp extends Assert {
             .waitUntilComplete();
     }
 
-    private OperationFuture<ServerMetadata> createServer(String name) {
-        return
-            serverService
-                .create(new CreateServerConfig()
-                    .name("PWROPS")
-                    .description(name)
-                    .type(STANDARD)
-                    .group(Group.refByName(US_EAST_STERLING, "MyServers"))
-                    .timeToLive(ZonedDateTime.now().plusDays(1))
-                    .machine(new Machine()
-                        .cpuCount(1)
-                        .ram(3)
-                    )
-                    .template(Template.refByOs()
-                        .dataCenter(US_EAST_STERLING)
-                        .type(CENTOS)
-                        .version("6")
-                        .architecture(x86_64)
-                    )
-                );
-    }
-
-    private GroupByIdRef createGroup(DataCenterByIdRef dataCenter, String name, String description) {
-        return
-            groupService.create(
-                new GroupConfig()
-                    .parentGroup(Group.refByName()
-                        .dataCenter(dataCenter)
-                        .name(Group.DEFAULT_GROUP)
-                    )
-                    .name(name)
-                    .description(description)
-            )
-            .waitUntilComplete()
-            .getResult()
-            .as(GroupByIdRef.class);
-    }
-
     private Group myServersGroup() {
         return Group.refByName()
             .dataCenter(US_EAST_STERLING)
             .name("MyServers");
     }
 
-    private Server mysqlServer() {
+    private Server getMysqlServer() {
         return
             Server.refByDescription()
                 .dataCenter(US_EAST_STERLING)
@@ -194,7 +146,7 @@ public class PowerOperationsSampleApp extends Assert {
 
         assert
             serverService
-                .findByRef(mysqlServer())
+                .findByRef(getMysqlServer())
                 .getDetails()
                 .getPowerState()
                 .equals("stopped");
@@ -205,12 +157,12 @@ public class PowerOperationsSampleApp extends Assert {
         testStopMySql();
 
         serverService
-            .powerOn(mysqlServer())
+            .powerOn(getMysqlServer())
             .waitUntilComplete();
 
         assert
             serverService
-                .findByRef(mysqlServer())
+                .findByRef(getMysqlServer())
                 .getDetails()
                 .getPowerState()
                 .equals("started");

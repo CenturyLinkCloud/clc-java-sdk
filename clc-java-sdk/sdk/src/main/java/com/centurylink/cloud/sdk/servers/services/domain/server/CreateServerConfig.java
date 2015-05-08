@@ -1,13 +1,13 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 
 import java.time.ZonedDateTime;
 
-import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
@@ -29,16 +29,10 @@ public class CreateServerConfig implements ServerConfig {
     private TimeToLive timeToLive;
     private boolean managedOS = false;
 
-    //TODO temporary config
-    private static CreateServerConfig loadTestConfig() {
+    public static CreateServerConfig baseServerConfig() {
         return new CreateServerConfig()
             .name("ALTR")
             .type(STANDARD)
-
-            .group(Group.refByName()
-                    .name(DEFAULT_GROUP)
-                    .dataCenter(DE_FRANKFURT)
-            )
 
             .machine(new Machine()
                     .cpuCount(1)
@@ -55,19 +49,29 @@ public class CreateServerConfig implements ServerConfig {
     }
 
     public static CreateServerConfig mysqlServer() {
-        return loadTestConfig()
+        return baseServerConfig()
             .name("MySQL")
             .description("MySQL");
     }
 
     public static CreateServerConfig nginxServer() {
-        return loadTestConfig()
+        CreateServerConfig nginx = baseServerConfig();
+
+        nginx.getMachine()
+            .disk(new DiskConfig()
+                .type(DiskType.RAW)
+                .size(10));
+
+        return nginx
             .name("Nginx")
-            .description("Nginx");
+            .description("Nginx")
+            .network(new NetworkConfig()
+                .publicIpConfig(new CreatePublicIpConfig()
+                    .openPorts(PortConfig.HTTP)));
     }
 
     public static CreateServerConfig apacheHttpServer() {
-        return loadTestConfig()
+        return baseServerConfig()
             .name("Apache")
             .description("Apache");
     }
