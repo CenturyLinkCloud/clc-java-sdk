@@ -38,7 +38,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = "test1")
+@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class InfrastructureTest extends AbstractServersSdkTest {
 
     @Inject
@@ -61,7 +61,7 @@ public class InfrastructureTest extends AbstractServersSdkTest {
         return String.format("%s_%s", value, testId);
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    @Test
     public void testInfrastructure() throws Exception {
         checkInfrastructure(
             initConfig(

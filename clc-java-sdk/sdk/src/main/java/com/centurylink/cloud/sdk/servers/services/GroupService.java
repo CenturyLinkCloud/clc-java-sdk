@@ -233,7 +233,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                         .getId();
                 }
                 createSubgroups((GroupHierarchyConfig) cfg, subGroupId);
-            } else if (cfg instanceof CreateServerConfig){
+            } else if (cfg instanceof CreateServerConfig) {
                 ((CreateServerConfig) cfg).group(Group.refById(groupId));
             } else {
                 ((CompositeServerConfig) cfg).getServer().group(Group.refById(groupId));

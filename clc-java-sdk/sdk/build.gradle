@@ -31,7 +31,7 @@ test {
 
 task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
     useTestNG() {
-        includeGroups 'test1'
+        includeGroups 'LongRunning'
     }
 
     testLogging {
