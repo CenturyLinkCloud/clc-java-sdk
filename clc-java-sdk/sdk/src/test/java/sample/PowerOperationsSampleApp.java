@@ -33,7 +33,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.filters
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
 import static java.lang.Boolean.TRUE;
 
-@Test(groups = SAMPLES)
+@Test(enabled = false, groups = SAMPLES)
 public class PowerOperationsSampleApp extends Assert {
     private final ServerService serverService;
     private final GroupService groupService;
@@ -70,17 +70,16 @@ public class PowerOperationsSampleApp extends Assert {
         deleteServers();
 
         groupService
-            .defineInfrastructure(
-                dataCenter(DataCenter.US_EAST_STERLING).subitems(
-                    group(DEFAULT_GROUP).subitems(
-                        group("MyServers", "MyServers Group Description").subitems(
-                            centOsServer("a_nginx"),
-                            centOsServer("a_apache"),
-                            centOsServer("b_mysql")
-                        )
+            .defineInfrastructure(dataCenter(US_EAST_STERLING).subitems(
+                group(DEFAULT_GROUP).subitems(
+                    group("MyServers",
+                          "MyServers Group Description").subitems(
+                        centOsServer("a_nginx"),
+                        centOsServer("a_apache"),
+                        centOsServer("b_mysql")
                     )
                 )
-            )
+            ))
 
             .waitUntilComplete();
     }

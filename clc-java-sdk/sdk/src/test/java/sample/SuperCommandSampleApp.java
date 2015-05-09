@@ -30,7 +30,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.filters
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
 import static java.util.stream.Collectors.toList;
 
-@Test(groups = SAMPLES)
+@Test(enabled = false, groups = SAMPLES)
 public class SuperCommandSampleApp extends Assert {
 
     private ServerService serverService;
@@ -51,18 +51,16 @@ public class SuperCommandSampleApp extends Assert {
         clearAll();
 
         groupService
-            .defineInfrastructure(
-                dataCenter(DE_FRANKFURT).subitems(
-                    group("Sample application").subitems(
-                        nginxServer(),
+            .defineInfrastructure(dataCenter(DE_FRANKFURT).subitems(
+                group("Sample application").subitems(
+                    nginxServer(),
 
-                        group("Business").subitems(
-                            apacheHttpServer(),
-                            mysqlServer()
-                        )
+                    group("Business").subitems(
+                        apacheHttpServer(),
+                        mysqlServer()
                     )
                 )
-            )
+            ))
 
             .waitUntilComplete();
     }
@@ -98,13 +96,13 @@ public class SuperCommandSampleApp extends Assert {
         mySqlSrv.getMachine()
             .disk(new DiskConfig()
                 .type(DiskType.RAW)
-                .size(10));
+                .size(10)
+            );
 
         return mySqlSrv;
     }
 
     public static CreateServerConfig nginxServer() {
-
         return centOsServer("Nginx")
             .network(new NetworkConfig()
                 .publicIpConfig(new CreatePublicIpConfig()

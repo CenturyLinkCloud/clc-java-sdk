@@ -63,16 +63,19 @@ public class SearchQueriesSampleApp extends Assert {
         groupService
             .defineInfrastructure(
                 dataCenter(DE_FRANKFURT).subitems(
-                    group("uat1", "uat1 group description").subitems(
+                    group("uat1",
+                          "uat1 group description").subitems(
                         centOsServer("sr-de1")
                     ),
-                    group("uat2", "uat2 group description").subitems(
+                    group("uat2",
+                          "uat2 group description").subitems(
                         centOsServer("sr-de2")
                     )
                 ),
 
                 dataCenter(US_EAST_STERLING).subitems(
-                    group("uat1", "uat1 group description").subitems(
+                    group("uat1",
+                          "uat1 group description").subitems(
                         centOsServer("sr-va1"),
                         centOsServer("sr-va2")
                     )
@@ -167,7 +170,6 @@ public class SearchQueriesSampleApp extends Assert {
     public void findAllServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter()
-                .dataCenters(DE_FRANKFURT, CA_VANCOUVER)
                 .status(ACTIVE, ARCHIVED)
         );
 
@@ -177,7 +179,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 2. Find all active servers in all datacenters
      */
-    @Test(groups = SAMPLES)
+    @Test(enabled = false, groups = SAMPLES)
     public void findAllActiveServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter().onlyActive()
@@ -189,7 +191,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 3. Find server within "uta1" group in all datacenters
      */
-    @Test(groups = SAMPLES)
+    @Test(enabled = false, groups = SAMPLES)
     public void findGroupServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter().groupNameContains("uat1")
@@ -201,7 +203,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 4. Find server that contains some value in it's metadata
      */
-    @Test(groups = SAMPLES)
+    @Test(enabled = false, groups = SAMPLES)
     public void findServersByMetadataValueTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter().where(
@@ -215,7 +217,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 5. Find templates of specified operating system
      */
-    @Test(groups = SAMPLES)
+    @Test(enabled = false, groups = SAMPLES)
     public void findOsTemplatesTest() {
         List<TemplateMetadata> templateMetadataList = templateService.find(
             new TemplateFilter()
@@ -230,7 +232,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 6. Find groups that contains keyword in description
      */
-    @Test(groups = SAMPLES)
+    @Test(enabled = false, groups = SAMPLES)
     public void testFindGroupsByDescriptionKeyword() {
         List<GroupMetadata> groupMetadataList = groupService.find(
             new GroupFilter()
