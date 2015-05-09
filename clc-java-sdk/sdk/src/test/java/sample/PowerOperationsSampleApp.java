@@ -65,7 +65,7 @@ public class PowerOperationsSampleApp extends Assert {
             .timeToLive(ZonedDateTime.now().plusHours(2));
     }
 
-    @BeforeClass
+//    @BeforeClass
     public void init() {
         deleteServers();
 
@@ -84,7 +84,7 @@ public class PowerOperationsSampleApp extends Assert {
             .waitUntilComplete();
     }
 
-    @AfterClass
+//    @AfterClass
     public void deleteServers() {
         serverService
             .delete(new ServerFilter()
