@@ -29,54 +29,6 @@ public class CreateServerConfig implements ServerConfig {
     private TimeToLive timeToLive;
     private boolean managedOS = false;
 
-    public static CreateServerConfig baseServerConfig() {
-        return new CreateServerConfig()
-            .name("ALTR")
-            .type(STANDARD)
-
-            .machine(new Machine()
-                    .cpuCount(1)
-                    .ram(2)
-            )
-
-            .template(Template.refByOs()
-                    .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
-                    .type(CENTOS)
-                    .version("6")
-                    .architecture(x86_64)
-            )
-            .timeToLive(ZonedDateTime.now().plusHours(2));
-    }
-
-    public static CreateServerConfig mysqlServer() {
-        CreateServerConfig mySqlSrv = baseServerConfig();
-
-        mySqlSrv.getMachine()
-            .disk(new DiskConfig()
-                .type(DiskType.RAW)
-                .size(10));
-
-        return mySqlSrv
-            .name("MySQL")
-            .description("MySQL");
-    }
-
-    public static CreateServerConfig nginxServer() {
-
-        return baseServerConfig()
-            .name("Nginx")
-            .description("Nginx")
-            .network(new NetworkConfig()
-                .publicIpConfig(new CreatePublicIpConfig()
-                    .openPorts(PortConfig.HTTP)));
-    }
-
-    public static CreateServerConfig apacheHttpServer() {
-        return baseServerConfig()
-            .name("Apache")
-            .description("Apache");
-    }
-
     public CompositeServerConfig count(int count) {
         return new CompositeServerConfig().server(this).count(count);
     }

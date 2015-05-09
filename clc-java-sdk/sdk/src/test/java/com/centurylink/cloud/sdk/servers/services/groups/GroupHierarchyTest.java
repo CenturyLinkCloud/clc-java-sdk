@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.servers.services.groups;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.SampleServerConfigs;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
@@ -12,6 +13,9 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
+import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.apacheHttpServer;
+import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.mysqlServer;
+import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.nginxServer;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
@@ -41,16 +45,16 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
             .name("Parent Group")
             .subitems(
                 group("Group1-1").subitems(
-                    group("Group1-1-1")
-                        .subitems(
-                            mysqlServer().count(2),
-                            apacheHttpServer()),
-                    group("Group1-1-2")
-                        .subitems(
-                            group("Group1-1-2-1"),
-                            nginxServer()
-                        )
+                    group("Group1-1-1").subitems(
+                        mysqlServer().count(2),
+                        apacheHttpServer()
+                    ),
+                    group("Group1-1-2").subitems(
+                        group("Group1-1-2-1"),
+                        nginxServer()
+                    )
                 ),
+
                 group("Group1-2")
             );
     }

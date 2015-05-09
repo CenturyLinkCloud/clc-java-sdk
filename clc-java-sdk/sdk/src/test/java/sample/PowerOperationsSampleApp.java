@@ -1,22 +1,35 @@
 package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.ZonedDateTime;
+
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
+import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
 import static java.lang.Boolean.TRUE;
 
@@ -34,20 +47,42 @@ public class PowerOperationsSampleApp extends Assert {
         groupService = sdk.groupService();
     }
 
+    public static CreateServerConfig centOsServer(String name) {
+        return new CreateServerConfig()
+            .name(name)
+            .description(name)
+            .type(STANDARD)
+            .machine(new Machine()
+                .cpuCount(1)
+                .ram(2)
+            )
+            .template(Template.refByOs()
+                .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
+                .type(CENTOS)
+                .version("6")
+                .architecture(x86_64)
+            )
+            .timeToLive(ZonedDateTime.now().plusHours(2));
+    }
+
     @BeforeClass
     public void init() {
         deleteServers();
 
-        groupService.defineInfrastructure(
-            new InfrastructureConfig()
-                .datacenter(US_EAST_STERLING)
-                .subitems(group("MyServers")
-                    .description("MyServers Group Description")
-                    .subitems(nginxServer().description("a_nginx"),
-                        apacheHttpServer().description("a_apache"),
-                        mysqlServer().description("b_mysql"))
+        groupService
+            .defineInfrastructure(
+                dataCenter(DataCenter.US_EAST_STERLING).subitems(
+                    group(DEFAULT_GROUP).subitems(
+                        group("MyServers", "MyServers Group Description").subitems(
+                            centOsServer("a_nginx"),
+                            centOsServer("a_apache"),
+                            centOsServer("b_mysql")
+                        )
+                    )
                 )
-        ).waitUntilComplete();
+            )
+
+            .waitUntilComplete();
     }
 
     @AfterClass

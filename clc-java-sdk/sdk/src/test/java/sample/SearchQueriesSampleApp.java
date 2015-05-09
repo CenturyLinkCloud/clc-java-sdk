@@ -2,69 +2,50 @@ package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
-import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.ServerByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.CA_VANCOUVER;
-import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.*;
+import static com.centurylink.cloud.sdk.core.function.Streams.map;
+import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
+import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus.ACTIVE;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus.ARCHIVED;
-
-import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.baseServerConfig;
-
+import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
+import static com.google.common.collect.Sets.newHashSet;
 
 public class SearchQueriesSampleApp extends Assert {
-
-    private final static String group1Name = "uat1";
-    private final static String group2Name = "uat2";
 
     private ServerService serverService;
     private GroupService groupService;
     private TemplateService templateService;
 
-    /* group 1 */
-    private GroupByIdRef group1De;
-    private GroupByIdRef group1Va;
+    Server server2Va = Server.refByDescription(US_EAST_STERLING, "sr-va2");
 
-    /* group 2 */
-    private GroupByIdRef group2De;
-
-    /* DE1 datacenter */
-    ServerByIdRef server1De;
-    ServerByIdRef server2De;
-
-    /* VA1 datacenter */
-    ServerByIdRef server1Va;
-    ServerByIdRef server2Va;
-
-    @BeforeClass(groups = SAMPLES)
-    public void init() {
+    public SearchQueriesSampleApp() {
         ClcSdk sdk = new ClcSdk(
             new PropertiesFileCredentialsProvider("centurylink-clc-sdk-uat.properties")
         );
@@ -72,69 +53,33 @@ public class SearchQueriesSampleApp extends Assert {
         serverService = sdk.serverService();
         groupService = sdk.groupService();
         templateService = sdk.templateService();
+    }
 
+    @BeforeClass(groups = SAMPLES)
+    public void init() {
         clearAll();
 
-        List<Group> groups = groupService.defineInfrastructure(new InfrastructureConfig()
-                .datacenter(DataCenter.DE_FRANKFURT)
-                .subitems(group(group1Name)
-                        .description("uat1 group description")
-                        .subitems(baseServerConfig()
-                            .name("sr-de1")),
-                    group(group2Name)
-                        .description("uat2 group description")
-                        .subitems(baseServerConfig()
-                                .name("sr-de2")
-                        )
+        groupService
+            .defineInfrastructure(
+                dataCenter(DE_FRANKFURT).subitems(
+                    group("uat1", "uat1 group description").subitems(
+                        centOsServer("sr-de1")
+                    ),
+                    group("uat2", "uat2 group description").subitems(
+                        centOsServer("sr-de2")
+                    )
                 ),
-            new InfrastructureConfig()
-                .datacenter(DataCenter.US_EAST_STERLING)
-                .subitems(group(group1Name)
-                        .description("uat1 group description")
-                        .subitems(
-                            baseServerConfig().name("sr-va1"),
-                            baseServerConfig().name("sr-va2")
-                        )
+
+                dataCenter(US_EAST_STERLING).subitems(
+                    group("uat1", "uat1 group description").subitems(
+                        centOsServer("sr-va1"),
+                        centOsServer("sr-va2")
+                    )
                 )
-        ).waitUntilComplete().getResult();
+            )
 
+            .waitUntilComplete();
 
-        groups.forEach(group -> {
-            GroupMetadata metadata = groupService.findByRef(group);
-
-            switch (metadata.getName()) {
-                case group1Name: {
-                    if (metadata.getLocationId().equals("DE1")) {
-                        group1De = Group.refById(metadata.getId());
-                    } else {
-                        group1Va = Group.refById(metadata.getId());
-                    }
-                    break;
-                }
-                case group2Name: group2De = Group.refById(metadata.getId());break;
-            }
-        });
-
-        List<ServerMetadata> serversDe1 = groupService.findByRef(group1De).getServers();
-        List<ServerMetadata> serversDe2 = groupService.findByRef(group2De).getServers();
-        List<ServerMetadata> serversVa1 = groupService.findByRef(group1Va).getServers();
-
-        server1De = serversDe1.stream()
-            .filter(server -> server.getName().contains("sr-de1".toUpperCase()))
-            .findFirst()
-            .get().asRefById();
-        server2De = serversDe2.stream()
-            .filter(server -> server.getName().contains("sr-de2".toUpperCase()))
-            .findFirst()
-            .get().asRefById();
-        server1Va = serversVa1.stream()
-            .filter(server -> server.getName().contains("sr-va1".toUpperCase()))
-            .findFirst()
-            .get().asRefById();
-        server2Va = serversVa1.stream()
-            .filter(server -> server.getName().contains("sr-va2".toUpperCase()))
-            .findFirst()
-            .get().asRefById();
 
         serverService
             .archive(server2Va)
@@ -146,6 +91,26 @@ public class SearchQueriesSampleApp extends Assert {
     @AfterClass(groups = SAMPLES)
     public void deleteServers() {
         clearAll();
+    }
+
+    public static CreateServerConfig centOsServer(String name) {
+        return new CreateServerConfig()
+            .name(name)
+            .description(name)
+            .type(STANDARD)
+            .machine(new Machine()
+                .cpuCount(1)
+                .ram(2)
+            )
+            .template(Template.refByOs()
+                .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
+                .type(CENTOS)
+                .version("6")
+                .architecture(x86_64)
+            )
+            .timeToLive(
+                ZonedDateTime.now().plusHours(2)
+            );
     }
 
     private void clearAll() {
@@ -172,25 +137,25 @@ public class SearchQueriesSampleApp extends Assert {
         assertEquals(loadServerMetadata(server).getStatus(), status);
     }
 
-    private void checkServerMetadataList(List<ServerMetadata> serverMetadataList, List<String> expectedServerIdList) {
+    private void checkServerMetadataList(List<ServerMetadata> serverMetadataList,
+                                         String... expectedServerDescs) {
         assertNotNull(serverMetadataList);
-        assertEquals(serverMetadataList.size(), expectedServerIdList.size());
+        assertEquals(serverMetadataList.size(), expectedServerDescs.length);
 
-        serverMetadataList.forEach(serverMetadata ->
-            assertTrue(
-                expectedServerIdList.contains(serverMetadata.getId())
-            )
+        assertEquals(
+            newHashSet(map(serverMetadataList, ServerMetadata::getDescription)),
+            newHashSet(expectedServerDescs)
         );
     }
 
-    private void checkGroupMetadataList(List<GroupMetadata> groupMetadataList, List<String> expectedGroupIdList) {
+    private void checkGroupMetadataList(List<GroupMetadata> groupMetadataList,
+                                        String... expectedGroupNames) {
         assertNotNull(groupMetadataList);
-        assertEquals(groupMetadataList.size(), expectedGroupIdList.size());
+        assertEquals(groupMetadataList.size(), expectedGroupNames.length);
 
-        groupMetadataList.forEach(serverMetadata ->
-            assertTrue(
-                expectedGroupIdList.contains(serverMetadata.getId())
-            )
+        assertEquals(
+            newHashSet(map(groupMetadataList, GroupMetadata::getName)),
+            newHashSet(expectedGroupNames)
         );
     }
 
@@ -205,13 +170,7 @@ public class SearchQueriesSampleApp extends Assert {
                 .groupNames(DEFAULT_GROUP)
         );
 
-        List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(server1De.getId());
-        serverIdList.add(server2De.getId());
-        serverIdList.add(server1Va.getId());
-        serverIdList.add(server2Va.getId());
-
-        checkServerMetadataList(serverMetadataList, serverIdList);
+        checkServerMetadataList(serverMetadataList, "sr-de1", "sr-de2", "sr-va1", "sr-va2");
     }
 
     /**
@@ -223,12 +182,7 @@ public class SearchQueriesSampleApp extends Assert {
             new ServerFilter().onlyActive()
         );
 
-        List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(server1De.getId());
-        serverIdList.add(server2De.getId());
-        serverIdList.add(server1Va.getId());
-
-        checkServerMetadataList(serverMetadataList, serverIdList);
+        checkServerMetadataList(serverMetadataList, "sr-de1", "sr-de2", "sr-va1");
     }
 
     /**
@@ -237,14 +191,10 @@ public class SearchQueriesSampleApp extends Assert {
     @Test(groups = SAMPLES)
     public void findGroupServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-            new ServerFilter().groupNameContains(group1Name)
+            new ServerFilter().groupNameContains("uat1")
         );
 
-        List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(server1De.getId());
-        serverIdList.add(server1Va.getId());
-
-        checkServerMetadataList(serverMetadataList, serverIdList);
+        checkServerMetadataList(serverMetadataList, "sr-de1", "sr-va1");
     }
 
     /**
@@ -252,19 +202,13 @@ public class SearchQueriesSampleApp extends Assert {
      */
     @Test(groups = SAMPLES)
     public void findServersByMetadataValueTest() {
-        String keyword = "sr-de";
-
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter().where(
-                serverMetadata -> serverMetadata.getName().toLowerCase().contains(keyword)
+                serverMetadata -> serverMetadata.getName().toLowerCase().contains("sr-de")
             )
         );
 
-        List<String> serverIdList = new ArrayList<>();
-        serverIdList.add(server1De.getId());
-        serverIdList.add(server2De.getId());
-
-        checkServerMetadataList(serverMetadataList, serverIdList);
+        checkServerMetadataList(serverMetadataList, "sr-de1", "sr-de2");
     }
 
     /**
@@ -287,19 +231,14 @@ public class SearchQueriesSampleApp extends Assert {
      */
     @Test(groups = SAMPLES)
     public void testFindGroupsByDescriptionKeyword() {
-        String keyword = group1Name;
-
         List<GroupMetadata> groupMetadataList = groupService.find(
             new GroupFilter()
                 .dataCenters(DE_FRANKFURT)
                 .where(
-                    groupMetadata -> groupMetadata.getDescription().contains(keyword)
+                    groupMetadata -> groupMetadata.getDescription().contains("uat1")
                 )
         );
 
-        List<String> groupIdList = new ArrayList<>();
-        groupIdList.add(group1De.getId());
-
-        checkGroupMetadataList(groupMetadataList, groupIdList);
+        checkGroupMetadataList(groupMetadataList, "uat1");
     }
 }

@@ -67,7 +67,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
     /**
      * Method allow to filter data centers by references.
      *
-     * @param dataCenters is list of references to target dataCenters
+     * @param dataCenters is list of references to target dataCenter
      * @return {@link TemplateFilter}
      * @throws java.lang.NullPointerException
      */

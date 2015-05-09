@@ -67,7 +67,7 @@ public class DataCenterFilter implements Filter<DataCenterFilter> {
     /**
      * Method allow to filter data centers by references.
      *
-     * @param dataCenterRefs is list of references to target dataCenters
+     * @param dataCenterRefs is list of references to target dataCenter
      * @return {@link DataCenterFilter}
      */
     public DataCenterFilter dataCenters(DataCenter... dataCenterRefs) {

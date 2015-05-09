@@ -86,6 +86,10 @@ public class GroupHierarchyConfig implements InfrastructureItem {
         return new GroupHierarchyConfig().name(name);
     }
 
+    public static GroupHierarchyConfig group(String name, String description) {
+        return new GroupHierarchyConfig().name(name).description(description);
+    }
+
     /**
      * Returns all configs for creating servers
      * @return all {@link CreateServerConfig} configs

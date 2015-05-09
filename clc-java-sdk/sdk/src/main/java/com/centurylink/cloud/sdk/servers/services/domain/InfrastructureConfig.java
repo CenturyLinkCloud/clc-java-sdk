@@ -11,14 +11,21 @@ import static java.util.Arrays.asList;
 
 /**
  * Hierarchy configuration with groups and servers for provided data centers.
- * Should contain data center {@code dataCenters}
- * and {@link com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig} {@code subitems}.
+ * Should contain data center {@code dataCenter}
+ * and {@link com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig}
+ * {@code subitems}.
  * 
  * @author Aliaksandr Krasitski
  */
-public class InfrastructureConfig{
+public class InfrastructureConfig {
     private List<GroupHierarchyConfig> subitems = new ArrayList<>();
     private List<DataCenter> dataCenters = new ArrayList<>();
+
+    public static InfrastructureConfig dataCenter(DataCenter... dataCenters) {
+        return
+            new InfrastructureConfig()
+                .dataCenters(dataCenters);
+    }
 
     /**
      * Returns list of hierarchy
@@ -52,7 +59,7 @@ public class InfrastructureConfig{
      * @param datacenters array of data centers
      * @return current class instance
      */
-    public InfrastructureConfig datacenter(DataCenter... datacenters) {
+    public InfrastructureConfig dataCenters(DataCenter... datacenters) {
         checkNotNull(datacenters, "List of dataCenters must be not a null");
         this.dataCenters.addAll(asList(datacenters));
         return this;

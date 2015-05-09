@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.servers.services.groups;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.SampleServerConfigs;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
@@ -15,7 +16,12 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.CA_TORONTO_1;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
+import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.apacheHttpServer;
+import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.mysqlServer;
+import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.nginxServer;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
@@ -35,8 +41,8 @@ public class InfrastructureTest extends AbstractServersSdkTest {
 
         List<GroupMetadata> groups = checkInfrastructure(
             initConfig(
-                DataCenter.CA_TORONTO_1,
-                DataCenter.US_CENTRAL_SALT_LAKE_CITY
+                CA_TORONTO_1,
+                US_CENTRAL_SALT_LAKE_CITY
             )
         );
 
@@ -59,20 +65,19 @@ public class InfrastructureTest extends AbstractServersSdkTest {
 
     private InfrastructureConfig initConfig(DataCenter... dataCenters) {
         return new InfrastructureConfig()
-            .datacenter(dataCenters)
+            .dataCenters(dataCenters)
             .subitems(new GroupHierarchyConfig()
                 .name("Parent Group")
                 .subitems(
                     group("Group1-1").subitems(
-                        group("Group1-1-1")
-                            .subitems(
-                                mysqlServer().count(2),
-                                apacheHttpServer()),
-                        group("Group1-1-2")
-                            .subitems(
-                                group("Group1-1-2-1"),
-                                nginxServer()
-                            )
+                        group("Group1-1-1").subitems(
+                            mysqlServer().count(2),
+                            apacheHttpServer()
+                        ),
+                        group("Group1-1-2").subitems(
+                            group("Group1-1-2-1"),
+                            nginxServer()
+                        )
                     ),
                     group("Group1-2")
                 ));
