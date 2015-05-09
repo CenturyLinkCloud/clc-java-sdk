@@ -2,6 +2,7 @@ package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
@@ -116,7 +117,7 @@ public class SearchQueriesSampleApp extends Assert {
     private void clearAll() {
         serverService
             .delete(new ServerFilter()
-                .dataCenters(DE_FRANKFURT, CA_VANCOUVER)
+                .dataCenters(DE_FRANKFURT, US_EAST_STERLING)
                 .status(ACTIVE, ARCHIVED)
             )
             .waitUntilComplete();
@@ -167,7 +168,7 @@ public class SearchQueriesSampleApp extends Assert {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter()
                 .dataCenters(DE_FRANKFURT, CA_VANCOUVER)
-                .groupNames(DEFAULT_GROUP)
+                .status(ACTIVE, ARCHIVED)
         );
 
         checkServerMetadataList(serverMetadataList, "sr-de1", "sr-de2", "sr-va1", "sr-va2");
