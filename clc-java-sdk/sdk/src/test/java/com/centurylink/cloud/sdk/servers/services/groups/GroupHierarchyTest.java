@@ -36,7 +36,7 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
     @Inject
     GroupService groupService;
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    @Test(enabled = false, groups = {INTEGRATION, LONG_RUNNING})
     public void testGroupHierarchy() {
         GroupHierarchyConfig config = initConfig();
         GroupMetadata parentGroup = defineGroupHierarchy(config);
