@@ -49,7 +49,7 @@ public class PowerOperationsSampleApp extends Assert {
 
     public static CreateServerConfig centOsServer(String name) {
         return new CreateServerConfig()
-            .name(name)
+            .name("PWROPS")
             .description(name)
             .type(STANDARD)
             .machine(new Machine()
