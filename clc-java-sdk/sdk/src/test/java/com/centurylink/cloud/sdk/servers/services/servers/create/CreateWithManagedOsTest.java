@@ -21,7 +21,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author Ilya Drabenia
  */
-@Test(groups = {INTEGRATION, LONG_RUNNING})
+//@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class CreateWithManagedOsTest extends AbstractServersSdkTest {
 
     @Inject
@@ -29,7 +29,7 @@ public class CreateWithManagedOsTest extends AbstractServersSdkTest {
 
     ServerMetadata server;
 
-    @Test
+//    @Test
     public void testCreateWithManagedOS() {
         server =
             serverService.create(anyServerConfig()
@@ -52,7 +52,7 @@ public class CreateWithManagedOsTest extends AbstractServersSdkTest {
         assert !isNullOrEmpty(server.getId());
     }
 
-    @AfterMethod
+//    @AfterMethod
     public void deleteServer() {
         serverService.delete(server.asRefById());
     }
