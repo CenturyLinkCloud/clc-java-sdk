@@ -5,13 +5,16 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.SampleServerConfigs;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
+import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.apacheHttpServer;
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.mysqlServer;
@@ -26,6 +29,9 @@ import static java.util.stream.Collectors.toList;
  * @author Aliaksandr Krasitski
  */
 public class GroupHierarchyTest extends AbstractServersSdkTest {
+
+    @Inject
+    ServerService serverService;
 
     @Inject
     GroupService groupService;
@@ -60,9 +66,9 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
     }
 
     private GroupMetadata defineGroupHierarchy(GroupHierarchyConfig config) {
-        groupService.defineGroupHierarchy(DataCenter.DE_FRANKFURT, config).waitUntilComplete();
+        groupService.defineGroupHierarchy(DE_FRANKFURT, config).waitUntilComplete();
 
-        return groupService.findByDataCenter(DataCenter.DE_FRANKFURT).stream()
+        return groupService.findByDataCenter(DE_FRANKFURT).stream()
             .filter(group -> group.getName().equals(config.getName()))
             .findFirst()
             .get();
@@ -101,6 +107,15 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
     }
 
     private void deleteGroup(GroupMetadata groupMetadata) {
-        groupService.delete(Group.refById(groupMetadata.getId())).waitUntilComplete();
+        serverService
+            .delete(new ServerFilter()
+                .dataCenters(DE_FRANKFURT)
+                .groupNames("Group1-1-1", "Group1-1-2")
+            )
+            .waitUntilComplete();
+
+        groupService
+            .delete(Group.refById(groupMetadata.getId()))
+            .waitUntilComplete();
     }
 }

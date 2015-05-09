@@ -5,11 +5,13 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.SampleServerConfigs;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
+import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
+import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
@@ -35,6 +37,9 @@ public class InfrastructureTest extends AbstractServersSdkTest {
 
     @Inject
     GroupService groupService;
+
+    @Inject
+    ServerService serverService;
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testInfrastructure() {
@@ -122,6 +127,13 @@ public class InfrastructureTest extends AbstractServersSdkTest {
     }
 
     private void deleteGroups(List<GroupMetadata> groups) {
+        serverService
+            .delete(new ServerFilter()
+                .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
+                .groupNames("Group1-1-1", "Group1-1-2")
+            )
+            .waitUntilComplete();
+
         List<GroupByIdRef> refs = groups.stream()
             .map(groupMetadata -> Group.refById(groupMetadata.getId()))
             .collect(toList());
