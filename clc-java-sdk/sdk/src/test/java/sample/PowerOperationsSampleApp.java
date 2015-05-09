@@ -33,7 +33,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.filters
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
 import static java.lang.Boolean.TRUE;
 
-@Test(enabled = false, groups = SAMPLES)
+@Test(groups = SAMPLES)
 public class PowerOperationsSampleApp extends Assert {
     private final ServerService serverService;
     private final GroupService groupService;
@@ -65,7 +65,7 @@ public class PowerOperationsSampleApp extends Assert {
             .timeToLive(ZonedDateTime.now().plusHours(2));
     }
 
-//    @BeforeClass
+    @BeforeClass
     public void init() {
         deleteServers();
 
@@ -84,7 +84,7 @@ public class PowerOperationsSampleApp extends Assert {
             .waitUntilComplete();
     }
 
-//    @AfterClass
+    @AfterClass
     public void deleteServers() {
         serverService
             .delete(new ServerFilter()
@@ -114,7 +114,7 @@ public class PowerOperationsSampleApp extends Assert {
                 .description("b_mysql");
     }
 
-//    @Test
+    @Test
     public void testWholeGroupReboot() {
         groupService
             .reboot(myServersGroup())
@@ -127,7 +127,7 @@ public class PowerOperationsSampleApp extends Assert {
                 .count() == 3;
     }
 
-//    @Test
+    @Test
     public void testCreateSnapshots() {
         serverService
             .createSnapshot(new ServerFilter()
@@ -146,7 +146,7 @@ public class PowerOperationsSampleApp extends Assert {
                 .getDetails().getSnapshots().size() == 1;
     }
 
-//    @Test(enabled = false)
+    @Test(enabled = false)
     public void testStartMaintenanceMode() {
         groupService
             .startMaintenance(myServersGroup())
@@ -159,7 +159,7 @@ public class PowerOperationsSampleApp extends Assert {
                 .count() == 3;
     }
 
-//    @Test
+    @Test
     public void testStopMaintenanceMode() {
         testStartMaintenanceMode();
 
@@ -175,7 +175,7 @@ public class PowerOperationsSampleApp extends Assert {
     }
 
 
-//    @Test(enabled = false)
+    @Test(enabled = false)
     public void testStopMySql() {
         serverService
             .powerOff(new ServerFilter()
@@ -193,7 +193,7 @@ public class PowerOperationsSampleApp extends Assert {
                 .equals("stopped");
     }
 
-//    @Test
+    @Test
     public void testStartMySql() {
         testStopMySql();
 

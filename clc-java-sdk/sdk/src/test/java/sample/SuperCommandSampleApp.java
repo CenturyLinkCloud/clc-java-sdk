@@ -30,7 +30,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.template.filters
 import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
 import static java.util.stream.Collectors.toList;
 
-@Test(enabled = false, groups = SAMPLES)
+@Test(groups = SAMPLES)
 public class SuperCommandSampleApp extends Assert {
 
     private ServerService serverService;
@@ -46,7 +46,7 @@ public class SuperCommandSampleApp extends Assert {
         groupService = sdk.groupService();
     }
 
-//    @BeforeClass
+    @BeforeClass
     public void init() {
         clearAll();
 
@@ -65,7 +65,7 @@ public class SuperCommandSampleApp extends Assert {
             .waitUntilComplete();
     }
 
-//    @AfterClass
+    @AfterClass
     public void deleteServers() {
         clearAll();
     }
@@ -140,14 +140,14 @@ public class SuperCommandSampleApp extends Assert {
                 .equals("started");
     }
 
-//    @Test
+    @Test
     public void checkServersIsActiveTest() {
         checkServerIsStarted("nginx");
         checkServerIsStarted("mysql");
         checkServerIsStarted("apache");
     }
 
-//    @Test
+    @Test
     public void nginxTest() {
         ServerMetadata nginxMetadata = loadServerMetadata(
             Server.refByDescription(DE_FRANKFURT, "nginx")
