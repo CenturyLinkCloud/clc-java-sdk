@@ -15,10 +15,13 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFi
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.CA_TORONTO_1;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
@@ -44,16 +47,28 @@ public class InfrastructureTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
+    int testId = generateTestId();
+
+    private static int generateTestId() {
+        return new Random(seed()).nextInt() % 1_000;
+    }
+
+    private static long seed() {
+        return new Date().getTime();
+    }
+
+    private String name(String value) {
+        return String.format("%s_%s", value, testId);
+    }
+
     @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testInfrastructure() throws Exception {
-        List<GroupMetadata> groups = checkInfrastructure(
+        checkInfrastructure(
             initConfig(
                 CA_TORONTO_1,
                 US_CENTRAL_SALT_LAKE_CITY
             )
         );
-
-        deleteGroups(groups);
     }
 
     private List<GroupMetadata> checkInfrastructure(InfrastructureConfig... configs) {
@@ -74,18 +89,18 @@ public class InfrastructureTest extends AbstractServersSdkTest {
         return new InfrastructureConfig()
             .dataCenters(dataCenters)
             .subitems(new GroupHierarchyConfig()
-                .name("Parent Group")
+                .name(name("Parent Group"))
                 .subitems(
-                    group("Group1-1").subitems(
-                        group("Group1-1-1").subitems(
+                    group(name("Group1-1")).subitems(
+                        group(name("Group1-1-1")).subitems(
                             mysqlServer().count(2)
                         ),
-                        group("Group1-1-2").subitems(
-                            group("Group1-1-2-1"),
+                        group(name("Group1-1-2")).subitems(
+                            group(name("Group1-1-2-1")),
                             apacheHttpServer()
                         )
                     ),
-                    group("Group1-2")
+                    group(name("Group1-2"))
                 ));
     }
 
@@ -127,17 +142,20 @@ public class InfrastructureTest extends AbstractServersSdkTest {
             });
     }
 
-    private void deleteGroups(List<GroupMetadata> groups) throws Exception {
+    @AfterClass
+    private void deleteGroups() throws Exception {
         serverService
             .delete(new ServerFilter()
                 .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
-                .groupNames("Group1-1-1", "Group1-1-2")
+                .groupNames(name("Group1-1-1"), name("Group1-1-2"))
             )
             .waitUntilComplete();
 
-        List<GroupByIdRef> refs = groups.stream()
-            .map(groupMetadata -> Group.refById(groupMetadata.getId()))
-            .collect(toList());
-        groupService.delete(refs.toArray(new Group[refs.size()])).waitUntilComplete();
+        groupService
+            .delete(new GroupFilter()
+                .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
+                .names(name("Parent Group"))
+            )
+            .waitUntilComplete();
     }
 }
