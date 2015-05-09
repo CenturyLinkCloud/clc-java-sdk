@@ -12,7 +12,9 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilt
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -33,6 +35,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author Aliaksandr Krasitski
  */
+@Test(groups = "test1")
 public class InfrastructureTest extends AbstractServersSdkTest {
 
     @Inject
@@ -42,8 +45,7 @@ public class InfrastructureTest extends AbstractServersSdkTest {
     ServerService serverService;
 
     @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testInfrastructure() {
-
+    public void testInfrastructure() throws Exception {
         List<GroupMetadata> groups = checkInfrastructure(
             initConfig(
                 CA_TORONTO_1,
@@ -126,7 +128,15 @@ public class InfrastructureTest extends AbstractServersSdkTest {
             });
     }
 
-    private void deleteGroups(List<GroupMetadata> groups) {
+    private void deleteGroups(List<GroupMetadata> groups) throws Exception {
+        LoggerFactory.getLogger(getClass())
+            .error(new ObjectMapper().writeValueAsString(
+                serverService.find(new ServerFilter()
+                    .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
+                    .groupNames("Group1-1-1", "Group1-1-2")
+                )
+            ));
+
         serverService
             .delete(new ServerFilter()
                 .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
