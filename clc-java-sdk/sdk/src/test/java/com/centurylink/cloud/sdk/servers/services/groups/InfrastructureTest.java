@@ -78,12 +78,11 @@ public class InfrastructureTest extends AbstractServersSdkTest {
                 .subitems(
                     group("Group1-1").subitems(
                         group("Group1-1-1").subitems(
-                            mysqlServer().count(2),
-                            apacheHttpServer()
+                            mysqlServer().count(2)
                         ),
                         group("Group1-1-2").subitems(
                             group("Group1-1-2-1"),
-                            nginxServer()
+                            apacheHttpServer()
                         )
                     ),
                     group("Group1-2")
@@ -129,14 +128,6 @@ public class InfrastructureTest extends AbstractServersSdkTest {
     }
 
     private void deleteGroups(List<GroupMetadata> groups) throws Exception {
-        LoggerFactory.getLogger(getClass())
-            .error(new ObjectMapper().writeValueAsString(
-                serverService.find(new ServerFilter()
-                    .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
-                    .groupNames("Group1-1-1", "Group1-1-2")
-                )
-            ));
-
         serverService
             .delete(new ServerFilter()
                 .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
