@@ -236,6 +236,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(Server... serverRefs) {
         return powerOperationResponse(
+            "Power On",
             client.powerOn(ids(serverRefs))
         );
     }
@@ -248,6 +249,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Power On",
             client.powerOn(ids(serverFilter))
         );
     }
@@ -260,6 +262,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> powerOff(Server... serverRefs) {
         return powerOperationResponse(
+            "Power Off",
             client.powerOff(ids(serverRefs))
         );
     }
@@ -272,6 +275,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> powerOff(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Power Off",
             client.powerOff(ids(serverFilter))
         );
     }
@@ -284,6 +288,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> startMaintenance(Server... serverRefs) {
         return powerOperationResponse(
+            "Start Maintenance",
             client.startMaintenance(ids(serverRefs))
         );
     }
@@ -296,6 +301,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> startMaintenance(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Start Maintenance",
             client.startMaintenance(ids(serverFilter))
         );
     }
@@ -308,6 +314,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> stopMaintenance(Server... serverRefs) {
         return powerOperationResponse(
+            "Stop Maintenance",
             client.stopMaintenance(ids(serverRefs))
         );
     }
@@ -320,6 +327,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Stop Maintenance",
             client.stopMaintenance(ids(serverFilter))
         );
     }
@@ -333,6 +341,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public OperationFuture<List<BaseServerResponse>> pause(Server... serverRefs) {
         return
             powerOperationResponse(
+                "Pause",
                 client.pause(ids(serverRefs))
             );
     }
@@ -345,6 +354,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> pause(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Pause",
             client.pause(ids(serverFilter))
         );
     }
@@ -357,6 +367,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> reboot(Server... serverRefs) {
         return powerOperationResponse(
+            "Reboot",
             client.reboot(ids(serverRefs))
         );
     }
@@ -369,6 +380,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> reboot(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Reboot",
             client.reboot(ids(serverFilter))
         );
     }
@@ -381,6 +393,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> reset(Server... serverRefs) {
         return powerOperationResponse(
+            "Reset",
             client.reset(ids(serverRefs))
         );
     }
@@ -393,6 +406,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> reset(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Reset",
             client.reset(ids(serverFilter))
         );
     }
@@ -405,6 +419,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> shutDown(Server... serverRefs) {
         return powerOperationResponse(
+            "Shutdown",
             client.shutDown(ids(serverRefs))
         );
     }
@@ -417,6 +432,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> shutDown(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Shutdown",
             client.shutDown(ids(serverFilter))
         );
     }
@@ -429,6 +445,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> archive(Server... serverRefs) {
         return powerOperationResponse(
+            "Archive",
             client.archive(ids(serverRefs))
         );
     }
@@ -441,6 +458,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> archive(ServerFilter serverFilter) {
         return powerOperationResponse(
+            "Archive",
             client.archive(ids(serverFilter))
         );
     }
@@ -455,6 +473,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, Server... serverRefs) {
         return
             powerOperationResponse(
+                "Create Snapshot",
                 client.createSnapshot(
                     new CreateSnapshotRequest()
                         .snapshotExpirationDays(expirationDays)
@@ -483,6 +502,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerFilter serverFilter) {
         return
             powerOperationResponse(
+                "Create Snapshot",
                 client.createSnapshot(
                     new CreateSnapshotRequest()
                         .snapshotExpirationDays(expirationDays)
@@ -891,7 +911,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return removePublicIp(getRefsFromFilter(serverFilter));
     }
 
-    public OperationFuture<List<BaseServerResponse>> powerOperationResponse(BaseServerListResponse response) {
+    public OperationFuture<List<BaseServerResponse>> powerOperationResponse(
+            String operation, BaseServerListResponse response) {
         if (response.hasErrors()) {
             throw response.summaryException();
         }
@@ -900,15 +921,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             new OperationFuture<>(
                 response,
                 new ParallelJobsFuture(
-                    jobInfoList(response),
+                    jobInfoList(operation, response),
                     queueClient
                 )
             );
     }
 
-    private List<JobInfo> jobInfoList(BaseServerListResponse apiResponse) {
+    private List<JobInfo> jobInfoList(String operation, BaseServerListResponse apiResponse) {
         return map(apiResponse, response ->
-            new ResourceJobInfo(response.findStatusId(), Server.refById(response.getServer()))
+            new ResourceJobInfo(response.findStatusId(), operation, Server.refById(response.getServer()))
         );
     }
 

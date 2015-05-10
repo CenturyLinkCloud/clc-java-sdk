@@ -397,6 +397,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Power On",
             client.powerOn(serverService().ids(groupFilter))
         );
     }
@@ -409,6 +410,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Power On",
             client.powerOn(serverService().ids(groupRefs))
         );
     }
@@ -421,6 +423,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> powerOff(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Power Off",
             client.powerOff(serverService().ids(groupFilter))
         );
     }
@@ -433,6 +436,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> powerOff(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Power Off",
             client.powerOff(serverService().ids(groupRefs))
         );
     }
@@ -445,6 +449,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> startMaintenance(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Start Maintenance",
             client.startMaintenance(serverService().ids(groupFilter))
         );
     }
@@ -457,6 +462,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> startMaintenance(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Start Maintenance",
             client.startMaintenance(serverService().ids(groupRefs))
         );
     }
@@ -469,6 +475,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> stopMaintenance(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Stop Maintenance",
             client.stopMaintenance(serverService().ids(groupFilter))
         );
     }
@@ -481,6 +488,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> stopMaintenance(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Stop Maintenance",
             client.stopMaintenance(serverService().ids(groupRefs))
         );
     }
@@ -493,6 +501,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> pause(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Pause",
             client.pause(serverService().ids(groupFilter))
         );
     }
@@ -505,6 +514,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> pause(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Pause",
             client.pause(serverService().ids(groupRefs))
         );
     }
@@ -517,6 +527,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> reboot(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Reboot",
             client.reboot(serverService().ids(groupFilter))
         );
     }
@@ -529,6 +540,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> reboot(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Reboot",
             client.reboot(serverService().ids(groupRefs))
         );
     }
@@ -541,6 +553,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> reset(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Reset",
             client.reset(serverService().ids(groupFilter))
         );
     }
@@ -553,6 +566,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> reset(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Reset",
             client.reset(serverService().ids(groupRefs))
         );
     }
@@ -565,6 +579,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> shutDown(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Shutdown",
             client.shutDown(serverService().ids(groupFilter))
         );
     }
@@ -577,6 +592,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> shutDown(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Shutdown",
             client.shutDown(serverService().ids(groupRefs))
         );
     }
@@ -589,6 +605,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> archive(GroupFilter groupFilter) {
         return serverService().powerOperationResponse(
+            "Archive",
             client.archive(serverService().ids(groupFilter))
         );
     }
@@ -601,6 +618,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<BaseServerResponse>> archive(Group... groupRefs) {
         return serverService().powerOperationResponse(
+            "Archive",
             client.archive(serverService().ids(groupRefs))
         );
     }
@@ -612,9 +630,11 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param groupFilter    search servers criteria by group filter
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, GroupFilter groupFilter) {
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays,
+                                                                    GroupFilter groupFilter) {
         return
             serverService().powerOperationResponse(
+                "Create Snapshot",
                 client.createSnapshot(
                     new CreateSnapshotRequest()
                         .snapshotExpirationDays(expirationDays)
@@ -633,6 +653,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, Group... groupRef) {
         return
             serverService().powerOperationResponse(
+                "Create Snapshot",
                 client.createSnapshot(
                     new CreateSnapshotRequest()
                         .snapshotExpirationDays(expirationDays)
