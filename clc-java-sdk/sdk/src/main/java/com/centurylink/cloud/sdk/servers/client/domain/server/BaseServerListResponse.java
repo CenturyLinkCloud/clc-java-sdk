@@ -41,7 +41,7 @@ public class BaseServerListResponse extends ArrayList<BaseServerResponse> {
     }
 
     public ClcClientException summaryException() {
-        if (!hasErrors()) {
+        if (hasErrors()) {
             ClcClientException ex = new ClcClientException();
             listExceptions().forEach(ex::addSuppressed);
             return ex;
