@@ -1,6 +1,6 @@
-package com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job;
+package com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future;
 
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.ClcTimeoutException;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.exceptions.JobTimeoutException;
 import com.centurylink.cloud.sdk.core.services.ClcServiceException;
 
 import java.time.Duration;
@@ -44,7 +44,7 @@ public class SequentialJobsFuture implements JobFuture {
         } catch (InterruptedException | ExecutionException e) {
             throw new ClcServiceException(e);
         } catch (TimeoutException e) {
-            throw new ClcTimeoutException(e);
+            throw new JobTimeoutException(e);
         }
     }
 

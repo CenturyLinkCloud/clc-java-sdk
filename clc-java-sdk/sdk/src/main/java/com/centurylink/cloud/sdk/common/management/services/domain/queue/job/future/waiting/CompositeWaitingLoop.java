@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.waiting;
+package com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.waiting;
 
 import java.util.function.Consumer;
 

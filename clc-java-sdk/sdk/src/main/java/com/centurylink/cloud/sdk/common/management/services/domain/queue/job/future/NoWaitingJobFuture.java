@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job;
+package com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;

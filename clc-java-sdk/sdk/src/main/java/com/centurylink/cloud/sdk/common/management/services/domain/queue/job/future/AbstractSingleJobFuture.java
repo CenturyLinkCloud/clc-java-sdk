@@ -1,7 +1,7 @@
-package com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job;
+package com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future;
 
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.waiting.TimeoutInterceptor;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.waiting.WaitingLoop;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.waiting.TimeoutInterceptor;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.waiting.WaitingLoop;
 import com.centurylink.cloud.sdk.core.services.SdkThreadPool;
 
 import java.time.Duration;

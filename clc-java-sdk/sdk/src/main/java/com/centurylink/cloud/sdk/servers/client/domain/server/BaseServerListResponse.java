@@ -32,6 +32,7 @@ public class BaseServerListResponse extends ArrayList<BaseServerResponse> {
                         .stream()
                         .filter(r -> r.getErrorMessage() != null)
                         .map(r -> new ClcClientException(r.getErrorMessage())),
+
                     this
                         .stream()
                         .filter(r -> !r.getQueued())

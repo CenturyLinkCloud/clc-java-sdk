@@ -1,10 +1,11 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.common.management.client.QueueClient;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.OperationFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.*;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.JobInfo;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.ResourceJobInfo;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.*;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.exceptions.fails.SingleCallResult;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
@@ -889,21 +891,25 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return removePublicIp(getRefsFromFilter(serverFilter));
     }
 
-    public OperationFuture<List<BaseServerResponse>> powerOperationResponse(BaseServerListResponse apiResponse) {
-        if (apiResponse.hasErrors()) {
-            throw apiResponse.summaryException();
+    public OperationFuture<List<BaseServerResponse>> powerOperationResponse(BaseServerListResponse response) {
+        if (response.hasErrors()) {
+            throw response.summaryException();
         }
 
         return
             new OperationFuture<>(
-                apiResponse,
-                apiResponse
-                    .stream()
-                    .filter(notNull())
-                    .map(BaseServerResponse::findStatusId)
-                    .collect(toList()),
-                queueClient
+                response,
+                new ParallelJobsFuture(
+                    jobInfoList(response),
+                    queueClient
+                )
             );
+    }
+
+    private List<JobInfo> jobInfoList(BaseServerListResponse apiResponse) {
+        return map(apiResponse, response ->
+            new ResourceJobInfo(response.findStatusId(), Server.refById(response.getServer()))
+        );
     }
 
     private OperationFuture<Link> baseServerResponse(Link response) {

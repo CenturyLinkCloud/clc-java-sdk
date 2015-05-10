@@ -1,6 +1,6 @@
-package com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.waiting;
+package com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.waiting;
 
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.ClcTimeoutException;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.exceptions.JobTimeoutException;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -23,7 +23,7 @@ public class TimeoutInterceptor implements Consumer<Void> {
     @Override
     public void accept(Void e) {
         if (timeLimit.isBefore(now())) {
-            throw new ClcTimeoutException("Job for operation %s is timed out", operationDescription);
+            throw new JobTimeoutException("Job for operation %s is timed out", operationDescription);
         }
     }
 

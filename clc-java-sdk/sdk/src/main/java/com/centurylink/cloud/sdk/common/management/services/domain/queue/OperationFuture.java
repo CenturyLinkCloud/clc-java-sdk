@@ -1,10 +1,10 @@
-package com.centurylink.cloud.sdk.common.management.services.domain.queue.future;
+package com.centurylink.cloud.sdk.common.management.services.domain.queue;
 
 import com.centurylink.cloud.sdk.common.management.client.QueueClient;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.JobFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job.SingleJobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.JobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.SingleJobFuture;
 
 import java.time.Duration;
 import java.util.List;

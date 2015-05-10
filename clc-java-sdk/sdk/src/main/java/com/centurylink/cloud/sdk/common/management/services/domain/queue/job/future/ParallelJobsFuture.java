@@ -1,4 +1,8 @@
-package com.centurylink.cloud.sdk.common.management.services.domain.queue.future.job;
+package com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future;
+
+import com.centurylink.cloud.sdk.common.management.client.QueueClient;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.JobInfo;
+import com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -6,6 +10,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
 import static com.google.common.collect.Iterables.toArray;
 import static java.util.Arrays.asList;
 
@@ -21,6 +27,13 @@ public class ParallelJobsFuture implements JobFuture {
 
     public ParallelJobsFuture(List<JobFuture> jobs) {
         this.jobs = new ArrayList<>(jobs);
+    }
+
+    public ParallelJobsFuture(List<JobInfo> jobInfoList, QueueClient queueClient) {
+        allItemsNotNull(jobInfoList, "Job Info List");
+        notNull(queueClient, "Queue Client must be not null");
+
+        this.jobs = map(jobInfoList, info -> new SingleJobFuture(info, queueClient));
     }
 
     @Override
