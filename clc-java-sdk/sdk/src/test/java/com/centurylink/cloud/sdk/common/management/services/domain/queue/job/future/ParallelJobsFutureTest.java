@@ -17,13 +17,10 @@ import static org.testng.Assert.*;
 
 public class ParallelJobsFutureTest {
 
-    private List<JobFuture> singleJobFutures(int count) {
-        return rangeClosed(1, count)
-            .mapToObj(i -> new TestJobFuture())
-            .collect(toList());
-    }
-
-    class TestJobFuture extends AbstractSingleJobFuture {
+    /**
+     * Stub for failed job future
+     */
+    class FailedJobFuture extends AbstractSingleJobFuture {
         @Override
         protected String operationInfo() {
             return "Mocked Operation";
@@ -37,10 +34,44 @@ public class ParallelJobsFutureTest {
         }
     }
 
-    @Test
+    private List<JobFuture> failedJobFutures(int count) {
+        return rangeClosed(1, count)
+            .mapToObj(i -> new FailedJobFuture())
+            .collect(toList());
+    }
+
+    /**
+     * Stub for succeeded job future
+     */
+    class SuccessJobFuture extends AbstractSingleJobFuture {
+
+        @Override
+        protected String operationInfo() {
+            return "Mocked Operation";
+        }
+
+        @Override
+        public WaitingLoop waitingLoop() {
+            return new SingleWaitingLoop(() -> true);
+        }
+
+    }
+
+    private List<JobFuture> successJobFutures(int count) {
+        return rangeClosed(1, count)
+            .mapToObj(i -> new SuccessJobFuture())
+            .collect(toList());
+    }
+
+    @Test(timeOut = 1000L)
     public void testWaitUntilComplete() throws Exception {
+        new ParallelJobsFuture(successJobFutures(4)).waitUntilComplete();
+    }
+
+    @Test
+    public void testWaitUntilComplete_failed() throws Exception {
         try {
-            new ParallelJobsFuture(singleJobFutures(2))
+            new ParallelJobsFuture(failedJobFutures(2))
                 .waitUntilComplete();
 
             fail("Parallel future must throw exception");
@@ -51,9 +82,9 @@ public class ParallelJobsFutureTest {
     }
 
     @Test
-    public void testWaitUntilCompleteWithDuration() throws Exception {
+    public void testWaitUntilCompleteWithDuration_failed() throws Exception {
         try {
-            new ParallelJobsFuture(singleJobFutures(3))
+            new ParallelJobsFuture(failedJobFutures(3))
                 .waitUntilComplete(Duration.of(10, MINUTES));
 
             fail("Parallel future must throw exception");
@@ -64,9 +95,29 @@ public class ParallelJobsFutureTest {
     }
 
     @Test
-    public void testWaitAsync() throws Exception {
+    public void testWaitUntilCompleteWithDuration_timedOut() throws Exception {
         try {
-            new ParallelJobsFuture(singleJobFutures(3))
+            new ParallelJobsFuture(failedJobFutures(3))
+                .waitUntilComplete(Duration.of(10, MINUTES));
+
+            fail("Parallel future must throw exception");
+        } catch (Exception ex) {
+            assert ex instanceof JobFailedException;
+            assertEquals(ex.getSuppressed().length, 3);
+        }
+    }
+
+    @Test(timeOut = 1000L)
+    public void testWaitAsync() throws Exception {
+        new ParallelJobsFuture(successJobFutures(3))
+            .waitAsync()
+            .join();
+    }
+
+    @Test
+    public void testWaitAsync_failed() throws Exception {
+        try {
+            new ParallelJobsFuture(failedJobFutures(3))
                 .waitAsync()
                 .join();
 
