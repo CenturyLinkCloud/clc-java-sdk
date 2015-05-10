@@ -650,7 +650,8 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param groupRef       groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, Group... groupRef) {
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays,
+                                                                    Group... groupRef) {
         return
             serverService().powerOperationResponse(
                 "Create Snapshot",
