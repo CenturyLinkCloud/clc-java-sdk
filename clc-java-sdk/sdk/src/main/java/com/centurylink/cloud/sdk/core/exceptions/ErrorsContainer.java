@@ -1,29 +1,45 @@
 package com.centurylink.cloud.sdk.core.exceptions;
 
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions;
+import com.google.common.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
 
 /**
  * @author Ilya Drabenia
  */
 public class ErrorsContainer {
     private final List<Throwable> errors = new CopyOnWriteArrayList<>();
+    private final Supplier<ClcException> exceptionSupplier;
+
+    public ErrorsContainer(Supplier<ClcException> exceptionSupplier) {
+        notNull(exceptionSupplier, "Exception supplier must be not null");
+
+        this.exceptionSupplier = exceptionSupplier;
+    }
 
     public boolean hasErrors() {
         return errors.size() > 0;
     }
 
-    public ClcClientException summaryException() {
+    public ClcException summaryException() {
         if (hasErrors()) {
-            ClcClientException ex = new ClcClientException();
+            ClcException ex = exceptionSupplier.get();
             errors.forEach(ex::addSuppressed);
             return ex;
         } else {
             return null;
+        }
+    }
+
+    public void throwSummaryExceptionIfNeeded() {
+        if (hasErrors()) {
+            throw summaryException();
         }
     }
 

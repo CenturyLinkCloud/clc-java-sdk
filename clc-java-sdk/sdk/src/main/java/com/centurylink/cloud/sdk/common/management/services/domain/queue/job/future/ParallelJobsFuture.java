@@ -2,11 +2,13 @@ package com.centurylink.cloud.sdk.common.management.services.domain.queue.job.fu
 
 import com.centurylink.cloud.sdk.common.management.client.QueueClient;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.JobInfo;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.exceptions.JobFailedException;
 import com.centurylink.cloud.sdk.core.exceptions.ErrorsContainer;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
@@ -19,8 +21,10 @@ import static java.util.stream.Collectors.toList;
  * @author Ilya Drabenia
  */
 public class ParallelJobsFuture implements JobFuture {
+    private final ErrorsContainer errors =
+            new ErrorsContainer(() -> new JobFailedException("Parallel Job Failed"));
+
     private final Stream<JobFuture> jobs;
-    private final ErrorsContainer errors = new ErrorsContainer();
 
     public ParallelJobsFuture(JobFuture... jobs) {
         this.jobs = Stream.of(jobs);
@@ -42,16 +46,17 @@ public class ParallelJobsFuture implements JobFuture {
 
     @Override
     public void waitUntilComplete() {
-        jobs.forEach(errors.intercept(
-            JobFuture::waitUntilComplete
-        ));
+        forEachFuture(JobFuture::waitUntilComplete);
     }
 
     @Override
     public void waitUntilComplete(Duration timeout) {
-        jobs.forEach(errors.intercept(
-            j -> j.waitUntilComplete(timeout)
-        ));
+        forEachFuture(j -> j.waitUntilComplete(timeout));
+    }
+
+    private void forEachFuture(Consumer<JobFuture> func) {
+        jobs.forEach(errors.intercept(func));
+        errors.throwSummaryExceptionIfNeeded();
     }
 
     @Override
@@ -74,11 +79,8 @@ public class ParallelJobsFuture implements JobFuture {
     }
 
     private Void throwSummaryExceptionIfNeeded(Void val) {
-        if (errors.hasErrors()) {
-            throw errors.summaryException();
-        } else {
-            return null;
-        }
+        errors.throwSummaryExceptionIfNeeded();
+        return null;
     }
 
     private Void collectErrors(Throwable ex) {
