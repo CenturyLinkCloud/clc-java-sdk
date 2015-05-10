@@ -52,7 +52,7 @@ public class SingleWaitingLoop implements WaitingLoop {
             return;
         }
 
-        sleep(10_000L);
+        sleep(15_000L);
     }
 
     private void sleep() {
