@@ -13,11 +13,11 @@ import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupBillingStats;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupBillingStats;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
@@ -647,11 +647,10 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Create snapshot of servers groups
      *
      * @param expirationDays expiration days (must be between 1 and 10)
-     * @param groupRef       groups references list
+     * @param groupRef groups references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays,
-                                                                    Group... groupRef) {
+    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, Group... groupRef) {
         return
             serverService().powerOperationResponse(
                 "Create Snapshot",
@@ -674,7 +673,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
         groupList.forEach(
             group -> result.add(
-                client.getGroupBillingStats(idByRef(group))
+                converter.convertBillingStats(
+                    client.getGroupBillingStats(idByRef(group))
+                )
             )
         );
 
@@ -689,8 +690,8 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     public List<GroupBillingStats> getBillingStats(GroupFilter groupFilter) {
         return findLazy(groupFilter)
             .map(
-                groupMetadata -> client.getGroupBillingStats(
-                    groupMetadata.getId()
+                groupMetadata -> converter.convertBillingStats(
+                    client.getGroupBillingStats(groupMetadata.getId())
                 )
             )
             .collect(toList());

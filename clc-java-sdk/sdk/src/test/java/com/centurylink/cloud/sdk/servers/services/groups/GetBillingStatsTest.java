@@ -2,11 +2,12 @@ package com.centurylink.cloud.sdk.servers.services.groups;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupBillingStats;
+import com.centurylink.cloud.sdk.servers.client.domain.group.ClientGroupBillingStats;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupBillingStats;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
@@ -25,6 +26,8 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 public class GetBillingStatsTest extends AbstractServersSdkTest {
+
+    private final static String groupName = "st-gp";
 
     @Inject
     ServerService serverService;
@@ -49,7 +52,7 @@ public class GetBillingStatsTest extends AbstractServersSdkTest {
             .delete(serverMetadata.asRefById());
 
         groupService
-            .delete(new GroupFilter().nameContains("st-gp"));
+            .delete(new GroupFilter().nameContains(groupName));
     }
 
     private void initGroup() {
@@ -60,7 +63,7 @@ public class GetBillingStatsTest extends AbstractServersSdkTest {
                         .dataCenter(DataCenter.DE_FRANKFURT)
                         .name(Group.DEFAULT_GROUP)
                 )
-                .name("st-gp")
+                .name(groupName)
         )
         .waitUntilComplete()
         .getResult()
@@ -89,9 +92,14 @@ public class GetBillingStatsTest extends AbstractServersSdkTest {
     public void testModifyServer() throws Exception {
         List<GroupBillingStats> stats = groupService.getBillingStats(group);
 
-        /* All changes are not implemented immediately */
         assertNotNull(stats);
         assertEquals(stats.size(), 1);
+        assertNotNull(stats.get(0).getDate());
+        assertEquals(stats.get(0).getGroups().size(), 1);
+        assertEquals(stats.get(0).getGroups().get(0).getName(), groupName);
+
+        /* All server changes are not implemented immediately */
+//        assertEquals(stats.get(0).getGroups().get(0).getServers().size(), 1);
     }
 
 }

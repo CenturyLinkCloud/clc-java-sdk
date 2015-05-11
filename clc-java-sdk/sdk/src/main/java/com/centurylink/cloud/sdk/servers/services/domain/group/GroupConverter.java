@@ -3,6 +3,9 @@ package com.centurylink.cloud.sdk.servers.services.domain.group;
 import com.centurylink.cloud.sdk.servers.client.domain.group.*;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author ilya.drabenia
  */
@@ -39,5 +42,61 @@ public class GroupConverter {
             .name(hierarchyConfig.getName())
             .description(hierarchyConfig.getDescription())
             .parentGroup(Group.refById(parentGroupId));
+    }
+
+    public GroupBillingStats convertBillingStats(ClientGroupBillingStats clientGroupBillingStats) {
+        List<GroupBilling> groupBillingList = new ArrayList<>();
+
+        clientGroupBillingStats.getGroups().forEach(
+            (groupId, clientGroupBilling) -> {
+                List<ServerBilling> serverBillingList = new ArrayList<>();
+
+                clientGroupBilling.getServers().forEach(
+                    (serverId, clientServerBilling) ->
+                        serverBillingList.add(
+                            convertServerBilling(serverId, clientServerBilling)
+                        )
+                );
+
+                groupBillingList.add(
+                    convertGroupBilling(groupId, clientGroupBilling, serverBillingList)
+                );
+            }
+        );
+
+        return convertGroupBillingStats(clientGroupBillingStats, groupBillingList);
+    }
+
+    private GroupBillingStats convertGroupBillingStats(
+            ClientGroupBillingStats clientGroupBillingStats,
+            List<GroupBilling> groupBillingList
+    ) {
+        return
+            new GroupBillingStats()
+                .date(clientGroupBillingStats.getDate())
+                .groups(groupBillingList);
+    }
+
+    private GroupBilling convertGroupBilling(
+            String groupId,
+            ClientGroupBilling clientGroupBilling,
+            List<ServerBilling> serverBillingList
+    ) {
+        return
+            new GroupBilling()
+                .groupId(groupId)
+                .name(clientGroupBilling.getName())
+                .servers(serverBillingList);
+    }
+
+    private ServerBilling convertServerBilling(String serverId, ClientServerBilling clientServerBilling) {
+        return
+            new ServerBilling()
+                .serverId(serverId)
+                .templateCost(clientServerBilling.getTemplateCost())
+                .archiveCost(clientServerBilling.getArchiveCost())
+                .monthlyEstimate(clientServerBilling.getMonthlyEstimate())
+                .monthToDate(clientServerBilling.getMonthToDate())
+                .currentHour(clientServerBilling.getCurrentHour());
     }
 }

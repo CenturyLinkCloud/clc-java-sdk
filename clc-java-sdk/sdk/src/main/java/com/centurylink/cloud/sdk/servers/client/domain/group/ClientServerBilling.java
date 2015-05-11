@@ -1,6 +1,6 @@
 package com.centurylink.cloud.sdk.servers.client.domain.group;
 
-public class ServerBilling {
+public class ClientServerBilling {
 
     private String templateCost;
     private String archiveCost;
