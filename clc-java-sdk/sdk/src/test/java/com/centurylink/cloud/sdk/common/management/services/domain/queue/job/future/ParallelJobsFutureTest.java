@@ -104,7 +104,7 @@ public class ParallelJobsFutureTest {
         }
     }
 
-    @Test(timeOut = 1000L)
+    @Test(timeOut = 3000L)
     public void testWaitAsync() throws Exception {
         new ParallelJobsFuture(successJobFutures(3))
             .waitAsync()
