@@ -86,3 +86,20 @@ List<GroupBillingStats> results =
     );
 
 ```
+
+SDK Custom Configuration
+------------------------
+
+``` java
+
+ClcSdk sdk = 
+    new ClcSdk(
+        new StaticCredentialsProvider("ilya", "drabenia"),
+        SdkConfiguration.builder()
+            .maxRetries(10)
+            .proxyHost("localhost")
+            .proxyPort(8081)
+            .build()
+    );
+
+```
