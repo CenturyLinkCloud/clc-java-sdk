@@ -90,13 +90,12 @@ public class GetBillingStatsTest extends AbstractServersSdkTest {
 
     @Test
     public void testModifyServer() throws Exception {
-        List<GroupBillingStats> stats = groupService.getBillingStats(group);
+        GroupBillingStats stats = groupService.getBillingStats(group);
 
         assertNotNull(stats);
-        assertEquals(stats.size(), 1);
-        assertNotNull(stats.get(0).getDate());
-        assertEquals(stats.get(0).getGroups().size(), 1);
-        assertEquals(stats.get(0).getGroups().get(0).getName(), groupName);
+        assertNotNull(stats.getDate());
+        assertEquals(stats.getGroups().size(), 1);
+        assertEquals(stats.getGroups().get(0).getName(), groupName);
 
         /* All server changes are not implemented immediately */
 //        assertEquals(stats.get(0).getGroups().get(0).getServers().size(), 1);

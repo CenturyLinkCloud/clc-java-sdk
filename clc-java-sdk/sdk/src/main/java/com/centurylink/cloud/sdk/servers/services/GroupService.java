@@ -636,9 +636,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             serverService().powerOperationResponse(
                 "Create Snapshot",
                 client.createSnapshot(
-                    new CreateSnapshotRequest()
-                        .snapshotExpirationDays(expirationDays)
-                        .serverIds(serverService().ids(groupFilter))
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(serverService().ids(groupFilter))
                 )
             );
     }
@@ -660,6 +660,17 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                         .serverIds(serverService().ids(groupRef))
                 )
             );
+    }
+
+    /**
+     * Get billing stats by single group
+     * @param group Group
+     * @return Group billing stats
+     */
+    public GroupBillingStats getBillingStats(Group group) {
+        return converter.convertBillingStats(
+            client.getGroupBillingStats(idByRef(group))
+        );
     }
 
     /**
