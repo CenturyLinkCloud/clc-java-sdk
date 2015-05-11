@@ -75,9 +75,8 @@ public class ParallelJobsFutureTest {
                 .waitUntilComplete();
 
             fail("Parallel future must throw exception");
-        } catch (Exception ex) {
-            assert ex instanceof JobFailedException;
-            assertEquals(((JobFailedException) ex).getSubExceptions().size(), 2);
+        } catch (JobFailedException ex) {
+            assertEquals(ex.getSubExceptions().size(), 2);
         }
     }
 
@@ -88,9 +87,8 @@ public class ParallelJobsFutureTest {
                 .waitUntilComplete(Duration.of(10, MINUTES));
 
             fail("Parallel future must throw exception");
-        } catch (Exception ex) {
-            assert ex instanceof JobFailedException;
-            assertEquals(((JobFailedException) ex).getSubExceptions().size(), 3);
+        } catch (JobFailedException ex) {
+            assertEquals(ex.getSubExceptions().size(), 3);
         }
     }
 
@@ -101,9 +99,8 @@ public class ParallelJobsFutureTest {
                 .waitUntilComplete(Duration.of(10, MINUTES));
 
             fail("Parallel future must throw exception");
-        } catch (Exception ex) {
-            assert ex instanceof JobFailedException;
-            assertEquals(((JobFailedException) ex).getSubExceptions().size(), 3);
+        } catch (JobFailedException ex) {
+            assertEquals(ex.getSubExceptions().size(), 3);
         }
     }
 
@@ -123,10 +120,10 @@ public class ParallelJobsFutureTest {
 
             fail("Parallel future must throw exception");
         } catch (CompletionException ex) {
-            Throwable cause = ex.getCause();
+            assert ex.getCause() instanceof JobFailedException;
 
-            assert cause instanceof JobFailedException;
-            assertEquals(((JobFailedException) cause).getSubExceptions().size(), 3);
+            JobFailedException cause = (JobFailedException) ex.getCause();
+            assertEquals(cause.getSubExceptions().size(), 3);
         }
     }
 
