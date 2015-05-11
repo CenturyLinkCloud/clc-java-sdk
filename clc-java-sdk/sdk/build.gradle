@@ -25,6 +25,8 @@ test {
     }
 
     testLogging {
+        showExceptions = true
+        showCauses = true
         exceptionFormat = 'full' // full information about failed tests
     }
 }
@@ -35,6 +37,8 @@ task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
     }
 
     testLogging {
+        showExceptions = true
+        showCauses = true
         exceptionFormat = 'full' // full information about failed tests
     }
 }
@@ -45,6 +49,8 @@ task runSamples(type: Test, dependsOn: 'compileTestJava') {
     }
 
     testLogging {
+        showExceptions = true
+        showCauses = true
         exceptionFormat = 'full' // full information about failed tests
     }
 }
