@@ -1,30 +1,32 @@
 package com.centurylink.cloud.sdk.servers.client.domain.group;
 
+import java.math.BigDecimal;
+
 public class ClientServerBilling {
 
-    private String templateCost;
-    private String archiveCost;
-    private String monthlyEstimate;
-    private String monthToDate;
-    private String currentHour;
+    private BigDecimal templateCost;
+    private BigDecimal archiveCost;
+    private BigDecimal monthlyEstimate;
+    private BigDecimal monthToDate;
+    private BigDecimal currentHour;
 
-    public String getTemplateCost() {
+    public BigDecimal getTemplateCost() {
         return templateCost;
     }
 
-    public String getArchiveCost() {
+    public BigDecimal getArchiveCost() {
         return archiveCost;
     }
 
-    public String getMonthlyEstimate() {
+    public BigDecimal getMonthlyEstimate() {
         return monthlyEstimate;
     }
 
-    public String getMonthToDate() {
+    public BigDecimal getMonthToDate() {
         return monthToDate;
     }
 
-    public String getCurrentHour() {
+    public BigDecimal getCurrentHour() {
         return currentHour;
     }
 }

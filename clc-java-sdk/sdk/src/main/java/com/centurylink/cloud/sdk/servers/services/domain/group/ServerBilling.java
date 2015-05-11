@@ -1,13 +1,15 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
+import java.math.BigDecimal;
+
 public class ServerBilling {
 
     private String serverId;
-    private String templateCost;
-    private String archiveCost;
-    private String monthlyEstimate;
-    private String monthToDate;
-    private String currentHour;
+    private BigDecimal templateCost;
+    private BigDecimal archiveCost;
+    private BigDecimal monthlyEstimate;
+    private BigDecimal monthToDate;
+    private BigDecimal currentHour;
 
     public String getServerId() {
         return serverId;
@@ -22,67 +24,67 @@ public class ServerBilling {
         return this;
     }
 
-    public String getTemplateCost() {
+    public BigDecimal getTemplateCost() {
         return templateCost;
     }
 
-    public void setTemplateCost(String templateCost) {
+    public void setTemplateCost(BigDecimal templateCost) {
         this.templateCost = templateCost;
     }
 
-    public ServerBilling templateCost(String templateCost) {
+    public ServerBilling templateCost(BigDecimal templateCost) {
         setTemplateCost(templateCost);
         return this;
     }
 
-    public String getArchiveCost() {
+    public BigDecimal getArchiveCost() {
         return archiveCost;
     }
 
-    public void setArchiveCost(String archiveCost) {
+    public void setArchiveCost(BigDecimal archiveCost) {
         this.archiveCost = archiveCost;
     }
 
-    public ServerBilling archiveCost(String archiveCost) {
+    public ServerBilling archiveCost(BigDecimal archiveCost) {
         setArchiveCost(archiveCost);
         return this;
     }
 
-    public String getMonthlyEstimate() {
+    public BigDecimal getMonthlyEstimate() {
         return monthlyEstimate;
     }
 
-    public void setMonthlyEstimate(String monthlyEstimate) {
+    public void setMonthlyEstimate(BigDecimal monthlyEstimate) {
         this.monthlyEstimate = monthlyEstimate;
     }
 
-    public ServerBilling monthlyEstimate(String monthlyEstimate) {
+    public ServerBilling monthlyEstimate(BigDecimal monthlyEstimate) {
         setMonthlyEstimate(monthlyEstimate);
         return this;
     }
 
-    public String getMonthToDate() {
+    public BigDecimal getMonthToDate() {
         return monthToDate;
     }
 
-    public void setMonthToDate(String monthToDate) {
+    public void setMonthToDate(BigDecimal monthToDate) {
         this.monthToDate = monthToDate;
     }
 
-    public ServerBilling monthToDate(String monthToDate) {
+    public ServerBilling monthToDate(BigDecimal monthToDate) {
         setMonthToDate(monthToDate);
         return this;
     }
 
-    public String getCurrentHour() {
+    public BigDecimal getCurrentHour() {
         return currentHour;
     }
 
-    public void setCurrentHour(String currentHour) {
+    public void setCurrentHour(BigDecimal currentHour) {
         this.currentHour = currentHour;
     }
 
-    public ServerBilling currentHour(String currentHour) {
+    public ServerBilling currentHour(BigDecimal currentHour) {
         setCurrentHour(currentHour);
         return this;
     }
