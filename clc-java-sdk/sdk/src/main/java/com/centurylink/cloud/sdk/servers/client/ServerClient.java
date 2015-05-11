@@ -116,7 +116,8 @@ public class ServerClient extends SdkHttpClient {
         return
             client("/groups/{accountAlias}/{groupId}")
                 .resolveTemplate("groupId", groupId)
-                    .request().delete(Link.class);
+                .request()
+                .delete(Link.class);
     }
 
     public BaseServerResponse convertToTemplate(CreateTemplateRequest request) {
