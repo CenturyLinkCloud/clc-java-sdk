@@ -1,23 +1,25 @@
 package com.centurylink.cloud.sdk.core.exceptions;
 
-import com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions;
-import com.google.common.reflect.TypeToken;
-
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
+import static java.util.stream.Collectors.joining;
+import static org.apache.commons.codec.CharEncoding.UTF_8;
 
 /**
  * @author Ilya Drabenia
  */
 public class ErrorsContainer {
-    private final List<Throwable> errors = new CopyOnWriteArrayList<>();
-    private final Supplier<ClcException> exceptionSupplier;
+    private final List<Exception> errors = new CopyOnWriteArrayList<>();
+    private final Function<String, ClcException> exceptionSupplier;
 
-    public ErrorsContainer(Supplier<ClcException> exceptionSupplier) {
+    public ErrorsContainer(Function<String, ClcException> exceptionSupplier) {
         notNull(exceptionSupplier, "Exception supplier must be not null");
 
         this.exceptionSupplier = exceptionSupplier;
@@ -27,14 +29,35 @@ public class ErrorsContainer {
         return errors.size() > 0;
     }
 
+    private String getStackTrace(Exception ex) {
+        try {
+            ByteArrayOutputStream outBytes = new ByteArrayOutputStream();
+            PrintStream out = new PrintStream(outBytes, true, UTF_8);
+
+            ex.printStackTrace(out);
+
+            return outBytes.toString(UTF_8);
+        } catch (UnsupportedEncodingException e) {
+            throw new ClcException(e);
+        }
+    }
+
     public ClcException summaryException() {
         if (hasErrors()) {
-            ClcException ex = exceptionSupplier.get();
-            errors.forEach(ex::addSuppressed);
+            ClcException ex = exceptionSupplier.apply(errorMessage());
+            errors.forEach(ex::addSubException);
             return ex;
         } else {
             return null;
         }
+    }
+
+    private String errorMessage() {
+        return "\n" +
+            errors
+                .stream()
+                .map(this::getStackTrace)
+                .collect(joining("\n"));
     }
 
     public void throwSummaryExceptionIfNeeded() {
@@ -53,7 +76,7 @@ public class ErrorsContainer {
         };
     }
 
-    public ErrorsContainer add(Throwable ex) {
+    public ErrorsContainer add(Exception ex) {
         errors.add(ex);
         return this;
     }

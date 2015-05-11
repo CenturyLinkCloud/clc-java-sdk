@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class ParallelJobsFuture implements JobFuture {
     private final ErrorsContainer errors =
-            new ErrorsContainer(() -> new JobFailedException("Parallel Job Failed"));
+            new ErrorsContainer((msg) -> new JobFailedException(msg));
 
     private final Stream<JobFuture> jobs;
 
@@ -84,7 +84,7 @@ public class ParallelJobsFuture implements JobFuture {
     }
 
     private Void collectErrors(Throwable ex) {
-        errors.add(ex);
+        errors.add((Exception) ex);
         return null;
     }
 
