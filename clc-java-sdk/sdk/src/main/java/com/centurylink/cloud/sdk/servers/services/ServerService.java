@@ -665,20 +665,6 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 .collect(toList());
     }
 
-    public List<String> ids(GroupFilter groupFilter) {
-        return ids(
-                new ServerFilter()
-                        .groupsWhere(groupFilter)
-        );
-    }
-
-    public List<String> ids(Group... groups) {
-        return ids(
-            new ServerFilter()
-                .groups(groups)
-        );
-    }
-
     /**
      * Add public IP to server
      *
@@ -934,7 +920,6 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         );
     }
 
-    /* TODO Remove this method in future */
     private OperationFuture<Link> baseServerResponse(Link response) {
         return new OperationFuture<>(
             response,
