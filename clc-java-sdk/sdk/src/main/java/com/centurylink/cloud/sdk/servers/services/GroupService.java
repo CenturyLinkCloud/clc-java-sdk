@@ -17,7 +17,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.group.GroupBillingStats;
+import com.centurylink.cloud.sdk.servers.services.domain.group.BillingStats;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
@@ -667,7 +667,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param group Group
      * @return Group billing stats
      */
-    public GroupBillingStats getBillingStats(Group group) {
+    public BillingStats getBillingStats(Group group) {
         return converter.convertBillingStats(
             client.getGroupBillingStats(idByRef(group))
         );
@@ -678,8 +678,8 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param groups groups array
      * @return List of Group billing stats
      */
-    public List<GroupBillingStats> getBillingStats(Group... groups) {
-        List<GroupBillingStats> result = new ArrayList<>();
+    public List<BillingStats> getBillingStats(Group... groups) {
+        List<BillingStats> result = new ArrayList<>();
         List<Group> groupList = Arrays.asList(groups);
 
         groupList.forEach(
@@ -698,7 +698,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param groupFilter group filter
      * @return List of Group billing stats
      */
-    public List<GroupBillingStats> getBillingStats(GroupFilter groupFilter) {
+    public List<BillingStats> getBillingStats(GroupFilter groupFilter) {
         return findLazy(groupFilter)
             .map(
                 groupMetadata -> converter.convertBillingStats(
