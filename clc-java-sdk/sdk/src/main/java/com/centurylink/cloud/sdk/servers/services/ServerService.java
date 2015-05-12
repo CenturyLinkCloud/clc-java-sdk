@@ -233,10 +233,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Power on a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOn(Server... serverRefs) {
+    public OperationFuture<List<Server>> powerOn(Server... serverRefs) {
         return powerOperationResponse(
+                Arrays.asList(serverRefs),
                 "Power On",
                 client.powerOn(ids(serverRefs))
         );
@@ -246,12 +247,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Power on a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOn(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> powerOn(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Power On",
-            client.powerOn(ids(serverFilter))
+            client.powerOn(ids(serverList))
         );
     }
 
@@ -259,10 +263,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Power off a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOff(Server... serverRefs) {
+    public OperationFuture<List<Server>> powerOff(Server... serverRefs) {
         return powerOperationResponse(
+            Arrays.asList(serverRefs),
             "Power Off",
             client.powerOff(ids(serverRefs))
         );
@@ -272,12 +277,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Power off a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOff(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> powerOff(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Power Off",
-            client.powerOff(ids(serverFilter))
+            client.powerOff(ids(serverList))
         );
     }
 
@@ -285,10 +293,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Start maintenance mode on a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> startMaintenance(Server... serverRefs) {
+    public OperationFuture<List<Server>> startMaintenance(Server... serverRefs) {
         return powerOperationResponse(
+            Arrays.asList(serverRefs),
             "Start Maintenance",
             client.startMaintenance(ids(serverRefs))
         );
@@ -298,12 +307,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Start maintenance mode on a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> startMaintenance(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> startMaintenance(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Start Maintenance",
-            client.startMaintenance(ids(serverFilter))
+            client.startMaintenance(ids(serverList))
         );
     }
 
@@ -311,10 +323,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Stop maintenance mode on a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> stopMaintenance(Server... serverRefs) {
+    public OperationFuture<List<Server>> stopMaintenance(Server... serverRefs) {
         return powerOperationResponse(
+            Arrays.asList(serverRefs),
             "Stop Maintenance",
             client.stopMaintenance(ids(serverRefs))
         );
@@ -324,12 +337,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Stop maintenance mode on a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> stopMaintenance(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> stopMaintenance(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Stop Maintenance",
-            client.stopMaintenance(ids(serverFilter))
+            client.stopMaintenance(ids(serverList))
         );
     }
 
@@ -337,26 +353,29 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Pause a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> pause(Server... serverRefs) {
-        return
-            powerOperationResponse(
-                "Pause",
-                client.pause(ids(serverRefs))
-            );
+    public OperationFuture<List<Server>> pause(Server... serverRefs) {
+        return powerOperationResponse(
+            Arrays.asList(serverRefs),
+            "Pause",
+            client.pause(ids(serverRefs))
+        );
     }
 
     /**
      * Pause a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> pause(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> pause(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Pause",
-            client.pause(ids(serverFilter))
+            client.pause(ids(serverList))
         );
     }
 
@@ -364,10 +383,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Reboot a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> reboot(Server... serverRefs) {
+    public OperationFuture<List<Server>> reboot(Server... serverRefs) {
         return powerOperationResponse(
+            Arrays.asList(serverRefs),
             "Reboot",
             client.reboot(ids(serverRefs))
         );
@@ -377,12 +397,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Reboot a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> reboot(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> reboot(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Reboot",
-            client.reboot(ids(serverFilter))
+            client.reboot(ids(serverList))
         );
     }
 
@@ -390,10 +413,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Reset a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> reset(Server... serverRefs) {
+    public OperationFuture<List<Server>> reset(Server... serverRefs) {
         return powerOperationResponse(
+            Arrays.asList(serverRefs),
             "Reset",
             client.reset(ids(serverRefs))
         );
@@ -403,12 +427,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Reset a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> reset(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> reset(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Reset",
-            client.reset(ids(serverFilter))
+            client.reset(ids(serverList))
         );
     }
 
@@ -416,10 +443,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Shut down a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> shutDown(Server... serverRefs) {
+    public OperationFuture<List<Server>> shutDown(Server... serverRefs) {
         return powerOperationResponse(
+            Arrays.asList(serverRefs),
             "Shutdown",
             client.shutDown(ids(serverRefs))
         );
@@ -429,12 +457,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Shut down a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> shutDown(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> shutDown(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Shutdown",
-            client.shutDown(ids(serverFilter))
+            client.shutDown(ids(serverList))
         );
     }
 
@@ -442,10 +473,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Archive a single server or group of servers
      *
      * @param serverRefs server references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> archive(Server... serverRefs) {
+    public OperationFuture<List<Server>> archive(Server... serverRefs) {
         return powerOperationResponse(
+            Arrays.asList(serverRefs),
             "Archive",
             client.archive(ids(serverRefs))
         );
@@ -455,12 +487,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Archive a single server or group of servers
      *
      * @param serverFilter search servers criteria
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> archive(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> archive(ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
         return powerOperationResponse(
+            serverList,
             "Archive",
-            client.archive(ids(serverFilter))
+            client.archive(ids(serverList))
         );
     }
 
@@ -471,16 +506,16 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @param serverRefs     server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, Server... serverRefs) {
-        return
-            powerOperationResponse(
-                "Create Snapshot",
-                client.createSnapshot(
-                        new CreateSnapshotRequest()
-                                .snapshotExpirationDays(expirationDays)
-                                .serverIds(ids(serverRefs))
-                )
-            );
+    public OperationFuture<List<Server>> createSnapshot(Integer expirationDays, Server... serverRefs) {
+        return powerOperationResponse(
+            Arrays.asList(serverRefs),
+            "Create Snapshot",
+            client.createSnapshot(
+                new CreateSnapshotRequest()
+                    .snapshotExpirationDays(expirationDays)
+                    .serverIds(ids(serverRefs))
+            )
+        );
     }
 
     /**
@@ -489,7 +524,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @param serverRefs     server references list
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Server... serverRefs) {
+    public OperationFuture<List<Server>> createSnapshot(Server... serverRefs) {
         return createSnapshot(10, serverRefs);
     }
 
@@ -500,16 +535,18 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @param serverFilter search servers criteria
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerFilter serverFilter) {
-        return
-            powerOperationResponse(
-                    "Create Snapshot",
-                    client.createSnapshot(
-                            new CreateSnapshotRequest()
-                                    .snapshotExpirationDays(expirationDays)
-                                    .serverIds(ids(serverFilter))
-                    )
-            );
+    public OperationFuture<List<Server>> createSnapshot(Integer expirationDays, ServerFilter serverFilter) {
+        List<Server> serverList = findServers(serverFilter);
+
+        return powerOperationResponse(
+            serverList,
+            "Create Snapshot",
+            client.createSnapshot(
+                new CreateSnapshotRequest()
+                    .snapshotExpirationDays(expirationDays)
+                    .serverIds(ids(serverList))
+            )
+        );
     }
 
     /**
@@ -518,7 +555,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @param serverFilter search servers criteria
      * @return OperationFuture wrapper for BaseServerResponse list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(ServerFilter serverFilter) {
+    public OperationFuture<List<Server>> createSnapshot(ServerFilter serverFilter) {
         return createSnapshot(10, serverFilter);
     }
 
@@ -643,14 +680,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return revertToSnapshot(getRefsFromFilter(filter));
     }
 
-    private List<String> ids(Server... serverRefs) {
-        return
-            Stream
-                .of(serverRefs)
-                .filter(notNull())
-                .map(this::idByRef)
-                .map(String::toUpperCase)
-                .collect(toList());
+    private List<String> ids(Server... servers) {
+        return ids(Arrays.asList(servers));
     }
 
     public List<String> ids(ServerFilter serverFilter) {
@@ -661,6 +692,16 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 .stream()
                 .filter(notNull())
                 .map(ServerMetadata::getId)
+                .map(String::toUpperCase)
+                .collect(toList());
+    }
+
+    public List<String> ids(List<Server> serverList) {
+        return
+            serverList
+                .stream()
+                .filter(notNull())
+                .map(this::idByRef)
                 .map(String::toUpperCase)
                 .collect(toList());
     }
@@ -898,15 +939,18 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return removePublicIp(getRefsFromFilter(serverFilter));
     }
 
-    public OperationFuture<List<BaseServerResponse>> powerOperationResponse(
-            String operation, BaseServerListResponse response) {
+    public OperationFuture<List<Server>> powerOperationResponse(
+            List<Server> serverList,
+            String operation,
+            BaseServerListResponse response
+    ) {
         if (response.hasErrors()) {
             throw response.summaryException();
         }
 
         return
             new OperationFuture<>(
-                response,
+                serverList,
                 new ParallelJobsFuture(
                     jobInfoList(operation, response),
                     queueClient
@@ -935,5 +979,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 response.getId(),
                 queueClient
         );
+    }
+
+    private List<Server> findServers(ServerFilter serverFilter) {
+        return find(serverFilter).stream()
+            .map(
+                metadata -> Server.refById(
+                    metadata.getId()
+                )
+            )
+            .collect(toList());
     }
 }
