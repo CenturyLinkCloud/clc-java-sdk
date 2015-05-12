@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.Boolean.TRUE;
 import static java.util.stream.Collectors.toList;
 
 public class BaseServerListResponse extends ArrayList<BaseServerResponse> {
@@ -39,7 +40,7 @@ public class BaseServerListResponse extends ArrayList<BaseServerResponse> {
     }
 
     private boolean isJobNotQueued(BaseServerResponse r) {
-        return r.getErrorMessage() != null || !r.getQueued();
+        return r.getErrorMessage() != null || !TRUE.equals(r.getQueued());
     }
 
     private String errorMessage(BaseServerResponse response) {
