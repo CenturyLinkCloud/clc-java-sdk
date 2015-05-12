@@ -5,7 +5,7 @@ import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupBillingStats;
+import com.centurylink.cloud.sdk.servers.client.domain.group.ClientGroupBillingStats;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.UpdateGroupRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
@@ -116,7 +116,8 @@ public class ServerClient extends SdkHttpClient {
         return
             client("/groups/{accountAlias}/{groupId}")
                 .resolveTemplate("groupId", groupId)
-                    .request().delete(Link.class);
+                .request()
+                .delete(Link.class);
     }
 
     public BaseServerResponse convertToTemplate(CreateTemplateRequest request) {
@@ -200,12 +201,12 @@ public class ServerClient extends SdkHttpClient {
                 .readEntity(Link.class);
     }
 
-    public GroupBillingStats getGroupBillingStats(String groupId) {
+    public ClientGroupBillingStats getGroupBillingStats(String groupId) {
         return
             client("/groups/{accountAlias}/{groupId}/billing")
                 .resolveTemplate("groupId", groupId)
                 .request()
-                .get(GroupBillingStats.class);
+                .get(ClientGroupBillingStats.class);
     }
 
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {

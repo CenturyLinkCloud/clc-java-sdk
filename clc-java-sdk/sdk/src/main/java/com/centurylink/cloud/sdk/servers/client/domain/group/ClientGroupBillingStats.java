@@ -14,21 +14,21 @@ import java.util.Map;
         "date",
         "groups"
 })
-public class GroupBillingStats {
+public class ClientGroupBillingStats {
 
     @JsonProperty("date")
     private String date;
     @JsonProperty("groups")
-    private Map<String, GroupBilling> groups = new HashMap<>();
+    private Map<String, ClientGroupBilling> groups = new HashMap<>();
 
 
     @JsonProperty("date")
-    public String getName() {
+    public String getDate() {
         return date;
     }
 
     @JsonProperty("groups")
-    public Map<String, GroupBilling> getGroups() {
+    public Map<String, ClientGroupBilling> getGroups() {
         return groups;
     }
 }

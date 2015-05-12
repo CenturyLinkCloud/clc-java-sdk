@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.core.exceptions;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -78,6 +79,11 @@ public class ErrorsContainer {
 
     public ErrorsContainer add(Exception ex) {
         errors.add(ex);
+        return this;
+    }
+
+    public ErrorsContainer addAll(Collection<Exception> exceptions) {
+        errors.addAll(exceptions);
         return this;
     }
 

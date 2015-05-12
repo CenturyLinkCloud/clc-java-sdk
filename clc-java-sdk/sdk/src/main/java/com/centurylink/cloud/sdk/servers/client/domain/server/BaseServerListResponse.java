@@ -1,6 +1,9 @@
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
+import com.centurylink.cloud.sdk.core.exceptions.ErrorsContainer;
+import com.centurylink.cloud.sdk.core.services.ClcServiceException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,14 +54,11 @@ public class BaseServerListResponse extends ArrayList<BaseServerResponse> {
         }
     }
 
-    public ClcClientException summaryException() {
-        if (hasErrors()) {
-            ClcClientException ex = new ClcClientException();
-            listExceptions().forEach(ex::addSuppressed);
-            return ex;
-        } else {
-            return null;
-        }
+    public ClcException summaryException() {
+        return
+            new ErrorsContainer(ClcServiceException::new)
+                .addAll(listExceptions())
+                .summaryException();
     }
 
     public boolean hasErrors() {
