@@ -27,6 +27,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef
 import com.centurylink.cloud.sdk.servers.services.domain.server.CompositeServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -204,7 +205,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Find group based on config instance and parent group identifier
      * @param config        group hierarchy config
      * @param parentGroupId parent group id
-     * @return
+     * @return GroupMetadata
      */
     private GroupMetadata findGroup(GroupHierarchyConfig config, String parentGroupId) {
         GroupMetadata parentGroup = findByRef(Group.refById(parentGroupId));
@@ -394,9 +395,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Power on groups of servers
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOn(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> powerOn(GroupFilter groupFilter) {
         return serverService().powerOn(
                 getServerSearchCriteria(groupFilter)
         );
@@ -406,9 +407,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Power on groups of servers
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOn(Group... groups) {
+    public OperationFuture<List<Server>> powerOn(Group... groups) {
         return serverService().powerOn(
                 getServerSearchCriteria(groups)
         );
@@ -418,9 +419,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Power off groups of servers
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOff(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> powerOff(GroupFilter groupFilter) {
         return serverService().powerOff(
                 getServerSearchCriteria(groupFilter)
         );
@@ -430,9 +431,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Power off groups of servers
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> powerOff(Group... groups) {
+    public OperationFuture<List<Server>> powerOff(Group... groups) {
         return serverService().powerOff(
                 getServerSearchCriteria(groups)
         );
@@ -442,9 +443,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Start servers groups maintenance
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> startMaintenance(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> startMaintenance(GroupFilter groupFilter) {
         return serverService().startMaintenance(
                 getServerSearchCriteria(groupFilter)
         );
@@ -454,9 +455,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Start servers groups maintenance
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> startMaintenance(Group... groups) {
+    public OperationFuture<List<Server>> startMaintenance(Group... groups) {
         return serverService().startMaintenance(
                 getServerSearchCriteria(groups)
         );
@@ -466,9 +467,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Stop servers groups maintenance
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> stopMaintenance(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> stopMaintenance(GroupFilter groupFilter) {
         return serverService().stopMaintenance(
                 getServerSearchCriteria(groupFilter)
         );
@@ -478,9 +479,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Stop servers groups maintenance
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> stopMaintenance(Group... groups) {
+    public OperationFuture<List<Server>> stopMaintenance(Group... groups) {
         return serverService().stopMaintenance(
                 getServerSearchCriteria(groups)
         );
@@ -490,9 +491,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Pause groups of servers
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> pause(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> pause(GroupFilter groupFilter) {
         return serverService().pause(
                 getServerSearchCriteria(groupFilter)
         );
@@ -502,9 +503,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Pause groups of servers
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> pause(Group... groups) {
+    public OperationFuture<List<Server>> pause(Group... groups) {
         return serverService().pause(
                 getServerSearchCriteria(groups)
         );
@@ -514,9 +515,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Reboot groups of servers
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> reboot(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> reboot(GroupFilter groupFilter) {
         return serverService().reboot(
                 getServerSearchCriteria(groupFilter)
         );
@@ -526,9 +527,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Reboot groups of servers
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> reboot(Group... groups) {
+    public OperationFuture<List<Server>> reboot(Group... groups) {
         return serverService().reboot(
                 getServerSearchCriteria(groups)
         );
@@ -538,9 +539,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Reset groups of servers
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> reset(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> reset(GroupFilter groupFilter) {
         return serverService().reset(
                 getServerSearchCriteria(groupFilter)
         );
@@ -550,9 +551,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Reset groups of servers
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> reset(Group... groups) {
+    public OperationFuture<List<Server>> reset(Group... groups) {
         return serverService().reset(
                 getServerSearchCriteria(groups)
         );
@@ -562,9 +563,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Shut down groups of servers
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> shutDown(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> shutDown(GroupFilter groupFilter) {
         return serverService().shutDown(
                 getServerSearchCriteria(groupFilter)
         );
@@ -574,9 +575,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Shut down groups of servers
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> shutDown(Group... groups) {
+    public OperationFuture<List<Server>> shutDown(Group... groups) {
         return serverService().shutDown(
                 getServerSearchCriteria(groups)
         );
@@ -586,9 +587,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Archive groups of servers
      *
      * @param groupFilter search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> archive(GroupFilter groupFilter) {
+    public OperationFuture<List<Server>> archive(GroupFilter groupFilter) {
         return serverService().archive(
                 getServerSearchCriteria(groupFilter)
         );
@@ -598,9 +599,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Archive groups of servers
      *
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> archive(Group... groups) {
+    public OperationFuture<List<Server>> archive(Group... groups) {
         return serverService().archive(
                 getServerSearchCriteria(groups)
         );
@@ -611,9 +612,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      *
      * @param expirationDays expiration days (must be between 1 and 10)
      * @param groupFilter    search servers criteria by group filter
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(
+    public OperationFuture<List<Server>> createSnapshot(
             Integer expirationDays,
             GroupFilter groupFilter
     ) {
@@ -628,9 +629,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      *
      * @param expirationDays expiration days (must be between 1 and 10)
      * @param groups groups references list
-     * @return OperationFuture wrapper for BaseServerResponse list
+     * @return OperationFuture wrapper for Server list
      */
-    public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, Group... groups) {
+    public OperationFuture<List<Server>> createSnapshot(Integer expirationDays, Group... groups) {
         return serverService().createSnapshot(
                 expirationDays,
                 getServerSearchCriteria(groups)
