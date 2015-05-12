@@ -24,7 +24,6 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION})
     public void testFindGroupsByDataCenter() {
-
         List<GroupMetadata> groups = groupService.findByDataCenter(DataCenter.DE_FRANKFURT);
 
         assert groups.size() > 0;
