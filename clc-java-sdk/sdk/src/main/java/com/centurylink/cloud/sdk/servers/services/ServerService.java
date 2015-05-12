@@ -103,6 +103,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             .map(
                 server ->
                     baseServerResponse(
+                        server,
                         client.modify(
                             idByRef(server),
                             serverConverter.buildModifyServerRequest(modifyServerConfig)
@@ -236,8 +237,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<BaseServerResponse>> powerOn(Server... serverRefs) {
         return powerOperationResponse(
-            "Power On",
-            client.powerOn(ids(serverRefs))
+                "Power On",
+                client.powerOn(ids(serverRefs))
         );
     }
 
@@ -475,9 +476,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             powerOperationResponse(
                 "Create Snapshot",
                 client.createSnapshot(
-                    new CreateSnapshotRequest()
-                        .snapshotExpirationDays(expirationDays)
-                        .serverIds(ids(serverRefs))
+                        new CreateSnapshotRequest()
+                                .snapshotExpirationDays(expirationDays)
+                                .serverIds(ids(serverRefs))
                 )
             );
     }
@@ -502,12 +503,12 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public OperationFuture<List<BaseServerResponse>> createSnapshot(Integer expirationDays, ServerFilter serverFilter) {
         return
             powerOperationResponse(
-                "Create Snapshot",
-                client.createSnapshot(
-                    new CreateSnapshotRequest()
-                        .snapshotExpirationDays(expirationDays)
-                        .serverIds(ids(serverFilter))
-                )
+                    "Create Snapshot",
+                    client.createSnapshot(
+                            new CreateSnapshotRequest()
+                                    .snapshotExpirationDays(expirationDays)
+                                    .serverIds(ids(serverFilter))
+                    )
             );
     }
 
@@ -563,15 +564,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<Link> restore(Server server, Group group) {
         return baseServerResponse(
-            restore(server, groupService.findByRef(group).getId())
+                restore(server, groupService.findByRef(group).getId())
         );
     }
 
     private Link restore(Server server, String groupId) {
         return client.restore(
-            idByRef(server),
-            new RestoreServerRequest()
-                .targetGroupId(groupId)
+                idByRef(server),
+                new RestoreServerRequest()
+                        .targetGroupId(groupId)
         );
     }
 
@@ -666,8 +667,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
     public List<String> ids(GroupFilter groupFilter) {
         return ids(
-            new ServerFilter()
-                .groupsWhere(groupFilter)
+                new ServerFilter()
+                        .groupsWhere(groupFilter)
         );
     }
 
@@ -767,8 +768,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         checkNotNull(publicIp, "public ip must not be null");
 
         Link response = client.modifyPublicIp(idByRef(server),
-            publicIp,
-            publicIpConverter.createPublicIpRequest(config)
+                publicIp,
+                publicIpConverter.createPublicIpRequest(config)
         );
 
         return new OperationFuture<>(
@@ -933,11 +934,21 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         );
     }
 
+    /* TODO Remove this method in future */
     private OperationFuture<Link> baseServerResponse(Link response) {
         return new OperationFuture<>(
             response,
             response.getId(),
             queueClient
+        );
+    }
+
+    private OperationFuture<Server> baseServerResponse(Server server, Link response) {
+        return
+            new OperationFuture<>(
+                server,
+                response.getId(),
+                queueClient
         );
     }
 }
