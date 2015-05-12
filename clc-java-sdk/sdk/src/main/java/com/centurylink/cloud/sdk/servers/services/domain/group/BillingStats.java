@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.group;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupBillingStats {
+public class BillingStats {
 
     private String date;
     private List<GroupBilling> groups = new ArrayList<>();
@@ -16,7 +16,7 @@ public class GroupBillingStats {
         this.date = date;
     }
 
-    public GroupBillingStats date(String date) {
+    public BillingStats date(String date) {
         setDate(date);
         return this;
     }
@@ -29,12 +29,12 @@ public class GroupBillingStats {
         this.groups = groups;
     }
 
-    public GroupBillingStats group (GroupBilling group) {
+    public BillingStats group (GroupBilling group) {
         this.groups.add(group);
         return this;
     }
 
-    public GroupBillingStats groups (List<GroupBilling> groups) {
+    public BillingStats groups (List<GroupBilling> groups) {
         setGroups(groups);
         return this;
     }

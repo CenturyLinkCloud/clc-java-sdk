@@ -44,10 +44,10 @@ public class GroupConverter {
             .parentGroup(Group.refById(parentGroupId));
     }
 
-    public GroupBillingStats convertBillingStats(ClientGroupBillingStats clientGroupBillingStats) {
+    public BillingStats convertBillingStats(ClientBillingStats clientBillingStats) {
         List<GroupBilling> groupBillingList = new ArrayList<>();
 
-        clientGroupBillingStats.getGroups().forEach(
+        clientBillingStats.getGroups().forEach(
             (groupId, clientGroupBilling) -> {
                 List<ServerBilling> serverBillingList = new ArrayList<>();
 
@@ -64,16 +64,16 @@ public class GroupConverter {
             }
         );
 
-        return convertGroupBillingStats(clientGroupBillingStats, groupBillingList);
+        return convertBillingStats(clientBillingStats, groupBillingList);
     }
 
-    private GroupBillingStats convertGroupBillingStats(
-            ClientGroupBillingStats clientGroupBillingStats,
+    private BillingStats convertBillingStats(
+            ClientBillingStats clientBillingStats,
             List<GroupBilling> groupBillingList
     ) {
         return
-            new GroupBillingStats()
-                .date(clientGroupBillingStats.getDate())
+            new BillingStats()
+                .date(clientBillingStats.getDate())
                 .groups(groupBillingList);
     }
 

@@ -14,7 +14,7 @@ import java.util.Map;
         "date",
         "groups"
 })
-public class ClientGroupBillingStats {
+public class ClientBillingStats {
 
     @JsonProperty("date")
     private String date;
