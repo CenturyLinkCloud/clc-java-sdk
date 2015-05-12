@@ -26,8 +26,16 @@ public class BaseServerResponse {
         return server;
     }
 
+    public BaseServerResponse server(String server) {
+        return new BaseServerResponse(server, isQueued, links, errorMessage);
+    }
+
     public Boolean getQueued() {
         return isQueued;
+    }
+
+    public BaseServerResponse queued(Boolean isQueued) {
+        return new BaseServerResponse(server, isQueued, links, errorMessage);
     }
 
     public List<Link> getLinks() {
@@ -36,6 +44,10 @@ public class BaseServerResponse {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    public BaseServerResponse errorMessage(String errorMessage) {
+        return new BaseServerResponse(server, isQueued, links, errorMessage);
     }
 
     public String findServerUuid() {

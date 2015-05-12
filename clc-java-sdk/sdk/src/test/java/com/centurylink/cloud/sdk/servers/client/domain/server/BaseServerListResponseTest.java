@@ -2,7 +2,6 @@ package com.centurylink.cloud.sdk.servers.client.domain.server;
 
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -17,11 +16,15 @@ public class BaseServerListResponseTest {
         }};
     }
 
+    private BaseServerResponse basicServerResponse(String server) {
+        return new BaseServerResponse(server, null, null, null);
+    }
+
     @Test
     public void testListExceptions_multipleExceptions() throws Exception {
         BaseServerListResponse response = prepareResponseList(
-            new BaseServerResponse("server2", false, null, "Error Message"),
-            new BaseServerResponse("server3", null, null, "Error Message")
+            basicServerResponse("server2").queued(false).errorMessage("Error Message"),
+            basicServerResponse("server3").queued(null).errorMessage("Error Message")
         );
 
         List<Exception> errors = response.listExceptions();
@@ -32,42 +35,46 @@ public class BaseServerListResponseTest {
     @Test
     public void testListExceptions_emptyResult() throws Exception {
         BaseServerListResponse response = prepareResponseList(
-            new BaseServerResponse("server2", null, null, null)
+            basicServerResponse("server2")
         );
 
         List<Exception> errors = response.listExceptions();
 
         assertEquals(errors.size(), 1);
-        assertExceptionMessageContains(errors.get(0), "server2", "not queued");
+        assertContains(firstErrorMessage(errors), "server2", "not queued");
+    }
+
+    private String firstErrorMessage(List<Exception> errors) {
+        return errors.get(0).getMessage();
     }
 
     @Test
     public void testListExceptions_onlyErrorMessage() throws Exception {
         BaseServerListResponse response = prepareResponseList(
-            new BaseServerResponse("server2", null, null, "Error Message")
+            basicServerResponse("server2").errorMessage("Error Message")
         );
 
         List<Exception> errors = response.listExceptions();
 
         assertEquals(errors.size(), 1);
-        assertExceptionMessageContains(errors.get(0), "server2", "Error Message");
+        assertContains(firstErrorMessage(errors), "server2", "Error Message");
     }
 
     @Test
     public void testListExceptions_onlyNotQueued() throws Exception {
         BaseServerListResponse response = prepareResponseList(
-            new BaseServerResponse("server2", false, null, null)
+            basicServerResponse("server2").queued(false)
         );
 
         List<Exception> errors = response.listExceptions();
 
         assertEquals(errors.size(), 1);
-        assertExceptionMessageContains(errors.get(0), "server2", "not queued");
+        assertContains(firstErrorMessage(errors), "server2", "not queued");
     }
 
-    private void assertExceptionMessageContains(Exception ex, String... keywords) {
+    private void assertContains(String str, String... keywords) {
         for (String curKeyword : keywords) {
-            assertTrue(ex.getMessage().contains(curKeyword));
+            assertTrue(str.contains(curKeyword));
         }
     }
 
