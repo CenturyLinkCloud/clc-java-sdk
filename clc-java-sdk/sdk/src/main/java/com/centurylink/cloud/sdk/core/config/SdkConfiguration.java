@@ -7,6 +7,7 @@ import com.google.inject.AbstractModule;
  */
 public class SdkConfiguration {
     private final Integer maxRetries;
+    private final ProxyConfig proxy;
 
     SdkConfiguration() {
         this(new SdkConfigurationBuilder());
@@ -14,10 +15,15 @@ public class SdkConfiguration {
 
     SdkConfiguration(SdkConfigurationBuilder builder) {
         maxRetries = builder.getMaxRetries();
+        proxy = builder.getProxyConfig();
     }
 
     public Integer getMaxRetries() {
         return maxRetries;
+    }
+
+    public ProxyConfig getProxy() {
+        return proxy;
     }
 
     public AbstractModule asModule() {

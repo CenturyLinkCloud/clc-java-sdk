@@ -1,11 +1,12 @@
 package com.centurylink.cloud.sdk.core.client;
 
-import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.auth.services.ProxyAuthentication;
 import com.centurylink.cloud.sdk.core.client.errors.ErrorProcessingFilter;
+import com.centurylink.cloud.sdk.core.config.AuthConfig;
+import com.centurylink.cloud.sdk.core.config.ProxyConfig;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 
 /**
  * @author ilya.drabenia
@@ -14,26 +15,49 @@ public class SdkHttpClient {
     public static final String CLC_API_URL = "https://api.tier3.com/v2";
 
     public static final SdkClientBuilder CLIENT_BUILDER =
-        (SdkClientBuilder) ClientBuilder
+        (SdkClientBuilder) ResteasyClientBuilder
             .newBuilder()
             .register(new ErrorProcessingFilter());
 
+    protected ProxyAuthentication proxyAuthentication;
 
-    protected final BearerAuthentication authentication;
-
-    public SdkHttpClient(BearerAuthentication authFilter, SdkConfiguration config) {
-        this.authentication = authFilter;
-
+    public SdkHttpClient(SdkConfiguration config) {
         CLIENT_BUILDER.maxRetries(config.getMaxRetries());
+        ProxyConfig proxyConfig = config.getProxy();
+        if (proxyConfig != null) {
+            CLIENT_BUILDER.defaultProxy(
+                proxyConfig.getHostname(),
+                proxyConfig.getPort(),
+                proxyConfig.getScheme());
+
+
+            AuthConfig authConfig = proxyConfig.getAuthConfig();
+            if (authConfig != null) {
+                this.proxyAuthentication = new ProxyAuthentication(
+                    authConfig.getUser(),
+                    authConfig.getPassword()
+                );
+
+                CLIENT_BUILDER.proxyCredentials(
+                    authConfig.getUser(),
+                    authConfig.getPassword()
+                );
+            }
+
+        }
+
     }
 
-    protected WebTarget client(String target) {
-        return
-            CLIENT_BUILDER
-                .build()
-                .register(authentication)
-                .target(CLC_API_URL + target)
-                .resolveTemplate("accountAlias", authentication.getAccountAlias());
+    protected ResteasyClient buildClient() {
+        ResteasyClient client = CLIENT_BUILDER
+            .build();
+
+        if (proxyAuthentication != null) {
+            client.register(proxyAuthentication);
+        }
+        return client;
     }
+
+
 
 }

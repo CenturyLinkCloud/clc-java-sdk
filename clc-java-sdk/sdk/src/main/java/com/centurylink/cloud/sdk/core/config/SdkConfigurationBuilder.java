@@ -5,6 +5,7 @@ package com.centurylink.cloud.sdk.core.config;
  */
 public class SdkConfigurationBuilder {
     private Integer maxRetries = 7;
+    private ProxyConfig proxyConfig;
 
     public SdkConfigurationBuilder maxRetries(Integer retries) {
         maxRetries = retries;
@@ -15,7 +16,20 @@ public class SdkConfigurationBuilder {
         return maxRetries;
     }
 
+    public SdkConfigurationBuilder proxyConfig(ProxyConfig proxyConfig) {
+        this.proxyConfig = proxyConfig;
+        return this;
+    }
+
+    public ProxyConfig getProxyConfig() {
+        return proxyConfig;
+    }
+
     public SdkConfiguration build() {
         return new SdkConfiguration(this);
     }
+
+
+
+
 }
