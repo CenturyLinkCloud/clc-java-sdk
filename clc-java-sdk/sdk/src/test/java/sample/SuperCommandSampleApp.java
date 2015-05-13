@@ -133,7 +133,10 @@ public class SuperCommandSampleApp extends Assert {
     private void checkServerIsStarted(String name) {
         assert
             serverService
-                .findLazy(new ServerFilter().descriptionContains(name))
+                .findLazy(new ServerFilter()
+                    .onlyActive()
+                    .descriptionContains(name)
+                )
                 .findFirst().get()
                 .getDetails()
                 .getPowerState()
