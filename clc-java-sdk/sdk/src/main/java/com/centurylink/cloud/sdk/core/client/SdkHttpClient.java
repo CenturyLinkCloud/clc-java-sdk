@@ -1,9 +1,6 @@
 package com.centurylink.cloud.sdk.core.client;
 
-import com.centurylink.cloud.sdk.core.auth.services.ProxyAuthentication;
 import com.centurylink.cloud.sdk.core.client.errors.ErrorProcessingFilter;
-import com.centurylink.cloud.sdk.core.config.AuthConfig;
-import com.centurylink.cloud.sdk.core.config.ProxyConfig;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -19,45 +16,18 @@ public class SdkHttpClient {
             .newBuilder()
             .register(new ErrorProcessingFilter());
 
-    protected ProxyAuthentication proxyAuthentication;
-
     public SdkHttpClient(SdkConfiguration config) {
         CLIENT_BUILDER.maxRetries(config.getMaxRetries());
-        ProxyConfig proxyConfig = config.getProxy();
-        if (proxyConfig != null) {
-            CLIENT_BUILDER.defaultProxy(
-                proxyConfig.getHostname(),
-                proxyConfig.getPort(),
-                proxyConfig.getScheme());
-
-
-            AuthConfig authConfig = proxyConfig.getAuthConfig();
-            if (authConfig != null) {
-                this.proxyAuthentication = new ProxyAuthentication(
-                    authConfig.getUser(),
-                    authConfig.getPassword()
-                );
-
-                CLIENT_BUILDER.proxyCredentials(
-                    authConfig.getUser(),
-                    authConfig.getPassword()
-                );
-            }
-
-        }
-
+        CLIENT_BUILDER.proxyConfig(
+            config.getProxyHost(),
+            config.getProxyPort(),
+            config.getProxyScheme(),
+            config.getProxyUsername(),
+            config.getProxyPassword()
+        );
     }
 
     protected ResteasyClient buildClient() {
-        ResteasyClient client = CLIENT_BUILDER
-            .build();
-
-        if (proxyAuthentication != null) {
-            client.register(proxyAuthentication);
-        }
-        return client;
+        return CLIENT_BUILDER.build();
     }
-
-
-
 }

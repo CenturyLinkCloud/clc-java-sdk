@@ -2,7 +2,6 @@ package com.centurylink.cloud.sdk.core.auth;
 
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.auth.services.ProxyAuthentication;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
 import com.google.inject.AbstractModule;
@@ -26,7 +25,6 @@ public class AuthModule extends AbstractModule {
     protected void configure() {
         bind(LoginClient.class);
         bind(BearerAuthentication.class);
-        bind(ProxyAuthentication.class);
     }
 
     @Provides

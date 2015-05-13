@@ -14,7 +14,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 @Test(groups = INTEGRATION)
 public class LoginClientTest {
 
-    LoginClient client = new LoginClient(SdkConfiguration.builder().build());
+    LoginClient client = new LoginClient(SdkConfiguration.DEFAULT);
 
     @Test
     public void testLoginWithCorrectCredentials() {

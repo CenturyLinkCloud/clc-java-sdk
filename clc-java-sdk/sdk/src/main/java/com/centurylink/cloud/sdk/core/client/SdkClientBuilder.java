@@ -182,6 +182,18 @@ public class SdkClientBuilder extends ClientBuilder
         return this;
     }
 
+    public SdkClientBuilder proxyConfig(String proxyHost, int proxyPort, String proxyScheme,
+                                        String proxyUsername, String proxyPassword) {
+        if (proxyHost != null) {
+            defaultProxy(proxyHost, proxyPort, proxyScheme);
+            if (proxyUsername != null) {
+                proxyCredentials(proxyUsername, proxyPassword);
+            }
+        }
+
+        return this;
+    }
+
     /**
      * If connection pooling is enabled, how long will we wait to get a connection?
      * @param timeout the timeout
