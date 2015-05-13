@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.group;
 import com.centurylink.cloud.sdk.servers.client.domain.group.*;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,5 +99,13 @@ public class GroupConverter {
                 .monthlyEstimate(clientServerBilling.getMonthlyEstimate())
                 .monthToDate(clientServerBilling.getMonthToDate())
                 .currentHour(clientServerBilling.getCurrentHour());
+    }
+
+    public MonitoringStatisticRequest createMonitoringStatisticRequest(ServerMonitoringFilter config) {
+        return new MonitoringStatisticRequest()
+            .start(config.getFrom().format(DateTimeFormatter.ISO_LOCAL_DATE))
+            .end(config.getTo().format(DateTimeFormatter.ISO_LOCAL_DATE))
+            .sampleInterval(config.getInterval().toString())
+            .type(config.getType().name());
     }
 }
