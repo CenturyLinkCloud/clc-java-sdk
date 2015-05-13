@@ -330,6 +330,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     private Group[] getRefsFromFilter(GroupFilter groupFilter) {
         checkNotNull(groupFilter, "Group filter must be not null");
+
         List<Group> groupList = find(groupFilter).stream()
             .map(metadata -> Group.refById(metadata.getId()))
             .collect(toList());
@@ -339,25 +340,23 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
     /**
      * Delete provided group
-     * @param groupRef group reference
-     * @return OperationFuture wrapper for Link
+     *
+     * @param group group reference
+     * @return OperationFuture wrapper for group
      */
-    public OperationFuture<Link> delete(Group groupRef) {
-        return deleteGroup(groupRef);
-    }
-
-    private OperationFuture<Link> deleteGroup(Group groupRef) {
-        Link response = client.deleteGroup(idByRef(groupRef));
+    public OperationFuture<Group> delete(Group group) {
+        Link response = client.deleteGroup(idByRef(group));
 
         return new OperationFuture<>(
-            response,
-            response.getId(),
-            queueClient
+                group,
+                response.getId(),
+                queueClient
         );
     }
 
     /**
      * Delete set of groups
+     *
      * @param groups groups array
      * @return OperationFuture wrapper for list of groups
      */
@@ -365,7 +364,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
         List<Group> groupList = Arrays.asList(groups);
 
         List<JobFuture> jobs = groupList.stream()
-            .map(group -> deleteGroup(group).jobFuture())
+            .map(group -> delete(group).jobFuture())
             .collect(toList());
 
         return new OperationFuture<>(
@@ -376,6 +375,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
     /**
      * Delete all groups for group criteria
+     *
      * @param filter search criteria
      * @return OperationFuture wrapper for list of groups
      */
@@ -640,6 +640,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
     /**
      * Get billing stats by single group
+     *
      * @param group Group
      * @return Group billing stats
      */
@@ -651,6 +652,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
     /**
      * Get billing stats by Groups
+     *
      * @param groups groups array
      * @return List of Group billing stats
      */

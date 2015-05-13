@@ -8,7 +8,6 @@ import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.BillingStats;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
@@ -49,7 +48,7 @@ public class GetBillingStatsTest extends AbstractServersSdkTest {
             .delete(serverMetadata.asRefById());
 
         groupService
-            .delete(new GroupFilter().nameContains(groupName));
+            .delete(group);
     }
 
     private void initGroup() {
