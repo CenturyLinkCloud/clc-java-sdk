@@ -1,11 +1,9 @@
 package com.centurylink.cloud.sdk.core.client;
 
-import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.errors.ErrorProcessingFilter;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 
 /**
  * @author ilya.drabenia
@@ -14,26 +12,22 @@ public class SdkHttpClient {
     public static final String CLC_API_URL = "https://api.tier3.com/v2";
 
     public static final SdkClientBuilder CLIENT_BUILDER =
-        (SdkClientBuilder) ClientBuilder
+        (SdkClientBuilder) ResteasyClientBuilder
             .newBuilder()
             .register(new ErrorProcessingFilter());
 
-
-    protected final BearerAuthentication authentication;
-
-    public SdkHttpClient(BearerAuthentication authFilter, SdkConfiguration config) {
-        this.authentication = authFilter;
-
+    public SdkHttpClient(SdkConfiguration config) {
         CLIENT_BUILDER.maxRetries(config.getMaxRetries());
+        CLIENT_BUILDER.proxyConfig(
+            config.getProxyHost(),
+            config.getProxyPort(),
+            config.getProxyScheme(),
+            config.getProxyUsername(),
+            config.getProxyPassword()
+        );
     }
 
-    protected WebTarget client(String target) {
-        return
-            CLIENT_BUILDER
-                .build()
-                .register(authentication)
-                .target(CLC_API_URL + target)
-                .resolveTemplate("accountAlias", authentication.getAccountAlias());
+    protected ResteasyClient buildClient() {
+        return CLIENT_BUILDER.build();
     }
-
 }

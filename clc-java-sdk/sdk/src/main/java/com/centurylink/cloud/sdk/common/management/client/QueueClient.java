@@ -2,14 +2,14 @@ package com.centurylink.cloud.sdk.common.management.client;
 
 import com.centurylink.cloud.sdk.common.management.client.domain.queue.GetStatusResponse;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
+import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.google.inject.Inject;
 
 /**
  * @author Ilya Drabenia
  */
-public class QueueClient extends SdkHttpClient {
+public class QueueClient extends AuthenticatedSdkHttpClient {
 
     @Inject
     public QueueClient(BearerAuthentication authFilter, SdkConfiguration config) {

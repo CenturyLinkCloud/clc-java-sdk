@@ -6,6 +6,8 @@ package com.centurylink.cloud.sdk.core.client;
 
 import com.centurylink.cloud.sdk.core.client.retry.ClcRetryStrategy;
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.ClientConnectionManager;
@@ -17,6 +19,7 @@ import org.apache.http.conn.ssl.BrowserCompatHostnameVerifier;
 import org.apache.http.conn.ssl.StrictHostnameVerifier;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.AutoRetryHttpClient;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.BasicClientConnectionManager;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
@@ -93,6 +96,7 @@ public class SdkClientBuilder extends ClientBuilder
     protected HttpHost defaultProxy;
     protected int responseBufferSize;
     protected Integer maxRetries;
+    protected UsernamePasswordCredentials proxyCredentials;
 
     /**
      * Changing the providerFactory will wipe clean any registered components or properties.
@@ -175,6 +179,18 @@ public class SdkClientBuilder extends ClientBuilder
 
     public SdkClientBuilder maxRetries(int maxRetries) {
         this.maxRetries = maxRetries;
+        return this;
+    }
+
+    public SdkClientBuilder proxyConfig(String proxyHost, int proxyPort, String proxyScheme,
+                                        String proxyUsername, String proxyPassword) {
+        if (proxyHost != null) {
+            defaultProxy(proxyHost, proxyPort, proxyScheme);
+            if (proxyUsername != null) {
+                proxyCredentials(proxyUsername, proxyPassword);
+            }
+        }
+
         return this;
     }
 
@@ -322,6 +338,17 @@ public class SdkClientBuilder extends ClientBuilder
     public SdkClientBuilder defaultProxy(String hostname, int port, final String scheme)
     {
         this.defaultProxy = new HttpHost(hostname, port, scheme);
+        return this;
+    }
+
+    /**
+     * Specify proxy credentials.
+     * @param user user
+     * @param password password
+     * @return current client builder
+     */
+    public SdkClientBuilder proxyCredentials(String user, String password) {
+        this.proxyCredentials = new UsernamePasswordCredentials(user, password);
         return this;
     }
 
@@ -487,7 +514,16 @@ public class SdkClientBuilder extends ClientBuilder
             }
 
             httpClient = new AutoRetryHttpClient(
-                new DefaultHttpClient(cm, params),
+                new DefaultHttpClient(cm, params) {{
+                    if (proxyCredentials != null) {
+                        setCredentialsProvider(new BasicCredentialsProvider() {{
+                            setCredentials(
+                                new AuthScope(defaultProxy.getHostName(), defaultProxy.getPort()),
+                                proxyCredentials
+                            );
+                        }});
+                    }
+                }},
                 new ClcRetryStrategy(3, 1000)
             );
 

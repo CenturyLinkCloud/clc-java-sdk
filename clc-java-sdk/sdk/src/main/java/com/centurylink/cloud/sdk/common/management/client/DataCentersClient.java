@@ -4,14 +4,14 @@ import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.Dat
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
+import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.google.inject.Inject;
 
 /**
  * @author ilya.drabenia
  */
-public class DataCentersClient extends SdkHttpClient {
+public class DataCentersClient extends AuthenticatedSdkHttpClient {
 
     @Inject
     public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {

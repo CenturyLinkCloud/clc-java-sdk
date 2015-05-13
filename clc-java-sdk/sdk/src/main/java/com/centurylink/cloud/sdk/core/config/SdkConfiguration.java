@@ -7,6 +7,13 @@ import com.google.inject.AbstractModule;
  */
 public class SdkConfiguration {
     private final Integer maxRetries;
+    private String proxyHost;
+    private int proxyPort = -1;
+    private String proxyScheme;
+    private String proxyUsername;
+    private String proxyPassword;
+
+    public static final SdkConfiguration DEFAULT = new SdkConfiguration();
 
     SdkConfiguration() {
         this(new SdkConfigurationBuilder());
@@ -14,10 +21,35 @@ public class SdkConfiguration {
 
     SdkConfiguration(SdkConfigurationBuilder builder) {
         maxRetries = builder.getMaxRetries();
+        proxyHost = builder.getProxyHost();
+        proxyPort = builder.getProxyPort();
+        proxyScheme = builder.getProxyScheme();
+        proxyUsername = builder.getProxyUsername();
+        proxyPassword = builder.getProxyPassword();
     }
 
     public Integer getMaxRetries() {
         return maxRetries;
+    }
+
+    public String getProxyHost() {
+        return proxyHost;
+    }
+
+    public int getProxyPort() {
+        return proxyPort;
+    }
+
+    public String getProxyScheme() {
+        return proxyScheme;
+    }
+
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
+    public String getProxyPassword() {
+        return proxyPassword;
     }
 
     public AbstractModule asModule() {
