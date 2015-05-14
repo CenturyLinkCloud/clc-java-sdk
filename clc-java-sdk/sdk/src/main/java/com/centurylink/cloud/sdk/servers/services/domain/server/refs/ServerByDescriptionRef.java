@@ -29,6 +29,14 @@ public class ServerByDescriptionRef extends Server {
             }};
     }
 
+    public DataCenter getDataCenter() {
+        return dataCenter;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
     public ServerByDescriptionRef dataCenter(DataCenter dataCenter) {
         notNull(dataCenter, "Data center must be not null");
 
