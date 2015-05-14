@@ -1,11 +1,17 @@
 package com.centurylink.cloud.sdk.servers.services.domain.group;
 
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.servers.client.domain.group.*;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author ilya.drabenia
@@ -101,11 +107,97 @@ public class GroupConverter {
                 .currentHour(clientServerBilling.getCurrentHour());
     }
 
-    public MonitoringStatisticRequest createMonitoringStatisticRequest(ServerMonitoringFilter config) {
-        return new MonitoringStatisticRequest()
-            .start(config.getFrom().format(DateTimeFormatter.ISO_LOCAL_DATE))
-            .end(config.getTo().format(DateTimeFormatter.ISO_LOCAL_DATE))
-            .sampleInterval(config.getInterval().toString())
-            .type(config.getType().name());
+    public MonitoringStatisticRequest createMonitoringStatisticRequest(ServerMonitoringConfig config) {
+
+        MonitoringStatisticRequest request =
+            new MonitoringStatisticRequest()
+                .type(config.getType().name());
+
+        switch (config.getType()) {
+            case HOURLY: {
+                if (config.getInterval() == null) {
+                    config.interval(config.DEFAULT_HOURLY_INTERVAL);
+                }
+
+                checkMonitoringFilter(config);
+
+                if (config.getFrom().isBefore(OffsetDateTime.now().minusDays(config.MAX_HOURLY_PERIOD_DAYS))) {
+                    throw new ClcClientException(String.format(
+                        "Start date must be within the past %s days",
+                        config.MAX_HOURLY_PERIOD_DAYS)
+                    );
+                }
+
+                if (config.getInterval().toHours() < config.MIN_HOURLY_INTERVAL_HOURS) {
+                    throw new ClcClientException(String.format(
+                        "Interval must be not less than %s hour(s)",
+                        config.MIN_HOURLY_INTERVAL_HOURS)
+                    );
+                }
+
+                break;
+            }
+            case REALTIME: {
+                if (config.getInterval() == null) {
+                    config.interval(config.DEFAULT_REALTIME_INTERVAL);
+                }
+
+                checkMonitoringFilter(config);
+
+                if (config.getFrom().isBefore(OffsetDateTime.now().minusHours(config.MAX_REALTIME_PERIOD_HOURS))) {
+                    throw new ClcClientException(String.format(
+                        "Start date must be within the past %s hours",
+                        config.MAX_REALTIME_PERIOD_HOURS)
+                    );
+                }
+
+                if (config.getInterval().getSeconds() < config.MIN_REALTIME_INTERVAL_MINUTES * 60) {
+                    throw new ClcClientException(String.format(
+                        "Interval must be not less than %s minutes",
+                        config.MIN_REALTIME_INTERVAL_MINUTES)
+                    );
+                }
+                break;
+            }
+            case LATEST: {
+                return request;
+            }
+        }
+
+        return request
+            .start(config.getFrom().atZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))
+            .end(
+                config.getTo() != null
+                    ? config.getTo().atZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)
+                    : null)
+            .sampleInterval(buildInterval(config.getInterval()));
+    }
+
+    private String buildInterval(Duration duration) {
+
+        long days = duration.toDays();
+        long hours = duration.minusDays(days).toHours();
+        long minutes = duration.minusDays(days).minusHours(hours).toMinutes();
+        long seconds = duration.minusDays(days).minusHours(hours).minusMinutes(minutes).getSeconds();
+
+        return String.format("%s:%s:%s:%s",
+            days < 10 ? ("0" + days) : days,
+            hours < 10 ? ("0" + hours) : hours,
+            minutes < 10 ? ("0" + minutes) : minutes,
+            seconds < 10 ? ("0" + seconds) : seconds
+        );
+    }
+
+    private void checkMonitoringFilter(ServerMonitoringConfig config) {
+        checkNotNull(config.getFrom(), "From date must be not a null");
+
+        OffsetDateTime to = config.getTo() != null ? config.getTo() : OffsetDateTime.now();
+
+        if (config.getFrom().isAfter(to)) {
+            throw new ClcClientException("Start date cannot be more than end date");
+        }
+        if (Duration.between(config.getFrom(), to).getSeconds() < config.getInterval().getSeconds()) {
+            throw new ClcClientException("Interval must fit within start/end date");
+        }
     }
 }

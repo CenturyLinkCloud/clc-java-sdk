@@ -8,9 +8,9 @@ import java.util.List;
  * @author aliaksandr.krasitski
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ServerMonitoringMetadata {
+public class ServerMonitoringStatistics {
     private String name;
-    private List<ServerMonitoringStats> stats;
+    private List<SamplingEntry> stats;
 
     public String getName() {
         return name;
@@ -20,11 +20,11 @@ public class ServerMonitoringMetadata {
         this.name = name;
     }
 
-    public List<ServerMonitoringStats> getStats() {
+    public List<SamplingEntry> getStats() {
         return stats;
     }
 
-    public void setStats(List<ServerMonitoringStats> stats) {
+    public void setStats(List<SamplingEntry> stats) {
         this.stats = stats;
     }
 }

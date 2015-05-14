@@ -14,7 +14,7 @@ import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStats;
+import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.*;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
@@ -684,27 +684,24 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
     /**
      * Retrieve the resource usage of servers within a group hierarchy statistics.
-     * @param group Group reference
-     * @param config
+     * @param group  Group reference
+     * @param config configuration for statistics entries
      * @return the statistics list
      */
-    public List<ServerMonitoringStats> getMonitoringStats(Group group, ServerMonitoringFilter config) {
+    public List<ServerMonitoringStatistics> getMonitoringStats(Group group, ServerMonitoringConfig config) {
+        checkNotNull(config, "Config must be not a null");
         return client.getMonitoringStatistics(
             idByRef(group),
-            converter.createMonitoringStatisticRequest(config))
-            .stream()
-            .map(metadata -> metadata.getStats())
-            .flatMap(List::stream)
-            .collect(toList());
+            converter.createMonitoringStatisticRequest(config));
     }
 
     /**
-     *
-     * @param groups
-     * @param config
-     * @return
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param groups the list of Group references
+     * @param config configuration for statistics entries
+     * @return the statistics list
      */
-    public List<ServerMonitoringStats> getMonitoringStats(List<Group> groups, ServerMonitoringFilter config) {
+    public List<ServerMonitoringStatistics> getMonitoringStats(List<Group> groups, ServerMonitoringConfig config) {
         return groups.stream()
             .map(group -> getMonitoringStats(group, config))
             .flatMap(List::stream)
@@ -712,12 +709,12 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     }
 
     /**
-     *
-     * @param groupFilter
-     * @param config
-     * @return
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param groupFilter group filter
+     * @param config      configuration for statistics entries
+     * @return the statistics list
      */
-    public List<ServerMonitoringStats> getMonitoringStats(GroupFilter groupFilter, ServerMonitoringFilter config) {
+    public List<ServerMonitoringStatistics> getMonitoringStats(GroupFilter groupFilter, ServerMonitoringConfig config) {
         return getMonitoringStats(Arrays.asList(getRefsFromFilter(groupFilter)), config);
     }
 

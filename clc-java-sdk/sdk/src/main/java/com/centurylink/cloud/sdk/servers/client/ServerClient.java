@@ -207,26 +207,26 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .get(ClientBillingStats.class);
     }
 
-    public List<ServerMonitoringMetadata> getMonitoringStatistics(String groupId, MonitoringStatisticRequest request) {
+    public List<ServerMonitoringStatistics> getMonitoringStatistics(String groupId, MonitoringStatisticRequest request) {
         WebTarget target = client("/groups/{accountAlias}/{groupId}/statistics")
             .resolveTemplate("groupId", groupId);
 
         if (request.getStart() != null) {
-            target.queryParam("start", request.getStart());
+            target = target.queryParam("start", request.getStart());
         }
         if (request.getEnd() != null) {
-            target.queryParam("end", request.getEnd());
+            target = target.queryParam("end", request.getEnd());
         }
         if (request.getSampleInterval() != null) {
-            target.queryParam("sampleInterval", request.getSampleInterval());
+            target = target.queryParam("sampleInterval", request.getSampleInterval());
         }
         if (request.getType() != null) {
-            target.queryParam("type", request.getType());
+            target = target.queryParam("type", request.getType());
         }
         return
             target
             .request()
-            .get(new GenericType<>(List.class));
+            .get(new GenericType<List<ServerMonitoringStatistics>>(){});
     }
 
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
