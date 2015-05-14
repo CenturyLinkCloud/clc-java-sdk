@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 @Test
 public class ServerMonitoringConfigTest {
@@ -47,11 +48,11 @@ public class ServerMonitoringConfigTest {
         ServerMonitoringConfig config = new ServerMonitoringConfig()
             .last(Duration.ofDays(2));
         OffsetDateTime start = config.getFrom();
-        MonitoringStatisticRequest monitoringStatisticRequest = converter.createMonitoringStatisticRequest(config);
+        MonitoringStatisticRequest req = converter.createMonitoringStatisticRequest(config);
 
-        assertEquals(monitoringStatisticRequest.getType(), config.getType().name());
-        assertEquals(monitoringStatisticRequest.getStart(), start.atZoneSameInstant(ZoneOffset.UTC).toString());
-        assertEquals(monitoringStatisticRequest.getSampleInterval(), "00:01:00:00");
+        assertEquals(req.getType(), config.getType().name());
+        assertEquals(req.getStart(), start.atZoneSameInstant(ZoneOffset.UTC).toString());
+        assertEquals(req.getSampleInterval(), "00:01:00:00");
     }
 
     @Test(expectedExceptions = ClcClientException.class)
@@ -75,9 +76,12 @@ public class ServerMonitoringConfigTest {
     public void typeLatestTest() {
         ServerMonitoringConfig config = new ServerMonitoringConfig()
             .type(MonitoringType.LATEST);
-        MonitoringStatisticRequest monitoringStatisticRequest = converter.createMonitoringStatisticRequest(config);
+        MonitoringStatisticRequest req = converter.createMonitoringStatisticRequest(config);
 
-        assertEquals(monitoringStatisticRequest.getType(), config.getType().name());
+        assertEquals(req.getType(), config.getType().name());
+        assertNull(req.getStart());
+        assertNull(req.getEnd());
+        assertNull(req.getSampleInterval());
     }
 
     @Test
@@ -87,11 +91,11 @@ public class ServerMonitoringConfigTest {
             .from(OffsetDateTime.now().minusHours(2));
 
         OffsetDateTime start = config.getFrom();
-        MonitoringStatisticRequest monitoringStatisticRequest = converter.createMonitoringStatisticRequest(config);
+        MonitoringStatisticRequest req = converter.createMonitoringStatisticRequest(config);
 
-        assertEquals(monitoringStatisticRequest.getType(), config.getType().name());
-        assertEquals(monitoringStatisticRequest.getStart(), start.atZoneSameInstant(ZoneOffset.UTC).toString());
-        assertEquals(monitoringStatisticRequest.getSampleInterval(), "00:00:05:00");
+        assertEquals(req.getType(), config.getType().name());
+        assertEquals(req.getStart(), start.atZoneSameInstant(ZoneOffset.UTC).toString());
+        assertEquals(req.getSampleInterval(), "00:00:05:00");
     }
 
     @Test(expectedExceptions = ClcClientException.class)

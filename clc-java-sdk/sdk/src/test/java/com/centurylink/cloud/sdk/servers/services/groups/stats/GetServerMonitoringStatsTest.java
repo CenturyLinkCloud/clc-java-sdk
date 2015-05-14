@@ -6,7 +6,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringSta
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.MonitoringType;
 import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
@@ -52,10 +51,9 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
             new GroupFilter().groups(group),
             new ServerMonitoringConfig()
                 .from(OffsetDateTime.now().minusDays(5))
-                .to(OffsetDateTime.now())
-                .type(MonitoringType.HOURLY)
-                .interval(sampleInterval)
         );
+
+        assertNotNull(result);
 
         result.stream()
             .forEach(metadata -> {
@@ -66,20 +64,24 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
                     SamplingEntry nextStats = metadata.getStats().get(i+1);
                     assertEquals(Duration.between(curStats.getTimestamp(), nextStats.getTimestamp()), sampleInterval);
 
-                    //if server prepared to delete - it hasn't details
-                    if (srvMetadata.getDetails() != null) {
-                        assertEquals(srvMetadata.getDetails().getCpu(), curStats.getCpu());
-                        assertEquals(srvMetadata.getDetails().getMemoryMB(), curStats.getMemoryMB());
-                        assertEquals(srvMetadata.getDetails().getDiskCount().intValue(), curStats.getDiskUsage().size());
-                        // if server has swap partition, user can't use it ->
-                        //assertEquals(srvMetadata.getDetails().getPartitions().size() - 1, curStats.getGuestDiskUsage().size());
-
-                        assertTrue(
-                            srvMetadata.getDetails().getStorageGB() * 1024 > curStats.getDiskUsageTotalCapacityMB().intValue()
-                        );
-                    }
+                    assertThatStatsMatch(srvMetadata, curStats);
                 }
             });
+    }
+
+    private void assertThatStatsMatch(ServerMetadata srvMetadata, SamplingEntry stats) {
+        //if server prepared to delete - it hasn't details
+        if (srvMetadata.getDetails() != null) {
+            assertEquals(srvMetadata.getDetails().getCpu(), stats.getCpu());
+            assertEquals(srvMetadata.getDetails().getMemoryMB(), stats.getMemoryMB());
+            assertEquals(srvMetadata.getDetails().getDiskCount().intValue(), stats.getDiskUsage().size());
+            // if server has swap partition, user can't use it ->
+            //assertEquals(srvMetadata.getDetails().getPartitions().size() - 1, curStats.getGuestDiskUsage().size());
+
+            assertTrue(
+                srvMetadata.getDetails().getStorageGB() * 1024 > stats.getDiskUsageTotalCapacityMB().intValue()
+            );
+        }
     }
 
 }
