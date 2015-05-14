@@ -3,6 +3,10 @@ package com.centurylink.cloud.sdk.servers.services.domain.group;
 import com.centurylink.cloud.sdk.servers.client.domain.group.*;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,4 +103,47 @@ public class GroupConverter {
                 .monthToDate(clientServerBilling.getMonthToDate())
                 .currentHour(clientServerBilling.getCurrentHour());
     }
+
+    public MonitoringStatisticRequest createMonitoringStatisticRequest(ServerMonitoringConfig config) {
+
+        MonitoringStatisticRequest request =
+            new MonitoringStatisticRequest()
+                .type(config.getType().name());
+
+        new ServerMonitoringConfigValidator().getValidator(config).validate();
+
+        return request
+            .start(formatDateTime(config.getFrom()))
+            .end(formatDateTime(config.getTo()))
+            .sampleInterval(buildInterval(config.getInterval()));
+    }
+
+    private String formatDateTime(OffsetDateTime dateTime) {
+        return dateTime != null
+            ? dateTime.atZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)
+            : null;
+    }
+
+    private String buildInterval(Duration duration) {
+        if (duration == null) {
+            return null;
+        }
+        long days = duration.toDays();
+        long hours = duration.minusDays(days).toHours();
+        long minutes = duration.minusDays(days).minusHours(hours).toMinutes();
+        long seconds = duration.minusDays(days).minusHours(hours).minusMinutes(minutes).getSeconds();
+
+        return String.format("%s:%s:%s:%s",
+            formatIntervalValue(days),
+            formatIntervalValue(hours),
+            formatIntervalValue(minutes),
+            formatIntervalValue(seconds)
+        );
+    }
+
+    private String formatIntervalValue(long value) {
+        return value < 10 ? ("0" + value) : ("" + value);
+    }
+
+
 }

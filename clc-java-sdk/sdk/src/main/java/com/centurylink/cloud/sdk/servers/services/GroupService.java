@@ -14,13 +14,9 @@ import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.group.BillingStats;
-import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.*;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
@@ -411,7 +407,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> powerOn(Group... groups) {
         return serverService().powerOn(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -435,7 +431,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> powerOff(Group... groups) {
         return serverService().powerOff(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -447,7 +443,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> startMaintenance(GroupFilter groupFilter) {
         return serverService().startMaintenance(
-                getServerSearchCriteria(groupFilter)
+            getServerSearchCriteria(groupFilter)
         );
     }
 
@@ -459,7 +455,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> startMaintenance(Group... groups) {
         return serverService().startMaintenance(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -471,7 +467,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> stopMaintenance(GroupFilter groupFilter) {
         return serverService().stopMaintenance(
-                getServerSearchCriteria(groupFilter)
+            getServerSearchCriteria(groupFilter)
         );
     }
 
@@ -483,7 +479,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> stopMaintenance(Group... groups) {
         return serverService().stopMaintenance(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -495,7 +491,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> pause(GroupFilter groupFilter) {
         return serverService().pause(
-                getServerSearchCriteria(groupFilter)
+            getServerSearchCriteria(groupFilter)
         );
     }
 
@@ -507,7 +503,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> pause(Group... groups) {
         return serverService().pause(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -519,7 +515,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> reboot(GroupFilter groupFilter) {
         return serverService().reboot(
-                getServerSearchCriteria(groupFilter)
+            getServerSearchCriteria(groupFilter)
         );
     }
 
@@ -531,7 +527,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> reboot(Group... groups) {
         return serverService().reboot(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -543,7 +539,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> reset(GroupFilter groupFilter) {
         return serverService().reset(
-                getServerSearchCriteria(groupFilter)
+            getServerSearchCriteria(groupFilter)
         );
     }
 
@@ -555,7 +551,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> reset(Group... groups) {
         return serverService().reset(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -567,7 +563,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> shutDown(GroupFilter groupFilter) {
         return serverService().shutDown(
-                getServerSearchCriteria(groupFilter)
+            getServerSearchCriteria(groupFilter)
         );
     }
 
@@ -579,7 +575,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> shutDown(Group... groups) {
         return serverService().shutDown(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -591,7 +587,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> archive(GroupFilter groupFilter) {
         return serverService().archive(
-                getServerSearchCriteria(groupFilter)
+            getServerSearchCriteria(groupFilter)
         );
     }
 
@@ -603,7 +599,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> archive(Group... groups) {
         return serverService().archive(
-                getServerSearchCriteria(groups)
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -619,8 +615,8 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             GroupFilter groupFilter
     ) {
         return serverService().createSnapshot(
-                expirationDays,
-                getServerSearchCriteria(groupFilter)
+            expirationDays,
+            getServerSearchCriteria(groupFilter)
         );
     }
 
@@ -633,8 +629,8 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Server>> createSnapshot(Integer expirationDays, Group... groups) {
         return serverService().createSnapshot(
-                expirationDays,
-                getServerSearchCriteria(groups)
+            expirationDays,
+            getServerSearchCriteria(groups)
         );
     }
 
@@ -646,7 +642,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public BillingStats getBillingStats(Group group) {
         return converter.convertBillingStats(
-                client.getGroupBillingStats(idByRef(group))
+            client.getGroupBillingStats(idByRef(group))
         );
     }
 
@@ -684,6 +680,42 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                 )
             )
             .collect(toList());
+    }
+
+    /**
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param group  Group reference
+     * @param config configuration for statistics entries
+     * @return the statistics list
+     */
+    public List<ServerMonitoringStatistics> getMonitoringStats(Group group, ServerMonitoringConfig config) {
+        checkNotNull(config, "Config must be not a null");
+        return client.getMonitoringStatistics(
+            idByRef(group),
+            converter.createMonitoringStatisticRequest(config));
+    }
+
+    /**
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param groups the list of Group references
+     * @param config configuration for statistics entries
+     * @return the statistics list
+     */
+    public List<ServerMonitoringStatistics> getMonitoringStats(List<Group> groups, ServerMonitoringConfig config) {
+        return groups.stream()
+            .map(group -> getMonitoringStats(group, config))
+            .flatMap(List::stream)
+            .collect(toList());
+    }
+
+    /**
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param groupFilter group filter
+     * @param config      configuration for statistics entries
+     * @return the statistics list
+     */
+    public List<ServerMonitoringStatistics> getMonitoringStats(GroupFilter groupFilter, ServerMonitoringConfig config) {
+        return getMonitoringStats(Arrays.asList(getRefsFromFilter(groupFilter)), config);
     }
 
     private ServerFilter getServerSearchCriteria(GroupFilter groupFilter) {

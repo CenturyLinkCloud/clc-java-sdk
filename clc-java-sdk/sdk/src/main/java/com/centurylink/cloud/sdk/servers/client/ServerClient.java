@@ -4,10 +4,7 @@ import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.servers.client.domain.group.CreateGroupRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.group.ClientBillingStats;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.group.UpdateGroupRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.group.*;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
@@ -17,6 +14,7 @@ import com.google.inject.Inject;
 import org.apache.http.HttpStatus;
 
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import java.util.HashMap;
 import java.util.List;
 
@@ -207,6 +205,28 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .resolveTemplate("groupId", groupId)
                 .request()
                 .get(ClientBillingStats.class);
+    }
+
+    public List<ServerMonitoringStatistics> getMonitoringStatistics(String groupId, MonitoringStatisticRequest request) {
+        WebTarget target = client("/groups/{accountAlias}/{groupId}/statistics")
+            .resolveTemplate("groupId", groupId);
+
+        if (request.getStart() != null) {
+            target = target.queryParam("start", request.getStart());
+        }
+        if (request.getEnd() != null) {
+            target = target.queryParam("end", request.getEnd());
+        }
+        if (request.getSampleInterval() != null) {
+            target = target.queryParam("sampleInterval", request.getSampleInterval());
+        }
+        if (request.getType() != null) {
+            target = target.queryParam("type", request.getType());
+        }
+        return
+            target
+            .request()
+            .get(new GenericType<List<ServerMonitoringStatistics>>(){});
     }
 
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
