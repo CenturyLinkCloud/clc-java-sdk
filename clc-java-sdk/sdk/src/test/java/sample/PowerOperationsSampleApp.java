@@ -90,6 +90,7 @@ public class PowerOperationsSampleApp extends Assert {
             .delete(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
                 .groupNames("MyServers")
+                .onlyActive()
             )
             .waitUntilComplete();
 
