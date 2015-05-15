@@ -8,7 +8,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.BillingStats;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupBilling;
 import com.centurylink.cloud.sdk.servers.services.domain.group.ServerBilling;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
@@ -41,13 +40,14 @@ public class BillingStatsEngine {
     private DataCenterFilter dataCenterFilter;
 
     public BillingStatsEngine(
+            ServerService serverService,
             GroupService groupService,
-            DataCenterService dataCenterService,
-            ServerService serverService
+            DataCenterService dataCenterService
     ) {
+        this.serverService = serverService;
         this.groupService = groupService;
         this.dataCenterService = dataCenterService;
-        this.serverService = serverService;
+
     }
 
     public BillingStatsEngine forServers(ServerFilter serverFilter) {
@@ -126,10 +126,6 @@ public class BillingStatsEngine {
 
     public List<BillingStatsEntry> groupByDataCenter() {
         List<BillingStatsEntry> result = new ArrayList<>();
-
-        List<BillingStats> billingStatsList = groupService.getBillingStats(
-            getStatsSearchCriteria()
-        );
 
         Map<DataCenterMetadata, Statistics> dataCenterMap = new HashMap<>();
 
