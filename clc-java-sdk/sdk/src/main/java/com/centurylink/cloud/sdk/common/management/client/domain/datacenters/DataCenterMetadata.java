@@ -2,6 +2,7 @@ package com.centurylink.cloud.sdk.common.management.client.domain.datacenters;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.fasterxml.jackson.annotation.*;
+import com.google.common.base.Objects;
 
 import javax.annotation.Generated;
 import java.util.ArrayList;
@@ -120,4 +121,18 @@ public class DataCenterMetadata {
         return null;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DataCenterMetadata)) return false;
+        DataCenterMetadata that = (DataCenterMetadata) o;
+
+        return Objects.equal(id, that.id) &&
+                Objects.equal(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, name);
+    }
 }
