@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.statistics;
 
 public class BillingStatsEntry<T> {
 
-    T entity; // ServerMetadata, GroupMetadata, DataCenterMetadata, AccountMetadata
+    T entity;
     Statistics statistics;
 
     public T getEntity() {
