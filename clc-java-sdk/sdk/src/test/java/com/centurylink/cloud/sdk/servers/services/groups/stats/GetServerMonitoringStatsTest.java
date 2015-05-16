@@ -23,7 +23,7 @@ import java.util.List;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
-@Test(groups = {INTEGRATION, LONG_RUNNING})
+//@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
 
     @Inject
@@ -44,7 +44,7 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
         group = Group.refById(serverMetadata.getGroupId());
     }
 
-    @Test
+//    @Test
     public void testServerStats() {
         Duration sampleInterval = Duration.ofHours(1);
         List<ServerMonitoringStatistics> result = groupService.getMonitoringStats(
@@ -59,9 +59,9 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
             .forEach(metadata -> {
                 ServerMetadata srvMetadata = serverService.findByRef(Server.refById(metadata.getName()));
 
-                for (int i = 0; i < metadata.getStats().size()-1; i++) {
+                for (int i = 0; i < metadata.getStats().size() - 1; i++) {
                     SamplingEntry curStats = metadata.getStats().get(i);
-                    SamplingEntry nextStats = metadata.getStats().get(i+1);
+                    SamplingEntry nextStats = metadata.getStats().get(i + 1);
                     assertEquals(Duration.between(curStats.getTimestamp(), nextStats.getTimestamp()), sampleInterval);
 
                     assertThatStatsMatch(srvMetadata, curStats);
