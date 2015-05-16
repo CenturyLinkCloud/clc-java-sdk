@@ -8,6 +8,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.domain.group.BillingStats;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupBilling;
 import com.centurylink.cloud.sdk.servers.services.domain.group.ServerBilling;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
@@ -30,6 +31,8 @@ public class BillingStatsEngine {
     }
 
     private Filter filter = Filter.GROUP;
+
+    private boolean withSubItems = false;
 
     private final GroupService groupService;
     private final DataCenterService dataCenterService;
@@ -71,25 +74,23 @@ public class BillingStatsEngine {
     public List<BillingStatsEntry> groupByGroup() {
         List<BillingStatsEntry> result = new ArrayList<>();
 
-        groupService
-            .getBillingStats(getStatsSearchCriteria())
-            .forEach(
-                billingStats ->
-                    billingStats.getGroups().forEach(
-                        groupBilling -> {
-                            Statistics statistics = new Statistics();
-                            aggregateStats(statistics, groupBilling);
+        getBillingStats().forEach(
+            billingStats ->
+                billingStats.getGroups().forEach(
+                    groupBilling -> {
+                        Statistics statistics = new Statistics();
+                        aggregateStats(statistics, groupBilling);
 
-                            result.add(
-                                createBillingStatsEntry(
-                                    groupService.findByRef(
-                                        Group.refById(groupBilling.getGroupId())
-                                    ),
-                                    statistics
-                                )
-                            );
-                        }
-                    )
+                        result.add(
+                            createBillingStatsEntry(
+                                groupService.findByRef(
+                                    Group.refById(groupBilling.getGroupId())
+                                ),
+                                statistics
+                            )
+                        );
+                    }
+                )
             );
 
         return result;
@@ -98,28 +99,26 @@ public class BillingStatsEngine {
     public List<BillingStatsEntry> groupByServer() {
         List<BillingStatsEntry> result = new ArrayList<>();
 
-        groupService
-            .getBillingStats(getStatsSearchCriteria())
-            .forEach(
-                billingStats ->
-                    billingStats.getGroups().forEach(
-                        groupBilling -> groupBilling.getServers().forEach(
-                            serverBilling -> {
-                                Statistics statistics = new Statistics();
-                                aggregateStats(statistics, serverBilling);
+        getBillingStats().forEach(
+            billingStats ->
+                billingStats.getGroups().forEach(
+                    groupBilling -> groupBilling.getServers().forEach(
+                        serverBilling -> {
+                            Statistics statistics = new Statistics();
+                            aggregateStats(statistics, serverBilling);
 
-                                result.add(
-                                    createBillingStatsEntry(
-                                        serverService.findByRef(
-                                            Server.refById(serverBilling.getServerId())
-                                        ),
-                                        statistics
-                                    )
-                                );
-                            }
-                        )
+                            result.add(
+                                createBillingStatsEntry(
+                                    serverService.findByRef(
+                                        Server.refById(serverBilling.getServerId())
+                                    ),
+                                    statistics
+                                )
+                            );
+                        }
                     )
-            );
+                )
+        );
 
         return result;
     }
@@ -129,32 +128,30 @@ public class BillingStatsEngine {
 
         Map<DataCenterMetadata, Statistics> dataCenterMap = new HashMap<>();
 
-        groupService
-            .getBillingStats(getStatsSearchCriteria())
-            .forEach(
-                billingStats -> billingStats.getGroups().forEach(
-                    groupBilling -> {
-                        GroupMetadata groupMetadata = groupService.findByRef(
-                                Group.refById(groupBilling.getGroupId())
-                        );
+        getBillingStats().forEach(
+            billingStats -> billingStats.getGroups().forEach(
+                groupBilling -> {
+                    GroupMetadata groupMetadata = groupService.findByRef(
+                        Group.refById(groupBilling.getGroupId())
+                    );
 
-                        DataCenterMetadata dataCenterMetadata = dataCenterService.findByRef(
-                                DataCenter.refById(groupMetadata.getLocationId())
-                        );
+                    DataCenterMetadata dataCenterMetadata = dataCenterService.findByRef(
+                        DataCenter.refById(groupMetadata.getLocationId())
+                    );
 
-                        if (dataCenterMap.get(dataCenterMetadata) != null) {
-                            aggregateStats(dataCenterMap.get(dataCenterMetadata), groupBilling);
-                        } else {
-                            Statistics statistics = new Statistics();
-                            aggregateStats(statistics, groupBilling);
-                            dataCenterMap.put(dataCenterMetadata, statistics);
-                        }
+                    if (dataCenterMap.get(dataCenterMetadata) != null) {
+                        aggregateStats(dataCenterMap.get(dataCenterMetadata), groupBilling);
+                    } else {
+                        Statistics statistics = new Statistics();
+                        aggregateStats(statistics, groupBilling);
+                        dataCenterMap.put(dataCenterMetadata, statistics);
                     }
-                )
-            );
+                }
+            )
+        );
 
         dataCenterMap.forEach(
-            (dataCenterMetadata, statistics) -> result.add(
+                (dataCenterMetadata, statistics) -> result.add(
                 createBillingStatsEntry(dataCenterMetadata, statistics)
             )
         );
@@ -165,15 +162,18 @@ public class BillingStatsEngine {
     public Statistics summarize() {
         Statistics statistics = new Statistics();
 
-        groupService
-            .getBillingStats(getStatsSearchCriteria())
-            .forEach(
-                billingStats -> billingStats.getGroups().forEach(
-                    groupBilling -> aggregateStats(statistics, groupBilling)
-                )
-            );
+        getBillingStats().forEach(
+            billingStats -> billingStats.getGroups().forEach(
+                groupBilling -> aggregateStats(statistics, groupBilling)
+            )
+        );
 
         return statistics;
+    }
+
+    public BillingStatsEngine aggregateSubItems() {
+        withSubItems = true;
+        return this;
     }
 
     private GroupFilter getStatsSearchCriteria() {
@@ -195,6 +195,29 @@ public class BillingStatsEngine {
             default:
                 return new GroupFilter();
         }
+    }
+
+    private List<BillingStats> getBillingStats() {
+        List<BillingStats> billingStatsList = groupService.getBillingStats(getStatsSearchCriteria());
+
+        if (!withSubItems) {
+            billingStatsList.forEach(
+                billingStats -> {
+                    GroupBilling groupBilling = billingStats
+                        .getGroups()
+                        .stream()
+                        .findFirst()
+                        .orElse(new GroupBilling());
+
+                    List<GroupBilling> groupBillingList = new ArrayList<>();
+                    groupBillingList.add(groupBilling);
+
+                    billingStats.setGroups(groupBillingList);
+                }
+            );
+        }
+
+        return billingStatsList;
     }
 
     private void aggregateStats(Statistics statistics, GroupBilling groupBilling) {
