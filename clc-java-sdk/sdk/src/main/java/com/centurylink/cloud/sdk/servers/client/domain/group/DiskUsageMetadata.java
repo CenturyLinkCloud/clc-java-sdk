@@ -6,18 +6,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @author aliaksandr.krasitski
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GuestUsage {
-    private String path;
+public class DiskUsageMetadata {
+    private String id;
     private Integer capacityMB;
-    private Integer consumedMB;
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
 
     public Integer getCapacityMB() {
         return capacityMB;
@@ -27,11 +18,11 @@ public class GuestUsage {
         this.capacityMB = capacityMB;
     }
 
-    public Integer getConsumedMB() {
-        return consumedMB;
+    public String getId() {
+        return id;
     }
 
-    public void setConsumedMB(Integer consumedMB) {
-        this.consumedMB = consumedMB;
+    public void setId(String id) {
+        this.id = id;
     }
 }

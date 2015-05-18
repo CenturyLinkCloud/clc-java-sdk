@@ -11,9 +11,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author aliaksandr.krasitski
  */
 public class ServerMonitoringConfigValidator {
-    private ServerMonitoringConfig config;
+    private ServerMonitoringFilter config;
 
-    private void checkMonitoringConfig(ServerMonitoringConfig config) {
+    private void checkMonitoringConfig(ServerMonitoringFilter config) {
         checkNotNull(config.getFrom(), "From date must be not a null");
 
         if (config.getInterval() == null) {
@@ -34,7 +34,7 @@ public class ServerMonitoringConfigValidator {
         }
     }
 
-    public MonitoringConfigValidator getValidator(ServerMonitoringConfig config) {
+    public MonitoringConfigValidator getValidator(ServerMonitoringFilter config) {
         this.config = config;
         switch (config.getType()) {
             case HOURLY: {

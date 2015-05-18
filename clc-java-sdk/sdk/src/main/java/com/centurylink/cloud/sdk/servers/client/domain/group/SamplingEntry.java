@@ -17,16 +17,16 @@ public class SamplingEntry {
     @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     private OffsetDateTime timestamp;
     private Integer cpu;
-    private Float cpuPercent;
+    private Double cpuPercent;
     private Integer memoryMB;
-    private Float memoryPercent;
+    private Double memoryPercent;
     @JsonProperty(value = "networkReceivedKBps")
-    private Float networkReceivedKBps;
+    private Double networkReceivedKBps;
     @JsonProperty(value = "networkTransmittedKBps")
-    private Float networkTransmittedKBps;
+    private Double networkTransmittedKBps;
     private Integer diskUsageTotalCapacityMB;
-    private List<DiskUsage> diskUsage;
-    private List<GuestUsage> guestDiskUsage;
+    private List<DiskUsageMetadata> diskUsage;
+    private List<GuestUsageMetadata> guestDiskUsage;
 
 
     public OffsetDateTime getTimestamp() {
@@ -45,11 +45,11 @@ public class SamplingEntry {
         this.cpu = cpu;
     }
 
-    public Float getCpuPercent() {
+    public Double getCpuPercent() {
         return cpuPercent;
     }
 
-    public void setCpuPercent(Float cpuPercent) {
+    public void setCpuPercent(Double cpuPercent) {
         this.cpuPercent = cpuPercent;
     }
 
@@ -61,27 +61,27 @@ public class SamplingEntry {
         this.memoryMB = memoryMB;
     }
 
-    public Float getMemoryPercent() {
+    public Double getMemoryPercent() {
         return memoryPercent;
     }
 
-    public void setMemoryPercent(Float memoryPercent) {
+    public void setMemoryPercent(Double memoryPercent) {
         this.memoryPercent = memoryPercent;
     }
 
-    public Float getNetworkReceivedKbps() {
+    public Double getNetworkReceivedKbps() {
         return networkReceivedKBps;
     }
 
-    public void setNetworkReceivedKbps(Float networkReceivedKBps) {
+    public void setNetworkReceivedKbps(Double networkReceivedKBps) {
         this.networkReceivedKBps = networkReceivedKBps;
     }
 
-    public Float getNetworkTransmittedKbps() {
+    public Double getNetworkTransmittedKbps() {
         return networkTransmittedKBps;
     }
 
-    public void setNetworkTransmittedKbps(Float networkTransmittedKbps) {
+    public void setNetworkTransmittedKbps(Double networkTransmittedKbps) {
         this.networkTransmittedKBps = networkTransmittedKbps;
     }
 
@@ -93,19 +93,19 @@ public class SamplingEntry {
         this.diskUsageTotalCapacityMB = diskUsageTotalCapacityMB;
     }
 
-    public List<DiskUsage> getDiskUsage() {
+    public List<DiskUsageMetadata> getDiskUsage() {
         return diskUsage;
     }
 
-    public void setDiskUsage(List<DiskUsage> diskUsage) {
+    public void setDiskUsage(List<DiskUsageMetadata> diskUsage) {
         this.diskUsage = diskUsage;
     }
 
-    public List<GuestUsage> getGuestDiskUsage() {
+    public List<GuestUsageMetadata> getGuestDiskUsage() {
         return guestDiskUsage;
     }
 
-    public void setGuestDiskUsage(List<GuestUsage> guestDiskUsage) {
+    public void setGuestDiskUsage(List<GuestUsageMetadata> guestDiskUsage) {
         this.guestDiskUsage = guestDiskUsage;
     }
 }

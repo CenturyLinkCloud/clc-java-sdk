@@ -688,7 +688,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param config configuration for statistics entries
      * @return the statistics list
      */
-    public List<ServerMonitoringStatistics> getMonitoringStats(Group group, ServerMonitoringConfig config) {
+    public List<ServerMonitoringStatistics> getMonitoringStats(Group group, ServerMonitoringFilter config) {
         checkNotNull(config, "Config must be not a null");
         return client.getMonitoringStatistics(
             idByRef(group),
@@ -701,7 +701,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param config configuration for statistics entries
      * @return the statistics list
      */
-    public List<ServerMonitoringStatistics> getMonitoringStats(List<Group> groups, ServerMonitoringConfig config) {
+    public List<ServerMonitoringStatistics> getMonitoringStats(List<Group> groups, ServerMonitoringFilter config) {
         return groups.stream()
             .map(group -> getMonitoringStats(group, config))
             .flatMap(List::stream)
@@ -714,7 +714,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param config      configuration for statistics entries
      * @return the statistics list
      */
-    public List<ServerMonitoringStatistics> getMonitoringStats(GroupFilter groupFilter, ServerMonitoringConfig config) {
+    public List<ServerMonitoringStatistics> getMonitoringStats(GroupFilter groupFilter, ServerMonitoringFilter config) {
         return getMonitoringStats(Arrays.asList(getRefsFromFilter(groupFilter)), config);
     }
 

@@ -6,7 +6,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringSta
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
@@ -49,7 +49,7 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
         Duration sampleInterval = Duration.ofHours(1);
         List<ServerMonitoringStatistics> result = groupService.getMonitoringStats(
             new GroupFilter().groups(group),
-            new ServerMonitoringConfig()
+            new ServerMonitoringFilter()
                 .from(OffsetDateTime.now().minusDays(5))
         );
 
@@ -71,10 +71,13 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
 
     private void assertThatStatsMatch(ServerMetadata srvMetadata, SamplingEntry stats) {
         //if server prepared to delete - it hasn't details
-        if (srvMetadata.getDetails() != null) {
-            assertEquals(srvMetadata.getDetails().getCpu(), stats.getCpu());
-            assertEquals(srvMetadata.getDetails().getMemoryMB(), stats.getMemoryMB());
-            assertEquals(srvMetadata.getDetails().getDiskCount().intValue(), stats.getDiskUsage().size());
+        //if server is paused - cpu, storage and memoryMB equal 0
+        if (srvMetadata.getDetails() != null && !srvMetadata.getDetails().getPowerState().equals("paused")) {
+
+            assertEquals(srvMetadata.getDetails().getCpu(), stats.getCpu(), "check cpu count");
+            assertEquals(srvMetadata.getDetails().getMemoryMB(), stats.getMemoryMB(), "check memory storage");
+
+            assertEquals(srvMetadata.getDetails().getDiskCount().intValue(), stats.getDiskUsage().size(), "check disks count");
             // if server has swap partition, user can't use it ->
             //assertEquals(srvMetadata.getDetails().getPartitions().size() - 1, curStats.getGuestDiskUsage().size());
 

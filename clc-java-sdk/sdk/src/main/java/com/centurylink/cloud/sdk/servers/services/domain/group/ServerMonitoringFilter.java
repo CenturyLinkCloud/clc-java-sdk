@@ -3,7 +3,7 @@ package com.centurylink.cloud.sdk.servers.services.domain.group;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
-public class ServerMonitoringConfig {
+public class ServerMonitoringFilter {
     private OffsetDateTime from;
     private OffsetDateTime to;
     private Duration interval;
@@ -17,7 +17,7 @@ public class ServerMonitoringConfig {
     public static final int MIN_REALTIME_INTERVAL_MINUTES = 5;
     public static final Duration DEFAULT_REALTIME_INTERVAL = Duration.ofMinutes(MIN_REALTIME_INTERVAL_MINUTES);
 
-    public ServerMonitoringConfig last(Duration last) {
+    public ServerMonitoringFilter last(Duration last) {
         from = OffsetDateTime.now().minus(last);
         return this;
     }
@@ -26,7 +26,7 @@ public class ServerMonitoringConfig {
         return from;
     }
 
-    public ServerMonitoringConfig from(OffsetDateTime from) {
+    public ServerMonitoringFilter from(OffsetDateTime from) {
         this.from = from;
         return this;
     }
@@ -35,7 +35,7 @@ public class ServerMonitoringConfig {
         return to;
     }
 
-    public ServerMonitoringConfig to(OffsetDateTime to) {
+    public ServerMonitoringFilter to(OffsetDateTime to) {
         this.to = to;
         return this;
     }
@@ -44,7 +44,7 @@ public class ServerMonitoringConfig {
         return interval;
     }
 
-    public ServerMonitoringConfig interval(Duration interval) {
+    public ServerMonitoringFilter interval(Duration interval) {
         this.interval = interval;
         return this;
     }
@@ -53,7 +53,7 @@ public class ServerMonitoringConfig {
         return type;
     }
 
-    public ServerMonitoringConfig type(MonitoringType type) {
+    public ServerMonitoringFilter type(MonitoringType type) {
         this.type = type;
         return this;
     }
