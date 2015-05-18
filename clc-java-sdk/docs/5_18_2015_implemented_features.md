@@ -1,5 +1,5 @@
 
-Get Monitoring Statistics basic functionality
+Get Monitoring Statistics functionality
 --------------------------------------------------
 
 ``` java
@@ -33,7 +33,7 @@ List<ServerMonitoringStats> result =
 
 ```
 
-Get Billing Statistics basic functionality
+Get Billing Statistics functionality
 --------------------------------------------------
 
 ``` java
