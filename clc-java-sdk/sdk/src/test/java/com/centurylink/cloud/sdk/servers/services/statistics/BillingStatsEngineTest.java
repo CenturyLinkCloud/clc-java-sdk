@@ -47,9 +47,15 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
                 .forServers(new ServerFilter().nameContains("md-srv"))
                 .groupByServer();
 
+        List<BillingStatsEntry> statsByDataCenter = statisticsService
+                .billingStats()
+                .forServers(new ServerFilter().nameContains("md-uti"))
+                .groupByDataCenter();
+
         assertNotNull(summarize);
         assertNotNull(statsByGroup);
         assertNotNull(statsByServer);
+        assertNotNull(statsByDataCenter);
     }
 
 }

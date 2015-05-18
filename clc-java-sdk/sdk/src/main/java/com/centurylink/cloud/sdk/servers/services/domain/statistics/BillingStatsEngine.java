@@ -42,7 +42,7 @@ public class BillingStatsEngine {
     private ServerFilter serverFilter;
     private DataCenterFilter dataCenterFilter;
 
-    private List<String> serverIdRestrictionsList = new ArrayList<>();
+    private List<String> serverIdRestrictionsList;
 
     public BillingStatsEngine(
             ServerService serverService,
@@ -52,7 +52,6 @@ public class BillingStatsEngine {
         this.serverService = serverService;
         this.groupService = groupService;
         this.dataCenterService = dataCenterService;
-
     }
 
     public BillingStatsEngine forServers(ServerFilter serverFilter) {
@@ -155,7 +154,7 @@ public class BillingStatsEngine {
         );
 
         dataCenterMap.forEach(
-                (dataCenterMetadata, statistics) -> result.add(
+            (dataCenterMetadata, statistics) -> result.add(
                 createBillingStatsEntry(dataCenterMetadata, statistics)
             )
         );
@@ -209,7 +208,13 @@ public class BillingStatsEngine {
     }
 
     private List<BillingStats> getBillingStats() {
-        List<BillingStats> billingStatsList = groupService.getBillingStats(getStatsSearchCriteria());
+        GroupFilter filter = getStatsSearchCriteria();
+
+        if (serverIdRestrictionsList != null && serverIdRestrictionsList.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<BillingStats> billingStatsList = groupService.getBillingStats(filter);
 
         if (!withSubItems) {
             billingStatsList.forEach(
@@ -267,7 +272,7 @@ public class BillingStatsEngine {
     }
 
     private boolean checkServerId(ServerBilling serverBilling) {
-        return serverIdRestrictionsList.isEmpty()
+        return serverIdRestrictionsList == null
                 || serverIdRestrictionsList.contains(serverBilling.getServerId());
     }
 }
