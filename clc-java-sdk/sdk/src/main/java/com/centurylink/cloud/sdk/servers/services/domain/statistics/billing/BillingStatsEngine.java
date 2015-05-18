@@ -19,7 +19,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.statistics.billing.subi
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
 public class BillingStatsEngine {
 
     private BillingStatsFilter statsFilter = new BillingStatsGroupFilter(new GroupFilter());
