@@ -19,6 +19,7 @@ public class GroupBillingStatsByGroup extends GroupBillingStatsBy {
         this.groupService = groupService;
     }
 
+    @Override
     public List<BillingStatsEntry> group(List<BillingStats> billingStatsList) {
         List<BillingStatsEntry> result = new ArrayList<>();
 

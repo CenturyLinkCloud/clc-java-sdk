@@ -19,6 +19,7 @@ public class GroupBillingStatsByServer extends GroupBillingStatsBy {
         this.serverService = serverService;
     }
 
+    @Override
     public List<BillingStatsEntry> group(List<BillingStats> billingStatsList) {
         List<BillingStatsEntry> result = new ArrayList<>();
 
@@ -34,7 +35,7 @@ public class GroupBillingStatsByServer extends GroupBillingStatsBy {
                                 result.add(
                                     createBillingStatsEntry(
                                         serverService.findByRef(
-                                                Server.refById(serverBilling.getServerId())
+                                            Server.refById(serverBilling.getServerId())
                                         ),
                                         statistics
                                     )

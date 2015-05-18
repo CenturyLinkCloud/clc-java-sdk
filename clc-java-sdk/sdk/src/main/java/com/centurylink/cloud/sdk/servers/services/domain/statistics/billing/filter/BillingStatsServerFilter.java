@@ -23,6 +23,7 @@ public class BillingStatsServerFilter implements BillingStatsFilter {
             .collect(toList());
     }
 
+    @Override
     public GroupFilter getFilter() {
         return
             new GroupFilter().id(

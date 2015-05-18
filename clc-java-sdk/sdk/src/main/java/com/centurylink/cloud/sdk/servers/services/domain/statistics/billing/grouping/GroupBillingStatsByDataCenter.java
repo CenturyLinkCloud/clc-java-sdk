@@ -31,7 +31,7 @@ public class GroupBillingStatsByDataCenter extends GroupBillingStatsBy {
         this.dataCenterService = dataCenterService;
     }
 
-
+    @Override
     public List<BillingStatsEntry> group(List<BillingStats> billingStatsList) {
         List<BillingStatsEntry> result = new ArrayList<>();
 
