@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.servers.services.domain.statistics;
+package com.centurylink.cloud.sdk.servers.services.domain.statistics.billing;
 
 import java.math.BigDecimal;
 

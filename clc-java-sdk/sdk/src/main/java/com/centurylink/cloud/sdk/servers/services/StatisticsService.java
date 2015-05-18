@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services;
 
 import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
-import com.centurylink.cloud.sdk.servers.services.domain.statistics.BillingStatsEngine;
+import com.centurylink.cloud.sdk.servers.services.domain.statistics.billing.BillingStatsEngine;
 import com.google.inject.Inject;
 
 /**
