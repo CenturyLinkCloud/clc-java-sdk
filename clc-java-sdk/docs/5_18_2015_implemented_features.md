@@ -38,11 +38,11 @@ Get Billing Statistics basic functionality
 
 ``` java
 
-List<ServerMonitoringStats> result = serverService.getBillingStats(group);
+GroupBillingStats result = serverService.getBillingStats(group);
 
-List<ServerMonitoringStats> result = serverService.getBillingStats(asList(groups1, group2));
+List<GroupBillingStats> result = serverService.getBillingStats(asList(groups1, group2));
 
-List<ServerMonitoringStats> result =
+List<GroupBillingStats> result =
     serverService
         .getBillingStats(
             new GroupFilter()
