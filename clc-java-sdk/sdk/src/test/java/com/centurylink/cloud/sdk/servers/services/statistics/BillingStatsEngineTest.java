@@ -6,8 +6,8 @@ import com.centurylink.cloud.sdk.servers.services.StatisticsService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.statistics.BillingStatsEntry;
-import com.centurylink.cloud.sdk.servers.services.domain.statistics.Statistics;
+import com.centurylink.cloud.sdk.servers.services.domain.statistics.billing.BillingStatsEntry;
+import com.centurylink.cloud.sdk.servers.services.domain.statistics.billing.Statistics;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
@@ -49,7 +49,7 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
 
         List<BillingStatsEntry> statsByDataCenter = statisticsService
                 .billingStats()
-                .forServers(new ServerFilter().nameContains("md-uti"))
+                .forServers(new ServerFilter().nameContains("md-srv"))
                 .groupByDataCenter();
 
         assertNotNull(summarize);
