@@ -51,3 +51,44 @@ List<GroupBillingStats> result =
         );
 
 ```
+
+Analytics Engine for Billing Statistics
+----------------------------------------
+
+``` java
+
+List<BillingStatsEntry> results =
+    statisticsService
+        .billingStats()
+        .forServers(new ServerFilter()
+            .dataCenters(DE_FRANKFURT, CA_TORONTO)
+            .descriptionContains("Cassandra")
+        )
+        .groupByDataCenter();
+
+List<BillingStatsEntry> results =
+    statisticsService
+        .billingStats()
+        .forGroups(new GroupFilter()
+            .dataCenters(DE_FRANKFURT, CA_TORONTO)
+            .names("Application", "Hadoop Cluster")
+        )
+        .summarize();
+
+List<BillingStatsEntry> results =
+    statisticsService
+        .billingStats()
+        .forDataCenters(new DataCenterFilter()
+            .dataCenters(DE_FRANKFURT, CA_TORONTO)
+        )
+        .groupByServer();
+
+List<BillingStatsEntry> results =
+    statisticsService
+        .billingStats()
+        .forDataCenters(new DataCenterFilter()
+            .dataCenters(DE_FRANKFURT, CA_TORONTO)
+        )
+        .groupByServerGroup();
+        
+```
