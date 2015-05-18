@@ -42,6 +42,8 @@ public class BillingStatsEngine {
     private ServerFilter serverFilter;
     private DataCenterFilter dataCenterFilter;
 
+    private List<String> serverIdRestrictionsList = new ArrayList<>();
+
     public BillingStatsEngine(
             ServerService serverService,
             GroupService groupService,
@@ -104,17 +106,19 @@ public class BillingStatsEngine {
                 billingStats.getGroups().forEach(
                     groupBilling -> groupBilling.getServers().forEach(
                         serverBilling -> {
-                            Statistics statistics = new Statistics();
-                            aggregateStats(statistics, serverBilling);
+                            if (checkServerId(serverBilling)) {
+                                Statistics statistics = new Statistics();
+                                aggregateStats(statistics, serverBilling);
 
-                            result.add(
-                                createBillingStatsEntry(
-                                    serverService.findByRef(
-                                        Server.refById(serverBilling.getServerId())
-                                    ),
-                                    statistics
-                                )
-                            );
+                                result.add(
+                                    createBillingStatsEntry(
+                                        serverService.findByRef(
+                                            Server.refById(serverBilling.getServerId())
+                                        ),
+                                        statistics
+                                    )
+                                );
+                            }
                         }
                     )
                 )
@@ -185,12 +189,19 @@ public class BillingStatsEngine {
                     new GroupFilter()
                         .dataCentersWhere(dataCenterFilter);
             case SERVER:
+                List<ServerMetadata> serverMetadataList = serverService.find(serverFilter);
+
+                serverIdRestrictionsList = serverMetadataList
+                    .stream()
+                    .map(ServerMetadata::getId)
+                    .collect(toList());
+
                 return
                     new GroupFilter().id(
-                        serverService.find(serverFilter)
-                            .stream()
-                            .map(ServerMetadata::getGroupId)
-                            .collect(toList())
+                        serverMetadataList
+                        .stream()
+                        .map(ServerMetadata::getGroupId)
+                        .collect(toList())
                     );
             default:
                 return new GroupFilter();
@@ -222,7 +233,11 @@ public class BillingStatsEngine {
 
     private void aggregateStats(Statistics statistics, GroupBilling groupBilling) {
         groupBilling.getServers().forEach(
-            serverBilling -> aggregateStats(statistics, serverBilling)
+            serverBilling -> {
+                if (checkServerId(serverBilling)) {
+                    aggregateStats(statistics, serverBilling);
+                }
+            }
         );
     }
 
@@ -249,5 +264,10 @@ public class BillingStatsEngine {
         return new BillingStatsEntry()
                 .entity(metadata)
                 .statistics(statistics);
+    }
+
+    private boolean checkServerId(ServerBilling serverBilling) {
+        return serverIdRestrictionsList.isEmpty()
+                || serverIdRestrictionsList.contains(serverBilling.getServerId());
     }
 }
