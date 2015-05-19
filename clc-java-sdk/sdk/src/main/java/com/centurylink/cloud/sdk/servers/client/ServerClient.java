@@ -255,4 +255,11 @@ public class ServerClient extends SdkHttpClient {
                 .readEntity(Link.class);
     }
 
+    public ServerCredentials getServerCredentials(String serverId) {
+        return
+            client("/servers/{accountAlias}/{serverId}/credentials")
+                .resolveTemplate("serverId", serverId)
+                .request()
+                .get(ServerCredentials.class);
+    }
 }
