@@ -30,6 +30,7 @@ public class BillingStatsServerFilter implements BillingStatsFilter {
                 serverMetadataList
                     .stream()
                     .map(ServerMetadata::getGroupId)
+                    .distinct()
                     .collect(toList())
             );
     }

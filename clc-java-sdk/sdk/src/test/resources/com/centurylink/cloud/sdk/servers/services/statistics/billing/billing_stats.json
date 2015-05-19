@@ -1,0 +1,35 @@
+{
+    "date": "2015-05-19T08:01:29Z",
+    "groups": {
+        "2dda7958f3ad4d819914e8d3cb643120": {
+            "name": "Default Group",
+            "servers": {
+                "de1altdcttl294": {
+                    "templateCost": 0.0,
+                    "archiveCost": 0.0,
+                    "monthlyEstimate": 26.83,
+                    "monthToDate": 11.11,
+                    "currentHour": 0.0519
+                },
+                "de1altdmd-srv189": {
+                    "templateCost": 0.0,
+                    "archiveCost": 0.0,
+                    "monthlyEstimate": 20.6,
+                    "monthToDate": 4.88,
+                    "currentHour": 0.0519
+                },
+                "de1altdmd-srv190": {
+                    "templateCost": 0.0,
+                    "archiveCost": 0.0,
+                    "monthlyEstimate": 23.93,
+                    "monthToDate": 0.69,
+                    "currentHour": 0.0767
+                }
+            }
+        },
+        "a6eca7d3ff724896831b3ecd7aba3c00": {
+            "name": "st-gp",
+            "servers": {}
+        }
+    }
+}
