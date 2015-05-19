@@ -1,11 +1,13 @@
 package com.centurylink.cloud.sdk.core.auth.services.domain.credentials;
 
+import com.centurylink.cloud.sdk.core.ToStringMixin;
+
 import java.util.Objects;
 
 /**
  * @author ilya.drabenia
  */
-public class Credentials {
+public class Credentials implements ToStringMixin {
     private final String username;
     private final String password;
 
@@ -26,5 +28,10 @@ public class Credentials {
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String toString() {
+        return this.toReadableString();
     }
 }
