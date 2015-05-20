@@ -1,5 +1,7 @@
 
 import reactMixin from 'react-mixin';
+import ValidationMixin from 'react-validation-mixin';
+import Joi from 'joi';
 import GroupSelect from './group-select.jsx';
 import TemplateSelect from './template-select.jsx';
 
@@ -10,8 +12,20 @@ export class Form extends React.Component {
         super(args);
 
         this.state = this.initialState();
+        this.validatorTypes = this.getValidatorTypes();
 
         _.bindAll(this, 'onSubmit', 'render', 'onCancel');
+    }
+
+    getValidatorTypes () {
+        return {
+            name: Joi.string().required().max(6).label('Name')
+//        lastName: Joi.string().allow(null).label('Last Name'),
+//        email: Joi.string().email().label('Email Address'),
+//        username:  Joi.string().alphanum().min(3).max(30).required().label('Username'),
+//        password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).label('Password'),
+//        verifyPassword: Joi.any().valid(Joi.ref('password')).required().label('Password Confirmation')
+        };
     }
 
     initialState() {
@@ -21,7 +35,7 @@ export class Form extends React.Component {
     onSubmit(e) {
         e.preventDefault();
 
-        this.props.onSubmit(this.state);
+        this.validate((e) => !e && this.props.onSubmit(this.state));
     }
 
     onCancel() {
@@ -31,10 +45,11 @@ export class Form extends React.Component {
     render () {
         return (
             <form onSubmit={this.onSubmit}>
-                <div className="form-group">
+                <div className={this.classesFor('name')}>
                     <label htmlFor="nameField">Name</label>
                     <input type="text" className="form-control" id="nameField" placeholder="Server Name..."
-                        valueLink={this.linkState('name')} />
+                        valueLink={this.linkState('name')} onBlur={this.handleValidation('name')}  />
+                    {this.getValidationMessages('name').map(this.renderHelpText)}
                 </div>
 
                 <div className="form-group">
@@ -71,6 +86,20 @@ export class Form extends React.Component {
         );
     }
 
+    renderHelpText (message) {
+        return (
+            <span className="help-block">{message}</span>
+        );
+    }
+
+    classesFor (field) {
+        return React.addons.classSet({
+            'form-group': true,
+            'has-error': !this.isValid(field)
+        });
+    }
+
 }
 
 reactMixin(Form.prototype, React.addons.LinkedStateMixin);
+reactMixin(Form.prototype, ValidationMixin);
