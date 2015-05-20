@@ -20,13 +20,10 @@ export class Form extends React.Component {
     getValidatorTypes () {
         return {
             name: Joi.string().required().max(6).label('Name'),
+            group: Joi.string().min(1).required().label("Group"),
             cpu: Joi.number().required().min(1).max(1000).label('CPU'),
-            ram: Joi.number().required().min(1).max(1000).label("RAM")
-//        lastName: Joi.string().allow(null).label('Last Name'),
-//        email: Joi.string().email().label('Email Address'),
-//        username:  Joi.string().alphanum().min(3).max(30).required().label('Username'),
-//        password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).label('Password'),
-//        verifyPassword: Joi.any().valid(Joi.ref('password')).required().label('Password Confirmation')
+            ram: Joi.number().required().min(1).max(1000).label("RAM"),
+            template: Joi.string().min(1).required().label("Template")
         };
     }
 
@@ -62,7 +59,7 @@ export class Form extends React.Component {
                     </select>
                 </div>
 
-                <GroupSelect model={this.state} />
+                <GroupSelect form={this} />
 
                 <div className={this.classesFor('cpu')}>
                     <label htmlFor="cpuField">CPU Count</label>
@@ -78,7 +75,7 @@ export class Form extends React.Component {
                     {this.getValidationMessages('ram').map(this.renderHelpText)}
                 </div>
 
-                <TemplateSelect model={this.state} />
+                <TemplateSelect form={this} />
 
                 <div className="pull-right">
                     <button type="submit" className="btn btn-primary">Submit</button>
