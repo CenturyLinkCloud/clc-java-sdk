@@ -19,7 +19,9 @@ export class Form extends React.Component {
 
     getValidatorTypes () {
         return {
-            name: Joi.string().required().max(6).label('Name')
+            name: Joi.string().required().max(6).label('Name'),
+            cpu: Joi.number().required().min(1).max(1000).label('CPU'),
+            ram: Joi.number().required().min(1).max(1000).label("RAM")
 //        lastName: Joi.string().allow(null).label('Last Name'),
 //        email: Joi.string().email().label('Email Address'),
 //        username:  Joi.string().alphanum().min(3).max(30).required().label('Username'),
@@ -62,16 +64,18 @@ export class Form extends React.Component {
 
                 <GroupSelect model={this.state} />
 
-                <div className="form-group">
+                <div className={this.classesFor('cpu')}>
                     <label htmlFor="cpuField">CPU Count</label>
                     <input type="text" className="form-control" id="cpuField" placeholder="CPU..."
-                        valueLink={this.linkState('cpu')} />
+                           valueLink={this.linkState('cpu')} onBlur={this.handleValidation('cpu')} />
+                    {this.getValidationMessages('cpu').map(this.renderHelpText)}
                 </div>
 
-                <div className="form-group">
+                <div className={this.classesFor('ram')}>
                     <label htmlFor="ramField">RAM</label>
                     <input type="text" className="form-control" id="ramField" placeholder="RAM (GB)..."
-                        valueLink={this.linkState('ram')} />
+                        valueLink={this.linkState('ram')} onBlur={this.handleValidation('ram')} />
+                    {this.getValidationMessages('ram').map(this.renderHelpText)}
                 </div>
 
                 <TemplateSelect model={this.state} />
