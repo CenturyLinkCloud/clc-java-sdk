@@ -20,10 +20,10 @@ export class Form extends React.Component {
     getValidatorTypes () {
         return {
             name: Joi.string().required().max(6).label('Name'),
-            group: Joi.string().min(1).required().label("Group"),
+            group: Joi.string().required().label("Group"),
             cpu: Joi.number().required().min(1).max(1000).label('CPU'),
             ram: Joi.number().required().min(1).max(1000).label("RAM"),
-            template: Joi.string().min(1).required().label("Template")
+            template: Joi.string().required().label("Template")
         };
     }
 

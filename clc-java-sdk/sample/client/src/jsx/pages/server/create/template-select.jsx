@@ -13,12 +13,13 @@ export default class TemplateSelect extends React.Component {
         this.state.templates = new TemplateList([], { dataCenter: this.state.dataCenter });
         this.state.templates.fetch({ success: () => this.setState(this.state) });
 
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'validate');
     }
 
     setState (args) {
-        this.props.form.state.template = args && args.template;
+        this.props.form.state.template = args.template;
         super.setState(args);
+        this.validate();
     }
 
     render () {
@@ -26,8 +27,8 @@ export default class TemplateSelect extends React.Component {
             <div className={this.form.classesFor('template')}>
                 <label htmlFor="templateField">Template</label>
                 <select className="form-control" id="templateField" valueLink={this.linkState('template')}
-                        onBlur={this.form.handleValidation('template')}>
-                    <option>&lt;Select&gt;</option>
+                        onBlur={this.validate()}>
+                    <option value="">&lt;Select&gt;</option>
                     {this.state.templates.map((i) =>
                         <option value={i.get('name')}>{i.get('description')}</option>
                     )}
@@ -35,6 +36,10 @@ export default class TemplateSelect extends React.Component {
                 {this.form.getValidationMessages('template').map(this.form.renderHelpText)}
             </div>
         );
+    }
+
+    validate () {
+        return this.form.handleValidation('template');
     }
 
 }

@@ -13,12 +13,13 @@ export default class GroupSelect extends React.Component {
         this.state.groups = new GroupList([], { dataCenter: this.state.dataCenter });
         this.state.groups.fetch({ success: () => this.setState(this.state) });
 
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'validate');
     }
 
     setState (args) {
-        this.props.form.state.group = args && args.group;
+        this.props.form.state.group = args.group;
         super.setState(args);
+        setTimeout(() => this.validate());
     }
 
     render () {
@@ -26,8 +27,8 @@ export default class GroupSelect extends React.Component {
             <div className={this.form.classesFor('group')}>
                 <label htmlFor="groupField">Group</label>
                 <select className="form-control" id="groupField" valueLink={this.linkState('group')}
-                        onBlur={this.form.handleValidation('group')}>
-                    <option>&lt;Select&gt;</option>
+                        onBlur={this.validate()}>
+                    <option value="">&lt;Select&gt;</option>
                     {this.state.groups.map((i) =>
                         <option value={i.get('id')}>{i.get('name')}</option>
                     )}
@@ -35,6 +36,10 @@ export default class GroupSelect extends React.Component {
                 {this.form.getValidationMessages('group').map(this.form.renderHelpText)}
             </div>
         );
+    }
+
+    validate () {
+        return this.form.handleValidation('group');
     }
 
 }
