@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.groups.stats;
 
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.SamplingEntry;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
@@ -23,7 +24,7 @@ import java.util.List;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
-//@Test(groups = {INTEGRATION, LONG_RUNNING})
+@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
 
     @Inject
@@ -44,11 +45,12 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
         group = Group.refById(serverMetadata.getGroupId());
     }
 
-//    @Test
+    @Test
     public void testServerStats() {
         Duration sampleInterval = Duration.ofHours(1);
         List<ServerMonitoringStatistics> result = groupService.getMonitoringStats(
-            new GroupFilter().groups(group),
+            //new GroupFilter().groups(group),
+            new GroupFilter().dataCenters(DataCenter.DE_FRANKFURT),
             new ServerMonitoringFilter()
                 .from(OffsetDateTime.now().minusDays(5))
         );

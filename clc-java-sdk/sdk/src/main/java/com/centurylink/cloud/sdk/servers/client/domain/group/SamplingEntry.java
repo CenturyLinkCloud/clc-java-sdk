@@ -16,15 +16,15 @@ public class SamplingEntry {
 
     @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     private OffsetDateTime timestamp;
-    private Integer cpu;
-    private Double cpuPercent;
-    private Integer memoryMB;
-    private Double memoryPercent;
+    private Integer cpu = 0;
+    private Double cpuPercent = 0d;
+    private Integer memoryMB = 0;
+    private Double memoryPercent = 0d;
     @JsonProperty(value = "networkReceivedKBps")
-    private Double networkReceivedKBps;
+    private Double networkReceivedKBps = 0d;
     @JsonProperty(value = "networkTransmittedKBps")
-    private Double networkTransmittedKBps;
-    private Integer diskUsageTotalCapacityMB;
+    private Double networkTransmittedKBps = 0d;
+    private Integer diskUsageTotalCapacityMB = 0;
     private List<DiskUsageMetadata> diskUsage;
     private List<GuestUsageMetadata> guestDiskUsage;
 

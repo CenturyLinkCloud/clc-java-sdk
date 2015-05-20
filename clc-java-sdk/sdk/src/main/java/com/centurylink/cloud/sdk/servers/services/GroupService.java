@@ -16,7 +16,11 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.group.*;
+import com.centurylink.cloud.sdk.servers.services.domain.group.BillingStats;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
@@ -29,10 +33,16 @@ import com.google.inject.Provider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
+import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.function.Predicates.in;
+import static com.centurylink.cloud.sdk.core.function.Predicates.isAlwaysTruePredicate;
+import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
@@ -327,7 +337,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     private Group[] getRefsFromFilter(GroupFilter groupFilter) {
         checkNotNull(groupFilter, "Group filter must be not null");
 
-        List<Group> groupList = find(groupFilter).stream()
+        List<Group> groupList = findLazy(groupFilter)
             .map(metadata -> Group.refById(metadata.getId()))
             .collect(toList());
 
@@ -702,10 +712,28 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @return the statistics list
      */
     public List<ServerMonitoringStatistics> getMonitoringStats(List<Group> groups, ServerMonitoringFilter config) {
-        return groups.stream()
+        List<ServerMonitoringStatistics> allStats = groups.stream()
             .map(group -> getMonitoringStats(group, config))
             .flatMap(List::stream)
             .collect(toList());
+
+        List<String> serverNames = allStats.stream()
+            .map(ServerMonitoringStatistics::getName)
+            .distinct()
+            .collect(toList());
+
+        //result may contain duplicates
+        if (serverNames.size() != allStats.size()) {
+            Map<String, ServerMonitoringStatistics> map = new HashMap<>();
+            allStats.forEach(stat -> {
+                if (!map.containsKey(stat.getName())) {
+                    map.put(stat.getName(), stat);
+                }
+            });
+            return new ArrayList<>(map.values());
+        }
+
+        return allStats;
     }
 
     /**
