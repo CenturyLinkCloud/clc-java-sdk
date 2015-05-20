@@ -41,7 +41,7 @@ public class GroupController {
     @RequestMapping(method = GET)
     public List<GroupMetadata> findAll(@PathVariable("dataCenter") String dataCenter) {
         return
-            sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
+            sdkRegistry.findOrCreate("idrabenia.altd", "RenVortEr9")
                 .groupService()
                 .find(new GroupFilter().dataCenters(DataCenter.refById(dataCenter)));
     }

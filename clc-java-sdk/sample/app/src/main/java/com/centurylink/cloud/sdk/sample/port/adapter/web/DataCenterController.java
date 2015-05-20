@@ -39,7 +39,7 @@ public class DataCenterController {
 
     @RequestMapping(method = GET)
     List<DataCenterBean> findAll() {
-        List<DataCenterMetadata> dataCenters = sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
+        List<DataCenterMetadata> dataCenters = sdkRegistry.findOrCreate("idrabenia.altd", "RenVortEr9")
                 .dataCenterService().findAll();
 
         List<DataCenterBean> dataCenterBeans = new ArrayList<>(dataCenters.size());

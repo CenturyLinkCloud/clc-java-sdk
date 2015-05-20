@@ -14,7 +14,9 @@
     "mold-source-map": "0.3.0"
   },
   "dependencies": {
+    "joi": "^6.4.1",
+    "react-bootstrap-datetimepicker": "^0.0.14",
     "react-mixin": "1.0.3",
-    "react-bootstrap-datetimepicker":"^0.0.14"
+    "react-validation-mixin": "^4.0.4"
   }
 }

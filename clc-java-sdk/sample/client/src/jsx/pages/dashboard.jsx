@@ -20,7 +20,6 @@ export class DashboardPage extends React.Component {
     render () {
         return (
             <div className="starter-template">
-                <a type="button" href="#/server/new" className="btn btn-info">Create Server</a>
                 <table className="table">
                     <thead>
                         <tr>
@@ -35,6 +34,12 @@ export class DashboardPage extends React.Component {
                                     <a href={`#/${item.get('id')}/server/`}>{item.get('id')}</a>
                                 </td>
                                 <td>{item.get('name')}</td>
+                                <td>
+                                    <a type="button" href={`#/${item.get('id')}/server/new`}
+                                       className="btn btn-info">
+                                       Create Server
+                                    </a>
+                                </td>
                             </tr>
                         )}
                     </tbody>

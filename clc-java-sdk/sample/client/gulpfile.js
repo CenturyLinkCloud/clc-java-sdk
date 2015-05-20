@@ -12,7 +12,7 @@ var sass = require('gulp-sass');
 var mold = require('mold-source-map');
 
 function toDist() {
-    return gulp.dest('dist')
+    return gulp.dest('dist');
 }
 
 function toAppStatic() {

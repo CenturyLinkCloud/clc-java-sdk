@@ -43,16 +43,16 @@ public class ServerController {
 
     @RequestMapping(method = GET)
     public List<ServerMetadata> getAll(@PathVariable String dataCenter) {
-        return sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
+        return sdkRegistry.findOrCreate("idrabenia.altd", "RenVortEr9")
             .serverService().find(new ServerFilter().dataCenters(DataCenter.refById(dataCenter)));
     }
 
     @RequestMapping(method = POST)
     public ServerBean createServer(@RequestBody ServerBean serverBean) {
-        sdkRegistry.findOrCreate("idrabenia", "RenVortEr9")
-                .serverService()
-                .create(serverBean.getServer())
-                .getResult();
+//        sdkRegistry.findOrCreate("idrabenia.altd", "RenVortEr9")
+//                .serverService()
+//                .create(serverBean.getServer())
+//                .getResult();
 
         return serverBean;
     }
