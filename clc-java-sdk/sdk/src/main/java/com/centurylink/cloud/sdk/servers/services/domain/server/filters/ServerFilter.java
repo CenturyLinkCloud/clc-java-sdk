@@ -50,6 +50,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
     private List<String> serverIds = new ArrayList<>();
     private GroupFilter groupFilter = new GroupFilter(Predicates.alwaysTrue());
     private Predicate<ServerMetadata> predicate = Predicates.alwaysTrue();
+    private boolean searchInSubGroups = false;
 
     public ServerFilter() {
     }
@@ -344,5 +345,23 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
 
     public List<String> getServerIds() {
         return serverIds;
+    }
+
+    /**
+     * Returns search in subgroups
+     * @return search in subgroups param
+     */
+    public boolean isSearchInSubGroups() {
+        return searchInSubGroups;
+    }
+
+    /**
+     * Specify search in subgroups
+     * @param searchInSubGroups new search in subgroups
+     * @return current ServerFilter instance
+     */
+    public ServerFilter searchInSubGroups(boolean searchInSubGroups) {
+        this.searchInSubGroups = searchInSubGroups;
+        return this;
     }
 }
