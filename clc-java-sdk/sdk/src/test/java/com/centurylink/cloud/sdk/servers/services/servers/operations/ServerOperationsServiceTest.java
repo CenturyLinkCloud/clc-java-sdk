@@ -1,13 +1,16 @@
 package com.centurylink.cloud.sdk.servers.services.servers.operations;
 
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.Details;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
@@ -200,5 +203,25 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         testRevertToSnapshot();
 
         assertThatServerHasStatus(server, "active");
+    }
+
+    @DataProvider(name = "sshSamples")
+    public Object[][] execSshSamples() {
+        return new Object[][] {
+                {"ping -c google.com", "echo hello"},
+                {"mkdir test", "cd ~; pwd"}
+        };
+    }
+
+    @Test(groups = {INTEGRATION, LONG_RUNNING}, dataProvider = "sshSamples")
+    public void testExecSsh(String shellCommand1, String shellCommand2) throws Exception {
+        OperationFuture<ShellResponse> response = serverService.execSsh(server)
+                .run(shellCommand1)
+                .run(shellCommand2)
+                .execute();
+        response.waitUntilComplete();
+        assertNotNull(response);
+        assertNotNull(response.getResult().getTrace());
+        assertTrue(response.getResult().getErrorStatus() != 1);
     }
 }

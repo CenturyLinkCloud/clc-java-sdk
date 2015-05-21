@@ -16,6 +16,9 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.remote.SshClient;
+import com.centurylink.cloud.sdk.servers.services.domain.remote.SshjClient;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ModifyServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConverter;
@@ -27,6 +30,7 @@ import com.google.inject.Inject;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
@@ -939,5 +943,31 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             response.getId(),
             queueClient
         );
+    }
+
+    public SshClient execSsh(Server server) {
+        checkNotNull(server);
+        ServerMetadata metadata = findByRef(server);
+        List<PublicIpMetadata> ipMetadataList = findPublicIp(server);
+        if (ipMetadataList.isEmpty()) {
+            OperationFuture<Server> addPublicIp = addPublicIp(server, new CreatePublicIpConfig().openPorts(PortConfig.SSH));
+            addPublicIp.waitUntilComplete();
+        }
+        List<IpAddress> ipAddresses = metadata.getDetails().getIpAddresses();
+        Optional<String> publicIp = ipAddresses.stream()
+                .map(IpAddress::getPublicIp)
+                .filter(notNull())
+                .findFirst();
+
+        ServerCredentials serverCredentials = client.getServerCredentials(metadata.getId());
+        return new SshjClient.Builder()
+                .username(serverCredentials.getUserName())
+                .password(serverCredentials.getPassword())
+                .host(publicIp.get())
+                .build();
+    }
+
+    public SshClient execSsh(Server... onServers) {
+        throw new UnsupportedOperationException();
     }
 }
