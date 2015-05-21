@@ -31,7 +31,11 @@ import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.group.*;
+import com.centurylink.cloud.sdk.servers.services.domain.group.BillingStats;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupConverter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
@@ -44,10 +48,16 @@ import com.google.inject.Provider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
+import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.function.Predicates.in;
+import static com.centurylink.cloud.sdk.core.function.Predicates.isAlwaysTruePredicate;
+import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
@@ -342,7 +352,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     private Group[] getRefsFromFilter(GroupFilter groupFilter) {
         checkNotNull(groupFilter, "Group filter must be not null");
 
-        List<Group> groupList = find(groupFilter).stream()
+        List<Group> groupList = findLazy(groupFilter)
             .map(metadata -> Group.refById(metadata.getId()))
             .collect(toList());
 
@@ -703,7 +713,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param config configuration for statistics entries
      * @return the statistics list
      */
-    public List<ServerMonitoringStatistics> getMonitoringStats(Group group, ServerMonitoringConfig config) {
+    public List<ServerMonitoringStatistics> getMonitoringStats(Group group, ServerMonitoringFilter config) {
         checkNotNull(config, "Config must be not a null");
         return client.getMonitoringStatistics(
             idByRef(group),
@@ -716,11 +726,22 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param config configuration for statistics entries
      * @return the statistics list
      */
-    public List<ServerMonitoringStatistics> getMonitoringStats(List<Group> groups, ServerMonitoringConfig config) {
-        return groups.stream()
+    public List<ServerMonitoringStatistics> getMonitoringStats(List<Group> groups, ServerMonitoringFilter config) {
+        List<ServerMonitoringStatistics> rawStats = groups.stream()
             .map(group -> getMonitoringStats(group, config))
             .flatMap(List::stream)
             .collect(toList());
+
+        Map<String, ServerMonitoringStatistics> distinctMap = new HashMap<>();
+
+        rawStats.stream()
+            .forEach(stat -> {
+                if (!distinctMap.containsKey(stat.getName())) {
+                    distinctMap.put(stat.getName(), stat);
+                }
+            });
+
+        return new ArrayList<>(distinctMap.values());
     }
 
     /**
@@ -729,8 +750,32 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @param config      configuration for statistics entries
      * @return the statistics list
      */
-    public List<ServerMonitoringStatistics> getMonitoringStats(GroupFilter groupFilter, ServerMonitoringConfig config) {
+    public List<ServerMonitoringStatistics> getMonitoringStats(GroupFilter groupFilter, ServerMonitoringFilter config) {
         return getMonitoringStats(Arrays.asList(getRefsFromFilter(groupFilter)), config);
+    }
+
+    /**
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param groups the list of Group references
+     * @param config configuration for statistics entries
+     * @return the statistics map <Group, Statistics>
+     */
+    public Map<Group, List<ServerMonitoringStatistics>> getMonitoringStatsAsMap(List<Group> groups, ServerMonitoringFilter config) {
+        Map<Group, List<ServerMonitoringStatistics>> result = new HashMap<>(groups.size());
+        groups.stream()
+            .forEach(group -> result.put(group, getMonitoringStats(group, config)));
+
+        return result;
+    }
+
+    /**
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param groupFilter group filter
+     * @param config      configuration for statistics entries
+     * @return the statistics map <Group, Statistics>
+     */
+    public Map<Group, List<ServerMonitoringStatistics>> getMonitoringStatsAsMap(GroupFilter groupFilter, ServerMonitoringFilter config) {
+        return getMonitoringStatsAsMap(Arrays.asList(getRefsFromFilter(groupFilter)), config);
     }
 
     private ServerFilter getServerSearchCriteria(GroupFilter groupFilter) {

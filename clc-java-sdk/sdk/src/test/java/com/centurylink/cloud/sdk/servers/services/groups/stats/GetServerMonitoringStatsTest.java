@@ -15,18 +15,17 @@
 
 package com.centurylink.cloud.sdk.servers.services.groups.stats;
 
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.SamplingEntry;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
-import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -37,66 +36,87 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static java.util.stream.Collectors.toList;
 
-//@Test(groups = {INTEGRATION, LONG_RUNNING})
+@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
-
-    @Inject
-    ServerService serverService;
 
     @Inject
     GroupService groupService;
 
     GroupByIdRef group;
 
-    Server server;
-    ServerMetadata serverMetadata;
-
     @BeforeMethod
     public void setUp() {
-        server = SingleServerFixture.server();
-        serverMetadata = serverService.findByRef(server);
-        group = Group.refById(serverMetadata.getGroupId());
+        List<GroupMetadata> metadata = groupService.find(new GroupFilter()
+            .dataCenters(DataCenter.DE_FRANKFURT)
+            .nameContains(Group.DEFAULT_GROUP));
+
+        assertTrue(metadata.size() > 0);
+        group = metadata.get(0).asRefById();
     }
 
-//    @Test
+    @Test
     public void testServerStats() {
         Duration sampleInterval = Duration.ofHours(1);
+        GroupFilter groupFilter = new GroupFilter().groups(group);
         List<ServerMonitoringStatistics> result = groupService.getMonitoringStats(
-            new GroupFilter().groups(group),
-            new ServerMonitoringConfig()
-                .from(OffsetDateTime.now().minusDays(5))
+            groupFilter,
+            new ServerMonitoringFilter()
+                .from(OffsetDateTime.now().minusDays(2))
         );
+
+        List<GroupMetadata> m = groupService.find(groupFilter);
 
         assertNotNull(result);
 
+        List<String> allServers = m.stream()
+            .map(GroupMetadata::getServers)
+            .flatMap(List::stream)
+            .map(ServerMetadata::getId)
+            .collect(toList());
+
         result.stream()
-            .forEach(metadata -> {
-                ServerMetadata srvMetadata = serverService.findByRef(Server.refById(metadata.getName()));
+            .map(ServerMonitoringStatistics::getName)
+            .forEach(serverId ->
+                assertTrue(allServers.contains(serverId), "check that server exists")
+            );
 
-                for (int i = 0; i < metadata.getStats().size() - 1; i++) {
-                    SamplingEntry curStats = metadata.getStats().get(i);
-                    SamplingEntry nextStats = metadata.getStats().get(i + 1);
-                    assertEquals(Duration.between(curStats.getTimestamp(), nextStats.getTimestamp()), sampleInterval);
+        result.stream()
+                .forEach(metadata -> {
 
-                    assertThatStatsMatch(srvMetadata, curStats);
-                }
-            });
+                    for (int i = 0; i < metadata.getStats().size() - 1; i++) {
+                        SamplingEntry curStats = metadata.getStats().get(i);
+                        SamplingEntry nextStats = metadata.getStats().get(i + 1);
+                        assertEquals(Duration.between(curStats.getTimestamp(), nextStats.getTimestamp()), sampleInterval);
+
+                        checkStats(curStats);
+                    }
+                });
     }
 
-    private void assertThatStatsMatch(ServerMetadata srvMetadata, SamplingEntry stats) {
-        //if server prepared to delete - it hasn't details
-        if (srvMetadata.getDetails() != null) {
-            assertEquals(srvMetadata.getDetails().getCpu(), stats.getCpu());
-            assertEquals(srvMetadata.getDetails().getMemoryMB(), stats.getMemoryMB());
-            assertEquals(srvMetadata.getDetails().getDiskCount().intValue(), stats.getDiskUsage().size());
-            // if server has swap partition, user can't use it ->
-            //assertEquals(srvMetadata.getDetails().getPartitions().size() - 1, curStats.getGuestDiskUsage().size());
+    private void checkStats(SamplingEntry stats) {
+        boolean isEmpty = stats.getCpu().equals(0);
 
-            assertTrue(
-                srvMetadata.getDetails().getStorageGB() * 1024 > stats.getDiskUsageTotalCapacityMB().intValue()
-            );
+        checkStat(stats.getCpuPercent(), isEmpty);
+        checkStat(stats.getMemoryPercent(), isEmpty);
+        checkStat(stats.getNetworkReceivedKbps(), isEmpty);
+        checkStat(stats.getNetworkTransmittedKbps(), isEmpty);
+        checkStat(stats.getDiskUsageTotalCapacityMB(), isEmpty);
+        checkStat(stats.getMemoryMB(), isEmpty);
+        checkStat(stats.getDiskUsage().size(), isEmpty);
+        checkStat(stats.getGuestDiskUsage().size(), isEmpty);
+    }
+
+    private void checkStat(Double value, boolean isEmpty) {
+        Double zero = 0d;
+        if (isEmpty) {
+            assertTrue(value == zero);
         }
     }
 
+    private void checkStat(Integer value, boolean isEmpty) {
+        Integer zero = 0;
+        assertTrue(isEmpty ? value == zero : value >=zero);
+    }
 }

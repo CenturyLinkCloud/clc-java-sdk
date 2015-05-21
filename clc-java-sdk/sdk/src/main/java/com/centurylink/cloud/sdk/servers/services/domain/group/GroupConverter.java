@@ -119,7 +119,7 @@ public class GroupConverter {
                 .currentHour(clientServerBilling.getCurrentHour());
     }
 
-    public MonitoringStatisticRequest createMonitoringStatisticRequest(ServerMonitoringConfig config) {
+    public MonitoringStatisticRequest createMonitoringStatisticRequest(ServerMonitoringFilter config) {
 
         MonitoringStatisticRequest request =
             new MonitoringStatisticRequest()
