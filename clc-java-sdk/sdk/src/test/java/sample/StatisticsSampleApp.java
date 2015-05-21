@@ -22,18 +22,22 @@ import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.Propertie
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.StatisticsService;
+import com.centurylink.cloud.sdk.servers.services.domain.group.MonitoringType;
+import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.billing.BillingStatsEntry;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.billing.Statistics;
+import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.MonitoringStatsEntry;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -174,6 +178,78 @@ public class StatisticsSampleApp extends Assert {
                     .dataCenters(DE_FRANKFURT)
             )
             .groupByServer();
+
+        assertNotNull(stats);
+    }
+
+    /**
+     * Step 4. App query total monitoring statistics by all datacenters
+     */
+    @Test(groups = {SAMPLES})
+    public void getMonitoringStatisticsByAllDatacenters() {
+        List<MonitoringStatsEntry> summarize = statisticsService
+            .monitoringStats()
+            .forDataCenters(
+                new DataCenterFilter()
+                    .dataCenters(DE_FRANKFURT, US_EAST_STERLING)
+            )
+            .forTime(new ServerMonitoringFilter().last(Duration.ofDays(2)))
+            .summarize();
+
+        assertNotNull(summarize);
+    }
+
+    /**
+     * Step 5. App query monitoring statistics grouped by datacenters
+     */
+    @Test(groups = {SAMPLES})
+    public void getMonitoringStatisticsGroupedByDatacenters() {
+        List<MonitoringStatsEntry> stats = statisticsService
+            .monitoringStats()
+            .forGroups(
+                new GroupFilter().nameContains("uat-s")
+            )
+            .forTime(new ServerMonitoringFilter().last(Duration.ofDays(2)))
+            .groupByDataCenter();
+
+        assertNotNull(stats);
+    }
+
+    /**
+     * Step 6. App query monitoring statistics grouped by servers within DE1 Datacenter
+     */
+    @Test(groups = {SAMPLES})
+    public void getDE1MonitoringStatsGroupedByServers() {
+        List<MonitoringStatsEntry> stats = statisticsService
+            .monitoringStats()
+            .forDataCenters(
+                new DataCenterFilter()
+                    .dataCenters(DE_FRANKFURT)
+            )
+            .forTime(new ServerMonitoringFilter().last(Duration.ofDays(2)))
+            .groupByServer();
+
+        groupService.findByDataCenter(DE_FRANKFURT);
+
+        assertNotNull(stats);
+    }
+
+    /**
+     * Step 7. App query monitoring statistics for last hour grouped by DataCenter
+     */
+    @Test(groups = {SAMPLES})
+    public void getDE1MonitoringStatsForLastHourGroupedByServers() {
+        List<MonitoringStatsEntry> stats = statisticsService
+            .monitoringStats()
+            .forDataCenters(
+                new DataCenterFilter()
+                    .dataCenters(DE_FRANKFURT)
+            )
+            .forTime(new ServerMonitoringFilter()
+                .last(Duration.ofHours(1))
+                .type(MonitoringType.REALTIME)
+                .interval(Duration.ofMinutes(10)))
+            .groupByDataCenter();
 
         assertNotNull(stats);
     }

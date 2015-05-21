@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.grouping;
 
+import com.centurylink.cloud.sdk.core.function.Predicates;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.account.AccountMetadata;
@@ -24,8 +25,11 @@ public class GroupMonitoringStatsByServer extends GroupMonitoringStatsBy {
     private ServerService serverService;
 
     private Predicate<ServerMonitoringStatistics> filterServers() {
-        List<String> serverIdsRestrictions = ((MonitoringStatsServerFilter)statsFilter).getServerIdRestrictionsList();
-        return (stat -> serverIdsRestrictions.isEmpty() || serverIdsRestrictions.contains(stat.getName()));
+        if (statsFilter instanceof MonitoringStatsServerFilter) {
+            List<String> serverIdsRestrictions = ((MonitoringStatsServerFilter)statsFilter).getServerIdRestrictionsList();
+            return (stat -> serverIdsRestrictions.isEmpty() || serverIdsRestrictions.contains(stat.getName()));
+        }
+        return Predicates.alwaysTrue();
     }
 
     public GroupMonitoringStatsByServer(ServerService serverService, MonitoringStatsFilter statsFilter) {
