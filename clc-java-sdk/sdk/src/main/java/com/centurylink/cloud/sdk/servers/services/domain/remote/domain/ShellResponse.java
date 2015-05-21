@@ -12,6 +12,14 @@ public class ShellResponse {
         this.trace = message;
     }
 
+    public String getTrace() {
+        return trace;
+    }
+
+    public int getErrorStatus() {
+        return errorStatus;
+    }
+
     @Override
     public String toString() {
         return "ShellResponse{" +

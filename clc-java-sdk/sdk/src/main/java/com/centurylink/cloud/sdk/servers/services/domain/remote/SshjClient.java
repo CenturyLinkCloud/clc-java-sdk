@@ -1,9 +1,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.remote;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.JobFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.servers.client.domain.server.ServerCredentials;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
@@ -13,10 +11,13 @@ import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.ConnectionException;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.TransportException;
+import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 import net.schmizz.sshj.userauth.UserAuthException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,9 +27,9 @@ public class SshjClient implements SshClient {
     private final SSHClient ssh;
     private final ServerCredentials credentials;
     private final String host;
-    private JobFuture job;
+    private List<String> commandList = new ArrayList<>();
 
-    private SshjClient(String host, ServerCredentials credentials) throws UserAuthException, TransportException {
+    private SshjClient(String host, ServerCredentials credentials) {
         ssh = new SSHClient();
         this.host = host;
         this.credentials = credentials;
@@ -65,12 +66,7 @@ public class SshjClient implements SshClient {
             if (privateKey.isPresent()) {
                 serverCredentials.setPassword(privateKey.get());
             }
-            try {
-                return new SshjClient(host, serverCredentials);
-            } catch (UserAuthException | TransportException e) {
-                // TODO: add logger
-                throw new ClcException(e);
-            }
+            return new SshjClient(host, serverCredentials);
         }
 
         public Builder host(String publicIp) {
@@ -82,6 +78,7 @@ public class SshjClient implements SshClient {
 
     @Override
     public SshjClient run(String command) {
+        commandList.add(command);
         return this;
     }
 
@@ -96,23 +93,21 @@ public class SshjClient implements SshClient {
     }
 
     @Override
-    public OperationFuture<ShellResponse> execute() {
+    public OperationFuture<ShellResponse> execute() throws SshException {
         ShellResponse response = null;
         Session session = null;
         try {
+            ssh.addHostKeyVerifier(new PromiscuousVerifier());
             ssh.connect(host);
             ssh.authPassword(credentials.getUserName(), credentials.getPassword());
-            session = ssh.startSession();
-            // TODO: think how to pass commands
-            Session.Command cmd = session.exec("echo test");
-            String output = IOUtils.readFully(cmd.getInputStream()).toString();
-            response = new ShellResponse(cmd.getExitStatus(), output);
-        } catch (ConnectionException e) {
-            e.printStackTrace();
-        } catch (TransportException e) {
-            e.printStackTrace();
+            for (String command : commandList) {
+                session = ssh.startSession();
+                Session.Command cmd = session.exec(command);
+                String output = IOUtils.readFully(cmd.getInputStream()).toString();
+                response = new ShellResponse(cmd.getExitStatus(), output);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SshException(e);
         } finally {
             try {
                 if (session != null) {
@@ -120,7 +115,7 @@ public class SshjClient implements SshClient {
                 }
                 ssh.disconnect();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new SshException(e);
             }
         }
         return new OperationFuture<>(response, new NoWaitingJobFuture());
