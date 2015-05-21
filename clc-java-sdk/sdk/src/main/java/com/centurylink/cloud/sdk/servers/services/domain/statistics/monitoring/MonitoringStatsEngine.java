@@ -7,6 +7,7 @@ import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.filter.MonitoringStatsDataCenterFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.filter.MonitoringStatsFilter;
@@ -17,6 +18,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.g
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.grouping.GroupMonitoringStatsByServer;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author aliaksandr.krasitski
@@ -27,7 +29,7 @@ public class MonitoringStatsEngine {
     private final GroupService groupService;
     private final DataCenterService dataCenterService;
 
-    private MonitoringStatsFilter statsFilter = new MonitoringStatsGroupFilter(new GroupFilter());
+    private MonitoringStatsFilter statsFilter;
 
     private ServerMonitoringFilter timeFilter;
 
@@ -95,8 +97,8 @@ public class MonitoringStatsEngine {
             .group(getServerMonitoringStats());
     }
 
-    private List<ServerMonitoringStatistics> getServerMonitoringStats() {
-        return groupService.getMonitoringStats(statsFilter.getFilter(), timeFilter);
+    private Map<Group, List<ServerMonitoringStatistics>> getServerMonitoringStats() {
+        return groupService.getMonitoringStatsAsMap(statsFilter.getFilter(), timeFilter);
     }
 
 }

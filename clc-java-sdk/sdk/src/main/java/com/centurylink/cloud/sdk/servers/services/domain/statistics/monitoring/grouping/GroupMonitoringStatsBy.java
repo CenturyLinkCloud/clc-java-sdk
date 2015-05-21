@@ -4,6 +4,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.DiskUsageMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GuestUsageMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.SamplingEntry;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
+import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.DiskUsage;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.GuestUsage;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.MonitoringEntry;
@@ -14,9 +15,11 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.summingDouble;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toList;
@@ -25,9 +28,10 @@ public abstract class GroupMonitoringStatsBy {
 
     protected MonitoringStatsFilter statsFilter;
 
-    public abstract List<MonitoringStatsEntry> group(List<ServerMonitoringStatistics> monitoringStatsList);
+    public abstract List<MonitoringStatsEntry> group(Map<Group, List<ServerMonitoringStatistics>> monitoringStats);
 
     public GroupMonitoringStatsBy(MonitoringStatsFilter statsFilter) {
+        checkNotNull(statsFilter, "Filter must be not a null");
         this.statsFilter = statsFilter;
     }
 
@@ -65,13 +69,32 @@ public abstract class GroupMonitoringStatsBy {
             .collect(toList());
     }
 
-    protected void collectStats(HashMap<String, List<MonitoringEntry>> plainGrouping,
+    protected void collectStats(Map<String, List<MonitoringEntry>> plainGrouping,
                                 String key,
-                                List<SamplingEntry> stats) {
+                                List<SamplingEntry> stats,
+                                boolean distinct) {
         if (!plainGrouping.containsKey(key)) {
-            plainGrouping.put(key, new ArrayList<>());
+            plainGrouping.put(key, convertEntry(stats));
+            return;
         }
-        plainGrouping.get(key).addAll(convertEntry(stats));
+        if (!distinct) {
+            plainGrouping.get(key).addAll(convertEntry(stats));
+        }
+    }
+
+    protected List<ServerMonitoringStatistics> selectServersStatsDistinct(
+        Map<Group, List<ServerMonitoringStatistics>> stats) {
+
+        Map<String, ServerMonitoringStatistics> distinctMap = new HashMap<>();
+        stats.values().stream()
+            .flatMap(List::stream)
+            .forEach(stat -> {
+                if (!distinctMap.containsKey(stat.getName())) {
+                    distinctMap.put(stat.getName(), stat);
+                }
+            });
+
+        return new ArrayList<>(distinctMap.values());
     }
 
     @SuppressWarnings("unchecked")

@@ -712,28 +712,21 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @return the statistics list
      */
     public List<ServerMonitoringStatistics> getMonitoringStats(List<Group> groups, ServerMonitoringFilter config) {
-        List<ServerMonitoringStatistics> allStats = groups.stream()
+        List<ServerMonitoringStatistics> rawStats = groups.stream()
             .map(group -> getMonitoringStats(group, config))
             .flatMap(List::stream)
             .collect(toList());
 
-        List<String> serverNames = allStats.stream()
-            .map(ServerMonitoringStatistics::getName)
-            .distinct()
-            .collect(toList());
+        Map<String, ServerMonitoringStatistics> distinctMap = new HashMap<>();
 
-        //result may contain duplicates
-        if (serverNames.size() != allStats.size()) {
-            Map<String, ServerMonitoringStatistics> map = new HashMap<>();
-            allStats.forEach(stat -> {
-                if (!map.containsKey(stat.getName())) {
-                    map.put(stat.getName(), stat);
+        rawStats.stream()
+            .forEach(stat -> {
+                if (!distinctMap.containsKey(stat.getName())) {
+                    distinctMap.put(stat.getName(), stat);
                 }
             });
-            return new ArrayList<>(map.values());
-        }
 
-        return allStats;
+        return new ArrayList<>(distinctMap.values());
     }
 
     /**
@@ -744,6 +737,30 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public List<ServerMonitoringStatistics> getMonitoringStats(GroupFilter groupFilter, ServerMonitoringFilter config) {
         return getMonitoringStats(Arrays.asList(getRefsFromFilter(groupFilter)), config);
+    }
+
+    /**
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param groups the list of Group references
+     * @param config configuration for statistics entries
+     * @return the statistics map <Group, Statistics>
+     */
+    public Map<Group, List<ServerMonitoringStatistics>> getMonitoringStatsAsMap(List<Group> groups, ServerMonitoringFilter config) {
+        Map<Group, List<ServerMonitoringStatistics>> result = new HashMap<>(groups.size());
+        groups.stream()
+            .forEach(group -> result.put(group, getMonitoringStats(group, config)));
+
+        return result;
+    }
+
+    /**
+     * Retrieve the resource usage of servers within a group hierarchy statistics.
+     * @param groupFilter group filter
+     * @param config      configuration for statistics entries
+     * @return the statistics map <Group, Statistics>
+     */
+    public Map<Group, List<ServerMonitoringStatistics>> getMonitoringStatsAsMap(GroupFilter groupFilter, ServerMonitoringFilter config) {
+        return getMonitoringStatsAsMap(Arrays.asList(getRefsFromFilter(groupFilter)), config);
     }
 
     private ServerFilter getServerSearchCriteria(GroupFilter groupFilter) {

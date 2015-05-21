@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.grouping;
 
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
@@ -13,8 +12,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.f
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import java.util.Map;
 
 public class GroupMonitoringStatsByGroup extends GroupMonitoringStatsBy {
 
@@ -33,28 +31,26 @@ public class GroupMonitoringStatsByGroup extends GroupMonitoringStatsBy {
     }
 
     @Override
-    public List<MonitoringStatsEntry> group(List<ServerMonitoringStatistics> stats) {
-        HashMap<String, List<MonitoringEntry>> plainGroupMap = new HashMap<>();
-        List<String> groupIds = groupService.find(statsFilter.getFilter()).stream()
-            .map(GroupMetadata::getId)
-            .collect(toList());
+    public List<MonitoringStatsEntry> group(Map<Group, List<ServerMonitoringStatistics>> stats) {
+        Map<String, List<MonitoringEntry>> plainGroupMap = new HashMap<>();
 
-        stats.stream()
-            .forEach(stat -> {
-                String key = serverService.findByRef(Server.refById(stat.getName())).getGroupId();
-                if (groupIds.contains(key) || aggregateSubItems)
-                    collectStats(plainGroupMap,
-                        key,
-                        stat.getStats()
-                    );
-                }
-            );
+        stats.forEach((group, statsList) ->
+            statsList.stream()
+                .forEach(stat -> {
+                    String key = serverService.findByRef(Server.refById(stat.getName())).getGroupId();
+                    if (group.asFilter().getIds().contains(key) || aggregateSubItems)
+                        collectStats(plainGroupMap,
+                            key,
+                            stat.getStats(),
+                            false
+                        );
+                })
+        );
 
         return aggregate(convertToMonitoringEntries(plainGroupMap));
     }
 
-    private List<MonitoringStatsEntry> convertToMonitoringEntries(
-        HashMap<String, List<MonitoringEntry>> plainGroupMap) {
+    private List<MonitoringStatsEntry> convertToMonitoringEntries(Map<String, List<MonitoringEntry>> plainGroupMap) {
 
         List<MonitoringStatsEntry> result = new ArrayList<>();
         plainGroupMap.forEach(
