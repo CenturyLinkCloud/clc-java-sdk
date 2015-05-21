@@ -19,11 +19,11 @@ import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.servers.ServersModule;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
+import com.centurylink.cloud.sdk.servers.services.StatisticsService;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -49,6 +49,9 @@ public class ClcSdk {
 
     @Inject
     CredentialsProvider credentialsProvider;
+
+    @Inject
+    StatisticsService statisticsService;
 
     public ClcSdk() {
         this(new PropertiesFileCredentialsProvider());
@@ -86,5 +89,9 @@ public class ClcSdk {
 
     public CredentialsProvider getCredentialsProvider() {
         return credentialsProvider;
+    }
+
+    public StatisticsService statisticsService() {
+        return statisticsService;
     }
 }
