@@ -27,12 +27,7 @@ import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
-import com.centurylink.cloud.sdk.servers.client.domain.server.ModifyServerRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
@@ -1026,6 +1021,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 )
             )
             .collect(toList());
+    }
 
     public SshClient execSsh(Server server) {
         checkNotNull(server);

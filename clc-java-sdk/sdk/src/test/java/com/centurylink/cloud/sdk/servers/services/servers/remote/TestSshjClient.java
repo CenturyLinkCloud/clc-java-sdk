@@ -10,6 +10,7 @@ import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.SshjClient;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
+import com.centurylink.cloud.sdk.tests.TestGroups;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -18,9 +19,13 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+
 /**
  * @author Anton Karavayeu
  */
+@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class TestSshjClient extends AbstractServersSdkTest {
     private SshjClient sshjClient;
 
