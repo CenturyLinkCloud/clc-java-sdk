@@ -20,17 +20,37 @@ import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.Get
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ilya.drabenia
  */
 public class DataCentersClient extends AuthenticatedSdkHttpClient {
 
+    private LoadingCache<String, DataCenterMetadata> cache = CacheBuilder.newBuilder()
+        .maximumSize(20)
+        .expireAfterWrite(1, TimeUnit.DAYS)
+        .build(new CacheLoader<String, DataCenterMetadata>() {
+                   @Override
+                   public DataCenterMetadata load(String id) throws Exception {
+                       return loadDataCenter(id);
+                   }
+               }
+        );
+
     @Inject
     public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
+        GetDataCenterListResponse dataCenters = findAllDataCenters();
+        dataCenters.forEach(dc -> cache.put(dc.getId(), dc));
     }
 
     public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(String dataCenterId) {
@@ -41,11 +61,19 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
     }
 
     public DataCenterMetadata getDataCenter(String dataCenterId) {
+        try {
+            return cache.get(dataCenterId);
+        } catch (ExecutionException e) {
+            throw new ClcClientException(e.getMessage());
+        }
+    }
+
+    private DataCenterMetadata loadDataCenter(String dataCenterId) {
         return
-            client("/datacenters/{accountAlias}/{dataCenterId}")
-                .queryParam("groupLinks", true)
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .request().get(DataCenterMetadata.class);
+        client("/datacenters/{accountAlias}/{dataCenterId}")
+            .queryParam("groupLinks", true)
+            .resolveTemplate("dataCenterId", dataCenterId)
+            .request().get(DataCenterMetadata.class);
     }
 
     // TODO: need to implement memoization of this method with acceptable expiration time
