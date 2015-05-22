@@ -102,6 +102,7 @@ public abstract class GroupMonitoringStatsBy {
         return new MonitoringStatsEntry<>(metadata, entries);
     }
 
+    @SuppressWarnings("unchecked")
     protected List<MonitoringStatsEntry> aggregate(List<MonitoringStatsEntry> plainEntries) {
         return plainEntries.stream()
             .map(entry -> {
@@ -120,6 +121,7 @@ public abstract class GroupMonitoringStatsBy {
             .collect(toList());
     }
 
+    @SuppressWarnings("unchecked")
     private MonitoringEntry aggregateMonitoringEntry(MonitoringStatsEntry entry, OffsetDateTime time) {
         Supplier<Stream<MonitoringEntry>> streamSupplier =
             () -> entry.getStatistics().stream()
