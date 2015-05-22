@@ -6,6 +6,7 @@ export class Body extends React.Component {
     constructor (props) {
         super(props);
         this.state = { loading: true };
+        this.user = null;
     }
 
     render () {
@@ -27,6 +28,9 @@ export class Body extends React.Component {
                             <ul className="nav navbar-nav">
                                 <li className="active"><a href="#">Home</a></li>
                                 <li><a href="#about">About</a></li>
+                            </ul>
+                            <ul className="nav navbar-nav navbar-right">
+                                <li><a href="#about">{ this.user ? 'Logout' : 'Login' }</a></li>
                             </ul>
                         </div>
                     </div>
