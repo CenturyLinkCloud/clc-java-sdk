@@ -1,15 +1,18 @@
 package com.centurylink.cloud.sdk.servers.services.domain.remote.domain;
 
+import com.centurylink.cloud.sdk.core.ToStringMixin;
+import com.google.common.base.Preconditions;
+
 /**
  * @author Anton Karavayeu
  */
-public class ShellResponse {
+public class ShellResponse implements ToStringMixin {
     private int errorStatus;
     private String trace;
 
     public ShellResponse(int errorStatus, String message) {
-        this.errorStatus = errorStatus;
-        this.trace = message;
+        this.errorStatus = Preconditions.checkNotNull(errorStatus);
+        this.trace = Preconditions.checkNotNull(message);
     }
 
     public String getTrace() {
@@ -22,10 +25,7 @@ public class ShellResponse {
 
     @Override
     public String toString() {
-        return "ShellResponse{" +
-                "errorStatus=" + errorStatus +
-                ", trace='" + trace + '\'' +
-                '}';
+        return toReadableString();
     }
 
 }
