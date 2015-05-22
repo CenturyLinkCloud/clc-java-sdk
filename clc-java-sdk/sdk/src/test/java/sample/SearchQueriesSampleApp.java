@@ -250,8 +250,8 @@ public class SearchQueriesSampleApp extends Assert {
         List<GroupMetadata> groupMetadataList = groupService.find(
             new GroupFilter()
                 .dataCenters(DE_FRANKFURT)
-                .where(
-                    groupMetadata -> groupMetadata.getDescription().contains("uat1")
+                .where(groupMetadata ->
+                    groupMetadata.getDescription() != null && groupMetadata.getDescription().contains("uat1")
                 )
         );
 
