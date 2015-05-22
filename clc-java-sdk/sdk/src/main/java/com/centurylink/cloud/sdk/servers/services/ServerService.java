@@ -19,14 +19,21 @@ import com.centurylink.cloud.sdk.common.management.client.QueueClient;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.JobInfo;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.ResourceJobInfo;
-import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.*;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.JobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.*;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerListResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.servers.client.domain.server.CreateSnapshotRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
+import com.centurylink.cloud.sdk.servers.client.domain.server.ModifyServerRequest;
+import com.centurylink.cloud.sdk.servers.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
@@ -44,7 +51,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
+import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.function.Predicates.in;
+import static com.centurylink.cloud.sdk.core.function.Predicates.isAlwaysTruePredicate;
+import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -235,7 +246,14 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                     return
                         groupService
                             .findLazy(serverFilter.getGroupFilter())
-                            .flatMap(group -> group.getServers().stream())
+                            .flatMap(group -> {
+                                    if (serverFilter.isSearchInSubGroups()) {
+                                        return group.getAllServers().stream();
+                                    } else {
+                                        return group.getServers().stream();
+                                    }
+                                }
+                            )
                             .filter(serverFilter.getPredicate())
                             .filter((serverFilter.getServerIds().size() > 0) ?
                                 combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()

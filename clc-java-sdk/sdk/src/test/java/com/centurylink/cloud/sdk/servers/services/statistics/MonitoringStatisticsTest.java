@@ -56,7 +56,9 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     private DataCenter[] dataCenters = {DataCenter.DE_FRANKFURT};
     private String groupName = Group.DEFAULT_GROUP;
 
-    private MathContext mathContext = new MathContext(4);
+    private static final int PRECISION = 4;
+    private static final MathContext MATH_CONTEXT = new MathContext(PRECISION);
+    private static final double DELTA = 1 / new BigDecimal(10).pow((PRECISION-1)).doubleValue();
 
     @BeforeClass
     private void setup() {
@@ -331,8 +333,9 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
     private void compareDoubleValues(double expected, double actual, String assertMessage) {
         assertEquals(
-            new BigDecimal(expected).round(mathContext),
-            new BigDecimal(actual).round(mathContext),
+            new BigDecimal(expected).round(MATH_CONTEXT).doubleValue(),
+            new BigDecimal(actual).round(MATH_CONTEXT).doubleValue(),
+            DELTA,
             assertMessage
         );
     }
