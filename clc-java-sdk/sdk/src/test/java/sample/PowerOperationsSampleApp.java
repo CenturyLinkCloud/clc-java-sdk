@@ -78,13 +78,17 @@ public class PowerOperationsSampleApp extends Assert {
 
     @BeforeClass
     public void init() {
-        deleteServers();
+        try {
+            deleteServers();
+        } catch (Exception ex) {
+            // ignore
+        }
 
         groupService
             .defineInfrastructure(dataCenter(US_EAST_STERLING).subitems(
                 group(DEFAULT_GROUP).subitems(
                     group("MyServers",
-                          "MyServers Group Description").subitems(
+                        "MyServers Group Description").subitems(
                         centOsServer("a_nginx"),
                         centOsServer("a_apache"),
                         centOsServer("b_mysql")
