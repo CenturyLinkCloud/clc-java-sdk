@@ -16,15 +16,11 @@
 package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
@@ -41,7 +37,6 @@ import static com.centurylink.cloud.sdk.common.management.services.domain.datace
 import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
@@ -50,12 +45,13 @@ import static java.lang.Boolean.TRUE;
 
 @Test(groups = SAMPLES)
 public class PowerOperationsSampleApp extends Assert {
+
     private final ServerService serverService;
     private final GroupService groupService;
 
     public PowerOperationsSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new PropertiesFileCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
         );
 
         serverService = sdk.serverService();

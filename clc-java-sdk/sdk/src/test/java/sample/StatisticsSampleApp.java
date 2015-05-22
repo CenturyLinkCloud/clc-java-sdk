@@ -18,7 +18,7 @@ package sample;
 import com.centurylink.cloud.sdk.ClcSdk;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.StatisticsService;
@@ -59,7 +59,7 @@ public class StatisticsSampleApp extends Assert {
 
     public StatisticsSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new PropertiesFileCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
         );
 
         serverService = sdk.serverService();

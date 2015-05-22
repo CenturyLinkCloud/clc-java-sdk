@@ -17,7 +17,7 @@ package com.centurylink.cloud.sdk.core.auth.services;
 
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ClientRequestContext;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 public class BearerAuthenticationTest {
 
     BearerAuthentication auth = new BearerAuthentication(
-        new PropertiesFileCredentialsProvider(),
+        new DefaultCredentialsProvider(),
         mock(LoginClient.class)
     );
 

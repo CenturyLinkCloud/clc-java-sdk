@@ -17,8 +17,7 @@ package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
@@ -44,7 +43,6 @@ import static com.centurylink.cloud.sdk.common.management.services.domain.datace
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus.ACTIVE;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerStatus.ARCHIVED;
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
@@ -63,7 +61,7 @@ public class SearchQueriesSampleApp extends Assert {
 
     public SearchQueriesSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new PropertiesFileCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
         );
 
         serverService = sdk.serverService();
