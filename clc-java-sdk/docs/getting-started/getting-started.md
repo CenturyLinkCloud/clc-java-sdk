@@ -2,24 +2,22 @@
 Installation
 ------------
 
-Must be updated when library will be published to maven central
+Could you write about typing installation to project any library from maven central. 
+Later we will change group and artifact ID.
 
 
-Credentials Providers and Configuration
----------------------------------------
+Provide Credentials
+--------------------
 
 
-Search Queries
+Create Server
+-------------
+
+
+Search Servers
 --------------
 
 
 Power Operations
 ----------------
 
-
-Define Group Hierarchy
-----------------------
-
-
-Statistics Engine
------------------
