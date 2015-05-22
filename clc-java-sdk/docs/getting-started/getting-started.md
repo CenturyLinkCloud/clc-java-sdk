@@ -33,9 +33,13 @@ First that you should do is provide your credentials. There are various ways to 
 
 <i>code example</i>
 
-    new DefaultCredentialsProvider();
-    new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties");
-    new DefaultCredentialsProvider("john.doe", "hey@WMe8u");
+``` java
+
+new DefaultCredentialsProvider();
+new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties");
+new DefaultCredentialsProvider("john.doe", "hey@WMe8u");
+
+```
 
 Once you've provide your credentials you can create a server
 
@@ -46,25 +50,29 @@ which should be specified in the `CreateServerConfig` such as name, group, os, d
 
 <i>code example</i>
 
-    serverService.create(new CreateServerConfig()
-        .name("ex-srv")
-        .type(STANDARD)
-        .password(PASSWORD)
-        .group(Group.refByName()
-            .dataCenter(DataCenter.refById(DE_FRANKFURT.getId()))
-            .name(DEFAULT_GROUP)
-        )
-        .machine(new Machine()
-            .cpuCount(1)
-            .ram(2)
-        )
-        .template(Template.refByOs()
-            .dataCenter(DE_FRANKFURT)
-            .type(CENTOS)
-            .version("6")
-            .architecture(x86_64)
-        )
+``` java
+
+serverService.create(new CreateServerConfig()
+    .name("ex-srv")
+    .type(STANDARD)
+    .password(PASSWORD)
+    .group(Group.refByName()
+        .dataCenter(DataCenter.refById(DE_FRANKFURT.getId()))
+        .name(DEFAULT_GROUP)
     )
+    .machine(new Machine()
+        .cpuCount(1)
+        .ram(2)
+    )
+    .template(Template.refByOs()
+        .dataCenter(DE_FRANKFURT)
+        .type(CENTOS)
+        .version("6")
+        .architecture(x86_64)
+    )
+)
+
+```
 
 Search Servers
 --------------
@@ -74,10 +82,13 @@ find severs by id, name, datacenter, group etc.
 
 <i>code example</i>
 
-    serverService.find(new ServerFilter().id("ex-srv189"));
-    serverService.find(new ServerFilter().nameContains("ex"));
-    serverService.find(new ServerFilter().groups(group));
+``` java
 
+serverService.find(new ServerFilter().id("ex-srv189"));
+serverService.find(new ServerFilter().nameContains("ex"));
+serverService.find(new ServerFilter().groups(group));
+
+```
 
 Power Operations
 ----------------
@@ -94,7 +105,10 @@ Also you have an ability to do different operations on server :
 
 <i>code example</i>
 
-    serverService.powerOn(server);
-    serverService.archive(server);
-    serverService.restart(server);
+``` java
 
+serverService.powerOn(server);
+serverService.archive(server);
+serverService.restart(server);
+
+```
