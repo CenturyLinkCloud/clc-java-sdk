@@ -30,6 +30,13 @@ First that you should do is provide your credentials. There are various ways to 
   * use properties files
 
 `DefaultCredentialsProvider` loads credentials in the order listed above.
+
+<i>code example</i>
+
+    new DefaultCredentialsProvider();
+    new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties");
+    new DefaultCredentialsProvider("john.doe", "hey@WMe8u");
+
 Once you've provide your credentials you can create a server
 
 Create Server
@@ -37,12 +44,39 @@ Create Server
 `ServerService.createServer(CreateServerConfig command)` creates a new server with necessary params <br />
 which should be specified in the `CreateServerConfig` such as name, group, os, disks settings etc.
 
+<i>code example</i>
+
+    serverService.create(new CreateServerConfig()
+        .name("ex-srv")
+        .type(STANDARD)
+        .password(PASSWORD)
+        .group(Group.refByName()
+            .dataCenter(DataCenter.refById(DE_FRANKFURT.getId()))
+            .name(DEFAULT_GROUP)
+        )
+        .machine(new Machine()
+            .cpuCount(1)
+            .ram(2)
+        )
+        .template(Template.refByOs()
+            .dataCenter(DE_FRANKFURT)
+            .type(CENTOS)
+            .version("6")
+            .architecture(x86_64)
+        )
+    )
 
 Search Servers
 --------------
 
 Than you can get the server data using `ServerService.find(ServerFilter filter)` note that `ServerFilter` allows us to
 find severs by id, name, datacenter, group etc. 
+
+<i>code example</i>
+
+    serverService.find(new ServerFilter().id("ex-srv189"));
+    serverService.find(new ServerFilter().nameContains("ex"));
+    serverService.find(new ServerFilter().groups(group));
 
 
 Power Operations
@@ -57,4 +91,10 @@ Also you have an ability to do different operations on server :
   * Restart of a server (`ServerService.restart`)
   * Pause a server (`ServerService.pause`)
   * etc.
+
+<i>code example</i>
+
+    serverService.powerOn(server);
+    serverService.archive(server);
+    serverService.restart(server);
 
