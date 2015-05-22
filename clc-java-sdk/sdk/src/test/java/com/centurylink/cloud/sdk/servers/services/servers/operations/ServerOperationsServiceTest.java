@@ -215,6 +215,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION, LONG_RUNNING}, dataProvider = "sshSamples")
     public void testExecSsh(String shellCommand1, String shellCommand2) throws Exception {
+        server = SingleServerFixture.server();
         OperationFuture<ShellResponse> response = serverService.execSsh(server)
                 .run(shellCommand1)
                 .run(shellCommand2)
