@@ -35,9 +35,11 @@ First that you should do is provide your credentials. There are various ways to 
 
 ``` java
 
-new DefaultCredentialsProvider();
-new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties");
-new DefaultCredentialsProvider("john.doe", "hey@WMe8u");
+List<ServerService> results = new ClcSdk(
+        new DefaultCredentialsProvider("john.doe", "hey@WMe8u")
+    )
+    .serverService()
+    .find(new ServerFilter());
 
 ```
 
@@ -84,9 +86,10 @@ find severs by id, name, datacenter, group etc.
 
 ``` java
 
-serverService.find(new ServerFilter().id("ex-srv189"));
-serverService.find(new ServerFilter().nameContains("ex"));
-serverService.find(new ServerFilter().groups(group));
+List<ServerMetadata> serverMetadataList = serverService.find(
+    new ServerFilter()
+        .nameContains("ex")
+);
 
 ```
 
@@ -108,7 +111,5 @@ Also you have an ability to do different operations on server :
 ``` java
 
 serverService.powerOn(server);
-serverService.archive(server);
-serverService.restart(server);
 
 ```
