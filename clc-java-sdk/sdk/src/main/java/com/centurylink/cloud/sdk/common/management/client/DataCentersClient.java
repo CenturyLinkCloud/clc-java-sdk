@@ -35,13 +35,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class DataCentersClient extends AuthenticatedSdkHttpClient {
 
-    private LoadingCache<String, DataCenterMetadata> cache = CacheBuilder.newBuilder()
+    private static final String ALL_DATACENTERS_KEY = "";
+
+    private LoadingCache<String, GetDataCenterListResponse> cache = CacheBuilder.newBuilder()
         .maximumSize(20)
-        .expireAfterWrite(1, TimeUnit.HOURS)
-        .build(new CacheLoader<String, DataCenterMetadata>() {
+        .expireAfterWrite(10, TimeUnit.SECONDS)
+        .refreshAfterWrite(10, TimeUnit.SECONDS)
+        .build(new CacheLoader<String, GetDataCenterListResponse>() {
                    @Override
-                   public DataCenterMetadata load(String id) throws Exception {
-                       return loadDataCenter(id);
+                   public GetDataCenterListResponse load(String id) throws Exception {
+                       return loadAllDataCenters();
                    }
                }
         );
@@ -50,7 +53,7 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
     public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
         GetDataCenterListResponse dataCenters = loadAllDataCenters();
-        dataCenters.forEach(dc -> cache.put(dc.getId(), dc));
+        cache.put(ALL_DATACENTERS_KEY, dataCenters);
     }
 
     public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(String dataCenterId) {
@@ -61,11 +64,7 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
     }
 
     public DataCenterMetadata getDataCenter(String dataCenterId) {
-        try {
-            return cache.get(dataCenterId);
-        } catch (ExecutionException e) {
-            throw new ClcClientException(e.getMessage());
-        }
+        return findAllDataCenters().findById(dataCenterId);
     }
 
     private DataCenterMetadata loadDataCenter(String dataCenterId) {
@@ -77,7 +76,11 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
     }
 
     public GetDataCenterListResponse findAllDataCenters() {
-        return new GetDataCenterListResponse(cache.asMap().values());
+        try {
+            return cache.get(ALL_DATACENTERS_KEY);
+        } catch (ExecutionException e) {
+            throw new ClcClientException(e.getMessage());
+        }
     }
 
     private GetDataCenterListResponse loadAllDataCenters() {
