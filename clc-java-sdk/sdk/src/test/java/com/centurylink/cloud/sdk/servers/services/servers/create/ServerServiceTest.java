@@ -37,4 +37,5 @@ public class ServerServiceTest extends AbstractServersSdkTest {
     public void testGetServer() {
         serverService.findByRef(Server.refById("randomString"));
     }
+
 }
