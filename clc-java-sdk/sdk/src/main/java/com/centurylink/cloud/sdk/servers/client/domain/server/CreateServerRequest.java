@@ -36,6 +36,8 @@ public class CreateServerRequest {
 
     private String type;
 
+    private String storageType;
+
     private String password;
 
     private String primaryDns;
@@ -96,14 +98,6 @@ public class CreateServerRequest {
         return this;
     }
 
-    /**
-     * Whether to create standard or hyperscale server
-     */
-    public CreateServerRequest type(String type) {
-        this.type = type;
-        return this;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -157,6 +151,29 @@ public class CreateServerRequest {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Whether to create standard or hyperscale server
+     */
+    public CreateServerRequest type(String type) {
+        this.type = type;
+        return this;
+    }
+
+    /**
+     * Whether to create standard or premium storage
+     */
+    public String getStorageType() {
+        return storageType;
+    }
+
+    /**
+     * Whether to create standard or premium storage
+     */
+    public CreateServerRequest storageType(String storageType) {
+        this.storageType = storageType;
+        return this;
     }
 
     public String getPassword() {
