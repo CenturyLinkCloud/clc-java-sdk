@@ -37,7 +37,7 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
 
     private LoadingCache<String, DataCenterMetadata> cache = CacheBuilder.newBuilder()
         .maximumSize(20)
-        .expireAfterWrite(1, TimeUnit.DAYS)
+        .expireAfterWrite(1, TimeUnit.HOURS)
         .build(new CacheLoader<String, DataCenterMetadata>() {
                    @Override
                    public DataCenterMetadata load(String id) throws Exception {
@@ -49,7 +49,7 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
     @Inject
     public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
-        GetDataCenterListResponse dataCenters = findAllDataCenters();
+        GetDataCenterListResponse dataCenters = loadAllDataCenters();
         dataCenters.forEach(dc -> cache.put(dc.getId(), dc));
     }
 
@@ -76,8 +76,11 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
             .request().get(DataCenterMetadata.class);
     }
 
-    // TODO: need to implement memoization of this method with acceptable expiration time
     public GetDataCenterListResponse findAllDataCenters() {
+        return new GetDataCenterListResponse(cache.asMap().values());
+    }
+
+    private GetDataCenterListResponse loadAllDataCenters() {
         return
             client("/datacenters/{accountAlias}?groupLinks=true")
                 .request()
