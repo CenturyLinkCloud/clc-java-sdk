@@ -16,7 +16,7 @@
 package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.core.services.refs.ReferenceNotResolvedException;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
@@ -54,7 +54,7 @@ public class SuperCommandSampleApp extends Assert {
 
     public SuperCommandSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new PropertiesFileCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
         );
 
         serverService = sdk.serverService();

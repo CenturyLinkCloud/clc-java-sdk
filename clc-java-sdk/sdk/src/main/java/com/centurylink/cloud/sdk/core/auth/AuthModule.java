@@ -18,7 +18,7 @@ package com.centurylink.cloud.sdk.core.auth;
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
@@ -29,7 +29,7 @@ public class AuthModule extends AbstractModule {
     private final CredentialsProvider credentialsProvider;
 
     public AuthModule() {
-        this.credentialsProvider = new PropertiesFileCredentialsProvider();
+        this.credentialsProvider = new DefaultCredentialsProvider();
     }
 
     public AuthModule(CredentialsProvider credentialsProvider) {

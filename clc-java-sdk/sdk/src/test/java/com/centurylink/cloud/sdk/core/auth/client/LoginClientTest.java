@@ -18,7 +18,7 @@ package com.centurylink.cloud.sdk.core.auth.client;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginRequest;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.Credentials;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.PropertiesFileCredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import org.testng.annotations.Test;
 
@@ -33,7 +33,7 @@ public class LoginClientTest {
 
     @Test
     public void testLoginWithCorrectCredentials() {
-        Credentials credentials = new PropertiesFileCredentialsProvider().getCredentials();
+        Credentials credentials = new DefaultCredentialsProvider().getCredentials();
 
         LoginResponse response = client.login(
             new LoginRequest(credentials.getUsername(), credentials.getPassword())
