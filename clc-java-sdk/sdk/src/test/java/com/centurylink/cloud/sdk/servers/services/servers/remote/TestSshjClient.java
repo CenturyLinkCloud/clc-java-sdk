@@ -1,11 +1,22 @@
 package com.centurylink.cloud.sdk.servers.services.servers.remote;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
+import com.centurylink.cloud.sdk.core.function.Predicates;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.SshjClient;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
+import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
+import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Anton Karavayeu
@@ -13,13 +24,35 @@ import org.testng.annotations.Test;
 public class TestSshjClient extends AbstractServersSdkTest {
     private SshjClient sshjClient;
 
+    @Inject
+    private ServerService serverService;
+
+    @Inject
+    private ServerClient serverClient;
+
     @BeforeClass
     public void init() {
+        Server server = SingleServerFixture.server();
+        ServerMetadata metadata = serverService.findByRef(server);
         sshjClient = new SshjClient.Builder()
-                .host("66.155.4.130")
+                .host(getPublicIp(metadata))
                 .username("root")
-                .password("D@eCxAH8?=#.e}={")
+                .password(getPassword(metadata))
                 .build();
+    }
+
+    private String getPublicIp(ServerMetadata metadata) {
+        List<IpAddress> ipAddresses = metadata.getDetails().getIpAddresses();
+        Optional<String> publicIp = ipAddresses.stream()
+                .map(IpAddress::getPublicIp)
+                .filter(Predicates.notNull())
+                .findFirst();
+        return publicIp.get();
+    }
+
+    private String getPassword(ServerMetadata metadata) {
+        return serverClient.getServerCredentials(metadata.getId())
+                .getPassword();
     }
 
     @Test()

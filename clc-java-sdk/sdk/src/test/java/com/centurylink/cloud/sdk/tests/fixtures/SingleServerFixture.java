@@ -5,6 +5,8 @@ import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.r
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.*;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
@@ -73,8 +75,10 @@ public class SingleServerFixture {
                     .network(new NetworkConfig()
                         .primaryDns("172.17.1.26")
                         .secondaryDns("172.17.1.27")
-                    )
+                        .publicIpConfig(new CreatePublicIpConfig()
+                            .openPorts(PortConfig.SSH))
                 )
+            )
                 .waitUntilComplete()
                 .getResult()
                 .asRefById();
