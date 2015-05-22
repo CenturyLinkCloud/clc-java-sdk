@@ -19,7 +19,12 @@ import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.annotation.Generated;
 import java.util.ArrayList;
@@ -359,17 +364,25 @@ public class GroupMetadata {
 
     @JsonIgnore
     public List<ServerMetadata> getAllServers() {
-        return
-            concat(
-                getServers()
-                    .stream(),
+        List<ServerMetadata> allServers = concat(
+            getServers()
+                .stream(),
 
-                getGroups()
-                    .stream()
-                    .flatMap(group ->
+            getGroups()
+                .stream()
+                .flatMap(group ->
                         group.getAllServers().stream()
-                    )
-            )
+                )
+        )
+        .collect(toList());
+
+        List<String> serverIds = allServers.stream()
+            .map(ServerMetadata::getId)
+            .distinct()
+            .collect(toList());
+
+        return allServers.stream()
+            .filter(srv -> serverIds.contains(srv.getId()))
             .collect(toList());
     }
 

@@ -248,13 +248,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                             .findLazy(serverFilter.getGroupFilter())
                             .flatMap(group -> {
                                     if (serverFilter.isSearchInSubGroups()) {
-                                        List<String> serverIds = group.getAllServers().stream()
-                                            .map(ServerMetadata::getId)
-                                            .distinct()
-                                            .collect(toList());
-
-                                        return group.getAllServers().stream()
-                                            .filter(srv -> serverIds.contains(srv.getId()));
+                                        return group.getAllServers().stream();
                                     } else {
                                         return group.getServers().stream();
                                     }
@@ -262,7 +256,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                             )
                             .filter(serverFilter.getPredicate())
                             .filter((serverFilter.getServerIds().size() > 0) ?
-                                    combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
+                                combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
                             );
                 }
             });
