@@ -53,6 +53,8 @@ public class CreateServerRequest {
 
     private boolean isManagedBackup;
 
+    private String storageType = "standard";
+
 
     /**
      * Name of the server to create. Alphanumeric characters and dashes only. Must be between 1-7 characters depending on the length of the account alias. (This name will be appended with a two digit number and prepended with the dataCenter code and account alias to make up the final server name.)
@@ -246,5 +248,13 @@ public class CreateServerRequest {
 
         this.isManagedOS = isManagedOS;
         return this;
+    }
+
+    public String getStorageType() {
+        return storageType;
+    }
+
+    public void setStorageType(String storageType) {
+        this.storageType = storageType;
     }
 }
