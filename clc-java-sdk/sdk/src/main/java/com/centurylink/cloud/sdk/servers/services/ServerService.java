@@ -57,6 +57,7 @@ import static com.centurylink.cloud.sdk.core.function.Predicates.isAlwaysTruePre
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
+import static com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig.SSH;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -896,7 +897,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return ipAddresses.stream()
             .map(IpAddress::getPublicIp)
             .filter(notNull())
-            .map(address -> getPublicIp(server, address))
+            .map(address -> getPublicIp(server, address).publicIPAddress(address))
             .collect(toList());
     }
 
@@ -1025,19 +1026,16 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
     public SshClient execSsh(Server server) {
         checkNotNull(server);
+
         ServerMetadata metadata = findByRef(server);
 
-        List<PublicIpMetadata> ipMetadataList = findPublicIp(server);
-        if (ipMetadataList.isEmpty()) {
-            OperationFuture<Server> addPublicIp = addPublicIp(server, new CreatePublicIpConfig().openPorts(PortConfig.SSH));
-            addPublicIp.waitUntilComplete();
+        if (!findPublicIpWithOpenSshPort(server).isPresent()) {
+            this
+                .addPublicIp(server, new CreatePublicIpConfig().openPorts(SSH))
+                .waitUntilComplete();
         }
 
-        List<IpAddress> ipAddresses = metadata.getDetails().getIpAddresses();
-        Optional<String> publicIp = ipAddresses.stream()
-                .map(IpAddress::getPublicIp)
-                .filter(notNull())
-                .findFirst();
+        Optional<String> publicIp = findPublicIpWithOpenSshPort(server);
 
         ServerCredentials serverCredentials = client.getServerCredentials(metadata.getId());
         return new SshjClient.Builder()
@@ -1045,6 +1043,21 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 .password(serverCredentials.getPassword())
                 .host(publicIp.get())
                 .build();
+    }
+
+    private Optional<String> findPublicIpWithOpenSshPort(Server server) {
+        return findPublicIp(server)
+            .stream()
+            .filter(ip ->
+                ip
+                    .getPorts()
+                    .stream()
+                    .filter(p -> p.getPort().equals(SSH))
+                    .count() > 0
+            )
+            .map(PublicIpMetadata::getPublicIPAddress)
+            .filter(notNull())
+            .findFirst();
     }
 
     public SshClient execSsh(Server... onServers) {

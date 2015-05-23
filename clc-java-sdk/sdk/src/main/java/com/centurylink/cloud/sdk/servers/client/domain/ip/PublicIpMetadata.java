@@ -34,6 +34,7 @@ import java.util.List;
     "sourceRestrictions"
 })
 public class PublicIpMetadata {
+    private String publicIPAddress;
     private String internalIPAddress;
     private List<PortConfig> ports;
     private List<SourceRestriction> sourceRestrictions;
@@ -85,6 +86,19 @@ public class PublicIpMetadata {
         List<SourceRestriction> restrictions = new ArrayList<>(sourceRestrictions.length);
         Arrays.asList(sourceRestrictions).forEach(value -> restrictions.add(new SourceRestriction(value)));
         setSourceRestrictions(restrictions);
+        return this;
+    }
+
+    public String getPublicIPAddress() {
+        return publicIPAddress;
+    }
+
+    public void setPublicIPAddress(String publicIPAddress) {
+        this.publicIPAddress = publicIPAddress;
+    }
+
+    public PublicIpMetadata publicIPAddress(String publicIpValue) {
+        setPublicIPAddress(publicIpValue);
         return this;
     }
 }
