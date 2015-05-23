@@ -29,10 +29,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Ilya Drabenia
  */
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/account")
 public class LoginController {
 
-    @RequestMapping(method = POST)
+    @RequestMapping(value = "/login", method = POST)
     public StatusResponse login(@RequestBody LoginForm loginForm, HttpSession session) {
         session.setAttribute("clc.username", loginForm.getUsername());
         session.setAttribute("clc.password", loginForm.getPassword());
@@ -40,7 +40,7 @@ public class LoginController {
         return new StatusResponse("OK");
     }
 
-    @RequestMapping(method = POST)
+    @RequestMapping(value = "/logout", method = POST)
     public StatusResponse logout(HttpSession session) {
         session.invalidate();
 

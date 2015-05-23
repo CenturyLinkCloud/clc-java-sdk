@@ -21,7 +21,6 @@ import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
