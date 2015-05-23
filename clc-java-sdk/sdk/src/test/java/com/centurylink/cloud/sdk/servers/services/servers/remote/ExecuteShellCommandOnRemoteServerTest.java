@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_WEST_SEATTLE;
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.centOsServer;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
@@ -60,7 +61,7 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
         server =
             serverService
                 .create(centOsServer("SSHCMD").group(Group.refByName()
-                    .dataCenter(DE_FRANKFURT)
+                    .dataCenter(US_WEST_SEATTLE)
                     .name(DEFAULT_GROUP)
                 ))
                 .waitUntilComplete()

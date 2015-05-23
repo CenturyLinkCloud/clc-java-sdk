@@ -33,26 +33,35 @@ export class LoginPage extends React.Component {
 
     render () {
         return (
-            <form className="form-signin">
-                <div className="form-signin-heading">Login</div>
-                        <div className="col-md-6 col-md-offset-3">
-                            <label htmlFor="usernameField">Username</label>
-                            <input type="text" className="form-control" id="usernameField" placeholder="Username..."
-                                valueLink={this.linkState('username')} onBlur={this.handleValidation('username')} />
-                            {this.getValidationMessages('username').map(this.renderHelpText)}
+            <div className="col-md-6 col-md-offset-3">
+                <div className="panel panel-default">
+                    <div className="panel-heading">Login</div>
 
-                            <label htmlFor="passwordField">Password</label>
-                            <input type="password" className="form-control" id="passwordField" placeholder="Password..."
-                                valueLink={this.linkState('password')} onBlur={this.handleValidation('password')} />
-                            {this.getValidationMessages('password').map(this.renderHelpText)}
+                    <div className="panel-body">
+                        <form className="form-signin">
+                            <div className="col-md-6 col-md-offset-3">
+                                <div className={this.classesFor('name')}>
+                                    <label htmlFor="usernameField">Username</label>
+                                    <input type="text" className="form-control" id="usernameField" placeholder="Username..."
+                                        valueLink={this.linkState('username')} onBlur={this.handleValidation('username')} />
+                                    {this.getValidationMessages('username').map(this.renderHelpText)}
+                                </div>
 
-                            <button class="btn btn-lg btn-primary btn-block" type="submit">
-                                Login
-                            </button>
-                        </div>
+                                <div className={this.classesFor('name')}>
+                                    <label htmlFor="passwordField">Password</label>
+                                    <input type="password" className="form-control" id="passwordField" placeholder="Password..."
+                                        valueLink={this.linkState('password')} onBlur={this.handleValidation('password')} />
+                                    {this.getValidationMessages('password').map(this.renderHelpText)}
+                                </div>
+
+                                <button className="btn btn-lg btn-primary btn-block" type="submit">
+                                    Login
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </form>
+            </div>
         );
     }
 
