@@ -1,6 +1,7 @@
 import reactMixin from 'react-mixin';
 import ValidationMixin from 'react-validation-mixin';
 import Joi from 'joi';
+import sessions from './../model/session.jsx';
 
 export class LoginPage extends React.Component {
 
@@ -31,6 +32,12 @@ export class LoginPage extends React.Component {
         });
     }
 
+    onSubmit () {
+        this.validate((err) =>
+            !err && sessions.createNew(this.state.username, this.state.password)
+        );
+    }
+
     render () {
         return (
             <div className="col-md-6 col-md-offset-3">
@@ -38,7 +45,7 @@ export class LoginPage extends React.Component {
                     <div className="panel-heading">Login</div>
 
                     <div className="panel-body">
-                        <form className="form-signin">
+                        <form className="form-signin" onSubmit={this.onSubmit}>
                             <div className="col-md-6 col-md-offset-3">
                                 <div className={this.classesFor('name')}>
                                     <label htmlFor="usernameField">Username</label>

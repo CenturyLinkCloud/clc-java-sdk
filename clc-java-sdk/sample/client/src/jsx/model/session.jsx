@@ -11,6 +11,10 @@ class Sessions {
         return this.session;
     }
 
+    createNew(username, password) {
+        this.session = new Session(username, password);
+    }
+
 }
 
 class Session {
