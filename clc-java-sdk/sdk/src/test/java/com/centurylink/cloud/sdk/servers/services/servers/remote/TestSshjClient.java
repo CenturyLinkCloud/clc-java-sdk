@@ -13,6 +13,8 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.TestGroups;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import javax.inject.Inject;
@@ -35,7 +37,7 @@ public class TestSshjClient extends AbstractServersSdkTest {
     @Inject
     private ServerClient serverClient;
 
-    @BeforeClass
+    @BeforeMethod
     public void init() {
         Server server = SingleServerFixture.server();
         ServerMetadata metadata = serverService.findByRef(server);
