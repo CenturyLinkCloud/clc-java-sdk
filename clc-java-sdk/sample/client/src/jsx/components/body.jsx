@@ -1,4 +1,6 @@
 let { RouteHandler } = ReactRouter;
+import reactMixin from 'react-mixin';
+import { Session } from './../model/session.jsx';
 
 
 export class Body extends React.Component {
@@ -6,7 +8,7 @@ export class Body extends React.Component {
     constructor (props) {
         super(props);
         this.state = { loading: true };
-        this.user = null;
+        this.userSession = null;
     }
 
     render () {

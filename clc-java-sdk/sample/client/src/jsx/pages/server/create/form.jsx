@@ -12,12 +12,11 @@ export class Form extends React.Component {
         super(args);
 
         this.state = this.initialState();
-        this.validatorTypes = this.getValidatorTypes();
 
         _.bindAll(this, 'onSubmit', 'render', 'onCancel');
     }
 
-    getValidatorTypes () {
+    get validatorTypes () {
         return {
             name: Joi.string().required().max(6).label('Name'),
             group: Joi.string().required().label("Group"),
