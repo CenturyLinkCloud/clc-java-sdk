@@ -2,28 +2,28 @@ package com.centurylink.cloud.sdk.servers.services.domain.remote;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.servers.client.domain.server.ServerCredentials;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
 import com.google.common.base.Preconditions;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
-import net.schmizz.sshj.connection.ConnectionException;
 import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.transport.TransportException;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
-import net.schmizz.sshj.userauth.UserAuthException;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
 
 /**
  * @author Anton Karavayeu
  */
 public class SshjClient implements SshClient {
+    public static final int CONNECTION_TIMEOUT = 15;
     private final SSHClient ssh;
     private final ServerCredentials credentials;
     private final String host;
@@ -82,6 +82,30 @@ public class SshjClient implements SshClient {
         return this;
     }
 
+    @FunctionalInterface
+    public interface SshConnectFunc {
+        void connect() throws IOException;
+    }
+
+    private void withTimeout(Duration timeout, SshConnectFunc func) {
+        notNull(func);
+        notNull(timeout);
+
+        long startTime = System.currentTimeMillis();
+
+        for (;;) {
+            try {
+                func.connect();
+                return;
+            } catch (IOException ex) {
+                long curTime = System.currentTimeMillis();
+                if (timeout.toMillis() > curTime - startTime) {
+                    throw new SshException(ex);
+                }
+            }
+        }
+    }
+
     @Override
     public SshClient run(File script) {
         throw new UnsupportedOperationException();
@@ -98,7 +122,9 @@ public class SshjClient implements SshClient {
         Session session = null;
         try {
             ssh.addHostKeyVerifier(new PromiscuousVerifier());
-            ssh.connect(host);
+            withTimeout(Duration.ofMinutes(CONNECTION_TIMEOUT), () ->
+                ssh.connect(host)
+            );
             ssh.authPassword(credentials.getUserName(), credentials.getPassword());
             for (String command : commandList) {
                 session = ssh.startSession();
