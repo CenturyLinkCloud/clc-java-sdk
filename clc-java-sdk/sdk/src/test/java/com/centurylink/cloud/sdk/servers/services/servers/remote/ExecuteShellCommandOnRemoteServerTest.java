@@ -17,7 +17,6 @@ package com.centurylink.cloud.sdk.servers.services.servers.remote;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
@@ -32,11 +31,12 @@ import static com.centurylink.cloud.sdk.common.management.services.domain.datace
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.centOsServer;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 
 /**
  * @author Ilya Drabenia
  */
-@Test(groups = {INTEGRATION, "LongRunning1"})
+@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTest {
 
     private Server server;
@@ -44,13 +44,8 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
     @Inject
     ServerService serverService;
 
-    @Inject
-    ServerClient serverClient;
-
     @BeforeClass
     public void createServer() {
-        injectDependencies();
-
         server =
             serverService
                 .create(centOsServer("SSHCMD").group(Group.refByName()

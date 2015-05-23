@@ -23,6 +23,7 @@ import com.google.inject.Guice;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
@@ -35,6 +36,7 @@ import static java.util.Arrays.asList;
  */
 public abstract class AbstractSdkTest extends Assert {
 
+    @BeforeClass(alwaysRun = true)
     @BeforeMethod(alwaysRun = true)
     public void injectDependencies() {
         Guice
