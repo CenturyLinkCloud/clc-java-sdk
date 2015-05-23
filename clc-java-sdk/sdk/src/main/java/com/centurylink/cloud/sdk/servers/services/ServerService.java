@@ -1026,11 +1026,13 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public SshClient execSsh(Server server) {
         checkNotNull(server);
         ServerMetadata metadata = findByRef(server);
+
         List<PublicIpMetadata> ipMetadataList = findPublicIp(server);
         if (ipMetadataList.isEmpty()) {
             OperationFuture<Server> addPublicIp = addPublicIp(server, new CreatePublicIpConfig().openPorts(PortConfig.SSH));
             addPublicIp.waitUntilComplete();
         }
+
         List<IpAddress> ipAddresses = metadata.getDetails().getIpAddresses();
         Optional<String> publicIp = ipAddresses.stream()
                 .map(IpAddress::getPublicIp)
