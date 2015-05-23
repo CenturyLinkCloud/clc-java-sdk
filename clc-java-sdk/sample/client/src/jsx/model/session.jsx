@@ -1,20 +1,30 @@
 
-export default sessions = new Sessions();
-
 class Sessions {
 
     constructor () {
         this.session = null;
+        this.listeners = [];
     }
 
-    get current () {
+    current () {
         return this.session;
     }
 
-    createNew(username, password) {
-        this.session = new Session(username, password);
+    addListener (type, listener) {
+        type === 'onSessionUpdated' && this.listeners.push(listener);
     }
 
+    fire
+
+    createNew (username, password) {
+        this.session = new Session(username, password);
+
+
+    }
+
+    logout () {
+        this.session = null;
+    }
 }
 
 class Session {
@@ -29,4 +39,6 @@ class Session {
     }
 
 }
+
+export default new Sessions();
 

@@ -7,8 +7,15 @@ export class Body extends React.Component {
 
     constructor (props) {
         super(props);
-        this.state = { loading: true };
-        this.state.sessions = sessions;
+        _.bindAll(this, 'render');
+
+        this.state = { loading: true, curSession: sessions.current() };
+        sessions.addListener('onSessionUpdated', () => this.updateSession());
+    }
+
+    updateSession () {
+        this.state.session = sessions.current();
+        this.setState(this.state);
     }
 
     render () {
@@ -28,11 +35,11 @@ export class Body extends React.Component {
                         </div>
                         <div id="navbar" className="collapse navbar-collapse">
                             <ul className="nav navbar-nav">
-                                <li className="active"><a href="#">Home</a></li>
-                                <li><a href="#about">About</a></li>
+                                <li className="active"><a href="#">Dashboard</a></li>
                             </ul>
+
                             <ul className="nav navbar-nav navbar-right">
-                                <li><a href="#about">{ this.user ? 'Logout' : 'Login' }</a></li>
+                                <li><a href="#/login">Logout</a></li>
                             </ul>
                         </div>
                     </div>

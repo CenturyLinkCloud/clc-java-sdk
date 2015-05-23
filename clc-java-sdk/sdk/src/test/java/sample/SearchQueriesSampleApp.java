@@ -57,7 +57,7 @@ public class SearchQueriesSampleApp extends Assert {
     private GroupService groupService;
     private TemplateService templateService;
 
-    Server server2Va = Server.refByDescription(US_EAST_STERLING, "sr-va2");
+    Server server2Va = Server.refByDescription(US_WEST_SANTA_CLARA, "sr-va2");
 
     public SearchQueriesSampleApp() {
         ClcSdk sdk = new ClcSdk(
@@ -86,7 +86,7 @@ public class SearchQueriesSampleApp extends Assert {
                     )
                 ),
 
-                dataCenter(US_EAST_STERLING).subitems(
+                dataCenter(US_WEST_SANTA_CLARA).subitems(
                     group("uat1",
                           "uat1 group description").subitems(
                         centOsServer("sr-va1"),
@@ -133,7 +133,7 @@ public class SearchQueriesSampleApp extends Assert {
     private void clearAll() {
         serverService
             .delete(new ServerFilter()
-                .dataCenters(DE_FRANKFURT, US_EAST_STERLING)
+                .dataCenters(DE_FRANKFURT, US_WEST_SANTA_CLARA)
                 .status(ACTIVE, ARCHIVED)
             )
             .waitUntilComplete();
