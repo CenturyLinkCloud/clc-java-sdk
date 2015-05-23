@@ -44,7 +44,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 /**
  * @author Ilya Drabenia
  */
-@Test(groups = {INTEGRATION, LONG_RUNNING})
+@Test(groups = {INTEGRATION, "LongRunning1"})
 public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTest {
 
     private Server server;
