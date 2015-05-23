@@ -62,7 +62,7 @@ public class TestSshjClient extends AbstractServersSdkTest {
                 .getPassword();
     }
 
-    @Test()
+    @Test
     public void executeTest() throws Exception {
         OperationFuture<ShellResponse> response = sshjClient
                 .run("ping -c 5 ya.ru")

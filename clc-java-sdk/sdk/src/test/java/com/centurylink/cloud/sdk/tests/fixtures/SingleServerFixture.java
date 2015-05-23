@@ -90,10 +90,8 @@ public class SingleServerFixture {
                     .network(new NetworkConfig()
                         .primaryDns("172.17.1.26")
                         .secondaryDns("172.17.1.27")
-                        .publicIpConfig(new CreatePublicIpConfig()
-                            .openPorts(PortConfig.SSH))
+                    )
                 )
-            )
                 .waitUntilComplete()
                 .getResult()
                 .asRefById();

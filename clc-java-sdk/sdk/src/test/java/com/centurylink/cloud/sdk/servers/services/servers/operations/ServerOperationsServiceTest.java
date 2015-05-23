@@ -205,7 +205,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         assertEquals(serverDetails.getSnapshots().size(), 0);
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING}, dependsOnMethods = "testExecSsh")
+    @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testRestore() throws Exception {
         server = SingleServerFixture.server();
 
@@ -220,24 +220,4 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         assertThatServerHasStatus(server, "active");
     }
 
-    @DataProvider(name = "sshSamples")
-    public Object[][] execSshSamples() {
-        return new Object[][] {
-                {"ping -c google.com", "echo hello"},
-                {"mkdir test", "cd ~; pwd"}
-        };
-    }
-
-    @Test(groups = {INTEGRATION, LONG_RUNNING}, dataProvider = "sshSamples")
-    public void testExecSsh(String shellCommand1, String shellCommand2) throws Exception {
-        server = SingleServerFixture.server();
-        OperationFuture<ShellResponse> response = serverService.execSsh(server)
-                .run(shellCommand1)
-                .run(shellCommand2)
-                .execute();
-        response.waitUntilComplete();
-        assertNotNull(response);
-        assertNotNull(response.getResult().getTrace());
-        assertTrue(response.getResult().getErrorStatus() != 1);
-    }
 }
