@@ -205,7 +205,7 @@ public class ServerOperationsServiceTest extends AbstractServersSdkTest {
         assertEquals(serverDetails.getSnapshots().size(), 0);
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+    @Test(groups = {INTEGRATION, LONG_RUNNING}, dependsOnMethods = "testExecSsh")
     public void testRestore() throws Exception {
         server = SingleServerFixture.server();
 
