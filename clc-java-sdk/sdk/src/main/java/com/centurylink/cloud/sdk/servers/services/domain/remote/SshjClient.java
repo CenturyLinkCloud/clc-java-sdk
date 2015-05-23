@@ -123,14 +123,14 @@ public class SshjClient implements SshClient {
         try {
             ssh.addHostKeyVerifier(new PromiscuousVerifier());
             withTimeout(Duration.ofMinutes(CONNECTION_TIMEOUT), () ->
-                ssh.connect(host)
+                    ssh.connect(host)
             );
             ssh.authPassword(credentials.getUserName(), credentials.getPassword());
             for (String command : commandList) {
                 session = ssh.startSession();
                 Session.Command cmd = session.exec(command);
                 String output = IOUtils.readFully(cmd.getInputStream()).toString();
-                response = new ShellResponse(cmd.getExitStatus(), output);
+                response = new ShellResponse(exitStatus(cmd), output);
             }
         } catch (IOException e) {
             throw new SshException(e);
@@ -145,5 +145,13 @@ public class SshjClient implements SshClient {
             }
         }
         return new OperationFuture<>(response, new NoWaitingJobFuture());
+    }
+
+    private Integer exitStatus(Session.Command cmd) {
+        if (cmd != null) {
+            return cmd.getExitStatus();
+        } else {
+            return 0;
+        }
     }
 }
