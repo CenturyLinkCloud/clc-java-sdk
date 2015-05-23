@@ -16,9 +16,14 @@
 package com.centurylink.cloud.sdk.servers.services.servers.remote;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
+import com.centurylink.cloud.sdk.core.function.Predicates;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.client.ServerClient;
+import com.centurylink.cloud.sdk.servers.client.domain.server.IpAddress;
+import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.servers.services.domain.remote.SshjClient;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.google.inject.Inject;
@@ -26,6 +31,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.util.List;
+import java.util.Optional;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.centOsServer;
@@ -44,6 +52,9 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
     @Inject
     ServerService serverService;
 
+    @Inject
+    ServerClient serverClient;
+
     @BeforeMethod
     public void createServer() {
         server =
@@ -57,7 +68,6 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
                 .asRefById();
     }
 
-
     @DataProvider(name = "sshSamples")
     public Object[][] execSshSamples() {
         return new Object[][] {
@@ -66,21 +76,60 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
         };
     }
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING}, dataProvider = "sshSamples")
+    @Test(dataProvider = "sshSamples")
     public void testExecSsh(String shellCommand1, String shellCommand2) throws Exception {
         OperationFuture<ShellResponse> response = serverService.execSsh(server)
             .run(shellCommand1)
             .run(shellCommand2)
-            .execute();
-        response.waitUntilComplete();
+            .execute()
+            .waitUntilComplete();
 
         assertNotNull(response);
         assertNotNull(response.getResult().getTrace());
         assertTrue(response.getResult().getErrorStatus() != 1);
     }
 
+    @Test
+    public void testSshjClient() {
+        ServerMetadata metadata = serverService.findByRef(server);
+        SshjClient sshjClient = buildSshjClient(metadata);
+
+        OperationFuture<ShellResponse> response = sshjClient
+            .run("ping -c 5 ya.ru")
+            .run("echo test")
+            .run("touch sdk")
+            .execute();
+        response.waitUntilComplete();
+
+        assertTrue(response.getResult().getErrorStatus() != 1);
+        assertNotNull(response.getResult().getTrace());
+    }
+
     @AfterMethod
     public void deleteServer() {
         serverService.delete(server);
     }
+
+    private String getPublicIp(ServerMetadata metadata) {
+        List<IpAddress> ipAddresses = metadata.getDetails().getIpAddresses();
+        Optional<String> publicIp = ipAddresses.stream()
+            .map(IpAddress::getPublicIp)
+            .filter(Predicates.notNull())
+            .findFirst();
+
+        return publicIp.get();
+    }
+
+    private String getPassword(ServerMetadata metadata) {
+        return serverClient.getServerCredentials(metadata.getId()).getPassword();
+    }
+
+    private SshjClient buildSshjClient(ServerMetadata metadata) {
+        return new SshjClient.Builder()
+            .host(getPublicIp(metadata))
+            .username("root")
+            .password(getPassword(metadata))
+            .build();
+    }
+
 }
