@@ -16,12 +16,14 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.sample.domain.SdkCredentials;
 import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
 import com.centurylink.cloud.sdk.sample.port.adapter.web.beans.DataCenterBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +40,12 @@ public class DataCenterController {
     SdkRegistry sdkRegistry;
 
     @RequestMapping(method = GET)
-    List<DataCenterBean> findAll() {
-        List<DataCenterMetadata> dataCenters = sdkRegistry.findOrCreate("idrabenia.altd", "RenVortEr9")
-                .dataCenterService().findAll();
+    List<DataCenterBean> findAll(HttpSession session) {
+        List<DataCenterMetadata> dataCenters =
+            sdkRegistry
+                .getSdk()
+                .dataCenterService()
+                .findAll();
 
         List<DataCenterBean> dataCenterBeans = new ArrayList<>(dataCenters.size());
         dataCenters.forEach(dataCenter -> dataCenterBeans.add(new DataCenterBean(dataCenter.getId(), dataCenter.getName())));

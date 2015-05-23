@@ -39,7 +39,8 @@ public class TemplateController {
     @RequestMapping(method = GET)
     public List<TemplateMetadata> findByDataCenter(@PathVariable("dataCenter") String dataCenter) {
         return
-            sdkRegistry.findOrCreate("idrabenia.altd", "RenVortEr9")
+            sdkRegistry
+                .getSdk()
                 .templateService()
                 .findByDataCenter(dataCenter);
     }

@@ -12,7 +12,7 @@ class App {
     get routes () {
         return (
             <Route handler={Body} path="/">
-                <DefaultRoute handler={LoginPage} />
+                <DefaultRoute handler={DashboardPage} />
                 <Route name="dashboard" path="/dashboard" handler={DashboardPage} />
                 <Route name="createServerInDC" path="/:dataCenter/server/new" handler={CreateServerPage} />
                 <Route name="serverList" path="/:dataCenter/server/" handler={ServerListPage} />

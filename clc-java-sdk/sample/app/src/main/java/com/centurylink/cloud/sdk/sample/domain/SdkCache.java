@@ -16,41 +16,36 @@
 package com.centurylink.cloud.sdk.sample.domain;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.Credentials;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * @author ilya.drabenia
+ * @author Ilya Drabenia
  */
-@Service
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class SdkRegistry {
+@Component
+public class SdkCache {
 
-    @Autowired
-    private SdkCache cache;
+    private ConcurrentMap<String, ClcSdk> map = new ConcurrentHashMap<>();
 
-    private volatile SdkCredentials credentials;
-
-    public SdkRegistry() {
+    public ConcurrentMap<String, ClcSdk> getMap() {
+        return map;
     }
 
-    private Map<String, ClcSdk> cacheMap() {
-        return cache.getMap();
+    public ClcSdk findOrCreate(SdkCredentials credentials) {
+        if (map.get(credentials.toString()) == null) {
+            map.putIfAbsent(
+                credentials.toString(),
+                new ClcSdk(new StaticCredentialsProvider(
+                    credentials.getUsername(),
+                    credentials.getPassword())
+                )
+            );
+        }
+
+        return map.get(credentials.toString());
     }
 
-    public ClcSdk getSdk() {
-        return cache.findOrCreate(credentials);
-    }
-
-    public void setCredentials(SdkCredentials credentials) {
-        this.credentials = credentials;
-    }
 }
