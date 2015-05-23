@@ -99,7 +99,7 @@ public class SshjClient implements SshClient {
                 return;
             } catch (IOException ex) {
                 long curTime = System.currentTimeMillis();
-                if (timeout.toMillis() > curTime - startTime) {
+                if (timeout.toMillis() < curTime - startTime) {
                     throw new SshException(ex);
                 }
             }
