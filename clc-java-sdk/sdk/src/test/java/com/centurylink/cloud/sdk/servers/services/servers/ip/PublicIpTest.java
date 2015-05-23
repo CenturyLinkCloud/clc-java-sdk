@@ -51,6 +51,8 @@ public class PublicIpTest extends AbstractServersSdkTest {
     public void testPublicIp() {
         serverRef = SingleServerFixture.server();
 
+        deletePublicIp();
+
         addPublicIp();
 
         modifyPublicIp();
