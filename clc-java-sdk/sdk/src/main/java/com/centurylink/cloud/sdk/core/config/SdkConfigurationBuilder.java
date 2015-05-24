@@ -27,7 +27,7 @@ public class SdkConfigurationBuilder {
     private String proxyScheme;
     private String proxyUsername;
     private String proxyPassword;
-    private long socketTimeout = Duration.ofMinutes(1L).toMillis();
+    private long socketTimeout = Duration.ofMinutes(5L).toMillis();
 
     public Integer getMaxRetries() {
         return maxRetries;
