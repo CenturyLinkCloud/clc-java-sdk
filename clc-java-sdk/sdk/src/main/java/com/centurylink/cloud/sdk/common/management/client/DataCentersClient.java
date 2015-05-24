@@ -35,25 +35,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class DataCentersClient extends AuthenticatedSdkHttpClient {
 
-    private static final String ALL_DATACENTERS_KEY = "";
-
-    private LoadingCache<String, GetDataCenterListResponse> cache = CacheBuilder.newBuilder()
-        .maximumSize(20)
-        .expireAfterWrite(10, TimeUnit.SECONDS)
-        .refreshAfterWrite(10, TimeUnit.SECONDS)
-        .build(new CacheLoader<String, GetDataCenterListResponse>() {
-                   @Override
-                   public GetDataCenterListResponse load(String id) throws Exception {
-                       return loadAllDataCenters();
-                   }
-               }
-        );
-
     @Inject
     public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
-        GetDataCenterListResponse dataCenters = loadAllDataCenters();
-        cache.put(ALL_DATACENTERS_KEY, dataCenters);
     }
 
     public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(String dataCenterId) {
@@ -63,8 +47,25 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
                 .request().get(DatacenterDeploymentCapabilitiesMetadata.class);
     }
 
+    private LoadingCache<String, DataCenterMetadata> dataCenterCache = CacheBuilder.newBuilder()
+        .maximumSize(20)
+        .expireAfterWrite(1, TimeUnit.HOURS)
+        .refreshAfterWrite(1, TimeUnit.HOURS)
+        .build(
+            new CacheLoader<String, DataCenterMetadata>() {
+                @Override
+                public DataCenterMetadata load(String id) throws Exception {
+                    return loadDataCenter(id);
+                }
+            }
+        );
+
     public DataCenterMetadata getDataCenter(String dataCenterId) {
-        return findAllDataCenters().findById(dataCenterId);
+        try {
+            return dataCenterCache.get(dataCenterId);
+        } catch (ExecutionException ex) {
+            throw new ClcClientException(ex);
+        }
     }
 
     private DataCenterMetadata loadDataCenter(String dataCenterId) {
@@ -75,11 +76,26 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
             .request().get(DataCenterMetadata.class);
     }
 
+    private static final String ALL_DATACENTERS_KEY = "";
+
+    private LoadingCache<String, GetDataCenterListResponse> allDataCentersCache = CacheBuilder.newBuilder()
+        .maximumSize(20)
+        .expireAfterWrite(1, TimeUnit.HOURS)
+        .refreshAfterWrite(1, TimeUnit.HOURS)
+        .build(
+            new CacheLoader<String, GetDataCenterListResponse>() {
+                @Override
+                public GetDataCenterListResponse load(String id) throws Exception {
+                    return loadAllDataCenters();
+                }
+            }
+        );
+
     public GetDataCenterListResponse findAllDataCenters() {
         try {
-            return cache.get(ALL_DATACENTERS_KEY);
+            return allDataCentersCache.get(ALL_DATACENTERS_KEY);
         } catch (ExecutionException e) {
-            throw new ClcClientException(e.getMessage());
+            throw new ClcClientException(e);
         }
     }
 
