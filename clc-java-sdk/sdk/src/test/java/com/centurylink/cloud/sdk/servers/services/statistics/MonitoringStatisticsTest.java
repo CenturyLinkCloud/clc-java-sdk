@@ -56,9 +56,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     private DataCenter[] dataCenters = {DataCenter.DE_FRANKFURT};
     private String groupName = Group.DEFAULT_GROUP;
 
-    private static final int PRECISION = 4;
-    private static final MathContext MATH_CONTEXT = new MathContext(PRECISION);
-    private static final double DELTA = 1 / new BigDecimal(10).pow((PRECISION-1)).doubleValue();
+    private static final double DELTA = 0.5;
 
     @BeforeClass
     private void setup() {
@@ -169,7 +167,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
             entry.getStatistics().stream()
                 .forEach(st ->
-                        checkStatisticsEntry((MonitoringEntry)st, allSamplingEntries)
+                    checkStatisticsEntry((MonitoringEntry)st, allSamplingEntries)
                 );
         });
     }
@@ -194,7 +192,8 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
         MonitoringStatsEntry<AccountMetadata> result = resultList.get(0);
 
-        Map<Group, List<ServerMonitoringStatistics>> stats = groupService.getMonitoringStatsAsMap(groupFilter, timeFilter);
+        Map<Group, List<ServerMonitoringStatistics>> stats = groupService
+            .getMonitoringStatsAsMap(groupFilter, timeFilter);
 
         result.getStatistics().forEach(stat -> {
             List<SamplingEntry> allSamplingEntries = stats.values().stream()
@@ -257,7 +256,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
             "check cpu count"
         );
 
-        compareDoubleValues(
+        assertDoubleValues(
             entry.getCpuPercent(),
             samplingEntries.stream().collect(summingDouble(SamplingEntry::getCpuPercent)) / samplingEntries.size(),
             "check cpu percent average"
@@ -275,19 +274,19 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
             "check sum disk usage total capacity"
         );
 
-        compareDoubleValues(
+        assertDoubleValues(
             entry.getMemoryPercent(),
             samplingEntries.stream().collect(summingDouble(SamplingEntry::getMemoryPercent)) / samplingEntries.size(),
             "check memory percent average"
         );
 
-        compareDoubleValues(
+        assertDoubleValues(
             entry.getNetworkReceivedKBps(),
             samplingEntries.stream().collect(summingDouble(SamplingEntry::getNetworkReceivedKbps)),
             "check sum network received traffic"
         );
 
-        compareDoubleValues(
+        assertDoubleValues(
             entry.getNetworkTransmittedKBps(),
             samplingEntries.stream().collect(summingDouble(SamplingEntry::getNetworkTransmittedKbps)),
             "check sum network transmitted traffic"
@@ -331,12 +330,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
             );
     }
 
-    private void compareDoubleValues(double expected, double actual, String assertMessage) {
-        assertEquals(
-            new BigDecimal(expected).round(MATH_CONTEXT).doubleValue(),
-            new BigDecimal(actual).round(MATH_CONTEXT).doubleValue(),
-            DELTA,
-            assertMessage
-        );
+    private void assertDoubleValues(double expected, double actual, String assertMessage) {
+        assertEquals(expected, actual, DELTA, assertMessage);
     }
 }
