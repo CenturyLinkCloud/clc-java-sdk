@@ -12,7 +12,7 @@ public class ShellResponse implements ToStringMixin {
 
     public ShellResponse(int errorStatus, String message) {
         this.errorStatus = Preconditions.checkNotNull(errorStatus);
-        this.trace = Preconditions.checkNotNull(message);
+        this.trace = message;
     }
 
     public String getTrace() {

@@ -123,7 +123,7 @@ public class SshjClient implements SshClient {
         try {
             ssh.addHostKeyVerifier(new PromiscuousVerifier());
             withTimeout(Duration.ofMinutes(CONNECTION_TIMEOUT), () ->
-                    ssh.connect(host)
+                ssh.connect(host)
             );
             ssh.authPassword(credentials.getUserName(), credentials.getPassword());
             for (String command : commandList) {
@@ -148,7 +148,7 @@ public class SshjClient implements SshClient {
     }
 
     private Integer exitStatus(Session.Command cmd) {
-        if (cmd != null) {
+        if (cmd != null && cmd.getExitStatus() != null) {
             return cmd.getExitStatus();
         } else {
             return 0;
