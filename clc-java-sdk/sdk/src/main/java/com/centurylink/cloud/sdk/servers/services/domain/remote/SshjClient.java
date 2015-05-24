@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
+import static net.schmizz.sshj.common.IOUtils.closeQuietly;
 
 /**
  * @author Anton Karavayeu
@@ -135,15 +136,13 @@ public class SshjClient implements SshClient {
         } catch (IOException e) {
             throw new SshException(e);
         } finally {
-            try {
-                if (session != null) {
-                    session.close();
-                }
-                ssh.disconnect();
-            } catch (IOException e) {
-                throw new SshException(e);
+            if (session != null) {
+                closeQuietly(session);
             }
+
+            closeQuietly(ssh);
         }
+
         return new OperationFuture<>(response, new NoWaitingJobFuture());
     }
 
