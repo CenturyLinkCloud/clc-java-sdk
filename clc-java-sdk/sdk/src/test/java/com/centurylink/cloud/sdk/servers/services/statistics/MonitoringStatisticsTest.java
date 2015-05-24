@@ -238,7 +238,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
     private void checkSamplingCount(List<SamplingEntry> allSamplingEntries, MonitoringStatsEntry entry) {
         long sampleCount = allSamplingEntries.stream()
-            .map(stat -> stat.getTimestamp())
+            .map(SamplingEntry::getTimestamp)
             .distinct()
             .count();
 

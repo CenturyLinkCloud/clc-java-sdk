@@ -20,6 +20,10 @@ import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 /**
  * @author ilya.drabenia
  */
@@ -32,14 +36,16 @@ public class SdkHttpClient {
             .register(new ErrorProcessingFilter());
 
     public SdkHttpClient(SdkConfiguration config) {
-        CLIENT_BUILDER.maxRetries(config.getMaxRetries());
-        CLIENT_BUILDER.proxyConfig(
-            config.getProxyHost(),
-            config.getProxyPort(),
-            config.getProxyScheme(),
-            config.getProxyUsername(),
-            config.getProxyPassword()
-        );
+        CLIENT_BUILDER
+            .maxRetries(config.getMaxRetries())
+            .proxyConfig(
+                config.getProxyHost(),
+                config.getProxyPort(),
+                config.getProxyScheme(),
+                config.getProxyUsername(),
+                config.getProxyPassword()
+            )
+            .socketTimeout(1, MINUTES);
     }
 
     protected ResteasyClient buildClient() {
