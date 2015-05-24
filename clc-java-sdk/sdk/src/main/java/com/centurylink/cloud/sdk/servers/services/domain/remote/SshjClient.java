@@ -136,11 +136,7 @@ public class SshjClient implements SshClient {
         } catch (IOException e) {
             throw new SshException(e);
         } finally {
-            if (session != null) {
-                closeQuietly(session);
-            }
-
-            closeQuietly(ssh);
+            closeQuietly(ssh, session);
         }
 
         return new OperationFuture<>(response, new NoWaitingJobFuture());
