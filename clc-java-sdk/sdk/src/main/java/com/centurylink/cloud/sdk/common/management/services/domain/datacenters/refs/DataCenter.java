@@ -29,6 +29,7 @@ public abstract class DataCenter implements Reference<DataCenterFilter> {
     public static final DataCenterByIdRef GB_PORTSMOUTH = refById("gb1");
     public static final DataCenterByIdRef GB_SLOUGH = refById("gb3");
     public static final DataCenterByIdRef US_CENTRAL_CHICAGO = refById("il1");
+    public static final DataCenterByIdRef SG_APAC = refById("sg1");
     public static final DataCenterByIdRef US_CENTRAL_SALT_LAKE_CITY = refById("ut1");
     public static final DataCenterByIdRef US_EAST_NEW_YORK = refById("ny1");
     public static final DataCenterByIdRef US_EAST_STERLING = refById("va1");
