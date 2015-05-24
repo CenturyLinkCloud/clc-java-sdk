@@ -15,6 +15,8 @@
 
 package com.centurylink.cloud.sdk.core.config;
 
+import java.time.Duration;
+
 /**
  * @author Ilya Drabenia
  */
@@ -25,6 +27,7 @@ public class SdkConfigurationBuilder {
     private String proxyScheme;
     private String proxyUsername;
     private String proxyPassword;
+    private long socketTimeout = Duration.ofMinutes(1L).toMillis();
 
     public Integer getMaxRetries() {
         return maxRetries;
@@ -130,6 +133,12 @@ public class SdkConfigurationBuilder {
     }
 
 
+    public long getSocketTimeout() {
+        return socketTimeout;
+    }
 
-
+    public SdkConfigurationBuilder socketTimeout(long socketTimeout) {
+        this.socketTimeout = socketTimeout;
+        return this;
+    }
 }

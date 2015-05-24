@@ -22,11 +22,12 @@ import com.google.inject.AbstractModule;
  */
 public class SdkConfiguration {
     private final Integer maxRetries;
-    private String proxyHost;
-    private int proxyPort = -1;
-    private String proxyScheme;
-    private String proxyUsername;
-    private String proxyPassword;
+    private final String proxyHost;
+    private final int proxyPort;
+    private final String proxyScheme;
+    private final String proxyUsername;
+    private final String proxyPassword;
+    private final long socketTimeout;
 
     public static final SdkConfiguration DEFAULT = new SdkConfiguration();
 
@@ -41,6 +42,7 @@ public class SdkConfiguration {
         proxyScheme = builder.getProxyScheme();
         proxyUsername = builder.getProxyUsername();
         proxyPassword = builder.getProxyPassword();
+        socketTimeout = builder.getSocketTimeout();
     }
 
     public Integer getMaxRetries() {
@@ -65,6 +67,10 @@ public class SdkConfiguration {
 
     public String getProxyPassword() {
         return proxyPassword;
+    }
+
+    public long getSocketTimeout() {
+        return socketTimeout;
     }
 
     public AbstractModule asModule() {

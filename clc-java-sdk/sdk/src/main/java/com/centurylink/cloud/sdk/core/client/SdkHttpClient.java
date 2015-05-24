@@ -22,6 +22,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 
 import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
@@ -45,7 +46,7 @@ public class SdkHttpClient {
                 config.getProxyUsername(),
                 config.getProxyPassword()
             )
-            .socketTimeout(1, MINUTES);
+            .socketTimeout(config.getSocketTimeout(), MILLISECONDS);
     }
 
     protected ResteasyClient buildClient() {
