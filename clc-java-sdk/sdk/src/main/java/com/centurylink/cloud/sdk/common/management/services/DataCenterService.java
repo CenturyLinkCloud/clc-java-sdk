@@ -50,8 +50,8 @@ public class DataCenterService implements QueryService<DataCenter, DataCenterFil
         return serverClient.findAllDataCenters();
     }
 
-    public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(DataCenter ref) {
-        return serverClient.getDeploymentCapabilities(idByRef(ref));
+    public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(DataCenter dataCenter) {
+        return serverClient.getDeploymentCapabilities(idByRef(dataCenter));
     }
 
     String idByRef(DataCenter ref) {
