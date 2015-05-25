@@ -20,7 +20,8 @@ package com.centurylink.cloud.sdk.servers.services.domain.server;
  */
 public enum StorageType {
     STANDARD("standard"),
-    PREMIUM("premium");
+    PREMIUM("premium"),
+    HYPERSCALE("hyperscale");
 
     private String code;
 

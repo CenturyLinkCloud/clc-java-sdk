@@ -15,7 +15,12 @@
 
 package com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.annotation.Generated;
 import java.util.ArrayList;
@@ -54,6 +59,8 @@ public class TemplateMetadata {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     @JsonIgnore
     public static final String MANAGED_OS_VALUE = "managedOS";
+    @JsonIgnore
+    public static final String HYPERSCALE_VALUE = "hyperscale";
 
     /**
      *
