@@ -24,8 +24,6 @@ import com.google.inject.Inject;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +38,7 @@ import static java.util.stream.Collectors.toList;
 * @author aliaksandr.krasitski
 */
 @Test(groups = {INTEGRATION, LONG_RUNNING})
+@SuppressWarnings("unchecked")
 public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
     @Inject
