@@ -157,7 +157,7 @@ public class CreateServerRequest {
      * Whether to create standard or hyperscale server
      */
     public CreateServerRequest type(String type, boolean hasCapability) {
-        if (type.equals(ServerType.HYPERSCALE) && !hasCapability) {
+        if (ServerType.HYPERSCALE.getCode().equals(type) && !hasCapability) {
             throw new IllegalArgumentException("Hyperscale server type is not available in selected data center");
         }
         this.type = type;
@@ -175,7 +175,7 @@ public class CreateServerRequest {
      * Whether to create standard or premium storage
      */
     public CreateServerRequest storageType(String storageType, boolean hasCapability) {
-        if (storageType.equals(StorageType.PREMIUM.getCode()) && !hasCapability) {
+        if (StorageType.PREMIUM.getCode().equals(storageType) && !hasCapability) {
             throw new IllegalArgumentException("Premium storage type is not supported by this datacenter");
         }
         this.storageType = storageType;
