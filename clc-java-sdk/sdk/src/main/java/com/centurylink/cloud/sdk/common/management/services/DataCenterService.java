@@ -17,8 +17,10 @@ package com.centurylink.cloud.sdk.common.management.services;
 
 import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.google.inject.Inject;
 
@@ -46,5 +48,17 @@ public class DataCenterService implements QueryService<DataCenter, DataCenterFil
 
     public List<DataCenterMetadata> findAll() {
         return serverClient.findAllDataCenters();
+    }
+
+    public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(DataCenter dataCenter) {
+        return serverClient.getDeploymentCapabilities(idByRef(dataCenter));
+    }
+
+    String idByRef(DataCenter ref) {
+        if (ref.is(DataCenterByIdRef.class)) {
+            return ref.as(DataCenterByIdRef.class).getId();
+        } else {
+            return findByRef(ref).getId();
+        }
     }
 }

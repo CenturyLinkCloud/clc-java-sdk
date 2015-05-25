@@ -16,7 +16,10 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.networks.services.NetworkService;
+import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.ModifyServerRequest;
@@ -35,17 +38,23 @@ public class ServerConverter {
     private final GroupService groupService;
     private final TemplateService templateService;
     private final NetworkService networkService;
+    private final DataCenterService dataCenterService;
 
     @Inject
     public ServerConverter(GroupService groupService, TemplateService templateService,
-                           NetworkService networkService) {
+                           NetworkService networkService, DataCenterService dataCenterService) {
         this.groupService = groupService;
         this.templateService = templateService;
         this.networkService = networkService;
+        this.dataCenterService = dataCenterService;
     }
 
     public CreateServerRequest buildCreateServerRequest(CreateServerConfig newServer) {
         TemplateMetadata templateMetadata = templateService.findByRef(newServer.getTemplate());
+        GroupMetadata groupMetadata = groupService.findByRef(newServer.getGroup());
+        if (newServer.getType().equals(ServerType.HYPERSCALE)) {
+            newServer.storageType(StorageType.HYPERSCALE);
+        }
         return
             new CreateServerRequest()
                 .name(newServer.getName())
@@ -54,12 +63,16 @@ public class ServerConverter {
                 .memoryGB(newServer.getMachine().getRam())
                 .additionalDisks(buildDiskRequestList(newServer.getMachine().getDisks()))
                 .password(newServer.getPassword())
-                .groupId(
-                    groupService
-                        .findByRef(newServer.getGroup())
-                        .getId()
+                .groupId(groupMetadata.getId())
+                .type(
+                    newServer.getType().getCode(),
+                    templateMetadata.hasCapability(TemplateMetadata.HYPERSCALE_VALUE))
+                .storageType(
+                    newServer.getStorageType().getCode(),
+                    dataCenterService.getDeploymentCapabilities(
+                        DataCenter.refById(groupMetadata.getLocationId())
+                    ).getSupportsPremiumStorage()
                 )
-                .type(ServerType.STANDARD.getCode())
                 .sourceServerId(templateMetadata.getName())
                 .primaryDns(newServer.getNetwork().getPrimaryDns())
                 .secondaryDns(newServer.getNetwork().getSecondaryDns())

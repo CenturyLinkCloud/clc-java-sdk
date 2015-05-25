@@ -15,10 +15,11 @@
 
 package com.centurylink.cloud.sdk.servers.services.servers.create;
 
+import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.ServersModule;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
@@ -66,6 +67,9 @@ public class DiskManagementTest extends AbstractServersSdkTest {
     @Inject
     GroupService groupService;
 
+    @Inject
+    DataCenterService dataCenterService;
+
     @Override
     protected List<Module> modules() {
         return list(new AuthModule(), Modules.override(new ServersModule()).with(new TestModule() {
@@ -74,7 +78,8 @@ public class DiskManagementTest extends AbstractServersSdkTest {
                 this
                     .mock(ServerClient.class)
                     .mock(TemplateService.class)
-                    .mock(GroupService.class);
+                    .mock(GroupService.class)
+                    .mock(DataCenterService.class);
             }
         }));
     }
@@ -82,8 +87,13 @@ public class DiskManagementTest extends AbstractServersSdkTest {
     @Test
     public void testCreateServerWithDisksOperation() {
         when(templateService.findByRef(any())).thenReturn(new TemplateMetadata());
-        when(groupService.findByRef(any())).thenReturn(new GroupMetadata());
+        when(groupService.findByRef(any())).thenReturn(new GroupMetadata(){{setLocationId("de1");}});
         when(serverClient.findServerByUuid(any())).thenReturn(new ServerMetadata());
+        when(dataCenterService.getDeploymentCapabilities(any())).thenReturn(
+            new DatacenterDeploymentCapabilitiesMetadata() {{
+                setSupportsPremiumStorage(true);
+            }}
+        );
         when(serverClient.create(any()))
             .thenReturn(new BaseServerResponse(null, true, new ArrayList<Link>() {{
                 add(new Link() {{

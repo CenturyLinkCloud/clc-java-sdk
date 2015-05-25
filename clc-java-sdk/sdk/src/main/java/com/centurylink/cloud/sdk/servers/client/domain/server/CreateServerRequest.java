@@ -15,6 +15,8 @@
 
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
+import com.centurylink.cloud.sdk.servers.services.domain.server.StorageType;
 import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -36,6 +38,8 @@ public class CreateServerRequest {
 
     private String type;
 
+    private String storageType;
+
     private String password;
 
     private String primaryDns;
@@ -52,8 +56,6 @@ public class CreateServerRequest {
     private boolean isManagedOS;
 
     private boolean isManagedBackup;
-
-    private String storageType = "standard";
 
 
     /**
@@ -93,14 +95,6 @@ public class CreateServerRequest {
      */
     public CreateServerRequest memoryGB(Integer memoryGB) {
         this.memoryGB = memoryGB;
-        return this;
-    }
-
-    /**
-     * Whether to create standard or hyperscale server
-     */
-    public CreateServerRequest type(String type) {
-        this.type = type;
         return this;
     }
 
@@ -157,6 +151,35 @@ public class CreateServerRequest {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Whether to create standard or hyperscale server
+     */
+    public CreateServerRequest type(String type, boolean hasCapability) {
+        if (ServerType.HYPERSCALE.getCode().equals(type) && !hasCapability) {
+            throw new IllegalArgumentException("Hyperscale server type is not available in selected data center");
+        }
+        this.type = type;
+        return this;
+    }
+
+    /**
+     * Whether to create standard or premium storage
+     */
+    public String getStorageType() {
+        return storageType;
+    }
+
+    /**
+     * Whether to create standard or premium storage
+     */
+    public CreateServerRequest storageType(String storageType, boolean hasCapability) {
+        if (StorageType.PREMIUM.getCode().equals(storageType) && !hasCapability) {
+            throw new IllegalArgumentException("Premium storage type is not supported by this datacenter");
+        }
+        this.storageType = storageType;
+        return this;
     }
 
     public String getPassword() {
@@ -248,13 +271,5 @@ public class CreateServerRequest {
 
         this.isManagedOS = isManagedOS;
         return this;
-    }
-
-    public String getStorageType() {
-        return storageType;
-    }
-
-    public void setStorageType(String storageType) {
-        this.storageType = storageType;
     }
 }
