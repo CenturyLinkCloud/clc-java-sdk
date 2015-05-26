@@ -54,7 +54,7 @@ public class SuperCommandSampleApp extends Assert {
 
     public SuperCommandSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider()
         );
 
         serverService = sdk.serverService();

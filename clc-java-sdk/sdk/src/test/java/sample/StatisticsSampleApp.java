@@ -59,7 +59,7 @@ public class StatisticsSampleApp extends Assert {
 
     public StatisticsSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider()
         );
 
         serverService = sdk.serverService();

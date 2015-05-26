@@ -61,7 +61,7 @@ public class SearchQueriesSampleApp extends Assert {
 
     public SearchQueriesSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider()
         );
 
         serverService = sdk.serverService();

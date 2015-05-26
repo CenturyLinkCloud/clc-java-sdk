@@ -51,7 +51,7 @@ public class PowerOperationsSampleApp extends Assert {
 
     public PowerOperationsSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider()
         );
 
         serverService = sdk.serverService();
