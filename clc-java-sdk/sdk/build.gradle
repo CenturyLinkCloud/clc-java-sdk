@@ -44,6 +44,9 @@ test {
         showCauses = true
         exceptionFormat = 'full' // full information about failed tests
     }
+
+    systemProperty "clc.username", System.getProperty("clc.username")
+    systemProperty "clc.password", System.getProperty("clc.password")
 }
 
 task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
@@ -56,6 +59,9 @@ task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
         showCauses = true
         exceptionFormat = 'full' // full information about failed tests
     }
+
+    systemProperty "clc.username", System.getProperty("clc.username")
+    systemProperty "clc.password", System.getProperty("clc.password")
 }
 
 task runSamples(type: Test, dependsOn: 'compileTestJava') {
@@ -68,6 +74,9 @@ task runSamples(type: Test, dependsOn: 'compileTestJava') {
         showCauses = true
         exceptionFormat = 'full' // full information about failed tests
     }
+
+    systemProperty "clc.username", System.getProperty("clc.username")
+    systemProperty "clc.password", System.getProperty("clc.password")
 }
 
 // In this section you declare the dependencies for your production and test code
