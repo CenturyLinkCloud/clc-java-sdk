@@ -13,24 +13,4 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
 
-repositories {
-    jcenter()
-}
-
-dependencies {
-
-}
-
-task run {
-    description('Run it on jetty.')
-    dependsOn(':sample:web-app:app:run')
-}
-
-task clientBuild {
-    description('Assemble client part of sample application.')
-    dependsOn(':sample:web-app:client:gulp_build')
-}
-
-build.dependsOn(':sample:web-app:app:build')

@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.sample.domain;
 
 import com.centurylink.cloud.sdk.ClcSdk;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,6 +36,10 @@ public class SdkCache {
     }
 
     public ClcSdk findOrCreate(SdkCredentials credentials) {
+        if (credentials == null) {
+            throw new ClcException("Authorization Required");
+        }
+
         if (map.get(credentials.toString()) == null) {
             map.putIfAbsent(
                 credentials.toString(),

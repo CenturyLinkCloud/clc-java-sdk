@@ -42,10 +42,10 @@ import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHiera
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
-import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
+import static sample.SamplesTestsConstants.SAMPLES;
 import static java.util.stream.Collectors.toList;
 
-@Test(groups = SAMPLES)
+@Test(groups = {SAMPLES})
 public class SuperCommandSampleApp extends Assert {
 
     private ServerService serverService;
