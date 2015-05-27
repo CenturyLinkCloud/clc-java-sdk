@@ -117,7 +117,11 @@ public class SingleServerFixture {
     @Test(enabled = false) // it's assert
     public void assertThatServerProperlyStarted(ServerMetadata metadata) {
         assertEquals(metadata.getLocationId().toUpperCase(), "DE1");
-        assertEquals(metadata.getDetails().getPowerState(), "started");
+
+        if (metadata.getDetails() != null) {
+            assertEquals(metadata.getDetails().getPowerState(), "started");
+        }
+
         assertEquals(metadata.getStatus(), "active");
     }
 
