@@ -40,7 +40,7 @@ export class LoginPage extends React.Component {
 
     createSession () {
         sessions.createNew(this.state.username, this.state.password);
-        this.transitionToRoute('dashboard');
+        setTimeout(() => this.transitionToRoute('dashboard'));
     }
 
     getContext() {

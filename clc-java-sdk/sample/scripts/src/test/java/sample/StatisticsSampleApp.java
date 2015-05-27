@@ -49,7 +49,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerSta
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
-import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
+import static sample.SamplesTestsConstants.SAMPLES;
 
 public class StatisticsSampleApp extends Assert {
 
@@ -59,7 +59,7 @@ public class StatisticsSampleApp extends Assert {
 
     public StatisticsSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider()
         );
 
         serverService = sdk.serverService();

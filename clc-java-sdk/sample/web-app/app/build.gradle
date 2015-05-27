@@ -36,7 +36,7 @@ repositories {
     mavenCentral()
 }
 
-build.dependsOn(':sample:client:gulp_build')
+build.dependsOn(':sample:web-app:client:gulp_build')
 
 dependencies {
     compile project(':sdk')

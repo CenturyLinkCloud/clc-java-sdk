@@ -48,7 +48,7 @@ import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerSta
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
-import static com.centurylink.cloud.sdk.tests.TestGroups.SAMPLES;
+import static sample.SamplesTestsConstants.SAMPLES;
 import static com.google.common.collect.Sets.newHashSet;
 
 public class SearchQueriesSampleApp extends Assert {
@@ -61,7 +61,7 @@ public class SearchQueriesSampleApp extends Assert {
 
     public SearchQueriesSampleApp() {
         ClcSdk sdk = new ClcSdk(
-            new DefaultCredentialsProvider("centurylink-clc-sdk-uat.properties")
+            new DefaultCredentialsProvider()
         );
 
         serverService = sdk.serverService();
@@ -69,7 +69,7 @@ public class SearchQueriesSampleApp extends Assert {
         templateService = sdk.templateService();
     }
 
-    @BeforeClass(groups = SAMPLES)
+    @BeforeClass(groups = {SAMPLES})
     public void init() {
         clearAll();
 
@@ -105,7 +105,7 @@ public class SearchQueriesSampleApp extends Assert {
         assertThatServerHasStatus(server2Va, "archived");
     }
 
-    @AfterClass(groups = SAMPLES)
+    @AfterClass(groups = {SAMPLES})
     public void deleteServers() {
         clearAll();
     }
@@ -179,7 +179,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 1. List all servers available for current user
      */
-    @Test(groups = SAMPLES)
+    @Test(groups = {SAMPLES})
     public void findAllServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter()
@@ -192,7 +192,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 2. Find all active servers in all datacenters
      */
-    @Test(groups = SAMPLES)
+    @Test(groups = {SAMPLES})
     public void findAllActiveServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter().onlyActive()
@@ -204,7 +204,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 3. Find server within "uta1" group in all datacenters
      */
-    @Test(groups = SAMPLES)
+    @Test(groups = {SAMPLES})
     public void findGroupServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter().groupNameContains("uat1")
@@ -216,7 +216,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 4. Find server that contains some value in it's metadata
      */
-    @Test(groups = SAMPLES)
+    @Test(groups = {SAMPLES})
     public void findServersByMetadataValueTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
             new ServerFilter().where(
@@ -230,7 +230,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 5. Find templates of specified operating system
      */
-    @Test(groups = SAMPLES)
+    @Test(groups = {SAMPLES})
     public void findOsTemplatesTest() {
         List<TemplateMetadata> templateMetadataList = templateService.find(
             new TemplateFilter()
@@ -245,7 +245,7 @@ public class SearchQueriesSampleApp extends Assert {
     /**
      * Step 6. Find groups that contains keyword in description
      */
-    @Test(groups = SAMPLES)
+    @Test(groups = {SAMPLES})
     public void testFindGroupsByDescriptionKeyword() {
         List<GroupMetadata> groupMetadataList = groupService.find(
             new GroupFilter()
