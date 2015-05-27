@@ -30,6 +30,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author Ilya Drabenia
  */
+/* TODO uncomment when it will be fixed */
 //@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
@@ -38,7 +39,7 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
     ServerMetadata server;
 
-    @Test
+//    @Test
     public void testCreateServerWithPublicIp() throws Exception {
         server =
             serverService.create(TestServerSupport.anyServerConfig()
@@ -55,7 +56,7 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest {
         assert !isNullOrEmpty(server.getId());
     }
 
-    @AfterMethod
+//    @AfterMethod
     public void deleteServer() {
         serverService.delete(server.asRefById().asFilter());
     }
