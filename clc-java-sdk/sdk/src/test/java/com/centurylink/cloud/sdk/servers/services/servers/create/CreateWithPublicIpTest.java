@@ -25,14 +25,12 @@ import com.google.inject.Inject;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author Ilya Drabenia
  */
-@Test(groups = {INTEGRATION, LONG_RUNNING})
+//@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
     @Inject
