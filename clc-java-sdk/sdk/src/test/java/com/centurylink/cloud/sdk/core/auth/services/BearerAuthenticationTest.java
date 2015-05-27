@@ -18,11 +18,13 @@ package com.centurylink.cloud.sdk.core.auth.services;
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
+import com.centurylink.cloud.sdk.tests.TestGroups;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.core.MultivaluedHashMap;
 
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -42,7 +44,7 @@ public class BearerAuthenticationTest {
         return context;
     }
 
-    @Test
+    @Test(groups = INTEGRATION)
     public void testBearerTokenFilter() throws Exception {
         mockLogin();
         ClientRequestContext context = stubRequestContext();

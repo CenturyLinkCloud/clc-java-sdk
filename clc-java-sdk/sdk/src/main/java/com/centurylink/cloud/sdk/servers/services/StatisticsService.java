@@ -30,7 +30,7 @@ public class StatisticsService {
     private final GroupService groupService;
     private final DataCenterService dataCenterService;
 
-    private String accountAlias;
+    private BearerAuthentication authentication;
 
     @Inject
     public StatisticsService(
@@ -42,7 +42,7 @@ public class StatisticsService {
         this.serverService = serverService;
         this.groupService = groupService;
         this.dataCenterService = dataCenterService;
-        this.accountAlias = authentication.getAccountAlias();
+        this.authentication = authentication;
     }
 
     public BillingStatsEngine billingStats() {
@@ -50,7 +50,7 @@ public class StatisticsService {
     }
 
     public MonitoringStatsEngine monitoringStats() {
-        return new MonitoringStatsEngine(serverService, groupService, dataCenterService, accountAlias);
+        return new MonitoringStatsEngine(serverService, groupService, dataCenterService, authentication.getAccountAlias());
     }
 
 

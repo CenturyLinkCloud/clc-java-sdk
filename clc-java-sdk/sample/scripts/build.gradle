@@ -22,6 +22,8 @@ repositories {
     jcenter()
 }
 
+test.onlyIf { false }
+
 task runSamples(type: Test, dependsOn: 'compileTestJava') {
     useTestNG() {
         includeGroups 'Samples'

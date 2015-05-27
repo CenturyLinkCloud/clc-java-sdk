@@ -34,7 +34,7 @@ repositories {
 
 test {
     useTestNG() {
-        excludeGroups 'LongRunning', 'Samples'
+        excludeGroups 'Integration' ,'LongRunning', 'Samples'
         parallel 'classes'
         threadCount 25
     }
