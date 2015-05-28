@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk;
 
 import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
@@ -52,6 +53,9 @@ public class ClcSdk {
 
     @Inject
     StatisticsService statisticsService;
+
+    @Inject
+    LoginClient loginClient;
 
     public ClcSdk() {
         this(new DefaultCredentialsProvider());
@@ -93,5 +97,9 @@ public class ClcSdk {
 
     public StatisticsService statisticsService() {
         return statisticsService;
+    }
+
+    public LoginClient loginClient() {
+        return loginClient;
     }
 }

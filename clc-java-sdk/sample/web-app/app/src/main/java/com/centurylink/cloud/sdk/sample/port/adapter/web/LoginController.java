@@ -15,8 +15,12 @@
 
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
+import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.sample.domain.SdkCredentials;
+import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
 import com.centurylink.cloud.sdk.sample.port.adapter.web.beans.LoginForm;
 import com.centurylink.cloud.sdk.sample.port.adapter.web.beans.StatusResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,8 +36,20 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/account")
 public class LoginController {
 
+    @Autowired
+    SdkRegistry sdkRegistry;
+
     @RequestMapping(value = "/login", method = POST)
     public StatusResponse login(@RequestBody LoginForm loginForm, HttpSession session) {
+        sdkRegistry.setCredentials(new SdkCredentials(loginForm.getUsername(), loginForm.getPassword()));
+
+        //check credentials
+        try {
+            sdkRegistry.getSdk().dataCenterService().findAll();
+        } catch (Exception e) {
+            throw new ClcClientException(e.getMessage());
+        }
+
         session.setAttribute("clc.username", loginForm.getUsername());
         session.setAttribute("clc.password", loginForm.getPassword());
 
