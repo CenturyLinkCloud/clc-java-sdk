@@ -40,8 +40,9 @@ public class BindSpiesModule extends TestModule {
         Stream
             .of(declaredFields())
             .filter(f -> f.isAnnotationPresent(Spy.class))
-            .forEach(f -> bind(f.getType())
-                .toProvider(new SpyProvider<>(f.getType()))
+            .forEach(f ->
+                bind(f.getType()).toProvider(new SpyProvider(f.getType())
+            )
         );
     }
 
