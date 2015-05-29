@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
@@ -53,6 +54,7 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
 
     private final static String DEFAULT_GROUP_NAME = Group.DEFAULT_GROUP;
     private final static String SUB_GROUP_NAME = "st-gp";
+    private final static String SUB_GROUP_ID = "a6eca7d3ff724896831b3ecd7aba3c00";
 
     private final static String FIRST_SERVER_ID = "de1altdmd-srv189";
     private final static String SECOND_SERVER_ID = "de1altdmd-srv190";
@@ -98,6 +100,15 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
             .doReturn(serverMetadataList)
                 .when(serverService).find(anyObject());
 
+        Mockito
+            .doReturn(
+                new GroupMetadata() {{
+                    setId(SUB_GROUP_ID);
+                    setName(SUB_GROUP_NAME);
+                    setLocationId(DataCenter.DE_FRANKFURT.getId());
+                }}
+            )
+            .when(serverClient).getGroup(eq(SUB_GROUP_ID), anyBoolean());
     }
 
     private List<ServerMetadata> mockFindServersResult() {
