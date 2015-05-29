@@ -1,0 +1,18 @@
+1. Getting Started
+  * [Installation](./1.-Getting-started#installation)
+  * [Providing credentials](./1.-Getting-started#providing-credentials)
+  * [Creating a server](./1.-Getting-started#creating-a-server)
+  * [Searching servers](./1.-Getting-started#searching-servers)
+  * [Power operations on a server](./1.-Getting-started#power-operations-on-a-server)
+2. User Guide
+  * [Server management](./2.1-Server-management)
+  * [Server actions](./2.2-Server-actions)
+  * [Configuring remote servers over SSH](./2.3-Configuring-remote-servers-over-SSH)
+  * [Managing groups](./2.4-Managing-groups)
+  * [Group actions](./2.5-Group-actions)
+  * [Defining a group hierarchy](./2.6-Defining-a-group-hierarchy)
+  * [Searching templates](./2.7-Searching-templates)
+  * [Searching data centers](./2.8-Searching-data-centers)
+  * [Billing statistics](./2.9-Billing-statistics)
+  * [Server monitoring statistics](./2.10-Server-monitoring-statistics)
+  * [SDK configuration](./2.11-SDK-configuration)

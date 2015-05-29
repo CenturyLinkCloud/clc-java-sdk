@@ -1,6 +1,6 @@
 Documentation
 -------------
-See the [wiki](https://github.com/LioK/clc-java-sdk-docs2/wiki) for CLC Java SDK getting-started and user guides.
+See the [wiki](.) for CLC Java SDK getting-started and user guides.
 
 Build process details
 ---------------------
@@ -15,7 +15,7 @@ $ gradle build
 Configuration details
 ---------------------
 
-Please see the [SDK configuration](https://github.com/LioK/clc-java-sdk-docs2/wiki/2.11-SDK-configuration) section for details and examples of how to configure the CLC SDK.
+Please see the [SDK configuration](./2.11-SDK-configuration) section for details and examples of how to configure the CLC SDK.
 
 Example
 -------
