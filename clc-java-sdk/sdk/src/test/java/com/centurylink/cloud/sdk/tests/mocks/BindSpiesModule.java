@@ -36,6 +36,7 @@ public class BindSpiesModule extends TestModule {
         overrideSpyBinding();
     }
 
+    @SuppressWarnings("unchecked")
     private void overrideSpyBinding() {
         Stream
             .of(declaredFields())
