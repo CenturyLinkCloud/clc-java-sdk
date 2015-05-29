@@ -16,23 +16,23 @@ $ gradle build
 Configuration details
 ---------------------
 
-Please see the [SDK configuration](https://github.com/LioK/clc-java-sdk-docs2/wiki/2.11-SDK-configuration) section for details and examples of how to configure the CLC SDK.
+Please see the [SDK configuration](https://github.com/LioK/clc-java-sdk-docs2/wiki/2.11-SDK-configuration) 
+section for details and examples of how to configure the CLC SDK.
 
 Example
 -------
 This example shows some of the functionality supported by the CLC Java SDK:
+
 ```java
 import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
+
 ...
-ClcSdk sdk = new ClcSdk(
-    new DefaultCredentialsProvider("user", "password")
-);
+ClcSdk sdk = new ClcSdk("user", "password");
 
 ServerService serverService = sdk.serverService();
 GroupService groupService = sdk.groupService();
 
-List<Group> groups =
-groupService
+List<Group> groups = groupService
     .defineInfrastructure(dataCenter(DataCenter.DE_FRANKFURT).subitems(
         group("Root Group").subitems(
             group("Business").subitems(
@@ -50,8 +50,9 @@ groupService
                 )
             )
         )
-    )
-).waitUntilComplete().getResult();
+    ))
+    .waitUntilComplete()
+    .getResult();
 ```
 
 License
