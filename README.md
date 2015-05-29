@@ -1,37 +1,59 @@
 
+Documentation
+-------------
+See the [wiki](https://github.com/LioK/clc-java-sdk-docs2/wiki) for CLC Java SDK getting-started and user guides.
 
-Project Structure
---------------------
-
-* clc-java-sdk - module that contains all projects related to CLC Java SDK
-    * sample - module that contains sample application
-        * client - module contains web client of sample application
-        * app - module contains backend of sample application
-    * sdk - module that contains SDK library
-
-
-Continuous Integration
-----------------------
-
-CI Specification:
-
- Parameter    | Value
- -------------|------------------
- URL          | http://66.155.4.208:8080/
- Authentication | GitHub Account Credentials
- IP Address   | 66.155.4.208
- Ssh Credentials | ci / 1qa@WS3ed
- Jdk Home     | /usr/local/jdk1.8.0_40
- Gradle Home  | /usr/local/gradle-2.1.1
- 
-***TODO items:***
-* configure continuous installation of web client
-* move from pulling changes tracking to GitHub repo webhooks
-
-
-Project Documentation
+Build process details
 ---------------------
-* [Architecture Specification](https://docs.google.com/document/d/1aSlv1wPeGxo4w7nY-X8u3QX-0NmITAJoPLAHIB_70Cc/edit?usp=sharing)
-* [Scope Description](https://docs.google.com/document/d/16_i2pxJk9bgP5fgwwkiKveqSAm0eAdgsnWBpdtIlTLY/edit)
-* [Business Scenarios](https://docs.google.com/document/d/10RTqkJ0tYmeV_S5nH0xcYcPIkXANp3mVEQOD-HGTM7E/edit?usp=sharing)
-* [Schedule](https://docs.google.com/spreadsheets/d/12M36PdDvlbovWbvaJ_HULh1pqF24VgQOQrYmGIlzO38/edit?usp=sharing)
+To build sources, you need to install Gradle 2.2.1 or later. To check out and build the ClcSDK source, issue the following commands:
+
+```
+$ git clone git@github.com:CenturyLinkCloud/clc-java-sdk.git
+$ cd clc-java-sdk/clc-java-sdk
+$ gradle build
+```
+
+Configuration details
+---------------------
+
+Please see the [SDK configuration](https://github.com/LioK/clc-java-sdk-docs2/wiki/2.11-SDK-configuration) section for details and examples of how to configure the CLC SDK.
+
+Example
+-------
+This example shows some of the functionality supported by the CLC Java SDK:
+```java
+import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
+...
+ClcSdk sdk = new ClcSdk(
+    new DefaultCredentialsProvider("user", "password")
+);
+
+ServerService serverService = sdk.serverService();
+GroupService groupService = sdk.groupService();
+
+List<Group> groups =
+groupService
+    .defineInfrastructure(dataCenter(DataCenter.DE_FRANKFURT).subitems(
+        group("Root Group").subitems(
+            group("Business").subitems(
+                new CreateServerConfig()
+                .name("SRV")
+                .machine(new Machine()
+                    .cpuCount(1)
+                    .ram(2)
+                )
+                .template(Template.refByOs()
+                    .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
+                    .type(CENTOS)
+                    .version("6")
+                    .architecture(x86_64)
+                )
+            )
+        )
+    )
+).waitUntilComplete().getResult();
+```
+
+License
+-------
+This project is licensed under the [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
