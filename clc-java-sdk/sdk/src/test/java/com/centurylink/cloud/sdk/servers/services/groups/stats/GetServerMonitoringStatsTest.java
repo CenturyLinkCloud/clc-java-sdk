@@ -20,7 +20,6 @@ import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.SamplingEntry;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
-import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
@@ -36,7 +35,6 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
-import static java.util.stream.Collectors.toList;
 
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
@@ -66,33 +64,18 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
                 .from(OffsetDateTime.now().minusDays(2))
         );
 
-        List<GroupMetadata> m = groupService.find(groupFilter);
-
         assertNotNull(result);
 
-        List<String> allServers = m.stream()
-            .map(GroupMetadata::getServers)
-            .flatMap(List::stream)
-            .map(ServerMetadata::getId)
-            .collect(toList());
-
         result.stream()
-            .map(ServerMonitoringStatistics::getName)
-            .forEach(serverId ->
-                assertTrue(allServers.contains(serverId), "check that server exists")
-            );
+            .forEach(metadata -> {
+                for (int i = 0; i < metadata.getStats().size() - 1; i++) {
+                    SamplingEntry curStats = metadata.getStats().get(i);
+                    SamplingEntry nextStats = metadata.getStats().get(i + 1);
+                    assertEquals(Duration.between(curStats.getTimestamp(), nextStats.getTimestamp()), sampleInterval);
 
-        result.stream()
-                .forEach(metadata -> {
-
-                    for (int i = 0; i < metadata.getStats().size() - 1; i++) {
-                        SamplingEntry curStats = metadata.getStats().get(i);
-                        SamplingEntry nextStats = metadata.getStats().get(i + 1);
-                        assertEquals(Duration.between(curStats.getTimestamp(), nextStats.getTimestamp()), sampleInterval);
-
-                        checkStats(curStats);
-                    }
-                });
+                    checkStats(curStats);
+                }
+            });
     }
 
     private void checkStats(SamplingEntry stats) {
