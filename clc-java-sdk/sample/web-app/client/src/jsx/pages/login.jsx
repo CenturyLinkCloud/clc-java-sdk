@@ -35,7 +35,25 @@ export class LoginPage extends React.Component {
     }
 
     onSubmit () {
-        this.validate((err) => !err && this.createSession());
+        this.setState({serverError : ""});
+        this.validate((err) => !err && this.tryLogin());
+    }
+
+    tryLogin () {
+        $.ajax({
+            url: './account/login',
+            dataType: 'json',
+            type: 'POST',
+            contentType:"application/json; charset=utf-8",
+            data: JSON.stringify({
+                    username:this.state.username,
+                    password:this.state.password
+                }),
+            success: this.createSession.bind(this),
+            error: function(xhr, status, err) {
+                this.setState({serverError : "Incorrect login/password!"});
+            }.bind(this)
+        })
     }
 
     createSession () {
@@ -60,6 +78,9 @@ export class LoginPage extends React.Component {
                     <div className="panel-body">
                         <form className="form-signin" onSubmit={this.onSubmit}>
                             <div className="col-md-6 col-md-offset-3">
+                                <div className="form-group has-error">
+                                    {this.renderHelpText(this.linkState('serverError'))}
+                                </div>
                                 <div className={this.classesFor('username')}>
                                     <label htmlFor="usernameField">Username</label>
                                     <input type="text" className="form-control" id="usernameField" placeholder="Username..."
