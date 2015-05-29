@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author aliaksandr krasitski
  */
-@Test
+//@Test
 public class PublicIpTest extends AbstractServersSdkTest {
 
     private Server serverRef;
@@ -47,7 +47,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    @Test(groups = {INTEGRATION, LONG_RUNNING})
+//    @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testPublicIp() {
         serverRef = SingleServerFixture.server();
 
