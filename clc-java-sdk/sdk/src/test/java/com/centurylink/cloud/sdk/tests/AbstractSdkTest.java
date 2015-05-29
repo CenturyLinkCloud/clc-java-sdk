@@ -18,6 +18,7 @@ package com.centurylink.cloud.sdk.tests;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.tests.mocks.BindMocksModule;
 import com.centurylink.cloud.sdk.tests.mocks.BindSpiesModule;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Guice;
 import com.google.inject.Module;
@@ -59,6 +60,17 @@ public abstract class AbstractSdkTest extends Assert {
 
 
     public <T> T fromJson(String filePath, Class<T> type) {
+        try {
+            return
+                new ObjectMapper().readValue(
+                    getClass().getResourceAsStream(filePath), type
+                );
+        } catch (IOException e) {
+            throw new ClcClientException(e);
+        }
+    }
+
+    public <T> T fromJson(String filePath, TypeReference<T> type) {
         try {
             return
                 new ObjectMapper().readValue(
