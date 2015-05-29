@@ -4,7 +4,9 @@ import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.Dat
 import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.client.domain.group.DiskUsageMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GuestUsageMetadata;
@@ -12,6 +14,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.SamplingEntry;
 import com.centurylink.cloud.sdk.servers.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
+import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.StatisticsService;
 import com.centurylink.cloud.sdk.servers.services.domain.account.AccountMetadata;
 import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringFilter;
@@ -20,11 +23,17 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.MonitoringEntry;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.MonitoringStatsEntry;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.inject.Inject;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +42,8 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static java.util.stream.Collectors.summingDouble;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toList;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 
 /**
 * @author aliaksandr.krasitski
@@ -50,17 +61,65 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     @Inject
     DataCenterService dataCenterService;
 
+    @Inject @Spy
+    ServerClient serverClient;
+
+    @Inject @Spy
+    ServerService serverService;
+
     ServerMonitoringFilter timeFilter;
 
     private DataCenter[] dataCenters = {DataCenter.DE_FRANKFURT};
     private String groupName = Group.DEFAULT_GROUP;
+    private GroupMetadata groupMetadata;
+    private Group group = Group
+        .refByName()
+        .dataCenter(DataCenter.DE_FRANKFURT)
+        .name(groupName);
 
     private static final double DELTA = 0.5;
+
+    List<String> serverIds = Arrays.asList(new String[]{"de1altdcttl604","de1altdmd-srv307",
+        "de1altdmd-srv324","de1altdtcrt523","de1altdtcrt738"});
 
     @BeforeClass
     private void setup() {
         timeFilter = new ServerMonitoringFilter()
             .last(Duration.ofDays(2));
+    }
+
+    @BeforeMethod
+    public void setUpFixtures() {
+        groupMetadata = groupService.findByRef(group);
+
+        Mockito
+            .doReturn(fromJson("monitoring_stats.json", new TypeReference<List<ServerMonitoringStatistics>>(){}))
+            .when(serverClient).getMonitoringStatistics(any(), any());
+
+        List<ServerMetadata> serverMetadataList = mockFindServersResult();
+
+        for (int i = 0; i < serverIds.size(); i++) {
+            Mockito
+                .doReturn(serverMetadataList.get(i))
+                .when(serverService).findByRef(eq(serverMetadataList.get(i).asRefById()));
+        }
+
+        Mockito.doReturn(serverMetadataList)
+            .when(serverService).find(any());
+    }
+
+    private List<ServerMetadata> mockFindServersResult() {
+        List<ServerMetadata> serverMetadataList = new ArrayList<>(serverIds.size());
+
+        serverIds.forEach(id -> serverMetadataList.add(
+            new ServerMetadata() {{
+                setId(id);
+                setLocationId(((DataCenterByIdRef)dataCenters[0]).getId());
+                setGroupId(groupMetadata.getId());
+            }})
+        );
+
+        return serverMetadataList;
     }
 
     @Test
@@ -106,20 +165,18 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
         assertEquals(resultList.size(), 1, "check count of grouping rows");
 
-        MonitoringStatsEntry<GroupMetadata> result = resultList.get(0);
-
-        assertEquals(groupName, result.getEntity().getName(), "check group by field");
-
         List<ServerMonitoringStatistics> stats = groupService.getMonitoringStats(groupFilter, timeFilter);
 
         List<SamplingEntry> allSamplingEntries = getSamplingEntries(stats);
 
+        MonitoringStatsEntry<GroupMetadata> result = resultList.get(0);
+
         checkSamplingCount(allSamplingEntries, result);
 
         result.getStatistics().stream()
-        .forEach(entry ->
-            checkStatisticsEntry(entry, allSamplingEntries)
-        );
+              .forEach(entry ->
+                      checkStatisticsEntry((MonitoringEntry) entry, allSamplingEntries)
+              );
     }
 
     @Test
@@ -127,12 +184,6 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
         GroupFilter groupFilter = new GroupFilter()
             .dataCenters(dataCenters)
             .nameContains(groupName);
-
-        List<String> serverIds = groupService.find(groupFilter).stream()
-            .map(GroupMetadata::getServers)
-            .flatMap(List::stream)
-            .map(ServerMetadata::getId)
-            .collect(toList());
 
         List<MonitoringStatsEntry> resultList = statisticsService.monitoringStats()
             .forServers(new ServerFilter().id(serverIds))
@@ -181,7 +232,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
             .forGroups(groupFilter)
             .forTime(timeFilter)
             .aggregateSubItems()
-            .groupByServerGroup();
+            .summarize();
 
         assertEquals(
             resultList.size(),
@@ -241,7 +292,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
             .distinct()
             .count();
 
-        assertEquals(sampleCount, entry.getStatistics().size(), "check time points count");
+        assertTrue(sampleCount >= entry.getStatistics().size(), "check time points count");
     }
 
     private void checkStatisticsEntry(MonitoringEntry entry, List<SamplingEntry> allSamplingEntries) {
