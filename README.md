@@ -32,27 +32,40 @@ ClcSdk sdk = new ClcSdk("user", "password");
 ServerService serverService = sdk.serverService();
 GroupService groupService = sdk.groupService();
 
-List<Group> groups = groupService
-    .defineInfrastructure(dataCenter(DataCenter.DE_FRANKFURT).subitems(
-        group("Root Group").subitems(
-            group("Business").subitems(
-                new CreateServerConfig()
-                .name("SRV")
-                .machine(new Machine()
-                    .cpuCount(1)
-                    .ram(2)
-                )
-                .template(Template.refByOs()
-                    .dataCenter(US_CENTRAL_SALT_LAKE_CITY)
-                    .type(CENTOS)
-                    .version("6")
-                    .architecture(x86_64)
-                )
+serverService
+    .create(new CreateServerConfig()
+        .name("TCRT")
+        .type(STANDARD)
+        .storageType(PREMIUM)
+        .password("serverPass")
+        .group(Group.refByName()
+            .name(DEFAULT_GROUP)
+            .dataCenter(DataCenter.refByName("FranKfUrt"))
+        )
+        .timeToLive(ZonedDateTime.now().plusDays(1))
+        .machine(new Machine()
+            .cpuCount(1)
+            .ram(3)
+            .disk(new DiskConfig()
+                .type(DiskType.RAW)
+                .size(14)
             )
         )
-    ))
-    .waitUntilComplete()
-    .getResult();
+        .template(Template.refByOs()
+            .dataCenter(DE_FRANKFURT)
+            .type(CENTOS)
+            .version("6")
+            .architecture(x86_64)
+        )
+        .network(new NetworkConfig()
+            .primaryDns("172.17.1.26")
+            .secondaryDns("172.17.1.27")
+            .publicIpConfig(new CreatePublicIpConfig()
+                .openPorts(8080)
+            )
+        )
+    )
+    .waitUntilComplete();
 ```
 
 License
