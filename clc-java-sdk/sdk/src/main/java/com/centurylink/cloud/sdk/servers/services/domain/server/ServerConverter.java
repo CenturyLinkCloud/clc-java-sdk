@@ -52,36 +52,50 @@ public class ServerConverter {
     public CreateServerRequest buildCreateServerRequest(CreateServerConfig newServer) {
         TemplateMetadata templateMetadata = templateService.findByRef(newServer.getTemplate());
         GroupMetadata groupMetadata = groupService.findByRef(newServer.getGroup());
+
         if (newServer.getType().equals(ServerType.HYPERSCALE)) {
             newServer.storageType(StorageType.HYPERSCALE);
         }
+
         return
             new CreateServerRequest()
                 .name(newServer.getName())
                 .description(newServer.getDescription())
                 .cpu(newServer.getMachine().getCpuCount())
                 .memoryGB(newServer.getMachine().getRam())
-                .additionalDisks(buildDiskRequestList(newServer.getMachine().getDisks()))
+                .additionalDisks(
+                    buildDiskRequestList(
+                        newServer.getMachine().getDisks()
+                    )
+                )
                 .password(newServer.getPassword())
                 .groupId(groupMetadata.getId())
+
                 .type(
                     newServer.getType().getCode(),
-                    templateMetadata.hasCapability(TemplateMetadata.HYPERSCALE_VALUE))
+                    templateMetadata.hasCapability(TemplateMetadata.HYPERSCALE_VALUE)
+                )
+
                 .storageType(
                     newServer.getStorageType().getCode(),
-                    dataCenterService.getDeploymentCapabilities(
-                        DataCenter.refById(groupMetadata.getLocationId())
-                    ).getSupportsPremiumStorage()
+                    dataCenterService
+                        .getDeploymentCapabilities(
+                            DataCenter.refById(groupMetadata.getLocationId())
+                        )
+                        .getSupportsPremiumStorage()
                 )
+
                 .sourceServerId(templateMetadata.getName())
                 .primaryDns(newServer.getNetwork().getPrimaryDns())
                 .secondaryDns(newServer.getNetwork().getSecondaryDns())
+
                 .networkId(
                     (newServer.getNetwork().getNetwork() == null) ? null :
                         networkService
                             .findByRef(newServer.getNetwork().getNetwork())
                             .getNetworkId()
                 )
+
                 .timeToLive(newServer.getTimeToLive())
                 .managedOS(
                     newServer.isManagedOS(),
