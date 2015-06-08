@@ -19,6 +19,7 @@ import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.function.Supplier;
 
 /**
  * Credentials provide that load user credentials from properties file that located at application classpath.
@@ -32,7 +33,7 @@ public class PropertiesFileCredentialsProvider implements CredentialsProvider {
     static final String PASSWORD_KEY = "clc.password";
 
     private final Properties properties = new Properties();
-    private final Runnable propertiesLoader;
+    private final Supplier<Properties> propertiesLoader;
 
     /**
      * Constructor that load properties from file <p>centurylink-cloud.properties</p>
@@ -49,21 +50,17 @@ public class PropertiesFileCredentialsProvider implements CredentialsProvider {
     public PropertiesFileCredentialsProvider(String filePath) {
         propertiesLoader = propertiesLoader(filePath);
 
-        propertiesLoader.run();
+        propertiesLoader.get();
     }
 
-    private Runnable propertiesLoader(final String filePath) {
-        return new Runnable() {
-            @Override
-            public void run() {
-                loadProperties(filePath);
-            }
-        };
+    private Supplier<Properties> propertiesLoader(final String filePath) {
+        return () -> loadProperties(filePath);
     }
 
-    private void loadProperties(String filePath) {
+    private Properties loadProperties(String filePath) {
         try {
             properties.load(getClass().getClassLoader().getResourceAsStream(filePath));
+            return properties;
         } catch (IOException e) {
             throw new ClcException(e);
         }
@@ -79,7 +76,7 @@ public class PropertiesFileCredentialsProvider implements CredentialsProvider {
 
     @Override
     public CredentialsProvider refresh() {
-        propertiesLoader.run();
+        propertiesLoader.get();
         return this;
     }
 

@@ -2,6 +2,8 @@ package com.centurylink.cloud.sdk.core.auth.services.domain.credentials;
 
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 public class DefaultCredentialsProvider implements CredentialsProvider {
 
     private CredentialsProvider credentialsProvider;
@@ -64,10 +66,9 @@ public class DefaultCredentialsProvider implements CredentialsProvider {
     }
 
     private boolean checkAndSetCredentials(CredentialsProvider provider) {
-        if (
-            provider.getCredentials().getUsername() == null
-            || provider.getCredentials().getPassword() == null
-        ) {
+        Credentials credentials = provider.getCredentials();
+
+        if (isNullOrEmpty(credentials.getUsername()) || isNullOrEmpty(credentials.getPassword())) {
             return false;
         }
 
