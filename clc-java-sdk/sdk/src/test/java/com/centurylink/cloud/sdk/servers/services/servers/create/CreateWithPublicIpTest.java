@@ -55,18 +55,18 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
     @BeforeMethod
     void start() {
-        SdkHttpClient.apiUrl("http://localhost:8080/v2");
+        SdkHttpClient.apiUrl("http://localhost:8081/v2");
 
         wireMockServer = new WireMockServer(wireMockConfig()
             .fileSource(new ClasspathFileSource(
                 "com/centurylink/cloud/sdk/servers/services/servers/create/ip"
             ))
-            .port(8080)
+            .port(8081)
         );
         wireMockServer.start();
 
-        WireMock.configureFor("localhost", 8080);
-        wireMock = new WireMock("localhost", 8080);
+        WireMock.configureFor("localhost", 8081);
+        wireMock = new WireMock("localhost", 8081);
     }
 
     @Test
