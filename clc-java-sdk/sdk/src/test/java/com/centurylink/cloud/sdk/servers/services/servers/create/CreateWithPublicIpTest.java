@@ -15,23 +15,33 @@
 
 package com.centurylink.cloud.sdk.servers.services.servers.create;
 
+import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.servers.TestServerSupport;
+import com.centurylink.cloud.sdk.tests.TestGroups;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
+import com.github.tomakehurst.wiremock.common.FileSource;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
+import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author Ilya Drabenia
  */
-/* TODO uncomment when it will be fixed */
-//@Test(groups = {INTEGRATION, LONG_RUNNING})
+@Test(groups = {INTEGRATION, LONG_RUNNING})
 public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
     @Inject
@@ -39,7 +49,27 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
     ServerMetadata server;
 
-//    @Test
+    WireMockServer wireMockServer;
+
+    WireMock wireMock;
+
+    @BeforeMethod
+    void start() {
+        SdkHttpClient.apiUrl("http://localhost:8080/v2");
+
+        wireMockServer = new WireMockServer(wireMockConfig()
+            .fileSource(new ClasspathFileSource(
+                "com/centurylink/cloud/sdk/servers/services/servers/create/ip"
+            ))
+            .port(8080)
+        );
+        wireMockServer.start();
+
+        WireMock.configureFor("localhost", 8080);
+        wireMock = new WireMock("localhost", 8080);
+    }
+
+    @Test
     public void testCreateServerWithPublicIp() throws Exception {
         server =
             serverService.create(TestServerSupport.anyServerConfig()
@@ -56,9 +86,12 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest {
         assert !isNullOrEmpty(server.getId());
     }
 
-//    @AfterMethod
+    @AfterMethod
     public void deleteServer() {
         serverService.delete(server.asRefById().asFilter());
+        wireMockServer.stop();
+
+        SdkHttpClient.restoreUrl();
     }
 
 }

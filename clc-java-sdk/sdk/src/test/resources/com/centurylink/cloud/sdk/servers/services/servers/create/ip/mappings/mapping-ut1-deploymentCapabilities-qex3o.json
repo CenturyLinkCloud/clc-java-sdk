@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/datacenters/ALTD/ut1/deploymentCapabilities",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ut1-deploymentCapabilities-qex3o.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Sun, 14 Jun 2015 16:13:26 GMT",
+      "Content-Length" : "1307"
+    }
+  }
+}

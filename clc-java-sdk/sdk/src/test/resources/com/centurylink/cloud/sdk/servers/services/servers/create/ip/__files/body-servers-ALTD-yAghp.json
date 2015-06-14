@@ -1,0 +1,1 @@
+{"server":"cttl","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/de1-69957","id":"de1-69957"},{"rel":"self","href":"/v2/servers/ALTD/d62c90f924d14edbbab56329402c81ee?uuid=True","id":"d62c90f924d14edbbab56329402c81ee","verbs":["GET"]}]}

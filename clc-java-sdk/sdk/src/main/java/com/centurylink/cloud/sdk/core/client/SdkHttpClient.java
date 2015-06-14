@@ -29,12 +29,20 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  * @author ilya.drabenia
  */
 public class SdkHttpClient {
-    public static final String CLC_API_URL = "https://api.tier3.com/v2";
+    protected static String CLC_API_URL = "https://api.tier3.com/v2";
 
     public static final SdkClientBuilder CLIENT_BUILDER =
         (SdkClientBuilder) ResteasyClientBuilder
             .newBuilder()
             .register(new ErrorProcessingFilter());
+
+    public static void apiUrl(String url) {
+        CLC_API_URL = url;
+    }
+
+    public static void restoreUrl() {
+        CLC_API_URL = "https://api.tier3.com/v2";
+    }
 
     public SdkHttpClient(SdkConfiguration config) {
         CLIENT_BUILDER
