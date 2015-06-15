@@ -53,9 +53,6 @@ public class LoginController {
             throw new ClcClientException(e.getMessage());
         }
 
-//        session.setAttribute("clc.username", loginForm.getUsername());
-//        session.setAttribute("clc.password", loginForm.getPassword());
-
         return new StatusResponse("OK");
     }
 
