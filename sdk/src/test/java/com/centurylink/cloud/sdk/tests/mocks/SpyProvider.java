@@ -38,7 +38,7 @@ class SpyProvider<T> implements Provider<T>, HasDependencies {
 
     private final InjectionPoint constructorInjectionPoint;
     private final Constructor<T> constructor;
-    private final HashSet<Dependency<?>> dependencySet;
+    private final Set<Dependency<?>> dependencySet;
     private final AtomicReference<T> cachedValue = new AtomicReference<>();
 
     @Inject private Injector injector;  // Guice will automatically inject this when the injector is created
