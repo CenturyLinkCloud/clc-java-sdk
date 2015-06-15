@@ -125,24 +125,6 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             });
     }
 
-    public List<GroupMetadata> findByDataCenter(DataCenter dataCenter) {
-        String rootGroupId = dataCentersClient
-            .getDataCenter(
-                dataCenterService.findByRef(dataCenter).getId()
-            )
-            .getGroup()
-            .getId();
-
-        try {
-            return
-                client
-                    .getGroup(rootGroupId, false)
-                    .getAllGroups();
-        } catch (ClcClientException ex) {
-            return new ArrayList<>();
-        }
-    }
-
     /**
      * Create group
      * @param groupConfig group config
