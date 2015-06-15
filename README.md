@@ -9,7 +9,7 @@ To build sources, you need to install Gradle 2.2.1 or later. To check out and bu
 
 ```
 $ git clone git@github.com:CenturyLinkCloud/clc-java-sdk.git
-$ cd clc-java-sdk/clc-java-sdk
+$ cd clc-java-sdk
 $ gradle build
 ```
 
