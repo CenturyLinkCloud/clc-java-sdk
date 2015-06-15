@@ -65,13 +65,13 @@ public class ServerMonitoringConfigValidator {
         }
     }
 
-    class MonitoringConfigValidator {
-        public void validate() {
-
+    interface MonitoringConfigValidator {
+        default void validate() {
+            //no validation needed
         }
     }
 
-    class HourlyMonitoringConfigValidator extends MonitoringConfigValidator{
+    class HourlyMonitoringConfigValidator implements MonitoringConfigValidator{
         @Override
         public void validate() {
             checkMonitoringConfig(config);
@@ -92,7 +92,7 @@ public class ServerMonitoringConfigValidator {
         }
     }
 
-    class RealtimeMonitoringConfigValidator extends MonitoringConfigValidator {
+    class RealtimeMonitoringConfigValidator implements MonitoringConfigValidator {
         @Override
         public void validate() {
             checkMonitoringConfig(config);
@@ -113,6 +113,6 @@ public class ServerMonitoringConfigValidator {
         }
     }
 
-    class LatestMonitoringConfigValidator extends MonitoringConfigValidator {
+    class LatestMonitoringConfigValidator implements MonitoringConfigValidator {
     }
 }
