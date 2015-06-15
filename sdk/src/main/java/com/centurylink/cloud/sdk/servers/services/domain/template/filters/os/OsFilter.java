@@ -121,6 +121,10 @@ public class OsFilter {
             }
         }
 
+        return processOsProperties(osDescription);
+    }
+
+    private boolean processOsProperties(String osDescription) {
         if (architecture != null) {
             if (osDescription.endsWith(architecture.getCode().toUpperCase())) {
                 osDescription = osDescription.replace(architecture.getCode().toUpperCase(), "");
@@ -129,6 +133,10 @@ public class OsFilter {
             }
         }
 
+        return processEditionAndVersion(osDescription);
+    }
+
+    private boolean processEditionAndVersion(String osDescription) {
         if (version != null) {
             if (osDescription.startsWith(version.toUpperCase())) {
                 osDescription = osDescription.replace(version.toUpperCase(), "");
