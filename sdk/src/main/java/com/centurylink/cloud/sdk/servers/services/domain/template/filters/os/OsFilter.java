@@ -121,10 +121,10 @@ public class OsFilter {
             }
         }
 
-        return processOsProperties(osDescription);
+        return processOsAttributes(osDescription);
     }
 
-    private boolean processOsProperties(String osDescriptionInitialValue) {
+    private boolean processOsAttributes(String osDescriptionInitialValue) {
         String osDescription = osDescriptionInitialValue;
 
         if (architecture != null) {
@@ -150,9 +150,7 @@ public class OsFilter {
         }
 
         if (edition != null) {
-            if (osDescription.startsWith(edition.toUpperCase())) {
-                osDescription = osDescription.replace(edition.toUpperCase(), "");
-            } else {
+            if (!osDescription.startsWith(edition.toUpperCase())) {
                 return false;
             }
         }
