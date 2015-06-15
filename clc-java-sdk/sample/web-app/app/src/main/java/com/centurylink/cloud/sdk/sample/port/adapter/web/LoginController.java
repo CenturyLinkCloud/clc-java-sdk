@@ -43,7 +43,7 @@ public class LoginController {
     SdkRegistry sdkRegistry;
 
     @RequestMapping(value = "/login", method = POST)
-    public StatusResponse login(@RequestBody LoginForm loginForm, HttpSession session) {
+    public StatusResponse login(@RequestBody LoginForm loginForm) {
         sdkRegistry.setCredentials(new SdkCredentials(loginForm.getUsername(), loginForm.getPassword()));
 
         //check credentials
