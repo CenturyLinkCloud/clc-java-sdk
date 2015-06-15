@@ -107,42 +107,44 @@ public class OsFilter {
     }
 
     public Predicate<TemplateMetadata> getPredicate() {
-        return t -> {
-            String osDescription = t.getOsType().toUpperCase();
+        return this::predicate;
+    }
 
-            if (osType != null) {
-                if (osDescription.startsWith(osType.toUpperCase())) {
-                    osDescription = osDescription.replace(osType.toUpperCase(), "");
-                } else {
-                    return false;
-                }
+    private boolean predicate(TemplateMetadata t) {
+        String osDescription = t.getOsType().toUpperCase();
+
+        if (osType != null) {
+            if (osDescription.startsWith(osType.toUpperCase())) {
+                osDescription = osDescription.replace(osType.toUpperCase(), "");
+            } else {
+                return false;
             }
+        }
 
-            if (architecture != null) {
-                if (osDescription.endsWith(architecture.getCode().toUpperCase())) {
-                    osDescription = osDescription.replace(architecture.getCode().toUpperCase(), "");
-                } else {
-                    return false;
-                }
+        if (architecture != null) {
+            if (osDescription.endsWith(architecture.getCode().toUpperCase())) {
+                osDescription = osDescription.replace(architecture.getCode().toUpperCase(), "");
+            } else {
+                return false;
             }
+        }
 
-            if (version != null) {
-                if (osDescription.startsWith(version.toUpperCase())) {
-                    osDescription = osDescription.replace(version.toUpperCase(), "");
-                } else {
-                    return false;
-                }
+        if (version != null) {
+            if (osDescription.startsWith(version.toUpperCase())) {
+                osDescription = osDescription.replace(version.toUpperCase(), "");
+            } else {
+                return false;
             }
+        }
 
-            if (edition != null) {
-                if (osDescription.startsWith(edition.toUpperCase())) {
-                    osDescription = osDescription.replace(edition.toUpperCase(), "");
-                } else {
-                    return false;
-                }
+        if (edition != null) {
+            if (osDescription.startsWith(edition.toUpperCase())) {
+                osDescription = osDescription.replace(edition.toUpperCase(), "");
+            } else {
+                return false;
             }
+        }
 
-            return true;
-        };
+        return true;
     }
 }
