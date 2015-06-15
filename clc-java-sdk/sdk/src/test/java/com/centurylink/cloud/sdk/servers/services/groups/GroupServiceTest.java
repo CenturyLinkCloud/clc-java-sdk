@@ -39,7 +39,10 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
     @Test(groups = {INTEGRATION})
     public void testFindGroupsByDataCenter() {
-        List<GroupMetadata> groups = groupService.findByDataCenter(DataCenter.DE_FRANKFURT);
+        List<GroupMetadata> groups = groupService.find(
+            new GroupFilter()
+                .dataCenters(DataCenter.DE_FRANKFURT)
+        );
 
         assert groups.size() > 0;
     }

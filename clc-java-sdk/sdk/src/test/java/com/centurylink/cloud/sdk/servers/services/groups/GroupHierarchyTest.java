@@ -15,13 +15,12 @@
 
 package com.centurylink.cloud.sdk.servers.services.groups;
 
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.servers.SampleServerConfigs;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.google.inject.Inject;
@@ -35,7 +34,6 @@ import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.apacheHttpSe
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.mysqlServer;
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.nginxServer;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static java.util.stream.Collectors.toList;
@@ -83,8 +81,13 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
     private GroupMetadata defineGroupHierarchy(GroupHierarchyConfig config) {
         groupService.defineGroupHierarchy(DE_FRANKFURT, config).waitUntilComplete();
 
-        return groupService.findByDataCenter(DE_FRANKFURT).stream()
-            .filter(group -> group.getName().equals(config.getName()))
+        return
+            groupService.find(
+                new GroupFilter()
+                    .dataCenters(DE_FRANKFURT)
+                    .nameContains(config.getName())
+            )
+            .stream()
             .findFirst()
             .get();
     }
