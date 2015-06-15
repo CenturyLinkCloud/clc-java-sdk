@@ -50,7 +50,7 @@ public class LoginController {
         try {
             sdkRegistry.getSdk().dataCenterService().findAll();
         } catch (ClcException | ClcHttpClientException e) {
-            throw new ClcClientException(e.getMessage());
+            throw new ClcClientException(e);
         }
 
         return new StatusResponse("OK");
