@@ -124,7 +124,9 @@ public class OsFilter {
         return processOsProperties(osDescription);
     }
 
-    private boolean processOsProperties(String osDescription) {
+    private boolean processOsProperties(String osDescriptionInitialValue) {
+        String osDescription = osDescriptionInitialValue;
+
         if (architecture != null) {
             if (osDescription.endsWith(architecture.getCode().toUpperCase())) {
                 osDescription = osDescription.replace(architecture.getCode().toUpperCase(), "");
@@ -136,7 +138,9 @@ public class OsFilter {
         return processEditionAndVersion(osDescription);
     }
 
-    private boolean processEditionAndVersion(String osDescription) {
+    private boolean processEditionAndVersion(String osDescriptionInitialValue) {
+        String osDescription = osDescriptionInitialValue;
+
         if (version != null) {
             if (osDescription.startsWith(version.toUpperCase())) {
                 osDescription = osDescription.replace(version.toUpperCase(), "");
