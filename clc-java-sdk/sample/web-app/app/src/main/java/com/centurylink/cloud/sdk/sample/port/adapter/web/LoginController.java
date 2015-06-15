@@ -16,6 +16,8 @@
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.client.errors.ClcHttpClientException;
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.sample.domain.SdkCredentials;
 import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
 import com.centurylink.cloud.sdk.sample.port.adapter.web.beans.LoginForm;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.NotFoundException;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -46,7 +49,7 @@ public class LoginController {
         //check credentials
         try {
             sdkRegistry.getSdk().dataCenterService().findAll();
-        } catch (Exception e) {
+        } catch (ClcException | ClcHttpClientException e) {
             throw new ClcClientException(e.getMessage());
         }
 
