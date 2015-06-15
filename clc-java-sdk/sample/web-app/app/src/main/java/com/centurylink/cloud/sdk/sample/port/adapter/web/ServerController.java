@@ -54,10 +54,10 @@ public class ServerController {
 
     @RequestMapping(method = POST)
     public ServerBean createServer(@RequestBody ServerBean serverBean) {
-//        sdkRegistry.findOrCreate("idrabenia.altd", "RenVortEr9")
-//                .serverService()
-//                .create(serverBean.getServer())
-//                .getResult();
+        sdkRegistry
+            .getSdk()
+            .serverService()
+            .create(serverBean.getServer());
 
         return serverBean;
     }

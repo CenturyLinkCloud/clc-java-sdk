@@ -391,7 +391,7 @@ public class GroupMetadata {
         return this.getLinks().stream()
                 .filter(link -> link.getRel().equals("parentGroup"))
                 .map(Link::getId)
-                .findFirst().get();
+                .findFirst().orElse(null);
     }
 
     public GroupByIdRef asRefById() {
