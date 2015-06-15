@@ -35,7 +35,6 @@ public class NetworkRef implements Reference {
 
     @Override
     public Filter asFilter() {
-        // TODO: hey, implement me!
         throw new UnsupportedOperationException();
     }
 }

@@ -117,9 +117,6 @@ public class ModifyServerTest extends AbstractServersSdkTest {
         List<Disk> disks = serverMetadata.getDetails().getDisks();
 
         assertEquals(disks.size(), 3);
-
-        /* TODO Should check why changes sometimes do not take effect immediately */
-//        assertEquals(disks.get(0).getSizeGB(), disk1ModifiedSize);
         assertEquals(disks.get(1).getSizeGB(), disk2ModifiedSize);
         assertEquals(disks.get(2).getSizeGB(), disk3ModifiedSize);
     }

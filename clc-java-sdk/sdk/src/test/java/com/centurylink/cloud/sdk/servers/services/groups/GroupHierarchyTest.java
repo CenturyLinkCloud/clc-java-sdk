@@ -105,11 +105,6 @@ public class GroupHierarchyTest extends AbstractServersSdkTest {
 
         assertTrue(metadataNames.containsAll(configNames), "group must have all groups from config");
 
-        //TODO GroupMetadata.getServers() returns empty list. should it be filled?
-//        assertEquals(groupMetadata.getServers().size(), hierarchyConfig.getServers().size(),
-//            "check server count"
-//        );
-
         groupMetadata.getGroups().stream()
             .forEach(group -> {
                 GroupHierarchyConfig nextConfig = (GroupHierarchyConfig)hierarchyConfig.getSubitems().stream()

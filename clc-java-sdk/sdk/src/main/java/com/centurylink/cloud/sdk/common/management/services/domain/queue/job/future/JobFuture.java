@@ -27,8 +27,6 @@ public interface JobFuture {
 
     void waitUntilComplete(Duration timeout);
 
-    // TODO: need to think about type of first parameter
-    // TODO: I think it may be response type of queue client
     CompletableFuture<Void> waitAsync();
 
 }
