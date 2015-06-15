@@ -149,12 +149,6 @@ public class OsFilter {
             }
         }
 
-        if (edition != null) {
-            if (!osDescription.startsWith(edition.toUpperCase())) {
-                return false;
-            }
-        }
-
-        return true;
+        return edition == null || osDescription.startsWith(edition.toUpperCase());
     }
 }
