@@ -229,7 +229,10 @@ public class StatisticsSampleApp extends Assert {
             .forTime(new ServerMonitoringFilter().last(Duration.ofDays(2)))
             .groupByServer();
 
-        groupService.findByDataCenter(DE_FRANKFURT);
+        groupService.find(
+            new GroupFilter()
+                .dataCenters(DataCenter.DE_FRANKFURT)
+        );
 
         assertNotNull(stats);
     }
