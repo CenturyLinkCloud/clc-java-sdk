@@ -152,7 +152,7 @@ public abstract class GroupMonitoringStatsBy {
     }
 
     private List<DiskUsage> aggregateDiskUsage(List<DiskUsage> flatList) {
-        HashMap<String, List<DiskUsage>> map = new HashMap<>();
+        Map<String, List<DiskUsage>> map = new HashMap<>();
         flatList.stream()
             .forEach(item -> {
                 if (map.get(item.getId()) == null) {
@@ -173,7 +173,7 @@ public abstract class GroupMonitoringStatsBy {
     }
 
     private List<GuestUsage> aggregateGuestUsage(List<GuestUsage> flatList) {
-        HashMap<String, List<GuestUsage>> map = new HashMap<>();
+        Map<String, List<GuestUsage>> map = new HashMap<>();
         flatList.stream()
             .forEach(item -> {
                 if (map.get(item.getPath()) == null) {
