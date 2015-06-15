@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.core.exceptions;
 
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.String.format;
@@ -25,8 +26,7 @@ import static java.lang.String.format;
  * @author ilya.drabenia
  */
 public class ClcException extends RuntimeException {
-    private final CopyOnWriteArrayList<Exception> subExceptions
-        = new CopyOnWriteArrayList<>();
+    private final List<Exception> subExceptions = new CopyOnWriteArrayList<>();
 
     public ClcException() {
 
@@ -56,7 +56,7 @@ public class ClcException extends RuntimeException {
         super(cause);
     }
 
-    public CopyOnWriteArrayList<Exception> getSubExceptions() {
+    public List<Exception> getSubExceptions() {
         return subExceptions;
     }
 
