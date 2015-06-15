@@ -30,10 +30,10 @@ public class CreateSnapshotRequest {
 
     public void setSnapshotExpirationDays(Integer snapshotExpirationDays) {
         if (snapshotExpirationDays == null || snapshotExpirationDays <= 0 || snapshotExpirationDays > defaultExpiration) {
-            snapshotExpirationDays = defaultExpiration;
+            this.snapshotExpirationDays = defaultExpiration;
+        } else {
+            this.snapshotExpirationDays = snapshotExpirationDays;
         }
-
-        this.snapshotExpirationDays = snapshotExpirationDays;
     }
 
     public CreateSnapshotRequest snapshotExpirationDays(Integer snapshotExpirationDays) {

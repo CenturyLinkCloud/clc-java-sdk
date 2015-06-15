@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 /**
  * @author Ilya Drabenia
  */
-public class SdkThreadPool {
+public abstract class SdkThreadPool {
 
     public static final Executor threadPool = Executors.newCachedThreadPool();
 

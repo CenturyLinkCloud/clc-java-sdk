@@ -40,7 +40,7 @@ public class DataCenterController {
     SdkRegistry sdkRegistry;
 
     @RequestMapping(method = GET)
-    List<DataCenterBean> findAll(HttpSession session) {
+    List<DataCenterBean> findAll() {
         List<DataCenterMetadata> dataCenters =
             sdkRegistry
                 .getSdk()
