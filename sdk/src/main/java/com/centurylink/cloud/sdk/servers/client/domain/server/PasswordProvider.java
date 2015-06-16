@@ -42,7 +42,7 @@ public class PasswordProvider {
     }
 
     public PasswordProvider password(String password) {
-        setCurrent(current);
+        setPassword(password);
         return this;
     }
 }
