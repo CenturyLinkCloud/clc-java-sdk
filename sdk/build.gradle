@@ -59,9 +59,9 @@ jacocoTestReport {
     }
 }
 
-test {
+task runUnitTests(type: Test, dependsOn: 'compileTestJava') {
     useTestNG() {
-        excludeGroups 'Integration', 'LongRunning', 'Samples'
+        excludeGroups 'Integration', 'LongRunning', 'Samples', 'Recorded'
         parallel 'classes'
         threadCount 25
     }
@@ -74,6 +74,25 @@ test {
 
     systemProperty "clc.username", System.getProperty("clc.username")
     systemProperty "clc.password", System.getProperty("clc.password")
+}
+
+task runRecordedTests(type: Test, dependsOn: 'compileTestJava') {
+    useTestNG() {
+        includeGroups 'Recorded'
+    }
+
+    testLogging {
+        showExceptions = true
+        showCauses = true
+        exceptionFormat = 'full' // full information about failed tests
+    }
+
+    systemProperty "clc.username", System.getProperty("clc.username")
+    systemProperty "clc.password", System.getProperty("clc.password")
+}
+
+test () {
+    dependsOn(['runUnitTests', 'runRecordedTests'])
 }
 
 task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {

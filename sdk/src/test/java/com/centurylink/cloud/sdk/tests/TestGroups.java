@@ -33,4 +33,9 @@ public interface TestGroups {
      * Group of tests that contains real business scenarios
      */
     String SAMPLES = "Samples";
+
+    /**
+     * Group of tests that use record and playback functionality
+     */
+    String RECORDED = "Recorded";
 }
