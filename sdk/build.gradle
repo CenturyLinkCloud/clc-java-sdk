@@ -109,6 +109,11 @@ task runSamples(type: Test, dependsOn: 'compileSampleTestJava') {
     systemProperty "clc.password", System.getProperty("clc.password")
 }
 
+javadoc {
+    source = sourceSets.main.allJava
+    destinationDir = file("./../docs/javadoc")
+}
+
 configurations {
     sampleTestCompile.extendsFrom testCompile
     sampleTestRuntime.extendsFrom testRuntime

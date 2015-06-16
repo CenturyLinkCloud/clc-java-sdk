@@ -116,8 +116,8 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * Changing the providerFactory will wipe clean any registered components or properties.
      *
-     * @param providerFactory
-     * @return
+     * @param providerFactory the provider factory
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder providerFactory(ResteasyProviderFactory providerFactory)
     {
@@ -128,8 +128,8 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * Executor to use to run AsyncInvoker invocations
      *
-     * @param asyncExecutor
-     * @return
+     * @param asyncExecutor the executor service
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder asyncExecutor(ExecutorService asyncExecutor)
     {
@@ -140,9 +140,9 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * If there is a connection pool, set the time to live in the pool.
      *
-     * @param ttl
-     * @param unit
-     * @return
+     * @param ttl the time to live
+     * @param unit the time unit
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder connectionTTL(long ttl, TimeUnit unit)
     {
@@ -154,9 +154,9 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * Socket inactivity timeout
      *
-     * @param timeout
-     * @param unit
-     * @return
+     * @param timeout the inactivity timeout
+     * @param unit the time unit
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder socketTimeout(long timeout, TimeUnit unit)
     {
@@ -168,9 +168,9 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * When trying to make an initial socket connection, what is the timeout?
      *
-     * @param timeout
-     * @param unit
-     * @return
+     * @param timeout the timeout
+     * @param unit the time unit
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder establishConnectionTimeout(long timeout, TimeUnit unit)
     {
@@ -183,8 +183,8 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * If connection pooling enabled, how many connections to pool per url?
      *
-     * @param maxPooledPerRoute
-     * @return
+     * @param maxPooledPerRoute the maximum number of connections per pool
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder maxPooledPerRoute(int maxPooledPerRoute)
     {
@@ -224,8 +224,8 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * Number of connections allowed to pool
      *
-     * @param connectionPoolSize
-     * @return
+     * @param connectionPoolSize the number of connections
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder connectionPoolSize(int connectionPoolSize)
     {
@@ -237,8 +237,8 @@ public class SdkClientBuilder extends ClientBuilder
      * Response stream is wrapped in a BufferedInputStream.  Default is 8192.  Value of 0 will not wrap it.
      * Value of -1 will use a SelfExpandingBufferedInputStream
      *
-     * @param size
-     * @return
+     * @param size the response buffer size
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder responseBufferSize(int size)
     {
@@ -251,6 +251,7 @@ public class SdkClientBuilder extends ClientBuilder
      * Disable trust management and hostname verification.  <i>NOTE</i> this is a security
      * hole, so only set this option if you cannot or do not want to verify the identity of the
      * host you are communicating with.
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder disableTrustManager()
     {
@@ -261,8 +262,8 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * SSL policy used to verify hostnames
      *
-     * @param policy
-     * @return
+     * @param policy the hostname verification policy
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder hostnameVerification(HostnameVerificationPolicy policy)
     {
@@ -273,8 +274,8 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * Negates all ssl and connection specific configuration
      *
-     * @param httpEngine
-     * @return
+     * @param httpEngine the client http engine
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder httpEngine(ClientHttpEngine httpEngine)
     {
@@ -322,8 +323,8 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * Specify a default proxy.  Default port and schema will be used
      *
-     * @param hostname
-     * @return
+     * @param hostname the proxy hostname
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder defaultProxy(String hostname)
     {
@@ -333,9 +334,9 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * Specify a default proxy host and port.  Default schema will be used
      *
-     * @param hostname
-     * @param port
-     * @return
+     * @param hostname the proxy hostname
+     * @param port the proxy port number
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder defaultProxy(String hostname, int port)
     {
@@ -345,10 +346,10 @@ public class SdkClientBuilder extends ClientBuilder
     /**
      * Specify default proxy.
      *
-     * @param hostname
-     * @param port
-     * @param scheme
-     * @return
+     * @param hostname the proxy hostname
+     * @param port the proxy port number
+     * @param scheme the proxy scheme
+     * @return current instance of SDK client builder
      */
     public SdkClientBuilder defaultProxy(String hostname, int port, final String scheme)
     {

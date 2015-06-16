@@ -50,7 +50,7 @@ public class TimeToLive {
      *
      * @param dateTime is not null ISO formatter string that contains server expiration date
      * @throws TimeToLiveParseException when application is not able to parse dateTime
-     * @throws NullPointerException
+     * @throws NullPointerException if {@code dateTime} is null
      */
     public TimeToLive(String dateTime) {
         checkNotNull(dateTime);

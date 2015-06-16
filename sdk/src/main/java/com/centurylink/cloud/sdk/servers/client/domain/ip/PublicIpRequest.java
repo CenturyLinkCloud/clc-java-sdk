@@ -74,7 +74,7 @@ public class PublicIpRequest {
 
     /**
      * Set source restrictions in CIDR(Classless Inter-Domain Routing) format
-     * @param sourceRestrictions
+     * @param sourceRestrictions the list of {@link SourceRestriction}
      */
     public void setSourceRestrictions(List<SourceRestriction> sourceRestrictions) {
         this.sourceRestrictions = sourceRestrictions;

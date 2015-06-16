@@ -67,7 +67,7 @@ public class Subnet {
      * If specified {@code cidr} - returns {@code cidr} value.
      * If specified {@code ipAddress} and {@code mask} - returns calculated IP address.
      * If specified {@code ipAddress} and {@code cidrMask} - returns calculated IP address.
-     * Otherwise returns {@value null}
+     * Otherwise returns {@code null}
      *
      * @return ip address string representation in CIDR format
      */

@@ -50,6 +50,9 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
      * Creates a new server. Calls to this operation must include a token acquired
      * from the authentication endpoint. See the Login API for information on acquiring
      * this token.
+     *
+     * @param request the {@code CreateServerRequest} instance
+     * @return current instance
      */
     public BaseServerResponse create(CreateServerRequest request) {
         return

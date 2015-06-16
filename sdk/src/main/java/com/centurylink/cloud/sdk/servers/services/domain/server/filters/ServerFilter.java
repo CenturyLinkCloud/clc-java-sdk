@@ -151,7 +151,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      *
      * @param filter is not a null group filter object
      * @return {@link ServerFilter}
-     * @throws NullPointerException
+     * @throws NullPointerException if {@code filter} is null
      */
     public ServerFilter groupsWhere(GroupFilter filter) {
         groupFilter = groupFilter.and(filter);
@@ -180,7 +180,7 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      *
      * @param filter is not null custom filtering predicate
      * @return {@link ServerFilter}
-     * @throws NullPointerException
+     * @throws NullPointerException if {@code filter} is null
      */
     public ServerFilter where(Predicate<ServerMetadata> filter) {
         checkNotNull(filter, "Filter must be not a null");
