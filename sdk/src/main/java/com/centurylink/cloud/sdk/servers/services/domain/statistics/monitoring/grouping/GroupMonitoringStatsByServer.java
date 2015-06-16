@@ -39,7 +39,7 @@ public class GroupMonitoringStatsByServer extends GroupMonitoringStatsBy {
 
     @Override
     public List<MonitoringStatsEntry> group(Map<Group, List<ServerMonitoringStatistics>> stats) {
-        HashMap<String, List<MonitoringEntry>> plainGroupMap = new HashMap<>();
+        Map<String, List<MonitoringEntry>> plainGroupMap = new HashMap<>();
         selectServersStatsDistinct(stats).stream()
             .filter(filterServers())
             .forEach(stat ->
