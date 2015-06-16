@@ -3,7 +3,7 @@
     "url" : "/v2/authentication/login",
     "method" : "POST",
     "bodyPatterns" : [ {
-      "equalToJson" : "{\"username\":\"idrabenia.altd\",\"password\":\"RenVortEr9\"}",
+      "equalToJson" : "{\"username\":\"stub_username\",\"password\":\"stub_password\"}",
       "jsonCompareMode" : "LENIENT"
     } ]
   },
