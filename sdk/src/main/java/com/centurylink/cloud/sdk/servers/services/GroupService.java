@@ -70,18 +70,16 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
     private final ServerClient client;
     private final GroupConverter converter;
-    private final DataCentersClient dataCentersClient;
     private final DataCenterService dataCenterService;
     private final Provider<ServerService> serverServiceProvider;
     private final QueueClient queueClient;
 
     @Inject
-    public GroupService(ServerClient client, GroupConverter converter, DataCentersClient dataCentersClient,
+    public GroupService(ServerClient client, GroupConverter converter,
                         DataCenterService dataCenterService, QueueClient queueClient,
                         Provider<ServerService> serverServiceProvider) {
         this.client = client;
         this.converter = converter;
-        this.dataCentersClient = dataCentersClient;
         this.dataCenterService = dataCenterService;
         this.serverServiceProvider = serverServiceProvider;
         this.queueClient = queueClient;
