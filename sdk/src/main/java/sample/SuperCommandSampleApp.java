@@ -32,13 +32,14 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
-import java.util.logging.Logger;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
@@ -56,7 +57,7 @@ public class SuperCommandSampleApp extends Assert {
     private ServerService serverService;
     private GroupService groupService;
 
-    private static final Logger LOGGER = Logger.getLogger("SuperCommandSampleApp");
+    private static final Logger LOGGER = LoggerFactory.getLogger(SuperCommandSampleApp.class);
 
 
     public SuperCommandSampleApp() {
@@ -141,7 +142,7 @@ public class SuperCommandSampleApp extends Assert {
         try {
             groupService.delete(ref);
         } catch (ReferenceNotResolvedException ex) {
-            LOGGER.info("nothing to delete");
+            LOGGER.info("nothing to delete", ex);
         }
     }
 

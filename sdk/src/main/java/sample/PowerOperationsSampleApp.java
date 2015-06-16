@@ -26,13 +26,14 @@ import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
-import java.util.logging.Logger;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
@@ -51,7 +52,9 @@ public class PowerOperationsSampleApp extends Assert {
     private final ServerService serverService;
     private final GroupService groupService;
 
-    private static final Logger LOGGER = Logger.getLogger("PowerOperationsSampleApp");
+    private static final Logger LOGGER = LoggerFactory.getLogger(PowerOperationsSampleApp.class);
+
+    private static final String GROUP_NAME = "MyServers";
 
     public PowerOperationsSampleApp() {
         ClcSdk sdk = new ClcSdk(
@@ -85,13 +88,13 @@ public class PowerOperationsSampleApp extends Assert {
         try {
             deleteServers();
         } catch (Exception ex) {
-            LOGGER.info("nothing to delete");
+            LOGGER.info("nothing to delete", ex);
         }
 
         groupService
             .defineInfrastructure(dataCenter(US_EAST_STERLING).subitems(
                 group(DEFAULT_GROUP).subitems(
-                    group("MyServers",
+                    group(GROUP_NAME,
                         "MyServers Group Description").subitems(
                         centOsServer("a_nginx"),
                         centOsServer("a_apache"),
@@ -108,7 +111,7 @@ public class PowerOperationsSampleApp extends Assert {
         serverService
             .delete(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
-                .groupNames("MyServers")
+                .groupNames(GROUP_NAME)
                 .onlyActive()
             )
             .waitUntilComplete();
@@ -116,7 +119,7 @@ public class PowerOperationsSampleApp extends Assert {
         groupService
             .delete(new GroupFilter()
                 .dataCenters(US_EAST_STERLING)
-                .names("MyServers")
+                .names(GROUP_NAME)
             )
             .waitUntilComplete();
     }
@@ -124,7 +127,7 @@ public class PowerOperationsSampleApp extends Assert {
     private Group myServersGroup() {
         return Group.refByName()
             .dataCenter(US_EAST_STERLING)
-            .name("MyServers");
+            .name(GROUP_NAME);
     }
 
     private Server getMysqlServer() {
@@ -152,7 +155,7 @@ public class PowerOperationsSampleApp extends Assert {
         serverService
             .createSnapshot(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
-                .groupNames("MyServers")
+                .groupNames(GROUP_NAME)
                 .descriptionContains("a_")
             )
             .waitUntilComplete();
@@ -200,7 +203,7 @@ public class PowerOperationsSampleApp extends Assert {
         serverService
             .powerOff(new ServerFilter()
                 .dataCenters(US_EAST_STERLING)
-                .groupNames("MyServers")
+                .groupNames(GROUP_NAME)
                 .descriptionContains("b_")
             )
             .waitUntilComplete();
