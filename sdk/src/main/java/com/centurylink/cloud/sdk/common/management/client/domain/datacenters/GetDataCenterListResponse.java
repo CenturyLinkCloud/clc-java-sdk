@@ -34,26 +34,4 @@ public class GetDataCenterListResponse extends ArrayList<DataCenterMetadata> {
         super(c);
     }
 
-    public DataCenterMetadata findById(String id) {
-        for (DataCenterMetadata curResponse : this) {
-            if (curResponse.getId().equalsIgnoreCase(id)) {
-                return curResponse;
-            }
-        }
-
-        return null;
-    }
-
-    public DataCenterMetadata findWhereNameContains(String name) {
-        String matchSubstring = name.toUpperCase();
-
-        for (DataCenterMetadata curResponse : this) {
-            String upperCaseName = curResponse.getName().toUpperCase();
-            if (upperCaseName.contains(matchSubstring)) {
-                return curResponse;
-            }
-        }
-
-        return null;
-    }
 }

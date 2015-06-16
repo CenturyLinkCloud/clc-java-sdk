@@ -19,6 +19,7 @@ import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
@@ -107,8 +108,9 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
     public void testFindAllCentOsTemplates() {
         List<TemplateMetadata> results = templateService.find(new TemplateFilter()
             .dataCenters("va1") // US_EAST_STERLING
+            .dataCenters(DataCenter.refByName("Sterling"))
             .osTypes(new OsFilter()
-                .type(CENTOS)
+                    .type(CENTOS)
             )
         );
 
