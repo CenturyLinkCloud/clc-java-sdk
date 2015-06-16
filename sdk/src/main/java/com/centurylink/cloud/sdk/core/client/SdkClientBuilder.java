@@ -489,7 +489,6 @@ public class SdkClientBuilder extends ClientBuilder
             }
             else
             {
-                //sslsf = new SSLSocketFactory(SSLContext.getInstance(SSLSocketFactory.TLS), verifier);
                 final SSLContext tlsContext = SSLContext.getInstance(org.apache.http.conn.ssl.SSLSocketFactory.TLS);
                 tlsContext.init(null, null, null);
                 sslsf = new org.apache.http.conn.ssl.SSLSocketFactory(tlsContext, verifier);
