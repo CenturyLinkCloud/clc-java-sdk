@@ -15,20 +15,11 @@
 
 package com.centurylink.cloud.sdk.core.client.errors;
 
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpStatus;
-
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.RedirectionException;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 import java.io.IOException;
 
-import static java.util.Arrays.asList;
-import static javax.ws.rs.core.Response.Status.*;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 
 /**

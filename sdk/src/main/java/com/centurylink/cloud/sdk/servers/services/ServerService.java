@@ -33,7 +33,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.PublicIpConverter;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.SshClient;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.SshjClient;
 import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;

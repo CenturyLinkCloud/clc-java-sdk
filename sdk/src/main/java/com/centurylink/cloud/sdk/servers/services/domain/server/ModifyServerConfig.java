@@ -15,8 +15,6 @@
 
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-
 public class ModifyServerConfig {
 
     private String groupId;

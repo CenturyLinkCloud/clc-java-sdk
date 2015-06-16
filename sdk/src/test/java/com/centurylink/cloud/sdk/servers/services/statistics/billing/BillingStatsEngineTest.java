@@ -42,11 +42,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
 @Test(groups = {INTEGRATION, LONG_RUNNING})
 @SuppressWarnings("unchecked")

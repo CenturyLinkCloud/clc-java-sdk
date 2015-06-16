@@ -22,7 +22,11 @@ import org.apache.http.protocol.HttpContext;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.jboss.resteasy.util.HttpResponseCodes.*;
+import static org.jboss.resteasy.util.HttpResponseCodes.SC_ACCEPTED;
+import static org.jboss.resteasy.util.HttpResponseCodes.SC_CREATED;
+import static org.jboss.resteasy.util.HttpResponseCodes.SC_NOT_FOUND;
+import static org.jboss.resteasy.util.HttpResponseCodes.SC_NO_CONTENT;
+import static org.jboss.resteasy.util.HttpResponseCodes.SC_OK;
 
 /**
  * @author Ilya Drabenia

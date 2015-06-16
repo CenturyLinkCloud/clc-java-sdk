@@ -20,7 +20,6 @@ import com.centurylink.cloud.sdk.servers.services.domain.template.filters.Templa
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType;
-import com.google.common.base.Strings;
 
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.google.common.base.Strings.nullToEmpty;

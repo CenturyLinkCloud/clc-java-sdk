@@ -33,6 +33,24 @@ repositories {
     jcenter()
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java"]
+            exclude "**/sample/**.java"
+        }
+    }
+    sampleTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/main/java')
+            include "**/sample/**.java"
+        }
+        resources.srcDir file('src/main/resources')
+    }
+}
+
 jacocoTestReport {
     reports {
         xml.enabled false
@@ -73,6 +91,29 @@ task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
     systemProperty "clc.password", System.getProperty("clc.password")
 }
 
+task runSamples(type: Test, dependsOn: 'compileSampleTestJava') {
+    testClassesDir = sourceSets.sampleTest.output.classesDir
+    classpath = sourceSets.sampleTest.runtimeClasspath
+
+    useTestNG() {
+        includeGroups 'Samples'
+    }
+
+    testLogging {
+        showExceptions = true
+        showCauses = true
+        exceptionFormat = 'full' // full information about failed tests
+    }
+
+    systemProperty "clc.username", System.getProperty("clc.username")
+    systemProperty "clc.password", System.getProperty("clc.password")
+}
+
+configurations {
+    sampleTestCompile.extendsFrom testCompile
+    sampleTestRuntime.extendsFrom testRuntime
+}
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.7'
@@ -87,6 +128,9 @@ dependencies {
 
     compile 'com.google.guava:guava:18.0'
     compile 'com.google.inject:guice:3.0'
+
+    //sample package
+    compile 'org.testng:testng:6.8.21'
 
     testCompile 'org.testng:testng:6.8.21'
     testCompile "org.mockito:mockito-core:1.+"
