@@ -117,7 +117,7 @@ public class ServerOperationsByServerFilterTest extends AbstractServerOperations
     }
 
     @Override
-    @Test(groups = {INTEGRATION})
+    @Test
     public void runChainTests() {
         ServerStubFixture fixture = new ServerStubFixture(serverClient, queueClient, dataCentersClient);
 
