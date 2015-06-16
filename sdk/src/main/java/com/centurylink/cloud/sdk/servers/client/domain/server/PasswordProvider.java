@@ -15,7 +15,7 @@
 
 package com.centurylink.cloud.sdk.servers.client.domain.server;
 
-public class Password {
+public class PasswordProvider {
 
     private String current;
     private String password;
@@ -28,7 +28,7 @@ public class Password {
         this.current = current;
     }
 
-    public Password current(String current) {
+    public PasswordProvider current(String current) {
         setCurrent(current);
         return this;
     }
@@ -41,7 +41,7 @@ public class Password {
         this.password = password;
     }
 
-    public Password password(String password) {
+    public PasswordProvider password(String password) {
         setCurrent(current);
         return this;
     }

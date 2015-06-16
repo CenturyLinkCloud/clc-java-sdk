@@ -23,7 +23,7 @@ import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.ModifyServerRequest;
-import com.centurylink.cloud.sdk.servers.client.domain.server.Password;
+import com.centurylink.cloud.sdk.servers.client.domain.server.PasswordProvider;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.TemplateService;
 import com.google.inject.Inject;
@@ -112,10 +112,10 @@ public class ServerConverter {
             && !credentialsConfig.getNewPassword().equals(credentialsConfig.getOldPassword())) {
 
             result.add(
-                new ModifyServerRequest<Password>()
+                new ModifyServerRequest<PasswordProvider>()
                     .member("password")
                     .value(
-                        new Password()
+                        new PasswordProvider()
                             .current(credentialsConfig.getOldPassword())
                             .password(credentialsConfig.getNewPassword())
                     )
