@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD/18194437eb394e3fb41ca39db0692799/billing",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-18194437eb394e3fb41ca39db0692799-billing-nqhLz.json",
+    "headers" : {
+      "Cache-Control" : "max-age=300, private",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 16 Jun 2015 22:46:04 GMT",
+      "Content-Length" : "221"
+    }
+  }
+}

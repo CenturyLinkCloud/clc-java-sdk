@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD/18194437eb394e3fb41ca39db0692799",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-ALTD-18194437eb394e3fb41ca39db0692799-WYrp6.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Tue, 16 Jun 2015 22:46:05 GMT",
+      "Content-Length" : "79"
+    }
+  }
+}

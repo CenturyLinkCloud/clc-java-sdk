@@ -1,0 +1,1 @@
+{"server":"st-srv","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/de1-72065","id":"de1-72065"},{"rel":"self","href":"/v2/servers/ALTD/303671c3bb3648e691fd3cab2d179eea?uuid=True","id":"303671c3bb3648e691fd3cab2d179eea","verbs":["GET"]}]}

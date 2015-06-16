@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"st-gp\",\"parentGroupId\":\"2dda7958f3ad4d819914e8d3cb643120\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-groups-ALTD-il45j.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/groups/altd/18194437eb394e3fb41ca39db0692799",
+      "Date" : "Tue, 16 Jun 2015 22:42:36 GMT",
+      "Content-Length" : "1446"
+    }
+  }
+}

@@ -83,10 +83,10 @@ public class ModifyServerTest extends AbstractServersSdkTest {
             .cpuCount(modifiedCpu)
                 .ram(modifiedRam)
                 .disk(
-                        new DiskConfig().diskId("0:0").size(disk1ModifiedSize)
+                    new DiskConfig().diskId("0:0").size(disk1ModifiedSize)
                 )
                 .disk(
-                        new DiskConfig().diskId("0:1").size(disk2ModifiedSize)
+                    new DiskConfig().diskId("0:1").size(disk2ModifiedSize)
                 )
                 .disk(
                     new DiskConfig().diskId("0:2").size(disk3ModifiedSize)

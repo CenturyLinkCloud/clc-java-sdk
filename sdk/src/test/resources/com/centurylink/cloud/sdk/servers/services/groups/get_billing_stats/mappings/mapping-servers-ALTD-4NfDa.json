@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"st-srv\",\"description\":null,\"groupId\":\"18194437eb394e3fb41ca39db0692799\",\"sourceServerId\":\"CENTOS-6-64-TEMPLATE\",\"cpu\":1,\"memoryGB\":2,\"type\":\"standard\",\"storageType\":\"standard\",\"password\":null,\"primaryDns\":null,\"secondaryDns\":null,\"networkId\":null,\"additionalDisks\":[],\"ttl\":null,\"managedOS\":false,\"isManagedOS\":false}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-servers-ALTD-4NfDa.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Tue, 16 Jun 2015 22:42:51 GMT",
+      "Content-Length" : "265"
+    }
+  }
+}

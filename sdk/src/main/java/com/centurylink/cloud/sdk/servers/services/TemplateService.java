@@ -60,11 +60,4 @@ public class TemplateService implements QueryService<Template, TemplateFilter, T
             );
     }
 
-    public List<TemplateMetadata> findByDataCenter(String dataCenterId) {
-        return
-            dataCentersClient
-                .getDeploymentCapabilities(dataCenterId)
-                .getTemplates();
-    }
-
 }
