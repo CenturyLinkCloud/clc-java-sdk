@@ -18,6 +18,7 @@ package com.centurylink.cloud.sdk.core.auth.services.domain.credentials;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.function.Supplier;
 
@@ -59,7 +60,12 @@ public class PropertiesFileCredentialsProvider implements CredentialsProvider {
 
     private Properties loadProperties(String filePath) {
         try {
-            properties.load(getClass().getClassLoader().getResourceAsStream(filePath));
+            InputStream fileIn = getClass().getClassLoader().getResourceAsStream(filePath);
+
+            if (fileIn != null) {
+                properties.load(fileIn);
+            }
+
             return properties;
         } catch (IOException e) {
             throw new ClcException(e);
