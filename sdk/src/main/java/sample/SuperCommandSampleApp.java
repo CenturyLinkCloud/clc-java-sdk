@@ -38,6 +38,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
+import java.util.logging.Logger;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
@@ -54,6 +55,8 @@ public class SuperCommandSampleApp extends Assert {
 
     private ServerService serverService;
     private GroupService groupService;
+
+    private static final Logger LOGGER = Logger.getLogger("SuperCommandSampleApp");
 
 
     public SuperCommandSampleApp() {
@@ -138,7 +141,7 @@ public class SuperCommandSampleApp extends Assert {
         try {
             groupService.delete(ref);
         } catch (ReferenceNotResolvedException ex) {
-            // noop
+            LOGGER.info("nothing to delete");
         }
     }
 
