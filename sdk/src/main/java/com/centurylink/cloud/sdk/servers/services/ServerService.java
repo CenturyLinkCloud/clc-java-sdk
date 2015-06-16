@@ -231,34 +231,36 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public Stream<ServerMetadata> findLazy(ServerFilter filter) {
         return filter
             .applyFindLazy(serverFilter -> {
-                if (isAlwaysTruePredicate(serverFilter.getPredicate())
-                    && isAlwaysTruePredicate(serverFilter.getGroupFilter().getPredicate())
-                    && isAlwaysTruePredicate(serverFilter.getGroupFilter().getDataCenterFilter().getPredicate())
-                    && serverFilter.getServerIds().size() > 0) {
+                if (isFilterContainsServerIdsCondition(serverFilter)) {
                     return
                         serverFilter
                             .getServerIds()
                             .stream()
                             .map(nullable(client::findServerById))
                             .filter(notNull());
-                } else {
-                    return
-                        groupService
-                            .findLazy(serverFilter.getGroupFilter())
-                            .flatMap(group -> {
-                                    if (serverFilter.isSearchInSubGroups()) {
-                                        return group.getAllServers().stream();
-                                    } else {
-                                        return group.getServers().stream();
-                                    }
-                                }
-                            )
-                            .filter(serverFilter.getPredicate())
-                            .filter((serverFilter.getServerIds().size() > 0) ?
-                                combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
-                            );
                 }
+
+                return
+                    groupService
+                        .findLazy(serverFilter.getGroupFilter())
+                        .flatMap(
+                            group -> serverFilter.isSearchInSubGroups() ?
+                                group.getAllServers().stream() : group.getServers().stream()
+                        )
+                        .filter(serverFilter.getPredicate())
+                        .filter(
+                            serverFilter.getServerIds().size() > 0 ?
+                                combine(ServerMetadata::getId, in(serverFilter.getServerIds())) : alwaysTrue()
+                        );
             });
+    }
+
+    private boolean isFilterContainsServerIdsCondition(ServerFilter filter) {
+        return
+            isAlwaysTruePredicate(filter.getPredicate())
+                && isAlwaysTruePredicate(filter.getGroupFilter().getPredicate())
+                && isAlwaysTruePredicate(filter.getGroupFilter().getDataCenterFilter().getPredicate())
+                && filter.getServerIds().size() > 0;
     }
 
     /**
