@@ -42,7 +42,7 @@ public class OsFilter {
      *
      * @param osType is enum value of {@link OsType}
      * @return {@link OsFilter}
-     * @throws NullPointerException
+     * @throws NullPointerException if {@code osType} is null
      */
     public OsFilter type(OsType osType) {
         this.osType =
@@ -57,7 +57,7 @@ public class OsFilter {
      *
      * @param osType is not null string value of operating system vendor
      * @return {@link OsFilter}
-     * @throws NullPointerException
+     * @throws NullPointerException if {@code osType} is null
      */
     public OsFilter type(String osType) {
         this.osType = checkNotNull(osType, "OS type must be not a null");
@@ -98,7 +98,7 @@ public class OsFilter {
      *
      * @param edition is not null string representation of operating system edition ("Datacenter", "Business").
      * @return {@link OsFilter}
-     * @throws NullPointerException
+     * @throws NullPointerException if {@code edition} is null
      */
     public OsFilter edition(String edition) {
         this.edition = checkNotNull(edition, "Edition must be not a null");

@@ -59,7 +59,13 @@ public class CreateServerRequest {
 
 
     /**
-     * Name of the server to create. Alphanumeric characters and dashes only. Must be between 1-7 characters depending on the length of the account alias. (This name will be appended with a two digit number and prepended with the dataCenter code and account alias to make up the final server name.)
+     * Name of the server to create. Alphanumeric characters and dashes only.
+     * Must be between 1-7 characters depending on the length of the account alias.
+     * (This name will be appended with a two digit number and prepended with the dataCenter code
+     * and account alias to make up the final server name.)
+     *
+     * @param name the server name
+     * @return current instance
      */
     public CreateServerRequest name(String name) {
         this.name = name;
@@ -67,7 +73,11 @@ public class CreateServerRequest {
     }
 
     /**
-     * ID of the parent group. Retrieved from query to parent group, or by looking at the URL on the UI pages in the Control Portal.
+     * ID of the parent group. Retrieved from query to parent group,
+     * or by looking at the URL on the UI pages in the Control Portal.
+     *
+     * @param groupId the group id
+     * @return current instance
      */
     public CreateServerRequest groupId(String groupId) {
         this.groupId = groupId;
@@ -75,7 +85,12 @@ public class CreateServerRequest {
     }
 
     /**
-     * ID of the server to use a source. May be the ID of a template, or when cloning, an existing server ID. The list of available templates for a given account in a data center can be retrieved from the Get Data Center Deployment Capabilities API operation.
+     * ID of the server to use a source. May be the ID of a template, or when cloning,
+     * an existing server ID. The list of available templates for a given account in a data center
+     * can be retrieved from the Get Data Center Deployment Capabilities API operation.
+     *
+     * @param sourceServerId the source server id
+     * @return current instance
      */
     public CreateServerRequest sourceServerId(String sourceServerId) {
         this.sourceServerId = sourceServerId;
@@ -84,6 +99,9 @@ public class CreateServerRequest {
 
     /**
      * Number of processors to configure the server with (1-16)
+     *
+     * @param cpu the number of CPU
+     * @return current instance
      */
     public CreateServerRequest cpu(Integer cpu) {
         this.cpu = cpu;
@@ -92,6 +110,9 @@ public class CreateServerRequest {
 
     /**
      * Number of GB of memory to configure the server with (1-128)
+     *
+     * @param memoryGB the number of memory
+     * @return current instance
      */
     public CreateServerRequest memoryGB(Integer memoryGB) {
         this.memoryGB = memoryGB;
@@ -112,21 +133,33 @@ public class CreateServerRequest {
     }
 
     /**
-     * Name of the server to create. Alphanumeric characters and dashes only. Must be between 1-7 characters depending on the length of the account alias. (This name will be appended with a two digit number and prepended with the dataCenter code and account alias to make up the final server name.)
+     * Name of the server to create. Alphanumeric characters and dashes only.
+     * Must be between 1-7 characters depending on the length of the account alias.
+     * (This name will be appended with a two digit number and prepended with the dataCenter code
+     * and account alias to make up the final server name.)
+     *
+     * @return the server name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * ID of the parent group. Retrieved from query to parent group, or by looking at the URL on the UI pages in the Control Portal.
+     * ID of the parent group. Retrieved from query to parent group,
+     * or by looking at the URL on the UI pages in the Control Portal.
+     *
+     * @return the group id
      */
     public String getGroupId() {
         return groupId;
     }
 
     /**
-     * ID of the server to use a source. May be the ID of a template, or when cloning, an existing server ID. The list of available templates for a given account in a data center can be retrieved from the Get Data Center Deployment Capabilities API operation.
+     * ID of the server to use a source. May be the ID of a template, or when cloning,
+     * an existing server ID. The list of available templates for a given account in a data center
+     * can be retrieved from the Get Data Center Deployment Capabilities API operation.
+     *
+     * @return the source server id
      */
     public String getSourceServerId() {
         return sourceServerId;
@@ -134,6 +167,8 @@ public class CreateServerRequest {
 
     /**
      * Number of processors to configure the server with (1-16)
+     *
+     * @return the number of CPU
      */
     public Integer getCpu() {
         return cpu;
@@ -141,6 +176,8 @@ public class CreateServerRequest {
 
     /**
      * Number of GB of memory to configure the server with (1-128)
+     *
+     * @return the number of RAM
      */
     public Integer getMemoryGB() {
         return memoryGB;
@@ -148,6 +185,8 @@ public class CreateServerRequest {
 
     /**
      * Whether to create standard or hyperscale server
+     *
+     * @return the server type
      */
     public String getType() {
         return type;
@@ -155,6 +194,10 @@ public class CreateServerRequest {
 
     /**
      * Whether to create standard or hyperscale server
+     *
+     * @param type the server type
+     * @param hasCapability the flag, that shows the availability of capability
+     * @return current instance
      */
     public CreateServerRequest type(String type, boolean hasCapability) {
         if (ServerType.HYPERSCALE.getCode().equals(type) && !hasCapability) {
@@ -166,6 +209,8 @@ public class CreateServerRequest {
 
     /**
      * Whether to create standard or premium storage
+     *
+     * @return the storage type
      */
     public String getStorageType() {
         return storageType;
@@ -173,6 +218,10 @@ public class CreateServerRequest {
 
     /**
      * Whether to create standard or premium storage
+     *
+     * @param storageType the storage type
+     * @param hasCapability the flag, that shows the availability of capability
+     * @return current instance
      */
     public CreateServerRequest storageType(String storageType, boolean hasCapability) {
         if (StorageType.PREMIUM.getCode().equals(storageType) && !hasCapability) {
@@ -245,6 +294,8 @@ public class CreateServerRequest {
 
     /**
      * Time to Live the server
+     *
+     * @return the time to live
      */
     public String getTtl() {
         return ttl;
@@ -252,6 +303,9 @@ public class CreateServerRequest {
 
     /**
      * Time to Live the server
+     *
+     * @param timeToLive the time to live
+     * @return current instance
      */
     public CreateServerRequest timeToLive(TimeToLive timeToLive) {
         if (timeToLive != null) {

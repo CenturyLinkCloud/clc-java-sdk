@@ -71,7 +71,7 @@ public class PublicIpMetadata {
 
     /**
      * Set source restrictions in CIDR(Classless Inter-Domain Routing) format
-     * @param sourceRestrictions
+     * @param sourceRestrictions the list of {@link SourceRestriction}
      */
     public void setSourceRestrictions(List<SourceRestriction> sourceRestrictions) {
         this.sourceRestrictions = sourceRestrictions;
@@ -79,7 +79,7 @@ public class PublicIpMetadata {
 
     /**
      * Specify List of source restrictions in CIDR(Classless Inter-Domain Routing) format
-     * @param sourceRestrictions
+     * @param sourceRestrictions the list of source restrictions provided in CIDR format
      * @return PublicIp configuration
      */
     public PublicIpMetadata sourceRestrictions(String... sourceRestrictions) {

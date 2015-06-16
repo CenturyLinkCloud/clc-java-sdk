@@ -54,9 +54,9 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
     /**
      * Method allow to provide custom filter predicate
      *
-     * @param predicate
+     * @param predicate is not null filtering expression
      * @return {@link TemplateFilter}
-     * @throws java.lang.NullPointerException
+     * @throws java.lang.NullPointerException if {@code predicate} is null
      */
     public TemplateFilter dataCentersWhere(Predicate<DataCenterMetadata> predicate) {
         checkNotNull(predicate, "Predicate must be not a null");
@@ -68,7 +68,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
     /**
      * Method allow to filter data centers by IDs. Filtering is strong case sensitive.
      *
-     * @param ids
+     * @param ids the array of data center id
      * @return {@link TemplateFilter}
      */
     public TemplateFilter dataCenters(String... ids) {
@@ -84,7 +84,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      *
      * @param dataCenters is list of references to target dataCenter
      * @return {@link TemplateFilter}
-     * @throws java.lang.NullPointerException
+     * @throws java.lang.NullPointerException if {@code dataCenters} is null
      */
     public TemplateFilter dataCenters(DataCenter... dataCenters) {
         allItemsNotNull(dataCenters, "Datacenter references");
@@ -100,7 +100,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      *
      * @param names is a not null list of name substrings
      * @return {@link TemplateFilter}
-     * @throws java.lang.NullPointerException
+     * @throws java.lang.NullPointerException if {@code names} is null
      */
     public TemplateFilter dataCenterNameContains(String... names) {
         allItemsNotNull(names, "Name substrings");
@@ -116,7 +116,7 @@ public class TemplateFilter extends AbstractResourceFilter<TemplateFilter> {
      *
      * @param names is not null list of name substrings
      * @return {@link TemplateFilter}
-     * @throws java.lang.NullPointerException
+     * @throws java.lang.NullPointerException if {@code names} is null
      */
     public TemplateFilter nameContains(String... names) {
         allItemsNotNull(names, "Name substrings");

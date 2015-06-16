@@ -143,7 +143,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     }
 
     /**
-     * Create group hierarchy based on {@link InfrastructureConfig} instance.<br/>
+     * Create group hierarchy based on {@link InfrastructureConfig} instance.<br>
      * Existing groups are not override!
      *
      * @param configs group hierarchy configs
@@ -737,7 +737,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Retrieve the resource usage of servers within a group hierarchy statistics.
      * @param groups the list of Group references
      * @param config configuration for statistics entries
-     * @return the statistics map <Group, Statistics>
+     * @return the statistics map
      */
     public Map<Group, List<ServerMonitoringStatistics>> getMonitoringStatsAsMap(List<Group> groups, ServerMonitoringFilter config) {
         Map<Group, List<ServerMonitoringStatistics>> result = new HashMap<>(groups.size());
@@ -751,7 +751,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * Retrieve the resource usage of servers within a group hierarchy statistics.
      * @param groupFilter group filter
      * @param config      configuration for statistics entries
-     * @return the statistics map <Group, Statistics>
+     * @return the statistics map
      */
     public Map<Group, List<ServerMonitoringStatistics>> getMonitoringStatsAsMap(GroupFilter groupFilter, ServerMonitoringFilter config) {
         return getMonitoringStatsAsMap(Arrays.asList(getRefsFromFilter(groupFilter)), config);

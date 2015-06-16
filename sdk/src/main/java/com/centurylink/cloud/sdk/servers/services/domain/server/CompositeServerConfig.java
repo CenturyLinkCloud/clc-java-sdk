@@ -16,7 +16,7 @@
 package com.centurylink.cloud.sdk.servers.services.domain.server;
 
 /**
- * Represents multiple identical server configs.<br/>
+ * Represents multiple identical server configs.<br>
  * Store {@code count} number of copies of {@code server}
  *
  * @author Aliaksandr Krasitski
