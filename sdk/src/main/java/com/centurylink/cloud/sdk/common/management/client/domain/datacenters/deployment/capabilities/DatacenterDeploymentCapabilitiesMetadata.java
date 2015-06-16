@@ -209,56 +209,6 @@ public class DatacenterDeploymentCapabilitiesMetadata {
         this.additionalProperties.put(name, value);
     }
 
-    public TemplateMetadata findByDescription(String description) {
-        for (TemplateMetadata curTemplate : this.getTemplates()) {
-            if (curTemplate.getDescription().contains(description)) {
-                return curTemplate;
-            }
-        }
-
-        return null;
-    }
-
-    public TemplateMetadata findByName(String name) {
-        for (TemplateMetadata curTemplate : this.getTemplates()) {
-            if (curTemplate.getName().contains(name)) {
-                return curTemplate;
-            }
-        }
-
-        return null;
-    }
-
-    public TemplateMetadata findByOsType(TemplateByOsRef operatingSystem) {
-        for (TemplateMetadata curTemplate : this.getTemplates()) {
-            if (templateHasOs(curTemplate, operatingSystem)) {
-                return curTemplate;
-            }
-        }
-
-        return null;
-    }
-
-    private boolean templateHasOs(TemplateMetadata curTemplate, TemplateByOsRef operatingSystem) {
-        return osTypeContains(
-            curTemplate,
-            operatingSystem.getType(),
-            operatingSystem.getVersion(),
-            operatingSystem.getEdition(),
-            operatingSystem.getArchitecture().getCode()
-        );
-    }
-
-    private boolean osTypeContains(TemplateMetadata curTemplate, String... values) {
-        for (String curValue : values) {
-            if (curValue != null && !curTemplate.getOsType().contains(curValue)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public NetworkMetadata findNetworkById(String id) {
         for (NetworkMetadata curNetwork : deployableNetworks) {
             if (curNetwork.getNetworkId().equalsIgnoreCase(id)) {

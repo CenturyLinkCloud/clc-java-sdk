@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD/a9e421f68c0a4f06a08fbdb135ff1413",
+    "method" : "PATCH",
+    "bodyPatterns" : [ {
+      "equalToJson" : "[{\"op\":\"set\",\"member\":\"name\",\"value\":\"Default Group test\"},{\"op\":\"set\",\"member\":\"description\",\"value\":\"test description\"}]",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-ALTD-a9e421f68c0a4f06a08fbdb135ff1413-RIxqb.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Tue, 16 Jun 2015 21:08:28 GMT"
+    }
+  }
+}

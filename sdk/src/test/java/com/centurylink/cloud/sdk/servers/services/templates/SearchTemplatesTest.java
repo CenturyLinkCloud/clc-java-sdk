@@ -106,7 +106,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
     @Test
     public void testFindAllCentOsTemplates() {
         List<TemplateMetadata> results = templateService.find(new TemplateFilter()
-            .dataCenters(US_EAST_STERLING)
+            .dataCenters("va1") // US_EAST_STERLING
             .osTypes(new OsFilter()
                 .type(CENTOS)
             )
@@ -122,7 +122,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
     @Test
     public void testFindAllTemplatesWithManagedOsCapabilities() {
         List<TemplateMetadata> results = templateService.find(new TemplateFilter()
-            .dataCenters(US_EAST_STERLING)
+            .dataCentersWhere(d -> d.getId().equals("va1")) // sterling
             .where(t -> t.getCapabilities().contains(MANAGED_OS_VALUE))
         );
 
@@ -133,16 +133,14 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
     public void testOrOperation() {
         List<TemplateMetadata> results = templateService.find(Filter.or(
             new TemplateFilter()
-                .dataCenters(US_EAST_STERLING)
+                .dataCenterNameContains("sterling")
                 .osTypes(new OsFilter()
                     .type(CENTOS)
                 ),
 
             new TemplateFilter()
                 .dataCenters(DE_FRANKFURT)
-                .osTypes(new OsFilter()
-                    .type(DEBIAN)
-                )
+                .nameContains("debian")
         ));
 
         assertEquals(results.size(), 4);

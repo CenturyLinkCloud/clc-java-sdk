@@ -16,7 +16,6 @@
 package com.centurylink.cloud.sdk.servers;
 
 import com.centurylink.cloud.sdk.common.management.CommonManagementModule;
-import com.centurylink.cloud.sdk.networks.NetworksModule;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
 import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
@@ -41,7 +40,6 @@ public class ServersModule extends AbstractModule {
         bind(TemplateService.class);
 
         install(new CommonManagementModule());
-        install(new NetworksModule());
     }
 
 }

@@ -33,14 +33,6 @@ repositories {
     jcenter()
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination "${buildDir}/jacocoHtml"
-    }
-}
-
 task runUnitTests(type: Test, dependsOn: 'compileTestJava') {
     useTestNG() {
         excludeGroups 'Integration', 'LongRunning', 'Samples', 'Recorded'
@@ -71,6 +63,17 @@ task runRecordedTests(type: Test, dependsOn: 'compileTestJava') {
 
     systemProperty "clc.username", "cloud_user"
     systemProperty "clc.password", "cloud_user_password"
+}
+
+task jacocoAllTestsReport(type: JacocoReport) {
+    sourceSets sourceSets.main
+    executionData runUnitTests, runRecordedTests
+
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
+    }
 }
 
 test () {

@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.servers.services.groups;
 
 import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.servers.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;
@@ -94,7 +95,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
     @Test
     public void testFindGroupByName() {
         List<GroupMetadata> groups = groupService.find(new GroupFilter()
-            .dataCenters(DE_FRANKFURT)
+            .dataCentersWhere(d -> d.getId().equals("de1" /*Frankfurt*/))
             .nameContains("MyServer")
         );
 
@@ -124,7 +125,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
     @Test
     public void testSearchById_de1DataCenter() {
         List<GroupMetadata> groups = groupService.find(new GroupFilter()
-            .dataCenters(DE_FRANKFURT)
+            .dataCentersWhere(new DataCenterFilter().dataCenters(DE_FRANKFURT))
             .id(GB_TEMPLATES_ID, DE_ROOT_ID)
         );
 

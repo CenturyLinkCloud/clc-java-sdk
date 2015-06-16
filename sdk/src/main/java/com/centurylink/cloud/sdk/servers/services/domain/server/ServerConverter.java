@@ -18,7 +18,6 @@ package com.centurylink.cloud.sdk.servers.services.domain.server;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.networks.services.NetworkService;
 import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.DiskRequest;
@@ -37,15 +36,13 @@ import java.util.List;
 public class ServerConverter {
     private final GroupService groupService;
     private final TemplateService templateService;
-    private final NetworkService networkService;
     private final DataCenterService dataCenterService;
 
     @Inject
     public ServerConverter(GroupService groupService, TemplateService templateService,
-                           NetworkService networkService, DataCenterService dataCenterService) {
+                           DataCenterService dataCenterService) {
         this.groupService = groupService;
         this.templateService = templateService;
-        this.networkService = networkService;
         this.dataCenterService = dataCenterService;
     }
 
@@ -88,13 +85,6 @@ public class ServerConverter {
                 .sourceServerId(templateMetadata.getName())
                 .primaryDns(newServer.getNetwork().getPrimaryDns())
                 .secondaryDns(newServer.getNetwork().getSecondaryDns())
-
-                .networkId(
-                    (newServer.getNetwork().getNetwork() == null) ? null :
-                        networkService
-                            .findByRef(newServer.getNetwork().getNetwork())
-                            .getNetworkId()
-                )
 
                 .timeToLive(newServer.getTimeToLive())
                 .managedOS(
