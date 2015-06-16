@@ -24,7 +24,11 @@ import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.*;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.DiskConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.DiskType;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
+import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
@@ -42,8 +46,8 @@ import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHiera
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
-import static sample.SamplesTestsConstants.SAMPLES;
 import static java.util.stream.Collectors.toList;
+import static sample.SamplesTestsConstants.SAMPLES;
 
 @Test(groups = {SAMPLES})
 public class SuperCommandSampleApp extends Assert {

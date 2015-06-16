@@ -15,7 +15,6 @@
 
 package com.centurylink.cloud.sdk.servers.services.groups;
 
-import com.centurylink.cloud.sdk.servers.SampleServerConfigs;
 import com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.ServerConfig;
 import org.testng.annotations.Test;
@@ -24,7 +23,6 @@ import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.apacheHttpSe
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.mysqlServer;
 import static com.centurylink.cloud.sdk.servers.SampleServerConfigs.nginxServer;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig.*;
 import static java.util.stream.Collectors.summingInt;
 import static org.testng.Assert.assertEquals;
 

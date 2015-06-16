@@ -24,7 +24,6 @@ import com.centurylink.cloud.sdk.common.management.services.domain.queue.Operati
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.JobFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.job.future.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.servers.client.ServerClient;

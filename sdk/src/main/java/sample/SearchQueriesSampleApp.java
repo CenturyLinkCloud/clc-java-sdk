@@ -39,7 +39,9 @@ import org.testng.annotations.Test;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.*;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
+import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_WEST_SANTA_CLARA;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
 import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
@@ -48,8 +50,8 @@ import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerSta
 import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
-import static sample.SamplesTestsConstants.SAMPLES;
 import static com.google.common.collect.Sets.newHashSet;
+import static sample.SamplesTestsConstants.SAMPLES;
 
 public class SearchQueriesSampleApp extends Assert {
 

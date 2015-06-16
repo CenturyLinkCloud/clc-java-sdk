@@ -21,7 +21,6 @@ import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.Get
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
-import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.networks.AbstractNetworksSdkTest;
 import com.centurylink.cloud.sdk.networks.NetworksModule;
 import com.google.inject.AbstractModule;

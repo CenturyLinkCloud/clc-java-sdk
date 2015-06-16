@@ -2,7 +2,6 @@ package com.centurylink.cloud.sdk.servers.services.domain.remote;
 
 import com.centurylink.cloud.sdk.common.management.services.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.servers.services.domain.remote.domain.ShellResponse;
-import net.schmizz.sshj.common.SSHException;
 
 import java.io.File;
 
