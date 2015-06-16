@@ -81,8 +81,8 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
     private static final double DELTA = 0.5;
 
-    List<String> serverIds = Arrays.asList(new String[]{"de1altdcttl604","de1altdmd-srv307",
-        "de1altdmd-srv324","de1altdtcrt523","de1altdtcrt738"});
+    List<String> serverIds = Arrays.asList("de1altdcttl604","de1altdmd-srv307",
+        "de1altdmd-srv324","de1altdtcrt523","de1altdtcrt738");
 
     @BeforeClass
     private void setup() {
