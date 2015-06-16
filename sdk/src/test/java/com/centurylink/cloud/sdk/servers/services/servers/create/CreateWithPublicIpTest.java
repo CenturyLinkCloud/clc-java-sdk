@@ -32,13 +32,14 @@ import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author Ilya Drabenia
  */
-@Test(groups = {INTEGRATION, LONG_RUNNING})
+@Test(groups = RECORDED)
 public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
     @Inject
