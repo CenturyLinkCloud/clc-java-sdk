@@ -32,6 +32,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
+import java.util.logging.Logger;
 
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
 import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
@@ -49,6 +50,8 @@ public class PowerOperationsSampleApp extends Assert {
 
     private final ServerService serverService;
     private final GroupService groupService;
+
+    private static final Logger LOGGER = Logger.getLogger("PowerOperationsSampleApp");
 
     public PowerOperationsSampleApp() {
         ClcSdk sdk = new ClcSdk(
@@ -82,7 +85,7 @@ public class PowerOperationsSampleApp extends Assert {
         try {
             deleteServers();
         } catch (Exception ex) {
-            // ignore
+            LOGGER.info("nothing to delete");
         }
 
         groupService

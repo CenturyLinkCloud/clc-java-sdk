@@ -55,6 +55,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
@@ -70,6 +71,7 @@ import java.util.concurrent.TimeUnit;
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
+@SuppressWarnings("deprecated")
 public class SdkClientBuilder extends ClientBuilder
 {
     public static enum HostnameVerificationPolicy
@@ -449,28 +451,12 @@ public class SdkClientBuilder extends ClientBuilder
 
     protected ClientHttpEngine initDefaultEngine()
     {
-        HttpClient httpClient = null;
+        HttpClient httpClient;
 
-        X509HostnameVerifier verifier = null;
-        if (this.verifier != null) verifier = new VerifierWrapper(this.verifier);
-        else
-        {
-            switch (policy)
-            {
-                case ANY:
-                    verifier = new AllowAllHostnameVerifier();
-                    break;
-                case WILDCARD:
-                    verifier = new BrowserCompatHostnameVerifier();
-                    break;
-                case STRICT:
-                    verifier = new StrictHostnameVerifier();
-                    break;
-            }
-        }
+        X509HostnameVerifier verifier = initHostnameVerifier();
         try
         {
-            org.apache.http.conn.ssl.SSLSocketFactory sslsf = null;
+            org.apache.http.conn.ssl.SSLSocketFactory sslsf;
             SSLContext theContext = sslContext;
             if (disableTrustManager)
             {
@@ -494,42 +480,15 @@ public class SdkClientBuilder extends ClientBuilder
                 tlsContext.init(null, null, null);
                 sslsf = new org.apache.http.conn.ssl.SSLSocketFactory(tlsContext, verifier);
             }
+
             SchemeRegistry registry = new SchemeRegistry();
             registry.register(
                 new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
             Scheme httpsScheme = new Scheme("https", 443, sslsf);
             registry.register(httpsScheme);
-            ClientConnectionManager cm = null;
-            if (connectionPoolSize > 0)
-            {
-                PoolingClientConnectionManager tcm = new PoolingClientConnectionManager(registry, connectionTTL, connectionTTLUnit);
-                tcm.setMaxTotal(connectionPoolSize);
-                if (maxPooledPerRoute == 0) maxPooledPerRoute = connectionPoolSize;
-                tcm.setDefaultMaxPerRoute(maxPooledPerRoute);
-                cm = tcm;
-
-            }
-            else
-            {
-                cm = new BasicClientConnectionManager(registry);
-            }
-            BasicHttpParams params = new BasicHttpParams();
-            if (socketTimeout > -1)
-            {
-                HttpConnectionParams.setSoTimeout(params, (int) socketTimeoutUnits.toMillis(socketTimeout));
-
-            }
-            if (establishConnectionTimeout > -1)
-            {
-                HttpConnectionParams.setConnectionTimeout(params, (int)establishConnectionTimeoutUnits.toMillis(establishConnectionTimeout));
-            }
-            if (connectionCheckoutTimeoutMs > -1)
-            {
-                HttpClientParams.setConnectionManagerTimeout(params, connectionCheckoutTimeoutMs);
-            }
 
             httpClient = new AutoRetryHttpClient(
-                new DefaultHttpClient(cm, params) {{
+                new DefaultHttpClient(initClientConnectionManager(registry), initHttpParams()) {{
                     if (proxyCredentials != null) {
                         setCredentialsProvider(new BasicCredentialsProvider() {{
                             setCredentials(
@@ -554,6 +513,70 @@ public class SdkClientBuilder extends ClientBuilder
         {
             throw new RuntimeException(e);
         }
+    }
+
+    private X509HostnameVerifier initHostnameVerifier() {
+        X509HostnameVerifier verifier = null;
+        if (this.verifier != null) verifier = new VerifierWrapper(this.verifier);
+        else
+        {
+            switch (policy)
+            {
+                case ANY:
+                    verifier = new AllowAllHostnameVerifier();
+                    break;
+                case WILDCARD:
+                    verifier = new BrowserCompatHostnameVerifier();
+                    break;
+                case STRICT:
+                    verifier = new StrictHostnameVerifier();
+                    break;
+            }
+        }
+
+        return verifier;
+    }
+
+    private ClientConnectionManager initClientConnectionManager(SchemeRegistry registry) {
+        ClientConnectionManager cm = null;
+        if (connectionPoolSize > 0)
+        {
+            PoolingClientConnectionManager tcm =
+                new PoolingClientConnectionManager(registry, connectionTTL, connectionTTLUnit);
+            tcm.setMaxTotal(connectionPoolSize);
+            if (maxPooledPerRoute == 0) maxPooledPerRoute = connectionPoolSize;
+            tcm.setDefaultMaxPerRoute(maxPooledPerRoute);
+            cm = tcm;
+
+        }
+        else
+        {
+            cm = new BasicClientConnectionManager(registry);
+        }
+
+        return cm;
+    }
+
+    private BasicHttpParams initHttpParams() {
+        BasicHttpParams params = new BasicHttpParams();
+        if (socketTimeout > -1)
+        {
+            HttpConnectionParams.setSoTimeout(params, (int) socketTimeoutUnits.toMillis(socketTimeout));
+        }
+
+        if (establishConnectionTimeout > -1)
+        {
+            HttpConnectionParams.setConnectionTimeout(params,
+                (int)establishConnectionTimeoutUnits.toMillis(establishConnectionTimeout)
+            );
+        }
+
+        if (connectionCheckoutTimeoutMs > -1)
+        {
+            HttpClientParams.setConnectionManagerTimeout(params, connectionCheckoutTimeoutMs);
+        }
+
+        return params;
     }
 
     @Override
