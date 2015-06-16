@@ -21,6 +21,7 @@ import com.centurylink.cloud.sdk.servers.services.domain.group.ServerMonitoringF
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
+import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.GuestUsage;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.MonitoringEntry;
 import com.centurylink.cloud.sdk.servers.services.domain.statistics.monitoring.MonitoringStatsEntry;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
@@ -355,29 +357,34 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
                 )
             );
 
-        entry.getGuestDiskUsage().stream()
-            .forEach(diskUsage -> {
-                    assertEquals(
-                        diskUsage.getCapacityMB(),
-                        samplingEntries.stream()
-                            .map(SamplingEntry::getGuestDiskUsage)
-                            .flatMap(List::stream)
-                            .filter(metadata -> metadata.getPath().equals(diskUsage.getPath()))
+        entry.getGuestDiskUsage().forEach(
+            diskUsage -> {
+                assertEquals(
+                    diskUsage.getCapacityMB(),
+                    fetchGuestUsageMetadataStream(samplingEntries, diskUsage)
                             .collect(summingInt(GuestUsageMetadata::getCapacityMB)),
-                        "check sum guest disk capacity usage"
-                    );
+                    "check sum guest disk capacity usage"
+                );
 
-                    assertEquals(
-                        diskUsage.getConsumedMB(),
-                        samplingEntries.stream()
-                            .map(SamplingEntry::getGuestDiskUsage)
-                            .flatMap(List::stream)
-                            .filter(metadata -> metadata.getPath().equals(diskUsage.getPath()))
+                assertEquals(
+                    diskUsage.getConsumedMB(),
+                    fetchGuestUsageMetadataStream(samplingEntries, diskUsage)
                             .collect(summingInt(GuestUsageMetadata::getConsumedMB)),
-                        "check sum guest disk consumed usage"
-                    );
-                }
-            );
+                    "check sum guest disk consumed usage"
+                );
+            }
+        );
+    }
+
+    private Stream<GuestUsageMetadata> fetchGuestUsageMetadataStream(
+            List<SamplingEntry> samplingEntries,
+            GuestUsage guestUsage
+    ) {
+        return
+            samplingEntries.stream()
+                .map(SamplingEntry::getGuestDiskUsage)
+                .flatMap(List::stream)
+                .filter(metadata -> metadata.getPath().equals(guestUsage.getPath()));
     }
 
     private void assertDoubleValues(double expected, double actual, String assertMessage) {
