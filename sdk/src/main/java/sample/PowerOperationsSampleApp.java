@@ -21,7 +21,8 @@ import com.centurylink.cloud.sdk.servers.services.GroupService;
 import com.centurylink.cloud.sdk.servers.services.ServerService;
 import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.server.*;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
 import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
@@ -41,7 +42,6 @@ import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerTyp
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
 import static java.lang.Boolean.TRUE;
-
 import static sample.SamplesTestsConstants.SAMPLES;
 
 @Test(groups = {SAMPLES})

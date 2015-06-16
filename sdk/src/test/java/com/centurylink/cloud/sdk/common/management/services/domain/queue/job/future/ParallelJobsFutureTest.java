@@ -28,7 +28,8 @@ import java.util.concurrent.CompletionException;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.rangeClosed;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 public class ParallelJobsFutureTest {
 

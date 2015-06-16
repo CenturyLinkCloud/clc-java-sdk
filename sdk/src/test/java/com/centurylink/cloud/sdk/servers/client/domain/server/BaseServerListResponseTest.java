@@ -20,7 +20,8 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class BaseServerListResponseTest {
     BaseServerListResponse response;

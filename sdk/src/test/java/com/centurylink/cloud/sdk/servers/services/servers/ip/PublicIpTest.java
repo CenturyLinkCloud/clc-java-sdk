@@ -26,14 +26,11 @@ import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.google.inject.Inject;
-import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static java.util.stream.Collectors.toList;
 
 /**

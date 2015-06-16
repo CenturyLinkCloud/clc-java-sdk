@@ -26,7 +26,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
 import static com.google.common.collect.Iterables.toArray;

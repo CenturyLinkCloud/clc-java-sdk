@@ -19,7 +19,11 @@ import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.r
 import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.*;
+import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
+import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
+import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
+import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
 import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateByNameRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -15,8 +15,6 @@
 
 package com.centurylink.cloud.sdk.common.management.services.domain.queue.job;
 
-import com.centurylink.cloud.sdk.core.function.Predicates;
-import com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions;
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
