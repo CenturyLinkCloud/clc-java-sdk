@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.tests.mocks;
 
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -79,7 +80,7 @@ class SpyProvider<T> implements Provider<T>, HasDependencies {
             try {
                 instance = constructor.newInstance(constructorParameters);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new ClcException(e);
             }
 
             injector.injectMembers(instance);
