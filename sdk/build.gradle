@@ -72,8 +72,8 @@ task runUnitTests(type: Test, dependsOn: 'compileTestJava') {
         exceptionFormat = 'full' // full information about failed tests
     }
 
-    systemProperty "clc.username", "stub_username"
-    systemProperty "clc.password", "stub_password"
+    systemProperty "clc.username", "cloud_user"
+    systemProperty "clc.password", "cloud_user_password"
 }
 
 task runRecordedTests(type: Test, dependsOn: 'compileTestJava') {
@@ -87,8 +87,8 @@ task runRecordedTests(type: Test, dependsOn: 'compileTestJava') {
         exceptionFormat = 'full' // full information about failed tests
     }
 
-    systemProperty "clc.username", "stub_username"
-    systemProperty "clc.password", "stub_password"
+    systemProperty "clc.username", "cloud_user"
+    systemProperty "clc.password", "cloud_user_password"
 }
 
 test () {
