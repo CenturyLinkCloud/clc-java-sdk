@@ -4,54 +4,48 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCen
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenterByIdRef;
+import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.DiskUsageMetadata;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GuestUsageMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.SamplingEntry;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
-import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.MonitoringEntry;
-import com.centurylink.cloud.sdk.server.services.client.ServerClient;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.DiskUsageMetadata;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.account.AccountMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.GuestUsage;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.MonitoringEntry;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.MonitoringStatsEntry;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
 import com.google.inject.Inject;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static java.util.stream.Collectors.summingDouble;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toList;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 
 /**
-* @author aliaksandr.krasitski
-*/
-@Test(groups = {INTEGRATION, LONG_RUNNING})
+ * @author aliaksandr.krasitski
+ */
+@Test(groups = RECORDED)
 @SuppressWarnings("unchecked")
 public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
@@ -64,65 +58,34 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     @Inject
     DataCenterService dataCenterService;
 
-    @Inject @Spy
-    ServerClient serverClient;
+    WireMockServer wireMockServer;
 
-    @Inject @Spy
-    ServerService serverService;
+    WireMock wireMock;
 
-    ServerMonitoringFilter timeFilter;
+    ServerMonitoringFilter timeFilter = new ServerMonitoringFilter().last(Duration.ofDays(2));
 
     private DataCenter[] dataCenters = {DataCenter.DE_FRANKFURT};
     private String groupName = Group.DEFAULT_GROUP;
-    private GroupMetadata groupMetadata;
-    private Group group = Group
-        .refByName()
-        .dataCenter(DataCenter.DE_FRANKFURT)
-        .name(groupName);
 
     private static final double DELTA = 0.5;
 
-    List<String> serverIds = Arrays.asList("de1altdcttl604","de1altdmd-srv307",
-        "de1altdmd-srv324","de1altdtcrt523","de1altdtcrt738");
+    List<String> serverIds = Arrays.asList("de1altdweb318", "de1altdweb424", "de1altdweb426", "de1altdweb443",
+        "de1altdmd-srv324", "de1altdtcrt523", "de1altdtcrt738", "de1altdtcrt940");
 
     @BeforeClass
-    private void setup() {
-        timeFilter = new ServerMonitoringFilter()
-            .last(Duration.ofDays(2));
-    }
+    void start() {
+        SdkHttpClient.apiUrl("http://localhost:8081/v2");
 
-    @BeforeMethod
-    public void setUpFixtures() {
-        groupMetadata = groupService.findByRef(group);
-
-        Mockito
-            .doReturn(fromJson("monitoring_stats.json", new TypeReference<List<ServerMonitoringStatistics>>(){}))
-            .when(serverClient).getMonitoringStatistics(any(), any());
-
-        List<ServerMetadata> serverMetadataList = mockFindServersResult();
-
-        for (int i = 0; i < serverIds.size(); i++) {
-            Mockito
-                .doReturn(serverMetadataList.get(i))
-                .when(serverService).findByRef(Matchers.eq(serverMetadataList.get(i).asRefById()));
-        }
-
-        Mockito.doReturn(serverMetadataList)
-            .when(serverService).find(any());
-    }
-
-    private List<ServerMetadata> mockFindServersResult() {
-        List<ServerMetadata> serverMetadataList = new ArrayList<>(serverIds.size());
-
-        serverIds.forEach(id -> serverMetadataList.add(
-            new ServerMetadata() {{
-                setId(id);
-                setLocationId(((DataCenterByIdRef)dataCenters[0]).getId());
-                setGroupId(groupMetadata.getId());
-            }})
+        wireMockServer = new WireMockServer(wireMockConfig()
+            .fileSource(new ClasspathFileSource(
+                "com/centurylink/cloud/sdk/server/services/dsl/statistics/monitoring"
+            ))
+            .port(8081)
         );
+        wireMockServer.start();
 
-        return serverMetadataList;
+        WireMock.configureFor("localhost", 8081);
+        wireMock = new WireMock("localhost", 8081);
     }
 
     @Test
@@ -137,7 +100,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
         MonitoringStatsEntry<DataCenterMetadata> result = resultList.get(0);
 
-        assertEquals(DataCenter.DE_FRANKFURT.getId(),result.getEntity().getId(), "check group by field");
+        assertEquals(DataCenter.DE_FRANKFURT.getId(), result.getEntity().getId(), "check group by field");
 
         List<ServerMonitoringStatistics> stats = groupService.getMonitoringStats(
             new GroupFilter().dataCentersWhere(filter),
@@ -177,9 +140,9 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
         checkSamplingCount(allSamplingEntries, result);
 
         result.getStatistics().stream()
-              .forEach(entry ->
-                      checkStatisticsEntry((MonitoringEntry) entry, allSamplingEntries)
-              );
+            .forEach(entry ->
+                checkStatisticsEntry((MonitoringEntry) entry, allSamplingEntries)
+            );
     }
 
     @Test
@@ -220,7 +183,7 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
             entry.getStatistics().stream()
                 .forEach(st ->
-                    checkStatisticsEntry((MonitoringEntry)st, allSamplingEntries)
+                    checkStatisticsEntry((MonitoringEntry) st, allSamplingEntries)
                 );
         });
     }
@@ -363,14 +326,14 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
                 assertEquals(
                     diskUsage.getCapacityMB(),
                     fetchGuestUsageMetadataStream(samplingEntries, diskUsage)
-                            .collect(summingInt(GuestUsageMetadata::getCapacityMB)),
+                        .collect(summingInt(GuestUsageMetadata::getCapacityMB)),
                     "check sum guest disk capacity usage"
                 );
 
                 assertEquals(
                     diskUsage.getConsumedMB(),
                     fetchGuestUsageMetadataStream(samplingEntries, diskUsage)
-                            .collect(summingInt(GuestUsageMetadata::getConsumedMB)),
+                        .collect(summingInt(GuestUsageMetadata::getConsumedMB)),
                     "check sum guest disk consumed usage"
                 );
             }
@@ -378,8 +341,8 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     }
 
     private Stream<GuestUsageMetadata> fetchGuestUsageMetadataStream(
-            List<SamplingEntry> samplingEntries,
-            GuestUsage guestUsage
+        List<SamplingEntry> samplingEntries,
+        GuestUsage guestUsage
     ) {
         return
             samplingEntries.stream()
@@ -390,5 +353,11 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
     private void assertDoubleValues(double expected, double actual, String assertMessage) {
         assertEquals(expected, actual, DELTA, assertMessage);
+    }
+
+    @AfterClass
+    public void finish() {
+        wireMockServer.stop();
+        SdkHttpClient.restoreUrl();
     }
 }
