@@ -15,7 +15,7 @@
 
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
-import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
 import com.centurylink.cloud.sdk.sample.port.adapter.web.beans.DataCenterBean;
 import org.springframework.beans.factory.annotation.Autowired;

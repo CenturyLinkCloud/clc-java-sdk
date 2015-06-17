@@ -1,0 +1,52 @@
+/*
+ * (c) 2015 CenturyLink. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.centurylink.cloud.sdk.server.services.client.domain.group;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+/**
+ * @author aliaksandr.krasitski
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class GuestUsageMetadata {
+    private String path;
+    private Integer capacityMB;
+    private Integer consumedMB;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Integer getCapacityMB() {
+        return capacityMB;
+    }
+
+    public void setCapacityMB(Integer capacityMB) {
+        this.capacityMB = capacityMB;
+    }
+
+    public Integer getConsumedMB() {
+        return consumedMB;
+    }
+
+    public void setConsumedMB(Integer consumedMB) {
+        this.consumedMB = consumedMB;
+    }
+}

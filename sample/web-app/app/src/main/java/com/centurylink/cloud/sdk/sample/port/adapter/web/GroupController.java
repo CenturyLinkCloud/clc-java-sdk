@@ -15,10 +15,10 @@
 
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

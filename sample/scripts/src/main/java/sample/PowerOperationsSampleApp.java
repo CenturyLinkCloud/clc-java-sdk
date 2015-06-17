@@ -17,15 +17,15 @@ package sample;
 
 import com.centurylink.cloud.sdk.ClcSdk;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
-import com.centurylink.cloud.sdk.servers.services.GroupService;
-import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
-import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
+import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
+import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -35,14 +35,14 @@ import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
-import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
-import static com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
-import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.GroupHierarchyConfig.group;
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
+import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.InfrastructureConfig.dataCenter;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig.group;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType.CENTOS;
 import static java.lang.Boolean.TRUE;
 import static sample.SamplesTestsConstants.SAMPLES;
 

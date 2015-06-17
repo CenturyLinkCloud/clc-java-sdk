@@ -15,19 +15,24 @@
 
 package com.centurylink.cloud.sdk.tests.fixtures;
 
-import com.centurylink.cloud.sdk.common.management.client.DataCentersClient;
-import com.centurylink.cloud.sdk.common.management.client.QueueClient;
-import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.DataCenterMetadata;
-import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.GetDataCenterListResponse;
-import com.centurylink.cloud.sdk.common.management.client.domain.queue.GetStatusResponse;
+import com.centurylink.cloud.sdk.base.services.client.DataCentersClient;
+import com.centurylink.cloud.sdk.base.services.client.QueueClient;
+import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
+import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.GetDataCenterListResponse;
+import com.centurylink.cloud.sdk.base.services.client.domain.queue.GetStatusResponse;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.servers.client.ServerClient;
-import com.centurylink.cloud.sdk.servers.client.domain.ChangeInfo;
-import com.centurylink.cloud.sdk.servers.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.*;
-import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.domain.group.filters.GroupFilter;
-import com.centurylink.cloud.sdk.servers.services.domain.server.filters.ServerFilter;
+import com.centurylink.cloud.sdk.server.services.client.ServerClient;
+import com.centurylink.cloud.sdk.server.services.client.domain.ChangeInfo;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerListResponse;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateSnapshotRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.Details;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.Snapshot;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 

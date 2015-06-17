@@ -15,16 +15,16 @@
 
 package com.centurylink.cloud.sdk;
 
-import com.centurylink.cloud.sdk.common.management.services.DataCenterService;
+import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.servers.ServersModule;
-import com.centurylink.cloud.sdk.servers.services.GroupService;
-import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.StatisticsService;
-import com.centurylink.cloud.sdk.servers.services.TemplateService;
+import com.centurylink.cloud.sdk.server.services.ServerModule;
+import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
+import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
+import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
+import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 
@@ -64,7 +64,7 @@ public class ClcSdk {
             .createInjector(
                 config.asModule(),
                 new AuthModule(credentialsProvider),
-                new ServersModule()
+                new ServerModule()
             )
             .injectMembers(this);
     }

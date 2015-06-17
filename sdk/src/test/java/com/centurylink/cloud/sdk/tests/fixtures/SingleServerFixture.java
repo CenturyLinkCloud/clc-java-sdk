@@ -16,25 +16,27 @@
 package com.centurylink.cloud.sdk.tests.fixtures;
 
 import com.centurylink.cloud.sdk.ClcSdk;
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.services.ServerService;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.CreatePublicIpConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.ip.port.PortConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.*;
-import com.centurylink.cloud.sdk.servers.services.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskType;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.NetworkConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
-import static com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group.DEFAULT_GROUP;
-import static com.centurylink.cloud.sdk.servers.services.domain.server.ServerType.STANDARD;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.CpuArchitecture.x86_64;
-import static com.centurylink.cloud.sdk.servers.services.domain.template.filters.os.OsType.CENTOS;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group.DEFAULT_GROUP;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType.CENTOS;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static org.testng.Assert.assertEquals;

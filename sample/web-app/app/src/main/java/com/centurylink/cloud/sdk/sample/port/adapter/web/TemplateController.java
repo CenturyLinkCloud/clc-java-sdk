@@ -15,9 +15,9 @@
 
 package com.centurylink.cloud.sdk.sample.port.adapter.web;
 
-import com.centurylink.cloud.sdk.common.management.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
+import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.sample.domain.SdkRegistry;
-import com.centurylink.cloud.sdk.servers.services.domain.template.filters.TemplateFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.TemplateFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

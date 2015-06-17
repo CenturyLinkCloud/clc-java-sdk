@@ -15,17 +15,17 @@
 
 package com.centurylink.cloud.sdk.sample.port.adapter.web.beans;
 
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.common.management.services.domain.datacenters.refs.DataCenterByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.servers.services.domain.group.refs.GroupByIdRef;
-import com.centurylink.cloud.sdk.servers.services.domain.server.CreateServerConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.Machine;
-import com.centurylink.cloud.sdk.servers.services.domain.server.NetworkConfig;
-import com.centurylink.cloud.sdk.servers.services.domain.server.ServerType;
-import com.centurylink.cloud.sdk.servers.services.domain.server.TimeToLive;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.Template;
-import com.centurylink.cloud.sdk.servers.services.domain.template.refs.TemplateByNameRef;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenterByIdRef;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.GroupByIdRef;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.NetworkConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerType;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.TimeToLive;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.TemplateByNameRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
