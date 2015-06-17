@@ -27,9 +27,11 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockRecording;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,21 +42,13 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author aliaksandr krasitski
  */
+@Test(groups = RECORDED)
 public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixin {
 
     private Server serverRef;
 
     @Inject
     ServerService serverService;
-
-//    @Test(groups = {INTEGRATION, LONG_RUNNING})
-    public void testPublicIp() {
-        serverRef = Server.refById("de1altdtcrt959");
-
-        modifyPublicIp();
-
-        deletePublicIp();
-    }
 
     private void checkServerStarted() {
         ServerMetadata serverMetadata = serverService.findByRef(serverRef);
@@ -70,9 +64,9 @@ public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixi
         return serverService.findByRef(serverRef).getDetails().getIpAddresses();
     }
 
-    @Test(groups = RECORDED)
-    @WireMockFileSource("add_ip_test")
-    private void testAddPublicIp() {
+    @Test
+    @WireMockFileSource("/add_ip_test")
+    public void testAddPublicIp() {
         serverRef = Server.refById("de1altdtcrt960");
 
         //add public IP
@@ -113,16 +107,13 @@ public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixi
         assertEquals(publicIpCount, publicIps.size());
     }
 
-    private void modifyPublicIp() {
-        List<IpAddress> ipAddresses = getIpAddresses();
+    @Test
+    @WireMockFileSource("/modify_ip_test")
+    public void modifyPublicIp() {
+        serverRef = Server.refById("DE1ALTDIPTEST01");
 
-        Integer[] ports = {8081, 8888};
-        String[] sourceRestrictions = new String[]{"50.50.50.50/32", "50.50.50.25/32"};
-        String publicIpAddress = ipAddresses.stream()
-            .filter(address -> address.getPublicIp() != null)
-            .map(address -> address.getPublicIp())
-            .findFirst()
-            .get();
+        Integer[] ports = { 8081, 8888 };
+        String[] sourceRestrictions = new String[]{ "50.50.50.50/32", "50.50.50.25/32" };
 
         ModifyPublicIpConfig config = new ModifyPublicIpConfig()
             .openPorts(ports)
@@ -130,9 +121,9 @@ public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixi
         serverService.modifyPublicIp(serverRef.asFilter(), config).waitUntilComplete();
 
         config.sourceRestrictions(sourceRestrictions[1]);
-        serverService.modifyPublicIp(serverRef, publicIpAddress, config).waitUntilComplete();
+        serverService.modifyPublicIp(serverRef, "66.155.4.95", config).waitUntilComplete();
 
-        PublicIpMetadata updatedPublicIp = serverService.getPublicIp(serverRef, publicIpAddress);
+        PublicIpMetadata updatedPublicIp = serverService.getPublicIp(serverRef, "66.155.4.95");
 
         List<Integer> updatedPorts = updatedPublicIp.getPorts()
             .stream()
@@ -148,14 +139,14 @@ public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixi
             "added source restriction must be present");
     }
 
-    private void deletePublicIp() {
-        serverService.removePublicIp(serverRef.asFilter()).waitUntilComplete();
+    @Test
+    @WireMockFileSource("/delete_ip_test")
+    public void deletePublicIp() {
+        serverRef = Server.refById("DE1ALTDIPTEST01");
 
-        List<IpAddress> initialIpAddresses = getIpAddresses();
-
-        assertEquals(initialIpAddresses.stream()
-            .filter(notNull())
-            .filter(addr -> addr.getPublicIp() != null).count(), 0, "count of public IPs must be 0 after clearing");
+        serverService
+            .removePublicIp(serverRef.asFilter())
+            .waitUntilComplete(Duration.ofMinutes(15));
     }
 
 }

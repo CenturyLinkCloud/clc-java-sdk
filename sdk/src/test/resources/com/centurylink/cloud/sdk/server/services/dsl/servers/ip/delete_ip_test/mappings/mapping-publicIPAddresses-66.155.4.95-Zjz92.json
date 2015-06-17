@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/de1altdiptest01/publicIPAddresses/66.155.4.95",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-publicIPAddresses-66.155.4.95-Zjz92.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Wed, 17 Jun 2015 15:40:27 GMT",
+      "Content-Length" : "79"
+    }
+  }
+}

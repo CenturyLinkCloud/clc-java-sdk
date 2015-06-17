@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/de1altdiptest01/publicIPAddresses/66.155.4.95",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"ports\":[{\"protocol\":\"TCP\",\"port\":8081},{\"protocol\":\"TCP\",\"port\":8888}],\"sourceRestrictions\":[{\"cidr\":\"50.50.50.50/32\"}]}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-publicIPAddresses-66.155.4.95-1rEAD.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Wed, 17 Jun 2015 15:13:05 GMT",
+      "Content-Length" : "79"
+    }
+  }
+}
