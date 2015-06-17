@@ -135,18 +135,4 @@ public class DataCenterMetadata {
         return null;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DataCenterMetadata)) return false;
-        DataCenterMetadata that = (DataCenterMetadata) o;
-
-        return Objects.equal(id, that.id) &&
-                Objects.equal(name, that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id, name);
-    }
 }

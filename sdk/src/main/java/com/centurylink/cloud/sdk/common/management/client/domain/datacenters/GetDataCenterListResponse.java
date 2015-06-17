@@ -23,15 +23,11 @@ import java.util.Collection;
  */
 public class GetDataCenterListResponse extends ArrayList<DataCenterMetadata> {
 
-    public GetDataCenterListResponse(int initialCapacity) {
-        super(initialCapacity);
+    public GetDataCenterListResponse(Collection<? extends DataCenterMetadata> c) {
+        super(c);
     }
 
     public GetDataCenterListResponse() {
-    }
-
-    public GetDataCenterListResponse(Collection<? extends DataCenterMetadata> c) {
-        super(c);
     }
 
 }

@@ -24,7 +24,6 @@ import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.servers.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.servers.client.domain.server.*;
 import com.centurylink.cloud.sdk.servers.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.servers.client.domain.server.template.CreateTemplateRequest;
 import com.google.inject.Inject;
 import org.apache.http.HttpStatus;
 
@@ -134,15 +133,6 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .resolveTemplate("groupId", groupId)
                 .request()
                 .delete(Link.class);
-    }
-
-    public BaseServerResponse convertToTemplate(CreateTemplateRequest request) {
-        return
-            client("/servers/{accountAlias}/{serverId}/convertToTemplate")
-                .resolveTemplate("serverId", request.getServerId())
-                .request()
-                .post(entity(request, APPLICATION_JSON_TYPE))
-                .readEntity(BaseServerResponse.class);
     }
 
     public BaseServerListResponse powerOn(List<String> serverIdList) {
