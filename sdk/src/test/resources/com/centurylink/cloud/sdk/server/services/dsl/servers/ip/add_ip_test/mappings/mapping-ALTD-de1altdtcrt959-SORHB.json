@@ -1,0 +1,17 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/de1altdtcrt959",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 404,
+    "bodyFileName" : "body-ALTD-de1altdtcrt959-SORHB.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Wed, 17 Jun 2015 14:23:53 GMT",
+      "Content-Length" : "0"
+    }
+  }
+}

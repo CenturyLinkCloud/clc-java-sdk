@@ -20,24 +20,27 @@ import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetada
 import com.centurylink.cloud.sdk.server.services.client.domain.server.IpAddress;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.ModifyPublicIpConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
+import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
+import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 import static java.util.stream.Collectors.toList;
 
 /**
  * @author aliaksandr krasitski
  */
-//@Test
-public class PublicIpTest extends AbstractServersSdkTest {
+public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixin {
 
     private Server serverRef;
 
@@ -46,9 +49,7 @@ public class PublicIpTest extends AbstractServersSdkTest {
 
 //    @Test(groups = {INTEGRATION, LONG_RUNNING})
     public void testPublicIp() {
-        serverRef = SingleServerFixture.server();
-
-        addPublicIp();
+        serverRef = Server.refById("de1altdtcrt959");
 
         modifyPublicIp();
 
@@ -69,17 +70,16 @@ public class PublicIpTest extends AbstractServersSdkTest {
         return serverService.findByRef(serverRef).getDetails().getIpAddresses();
     }
 
-    private void addPublicIp() {
-        assertEquals(serverService.findPublicIp(serverRef).size(), 0, "after server creation public ip doesn't exist");
-
-        checkServerStarted();
+    @Test(groups = RECORDED)
+    @WireMockFileSource("add_ip_test")
+    private void testAddPublicIp() {
+        serverRef = Server.refById("de1altdtcrt960");
 
         //add public IP
         serverService
-            .addPublicIp(serverRef.asFilter(),
-                new CreatePublicIpConfig()
-                    .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
-                    .sourceRestrictions("70.100.60.140/32")
+            .addPublicIp(serverRef.asFilter(), new CreatePublicIpConfig()
+                .openPorts(PortConfig.HTTPS, PortConfig.HTTP)
+                .sourceRestrictions("70.100.60.140/32")
             )
             .waitUntilComplete();
 
@@ -92,8 +92,16 @@ public class PublicIpTest extends AbstractServersSdkTest {
                 assertEquals(resp.getInternalIPAddress(), address.getInternal(), "internal ip addresses must be equal");
             });
 
-        assertEquals(ipAddresses.stream().filter(address -> address.getPublicIp() != null).collect(toList()).size(), 1,
-            "public ip must be added");
+        assertEquals(
+            ipAddresses
+                .stream()
+                .filter(address -> address.getPublicIp() != null)
+                .collect(toList())
+                .size(),
+
+            1,
+            "public ip must be added"
+        );
 
         int publicIpCount = ipAddresses.stream()
             .filter(address -> address.getPublicIp() != null)

@@ -1,9 +1,13 @@
 package com.centurylink.cloud.sdk.tests.recorded;
 
+import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
 
 import java.lang.reflect.Method;
+
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 /**
  * @author Ilya Drabenia
@@ -21,16 +25,38 @@ public class WireMockFixture {
 
     static String fileSourcePath(Object instance, Method method) {
         WireMockFileSource classSource = instance.getClass().getAnnotation(WireMockFileSource.class);
-
         if (classSource != null) {
-            return instance.getClass().getPackage().getName().replace(".", "/") + "/" + classSource.value();
+            return packageFolder(instance) + classSource.value();
         }
 
         WireMockFileSource methodSource = method.getAnnotation(WireMockFileSource.class);
         if (methodSource != null) {
-            return instance.getClass().getPackage().getName().replace(".", "/") + "/" + methodSource.value();
+            return packageFolder(instance) + methodSource.value();
         }
 
-        throw new ClcException("WireMock File Source not specified");
+        return packageFolder(instance);
+    }
+
+    private static String packageFolder(Object instance) {
+        return instance.getClass().getPackage().getName().replace(".", "/") + "/";
+    }
+
+    public static void startServerFor(Object instance, Method testMethod) {
+        SdkHttpClient.apiUrl("http://localhost:8081/v2");
+
+        setWireMockServer(new WireMockServer(wireMockConfig()
+            .fileSource(new ClasspathFileSource(fileSourcePath(instance, testMethod)))
+            .port(8081)
+        ));
+
+        getWireMockServer().start();
+    }
+
+    public static void stopServer() {
+        SdkHttpClient.restoreUrl();
+
+        if (getWireMockServer() != null && getWireMockServer().isRunning()) {
+            getWireMockServer().stop();
+        }
     }
 }
