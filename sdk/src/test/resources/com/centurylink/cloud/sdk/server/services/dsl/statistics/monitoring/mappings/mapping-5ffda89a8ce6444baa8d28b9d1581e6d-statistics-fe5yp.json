@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD/5ffda89a8ce6444baa8d28b9d1581e6d/statistics?start=2015-06-15&sampleInterval=0%3A1%3A0%3A0&type=HOURLY",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-5ffda89a8ce6444baa8d28b9d1581e6d-statistics-fe5yp.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 17 Jun 2015 07:50:08 GMT",
+      "Content-Length" : "1338"
+    }
+  }
+}
