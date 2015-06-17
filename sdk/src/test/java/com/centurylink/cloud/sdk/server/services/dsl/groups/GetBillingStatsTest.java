@@ -62,7 +62,7 @@ public class GetBillingStatsTest extends AbstractServersSdkTest {
 
         wireMockServer = new WireMockServer(wireMockConfig()
             .fileSource(new ClasspathFileSource(
-                "com/centurylink/cloud/sdk/servers/services/groups/get_billing_stats"
+                "com/centurylink/cloud/sdk/server/services/dsl/groups/get_billing_stats"
             ))
             .port(8081)
         );

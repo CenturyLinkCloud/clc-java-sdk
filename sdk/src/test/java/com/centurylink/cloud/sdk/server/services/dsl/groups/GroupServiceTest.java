@@ -51,7 +51,7 @@ public class GroupServiceTest extends AbstractServersSdkTest {
 
         wireMockServer = new WireMockServer(wireMockConfig()
             .fileSource(new ClasspathFileSource(
-                "com/centurylink/cloud/sdk/servers/services/groups/operations"
+                "com/centurylink/cloud/sdk/server/services/dsl/groups/operations"
             ))
             .port(8081)
         );
