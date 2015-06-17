@@ -55,7 +55,8 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest {
 
         wireMockServer = new WireMockServer(wireMockConfig()
             .fileSource(new ClasspathFileSource(
-                "com/centurylink/cloud/sdk/servers/services/servers/create/ip"
+                "com/centurylink/cloud/sdk/server/services/dsl/servers/create/ip"
+
             ))
             .port(8081)
         );
