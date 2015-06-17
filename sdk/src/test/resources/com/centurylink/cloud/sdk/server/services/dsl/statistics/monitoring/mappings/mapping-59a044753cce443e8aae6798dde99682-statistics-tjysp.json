@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "urlPath" : "/v2/groups/ALTD/59a044753cce443e8aae6798dde99682/statistics",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-59a044753cce443e8aae6798dde99682-statistics-tjysp.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 17 Jun 2015 09:51:12 GMT",
+      "Content-Length" : "122"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "urlPath" : "/v2/groups/ALTD/7fd29e21011e4e9c8b55c97350dbc9cc/statistics",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-7fd29e21011e4e9c8b55c97350dbc9cc-statistics-Ks8vj.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 17 Jun 2015 09:47:51 GMT",
+      "Content-Length" : "122"
+    }
+  }
+}
