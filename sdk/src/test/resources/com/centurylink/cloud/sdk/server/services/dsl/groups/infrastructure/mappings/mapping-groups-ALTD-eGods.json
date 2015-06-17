@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Group1-1-2-1\",\"parentGroupId\":\"7d280c431f134b5c9fc2b09245969313\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-groups-ALTD-eGods.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/groups/altd/82dd38f3f8f440dabe1ad054f7055039",
+      "Date" : "Wed, 17 Jun 2015 16:12:58 GMT",
+      "Content-Length" : "1453"
+    }
+  }
+}

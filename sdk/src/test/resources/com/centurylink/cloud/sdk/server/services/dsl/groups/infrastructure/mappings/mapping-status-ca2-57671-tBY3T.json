@@ -1,0 +1,19 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/status/ca2-57671",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-status-ca2-57671-tBY3T.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 17 Jun 2015 16:11:41 GMT",
+      "Content-Length" : "141"
+    }
+  }
+}

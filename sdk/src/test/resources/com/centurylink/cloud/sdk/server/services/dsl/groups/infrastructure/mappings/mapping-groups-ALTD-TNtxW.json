@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Parent Group\",\"parentGroupId\":\"6a2afe04ac7243ccaaf23dfe77f4adfc\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-groups-ALTD-TNtxW.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/groups/altd/4dabe8c5d4c14de0acd77a08af4ed30f",
+      "Date" : "Wed, 17 Jun 2015 16:12:49 GMT",
+      "Content-Length" : "1453"
+    }
+  }
+}

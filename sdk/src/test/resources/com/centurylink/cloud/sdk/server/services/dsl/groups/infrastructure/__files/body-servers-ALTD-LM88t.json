@@ -1,0 +1,1 @@
+{"server":"apache","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/ca2-57672","id":"ca2-57672"},{"rel":"self","href":"/v2/servers/ALTD/a2602e94eb8d4408a3ba1b47c88e4bfc?uuid=True","id":"a2602e94eb8d4408a3ba1b47c88e4bfc","verbs":["GET"]}]}
