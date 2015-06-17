@@ -43,8 +43,8 @@ import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toList;
 
 /**
-* @author aliaksandr.krasitski
-*/
+ * @author aliaksandr.krasitski
+ */
 @Test(groups = RECORDED)
 @SuppressWarnings("unchecked")
 public class MonitoringStatisticsTest extends AbstractServersSdkTest {
@@ -62,16 +62,15 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
     WireMock wireMock;
 
-    ServerMonitoringFilter timeFilter = new ServerMonitoringFilter()
-        .last(Duration.ofDays(2));
+    ServerMonitoringFilter timeFilter = new ServerMonitoringFilter().last(Duration.ofDays(2));
 
     private DataCenter[] dataCenters = {DataCenter.DE_FRANKFURT};
     private String groupName = Group.DEFAULT_GROUP;
 
     private static final double DELTA = 0.5;
 
-    List<String> serverIds = Arrays.asList("de1altdweb318","de1altdweb424","de1altdweb426","de1altdweb443",
-        "de1altdmd-srv324","de1altdtcrt523","de1altdtcrt738","de1altdtcrt940");
+    List<String> serverIds = Arrays.asList("de1altdweb318", "de1altdweb424", "de1altdweb426", "de1altdweb443",
+        "de1altdmd-srv324", "de1altdtcrt523", "de1altdtcrt738", "de1altdtcrt940");
 
     @BeforeClass
     void start() {
@@ -93,15 +92,15 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     public void testGroupByDataCenter() {
         DataCenterFilter filter = new DataCenterFilter().dataCenters(dataCenters);
         List<MonitoringStatsEntry> resultList = statisticsService.monitoringStats()
-                                                                 .forDataCenters(filter)
-                                                                 .forTime(timeFilter)
-                                                                 .groupByDataCenter();
+            .forDataCenters(filter)
+            .forTime(timeFilter)
+            .groupByDataCenter();
 
         assertEquals(resultList.size(), dataCenters.length, "check count of grouping rows");
 
         MonitoringStatsEntry<DataCenterMetadata> result = resultList.get(0);
 
-        assertEquals(DataCenter.DE_FRANKFURT.getId(),result.getEntity().getId(), "check group by field");
+        assertEquals(DataCenter.DE_FRANKFURT.getId(), result.getEntity().getId(), "check group by field");
 
         List<ServerMonitoringStatistics> stats = groupService.getMonitoringStats(
             new GroupFilter().dataCentersWhere(filter),
@@ -113,9 +112,9 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
         checkSamplingCount(allSamplingEntries, result);
 
         result.getStatistics().stream()
-              .forEach(entry ->
-                      checkStatisticsEntry(entry, allSamplingEntries)
-              );
+            .forEach(entry ->
+                checkStatisticsEntry(entry, allSamplingEntries)
+            );
     }
 
     @Test
@@ -125,10 +124,10 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
             .nameContains(groupName);
 
         List<MonitoringStatsEntry> resultList = statisticsService.monitoringStats()
-                                                                 .forGroups(groupFilter)
-                                                                 .forTime(timeFilter)
-                                                                 .aggregateSubItems()
-                                                                 .groupByServerGroup();
+            .forGroups(groupFilter)
+            .forTime(timeFilter)
+            .aggregateSubItems()
+            .groupByServerGroup();
 
         assertEquals(resultList.size(), 1, "check count of grouping rows");
 
@@ -141,9 +140,9 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
         checkSamplingCount(allSamplingEntries, result);
 
         result.getStatistics().stream()
-              .forEach(entry ->
-                      checkStatisticsEntry((MonitoringEntry) entry, allSamplingEntries)
-              );
+            .forEach(entry ->
+                checkStatisticsEntry((MonitoringEntry) entry, allSamplingEntries)
+            );
     }
 
     @Test
@@ -153,19 +152,19 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
             .nameContains(groupName);
 
         List<MonitoringStatsEntry> resultList = statisticsService.monitoringStats()
-                                                                 .forServers(new ServerFilter().id(serverIds))
-                                                                 .forTime(timeFilter)
-                                                                 .groupByServer();
+            .forServers(new ServerFilter().id(serverIds))
+            .forTime(timeFilter)
+            .groupByServer();
 
         List<ServerMonitoringStatistics> stats = groupService.getMonitoringStats(groupFilter, timeFilter);
 
         assertEquals(
             resultList.size(),
             stats.stream()
-                 .map(ServerMonitoringStatistics::getName)
-                 .distinct()
-                 .collect(toList())
-                 .size(),
+                .map(ServerMonitoringStatistics::getName)
+                .distinct()
+                .collect(toList())
+                .size(),
             "check count of grouping rows"
         );
 
@@ -175,17 +174,17 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
 
             List<SamplingEntry> allSamplingEntries = stats.stream()
-                                                          .filter(stat -> stat.getName().equals(serverId))
-                                                          .map(ServerMonitoringStatistics::getStats)
-                                                          .flatMap(List::stream)
-                                                          .collect(toList());
+                .filter(stat -> stat.getName().equals(serverId))
+                .map(ServerMonitoringStatistics::getStats)
+                .flatMap(List::stream)
+                .collect(toList());
 
             checkSamplingCount(allSamplingEntries, entry);
 
             entry.getStatistics().stream()
-                 .forEach(st ->
-                         checkStatisticsEntry((MonitoringEntry)st, allSamplingEntries)
-                 );
+                .forEach(st ->
+                    checkStatisticsEntry((MonitoringEntry) st, allSamplingEntries)
+                );
         });
     }
 
@@ -196,10 +195,10 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
             .nameContains(groupName);
 
         List<MonitoringStatsEntry> resultList = statisticsService.monitoringStats()
-                                                                 .forGroups(groupFilter)
-                                                                 .forTime(timeFilter)
-                                                                 .aggregateSubItems()
-                                                                 .summarize();
+            .forGroups(groupFilter)
+            .forTime(timeFilter)
+            .aggregateSubItems()
+            .summarize();
 
         assertEquals(
             resultList.size(),
@@ -214,11 +213,11 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
         result.getStatistics().forEach(stat -> {
             List<SamplingEntry> allSamplingEntries = stats.values().stream()
-                                                          .flatMap(List::stream)
-                                                          .map(ServerMonitoringStatistics::getStats)
-                                                          .flatMap(List::stream)
-                                                          .filter(entry -> entry.getTimestamp().equals(stat.getTimestamp()))
-                                                          .collect(toList());
+                .flatMap(List::stream)
+                .map(ServerMonitoringStatistics::getStats)
+                .flatMap(List::stream)
+                .filter(entry -> entry.getTimestamp().equals(stat.getTimestamp()))
+                .collect(toList());
 
             checkStatisticsEntry(stat, allSamplingEntries);
         });
@@ -231,41 +230,41 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
         GroupFilter groupFilter = new GroupFilter().id(rootGroupId);
 
         List<MonitoringStatsEntry> resultList = statisticsService.monitoringStats()
-                                                                 .forGroups(groupFilter)
-                                                                 .forTime(timeFilter)
-                                                                 .groupByServerGroup();
+            .forGroups(groupFilter)
+            .forTime(timeFilter)
+            .groupByServerGroup();
 
         assertEquals(resultList.size(), 0, "check result rows count");
 
         resultList = statisticsService.monitoringStats()
-                                      .forGroups(groupFilter)
-                                      .forTime(timeFilter)
-                                      .aggregateSubItems()
-                                      .groupByServerGroup();
+            .forGroups(groupFilter)
+            .forTime(timeFilter)
+            .aggregateSubItems()
+            .groupByServerGroup();
 
         assertEquals(resultList.size(), 1, "check result rows count");
     }
 
     private List<SamplingEntry> getSamplingEntries(List<ServerMonitoringStatistics> stats) {
         return stats.stream()
-                    .map(ServerMonitoringStatistics::getStats)
-                    .flatMap(List::stream)
-                    .collect(toList());
+            .map(ServerMonitoringStatistics::getStats)
+            .flatMap(List::stream)
+            .collect(toList());
     }
 
     private void checkSamplingCount(List<SamplingEntry> allSamplingEntries, MonitoringStatsEntry entry) {
         long sampleCount = allSamplingEntries.stream()
-                                             .map(SamplingEntry::getTimestamp)
-                                             .distinct()
-                                             .count();
+            .map(SamplingEntry::getTimestamp)
+            .distinct()
+            .count();
 
         assertTrue(sampleCount >= entry.getStatistics().size(), "check time points count");
     }
 
     private void checkStatisticsEntry(MonitoringEntry entry, List<SamplingEntry> allSamplingEntries) {
         List<SamplingEntry> samplingEntries = allSamplingEntries.stream()
-                                                                .filter(e -> e.getTimestamp().equals(entry.getTimestamp()))
-                                                                .collect(toList());
+            .filter(e -> e.getTimestamp().equals(entry.getTimestamp()))
+            .collect(toList());
 
         assertEquals(
             entry.getCpu(),
@@ -310,17 +309,17 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
         );
 
         entry.getDiskUsage().stream()
-             .forEach(diskUsage ->
-                     assertEquals(
-                         diskUsage.getCapacityMB(),
-                         samplingEntries.stream()
-                                        .map(SamplingEntry::getDiskUsage)
-                                        .flatMap(List::stream)
-                                        .filter(metadata -> metadata.getId().equals(diskUsage.getId()))
-                                        .collect(summingInt(DiskUsageMetadata::getCapacityMB)),
-                         "check sum disk usage"
-                     )
-             );
+            .forEach(diskUsage ->
+                assertEquals(
+                    diskUsage.getCapacityMB(),
+                    samplingEntries.stream()
+                        .map(SamplingEntry::getDiskUsage)
+                        .flatMap(List::stream)
+                        .filter(metadata -> metadata.getId().equals(diskUsage.getId()))
+                        .collect(summingInt(DiskUsageMetadata::getCapacityMB)),
+                    "check sum disk usage"
+                )
+            );
 
         entry.getGuestDiskUsage().forEach(
             diskUsage -> {
@@ -347,9 +346,9 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     ) {
         return
             samplingEntries.stream()
-                           .map(SamplingEntry::getGuestDiskUsage)
-                           .flatMap(List::stream)
-                           .filter(metadata -> metadata.getPath().equals(guestUsage.getPath()));
+                .map(SamplingEntry::getGuestDiskUsage)
+                .flatMap(List::stream)
+                .filter(metadata -> metadata.getPath().equals(guestUsage.getPath()));
     }
 
     private void assertDoubleValues(double expected, double actual, String assertMessage) {
@@ -359,7 +358,6 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     @AfterClass
     public void finish() {
         wireMockServer.stop();
-
         SdkHttpClient.restoreUrl();
     }
 }
