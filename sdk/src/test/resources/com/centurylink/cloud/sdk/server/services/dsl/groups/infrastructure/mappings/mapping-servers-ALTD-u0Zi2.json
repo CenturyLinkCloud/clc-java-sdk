@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Apache\",\"description\":\"Apache\",\"groupId\":\"7d280c431f134b5c9fc2b09245969313\",\"sourceServerId\":\"CENTOS-6-64-TEMPLATE\",\"cpu\":1,\"memoryGB\":2,\"type\":\"standard\",\"storageType\":\"standard\",\"password\":null,\"primaryDns\":null,\"secondaryDns\":null,\"networkId\":null,\"additionalDisks\":[],\"managedOS\":false,\"isManagedOS\":false}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-servers-ALTD-u0Zi2.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Wed, 17 Jun 2015 16:14:58 GMT",
+      "Content-Length" : "267"
+    }
+  }
+}

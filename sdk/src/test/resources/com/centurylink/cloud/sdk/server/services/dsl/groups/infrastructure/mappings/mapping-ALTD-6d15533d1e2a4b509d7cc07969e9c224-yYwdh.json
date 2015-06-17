@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/6d15533d1e2a4b509d7cc07969e9c224?uuid=true",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-6d15533d1e2a4b509d7cc07969e9c224-yYwdh.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 17 Jun 2015 16:14:06 GMT",
+      "Content-Length" : "529"
+    }
+  }
+}

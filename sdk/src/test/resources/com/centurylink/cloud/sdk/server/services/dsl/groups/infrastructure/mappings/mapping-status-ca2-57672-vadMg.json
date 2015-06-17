@@ -1,0 +1,19 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/status/ca2-57672",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-status-ca2-57672-vadMg.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 17 Jun 2015 16:12:47 GMT",
+      "Content-Length" : "141"
+    }
+  }
+}

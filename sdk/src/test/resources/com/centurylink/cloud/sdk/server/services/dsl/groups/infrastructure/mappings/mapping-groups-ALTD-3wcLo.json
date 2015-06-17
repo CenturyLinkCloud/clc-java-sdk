@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Group1-1-2\",\"parentGroupId\":\"0b9c9df6179e43669338c701aa140d24\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-groups-ALTD-3wcLo.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/groups/altd/7d280c431f134b5c9fc2b09245969313",
+      "Date" : "Wed, 17 Jun 2015 16:12:55 GMT",
+      "Content-Length" : "1451"
+    }
+  }
+}

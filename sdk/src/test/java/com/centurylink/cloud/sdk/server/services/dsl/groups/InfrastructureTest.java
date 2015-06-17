@@ -16,6 +16,7 @@
 package com.centurylink.cloud.sdk.server.services.dsl.groups;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
@@ -24,15 +25,16 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.InfrastructureConfig
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.CA_TORONTO_1;
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;
@@ -40,14 +42,14 @@ import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.server.services.SampleServerConfigs.apacheHttpServer;
 import static com.centurylink.cloud.sdk.server.services.SampleServerConfigs.mysqlServer;
 import static com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig.group;
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static java.util.stream.Collectors.toList;
 
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = {INTEGRATION, LONG_RUNNING})
+@Test(groups = RECORDED)
 public class InfrastructureTest extends AbstractServersSdkTest {
 
     @Inject
@@ -56,18 +58,28 @@ public class InfrastructureTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    int testId = generateTestId();
+    WireMockServer wireMockServer;
 
-    private static int generateTestId() {
-        return new Random(seed()).nextInt() % 1_000;
-    }
-
-    private static long seed() {
-        return new Date().getTime();
-    }
+    WireMock wireMock;
 
     private String name(String value) {
-        return String.format("%s_%s", value, testId);
+        return value;
+    }
+
+    @BeforeClass
+    void start() {
+        SdkHttpClient.apiUrl("http://localhost:8081/v2");
+
+        wireMockServer = new WireMockServer(wireMockConfig()
+            .fileSource(new ClasspathFileSource(
+                "com/centurylink/cloud/sdk/server/services/dsl/groups/infrastructure"
+            ))
+            .port(8081)
+        );
+        wireMockServer.start();
+
+        WireMock.configureFor("localhost", 8081);
+        wireMock = new WireMock("localhost", 8081);
     }
 
     @Test
@@ -147,19 +159,8 @@ public class InfrastructureTest extends AbstractServersSdkTest {
     }
 
     @AfterClass
-    private void deleteGroups() throws Exception {
-        serverService
-            .delete(new ServerFilter()
-                .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
-                .groupNames(name("Group1-1-1"), name("Group1-1-2"))
-            )
-            .waitUntilComplete();
-
-        groupService
-            .delete(new GroupFilter()
-                .dataCenters(CA_TORONTO_1, US_CENTRAL_SALT_LAKE_CITY)
-                .names(name("Parent Group"))
-            )
-            .waitUntilComplete();
+    private void finish() throws Exception {
+        wireMockServer.stop();
+        SdkHttpClient.restoreUrl();
     }
 }

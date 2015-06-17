@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"MySQL\",\"description\":\"MySQL\",\"groupId\":\"2c9465181fba4b569a3a26898f71abf3\",\"sourceServerId\":\"CENTOS-6-64-TEMPLATE\",\"cpu\":1,\"memoryGB\":2,\"type\":\"standard\",\"storageType\":\"standard\",\"password\":null,\"primaryDns\":null,\"secondaryDns\":null,\"networkId\":null,\"additionalDisks\":[{\"diskId\":null,\"path\":null,\"type\":\"raw\",\"sizeGB\":10}],\"managedOS\":false,\"isManagedOS\":false}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-servers-ALTD-4Nenj.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Wed, 17 Jun 2015 16:13:13 GMT",
+      "Content-Length" : "266"
+    }
+  }
+}

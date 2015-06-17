@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Group1-2\",\"parentGroupId\":\"4dabe8c5d4c14de0acd77a08af4ed30f\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-groups-ALTD-OCTQJ.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/groups/altd/89629324581e455da25b1d330e5f030f",
+      "Date" : "Wed, 17 Jun 2015 16:12:59 GMT",
+      "Content-Length" : "1449"
+    }
+  }
+}
