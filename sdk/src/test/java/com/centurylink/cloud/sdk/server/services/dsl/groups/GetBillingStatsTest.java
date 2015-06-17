@@ -16,11 +16,10 @@
 package com.centurylink.cloud.sdk.server.services.dsl.groups;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.BillingStats;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConfig;
@@ -28,18 +27,18 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 @Test(groups = RECORDED)
-public class GetBillingStatsTest extends AbstractServersSdkTest {
+@WireMockFileSource("/get_billing_stats")
+public class GetBillingStatsTest extends AbstractServersSdkTest implements WireMockMixin {
 
     private final static String groupName = "st-gp";
 
@@ -54,20 +53,8 @@ public class GetBillingStatsTest extends AbstractServersSdkTest {
     GroupByIdRef group;
     GroupMetadata groupMetadata;
 
-    private WireMockServer wireMockServer;
-
     @BeforeMethod
     public void setUp() {
-        SdkHttpClient.apiUrl("http://localhost:8081/v2");
-
-        wireMockServer = new WireMockServer(wireMockConfig()
-            .fileSource(new ClasspathFileSource(
-                "com/centurylink/cloud/sdk/server/services/dsl/groups/get_billing_stats"
-            ))
-            .port(8081)
-        );
-        wireMockServer.start();
-
         initGroup();
         initServer();
     }
@@ -79,8 +66,6 @@ public class GetBillingStatsTest extends AbstractServersSdkTest {
 
         groupService
             .delete(group);
-
-        wireMockServer.stop();
     }
 
     private void initGroup() {

@@ -16,47 +16,29 @@
 package com.centurylink.cloud.sdk.server.services.dsl.groups;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.GroupByIdRef;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 @Test(groups = RECORDED)
-public class GroupServiceTest extends AbstractServersSdkTest {
+@WireMockFileSource("/test_group_operations")
+public class GroupServiceTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
     GroupService groupService;
-
-    private WireMockServer wireMockServer;
-
-    @BeforeMethod
-    public void prepareReplay() {
-        SdkHttpClient.apiUrl("http://localhost:8081/v2");
-
-        wireMockServer = new WireMockServer(wireMockConfig()
-            .fileSource(new ClasspathFileSource(
-                "com/centurylink/cloud/sdk/server/services/dsl/groups/operations"
-            ))
-            .port(8081)
-        );
-        wireMockServer.start();
-    }
 
     @Test
     public void testFindGroupsByDataCenter() {
@@ -129,12 +111,6 @@ public class GroupServiceTest extends AbstractServersSdkTest {
                 filter.id(groupService.findByRef(group).getId()));
 
         return filter;
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        wireMockServer.stop();
-        SdkHttpClient.restoreUrl();
     }
 
 }

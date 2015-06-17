@@ -15,58 +15,34 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.servers.create;
 
-import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.NetworkConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * @author Ilya Drabenia
  */
 @Test(groups = RECORDED)
-public class CreateWithPublicIpTest extends AbstractServersSdkTest {
+public class CreateWithPublicIpTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
     ServerService serverService;
 
     ServerMetadata server;
 
-    WireMockServer wireMockServer;
-
-    WireMock wireMock;
-
-    @BeforeMethod
-    void start() {
-        SdkHttpClient.apiUrl("http://localhost:8081/v2");
-
-        wireMockServer = new WireMockServer(wireMockConfig()
-            .fileSource(new ClasspathFileSource(
-                "com/centurylink/cloud/sdk/server/services/dsl/servers/create/ip"
-
-            ))
-            .port(8081)
-        );
-        wireMockServer.start();
-
-        WireMock.configureFor("localhost", 8081);
-        wireMock = new WireMock("localhost", 8081);
-    }
-
     @Test
+    @WireMockFileSource("/ip")
     public void testCreateServerWithPublicIp() throws Exception {
         server =
             serverService.create(TestServerSupport.anyServerConfig()
@@ -86,9 +62,6 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest {
     @AfterMethod
     public void deleteServer() {
         serverService.delete(server.asRefById().asFilter());
-        wireMockServer.stop();
-
-        SdkHttpClient.restoreUrl();
     }
 
 }

@@ -24,12 +24,18 @@ import com.google.inject.Guice;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.core.function.Streams.map;
+import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
+import static com.google.common.collect.Iterables.toArray;
 import static java.util.Arrays.asList;
 
 /**
@@ -78,6 +84,34 @@ public abstract class AbstractSdkTest extends Assert {
                 );
         } catch (IOException e) {
             throw new ClcClientException(e);
+        }
+    }
+
+    // wiremock mixin support
+    @BeforeMethod(groups = RECORDED)
+    public void startWireMockServer(Method method) {
+        execMixinMethodIfExists("initWireMock", method);
+    }
+
+
+    @AfterMethod(groups = RECORDED)
+    public void stopWireMockServer() {
+        execMixinMethodIfExists("destroyWireMock");
+    }
+
+    private void execMixinMethodIfExists(String methodName, Object... args) {
+        try {
+            Method initWireMockMethod = this.getClass().getMethod(
+                methodName,
+                toArray(map(args, Object::getClass), Class.class)
+            );
+
+            if (initWireMockMethod != null) {
+                initWireMockMethod.invoke(this, args);
+            }
+        } catch (IllegalAccessException | InvocationTargetException
+                | NoSuchMethodException | SecurityException ex) {
+            // ignore this exception
         }
     }
 
