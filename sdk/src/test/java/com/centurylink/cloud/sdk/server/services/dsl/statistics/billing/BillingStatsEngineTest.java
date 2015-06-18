@@ -18,50 +18,29 @@ package com.centurylink.cloud.sdk.server.services.dsl.statistics.billing;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.server.services.client.domain.ChangeInfo;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.ClientBillingStats;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
-import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.Statistics;
-import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.Details;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.BillingStatsEntry;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
 
 @Test(groups = {RECORDED})
 @SuppressWarnings("unchecked")
 public class BillingStatsEngineTest extends AbstractServersSdkTest implements WireMockMixin {
 
     private final static String DEFAULT_GROUP_NAME = Group.DEFAULT_GROUP;
-    private final static String SUB_GROUP_NAME = "st-gp";
-    private final static String SUB_GROUP_ID = "a6eca7d3ff724896831b3ecd7aba3c00";
-
-    private final static String FIRST_SERVER_ID = "de1altdmd-srv189";
-    private final static String SECOND_SERVER_ID = "de1altdmd-srv190";
 
     @Inject
     StatisticsService statisticsService;
