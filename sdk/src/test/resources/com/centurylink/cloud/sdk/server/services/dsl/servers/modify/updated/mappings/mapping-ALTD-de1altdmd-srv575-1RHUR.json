@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/de1altdmd-srv575",
+    "method" : "PATCH",
+    "bodyPatterns" : [ {
+      "equalToJson" : "[{\"op\":\"set\",\"member\":\"description\",\"value\":\"Description for tests\"},{\"op\":\"set\",\"member\":\"cpu\",\"value\":\"2\"},{\"op\":\"set\",\"member\":\"memory\",\"value\":\"4\"},{\"op\":\"set\",\"member\":\"disks\",\"value\":[{\"diskId\":\"0:0\",\"path\":null,\"type\":\"partitioned\",\"sizeGB\":3},{\"diskId\":\"0:1\",\"path\":null,\"type\":\"partitioned\",\"sizeGB\":5},{\"diskId\":\"0:2\",\"path\":null,\"type\":\"partitioned\",\"sizeGB\":19}]}]",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-ALTD-de1altdmd-srv575-1RHUR.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Thu, 18 Jun 2015 12:55:04 GMT",
+      "Content-Length" : "79"
+    }
+  }
+}

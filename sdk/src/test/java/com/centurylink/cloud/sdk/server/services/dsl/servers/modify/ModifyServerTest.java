@@ -23,19 +23,18 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ModifyServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
-import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 
-@Test(groups = {INTEGRATION, LONG_RUNNING})
-public class ModifyServerTest extends AbstractServersSdkTest {
+@Test(groups = {RECORDED})
+public class ModifyServerTest extends AbstractServersSdkTest implements WireMockMixin {
 
     private final static String initialDescription = "";
     private final static Integer initialCpu = 1;
@@ -54,8 +53,7 @@ public class ModifyServerTest extends AbstractServersSdkTest {
 
     ServerMetadata serverMetadata;
 
-    @BeforeMethod
-    public void createServer() {
+    private void createServer() {
         serverMetadata = serverService.create(
             TestServerSupport
                 .anyServerConfig()
@@ -74,8 +72,7 @@ public class ModifyServerTest extends AbstractServersSdkTest {
         assertNotNull(serverMetadata);
     }
 
-    @AfterMethod
-    public void deleteServer() {
+    private void deleteServer() {
         serverService.delete(serverMetadata.asRefById());
     }
 
@@ -123,13 +120,20 @@ public class ModifyServerTest extends AbstractServersSdkTest {
     }
 
     @Test
-    public void testModifyServer() throws Exception {
+    @WireMockFileSource("/created")
+    public void testCreateServer() throws Exception {
+        createServer();
         checkInitialServerState();
+    }
 
+    @Test
+    @WireMockFileSource("/updated")
+    public void testModifyServer() throws Exception {
         sendModifyRequest();
         fetchLastServerMetadata();
-
         checkServerStateAfterUpdate();
+
+        deleteServer();
     }
 
 }

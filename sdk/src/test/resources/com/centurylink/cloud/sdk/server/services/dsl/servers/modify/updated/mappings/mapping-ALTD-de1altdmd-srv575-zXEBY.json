@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/de1altdmd-srv575",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-ALTD-de1altdmd-srv575-zXEBY.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Thu, 18 Jun 2015 12:59:01 GMT",
+      "Content-Length" : "135"
+    }
+  }
+}

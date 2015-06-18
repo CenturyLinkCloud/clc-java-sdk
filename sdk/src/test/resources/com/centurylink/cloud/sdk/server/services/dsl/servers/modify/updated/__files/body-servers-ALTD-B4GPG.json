@@ -1,0 +1,1 @@
+{"server":"md-srv","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/de1-73400","id":"de1-73400"},{"rel":"self","href":"/v2/servers/ALTD/4a6e49003efd4d5bbefec31fe0b6c44e?uuid=True","id":"4a6e49003efd4d5bbefec31fe0b6c44e","verbs":["GET"]}]}

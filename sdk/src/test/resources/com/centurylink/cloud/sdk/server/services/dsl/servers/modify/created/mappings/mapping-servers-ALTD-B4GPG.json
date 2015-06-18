@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"md-srv\",\"description\":\"\",\"groupId\":\"2dda7958f3ad4d819914e8d3cb643120\",\"sourceServerId\":\"CENTOS-6-64-TEMPLATE\",\"cpu\":1,\"memoryGB\":2,\"type\":\"standard\",\"storageType\":\"standard\",\"password\":null,\"primaryDns\":null,\"secondaryDns\":null,\"networkId\":null,\"additionalDisks\":[],\"ttl\":null,\"managedOS\":false,\"isManagedOS\":false}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-servers-ALTD-B4GPG.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Thu, 18 Jun 2015 12:51:19 GMT",
+      "Content-Length" : "265"
+    }
+  }
+}
