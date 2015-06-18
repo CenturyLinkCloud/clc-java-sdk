@@ -11,7 +11,17 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
  * @author Aliaksandr Krasitski
  */
 @Test(groups = RECORDED)
-public class ServerStopMaintenanceTest extends AbstractServerOperationTest implements WireMockMixin {
+public class ServerMaintenanceTest extends AbstractServerOperationTest implements WireMockMixin {
+
+    @Test
+    @WireMockFileSource("/maintenance/start")
+    public void testStartMaintenanceServer() {
+        serverService.startMaintenance(server)
+            .waitUntilComplete();
+
+        ServerMetadata serverMetadata = serverService.findByRef(server);
+        assertThatMaintenanceFlagIs(serverMetadata, true);
+    }
 
     @Test
     @WireMockFileSource("/maintenance/stop")
