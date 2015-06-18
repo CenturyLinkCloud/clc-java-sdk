@@ -60,7 +60,7 @@ public class PropertiesFileCredentialsProvider implements CredentialsProvider {
 
     private Properties loadProperties(String filePath) {
         try {
-            InputStream fileIn = getClass().getClassLoader().getResourceAsStream(filePath);
+            InputStream fileIn = propertiesFileInputStream(filePath);
 
             if (fileIn != null) {
                 properties.load(fileIn);
@@ -70,6 +70,10 @@ public class PropertiesFileCredentialsProvider implements CredentialsProvider {
         } catch (IOException e) {
             throw new ClcException(e);
         }
+    }
+
+    InputStream propertiesFileInputStream(String filePath) {
+        return getClass().getClassLoader().getResourceAsStream(filePath);
     }
 
     @Override

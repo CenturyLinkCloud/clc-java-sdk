@@ -13,7 +13,7 @@ public class DefaultCredentialsProviderTest {
     private String userName = "user";
     private String userPassword = "password";
 
-    private String userNameSysProp = "clc.username";
+    private String userNameSysProp = "clc.login";
     private String userPasswordSysProp = "clc.userpass";
 
     @Test
@@ -21,7 +21,7 @@ public class DefaultCredentialsProviderTest {
         new DefaultCredentialsProvider();
     }
 
-    @Test(expectedExceptions = ClcException.class)
+    @Test
     public void testConstructorWithNullUserParams() {
         new DefaultCredentialsProvider(null, null);
     }
@@ -41,7 +41,7 @@ public class DefaultCredentialsProviderTest {
         System.clearProperty(userPasswordSysProp);
     }
 
-    @Test
+    @Test(expectedExceptions = ClcException.class)
     public void testConstructorWithNullPath() {
         new DefaultCredentialsProvider(null);
     }

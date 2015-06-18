@@ -12,8 +12,8 @@ public class SystemVariableCredentialsProviderTest {
     private String userName = "user";
     private String userPassword = "password";
 
-    private String userNameSysProp = "clc.username";
-    private String userPasswordSysProp = "clc.password";
+    private String userNameSysProp = "clc._username";
+    private String userPasswordSysProp = "clc._password";
 
     @BeforeClass
     void setup() {
@@ -29,7 +29,7 @@ public class SystemVariableCredentialsProviderTest {
 
     @Test
     public void testDefaultConstructor() {
-        CredentialsProvider provider = new SystemVariableCredentialsProvider();
+        CredentialsProvider provider = new SystemVariableCredentialsProvider(userNameSysProp, userPasswordSysProp);
         assert provider.getCredentials().isEqualTo(new Credentials(userName, userPassword));
     }
 
