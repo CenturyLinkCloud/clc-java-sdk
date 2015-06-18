@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "url" : "/v2/authentication/login",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"username\":\"cloud_user\",\"password\":\"cloud_user_password\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-authentication-login-yzOUY.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 18 Jun 2015 11:36:35 GMT",
+      "Content-Length" : "707"
+    }
+  }
+}

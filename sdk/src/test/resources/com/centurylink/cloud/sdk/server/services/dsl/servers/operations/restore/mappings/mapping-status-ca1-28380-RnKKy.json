@@ -1,0 +1,19 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/status/ca1-28380",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-status-ca1-28380-RnKKy.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 18 Jun 2015 07:32:46 GMT",
+      "Content-Length" : "141"
+    }
+  }
+}
