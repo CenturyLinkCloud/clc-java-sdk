@@ -32,6 +32,8 @@ import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetada
 import com.centurylink.cloud.sdk.server.services.client.domain.server.Details;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.BillingStatsEntry;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
@@ -45,13 +47,14 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
+import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 
-@Test(groups = {INTEGRATION, LONG_RUNNING})
+@Test(groups = {RECORDED})
 @SuppressWarnings("unchecked")
-public class BillingStatsEngineTest extends AbstractServersSdkTest {
+public class BillingStatsEngineTest extends AbstractServersSdkTest implements WireMockMixin {
 
     private final static String DEFAULT_GROUP_NAME = Group.DEFAULT_GROUP;
     private final static String SUB_GROUP_NAME = "st-gp";
@@ -63,91 +66,10 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
     @Inject
     StatisticsService statisticsService;
 
-    @Inject
-    GroupService groupService;
-
-    @Inject @Spy
-    ServerService serverService;
-
-    @Inject @Spy
-    ServerClient serverClient;
-
     private Group group = Group
         .refByName()
         .dataCenter(DataCenter.DE_FRANKFURT)
         .name(DEFAULT_GROUP_NAME);
-
-    private GroupMetadata groupMetadata;
-
-    @BeforeMethod
-    public void setUpFixtures() {
-        groupMetadata = groupService.findByRef(group);
-
-        List<ServerMetadata> serverMetadataList = mockFindServersResult();
-
-        Mockito
-            .doReturn(fromJson("billing_stats.json", ClientBillingStats.class))
-                .when(serverClient).getGroupBillingStats(eq(groupMetadata.getId()));
-
-        Mockito
-            .doReturn(serverMetadataList.get(0))
-                .when(serverService).findByRef(Matchers.eq(serverMetadataList.get(0).asRefById()));
-
-        Mockito
-            .doReturn(serverMetadataList.get(1))
-                .when(serverService).findByRef(Matchers.eq(serverMetadataList.get(1).asRefById()));
-
-        Mockito
-            .doReturn(serverMetadataList)
-                .when(serverService).find(anyObject());
-
-        Mockito
-            .doReturn(
-                new GroupMetadata() {{
-                    setId(SUB_GROUP_ID);
-                    setName(SUB_GROUP_NAME);
-                    setLocationId(DataCenter.DE_FRANKFURT.getId());
-                }}
-            )
-            .when(serverClient).getGroup(eq(SUB_GROUP_ID), anyBoolean());
-    }
-
-    private List<ServerMetadata> mockFindServersResult() {
-        List<ServerMetadata> serverMetadataList = new ArrayList<>();
-
-        serverMetadataList.add(createServerMetadata(FIRST_SERVER_ID));
-        serverMetadataList.add(createServerMetadata(SECOND_SERVER_ID));
-
-        return serverMetadataList;
-    }
-
-    private ServerMetadata createServerMetadata(String serverId) {
-        return new ServerMetadata() {{
-            setId(serverId);
-            setName(serverId.toUpperCase());
-            setGroupId(groupMetadata.getId());
-            setIsTemplate(false);
-            setLocationId(DataCenter.DE_FRANKFURT.getId());
-            setOsType("CentOS 5 64-bit");
-            setOs("centOS5_64Bit");
-            setStatus("active");
-            setType("standard");
-            setStorageType("premium");
-            setChangeInfo(new ChangeInfo() {{
-                setCreatedBy("idrabenia.altd");
-                setCreatedDate("2015-04-23T11:41:22Z");
-                setModifiedBy("idrabenia.altd");
-                setModifiedDate("2015-04-23T11:48:40Z");
-            }});
-            setDetails(new Details() {{
-                setCpu(1);
-                setDiskCount(4);
-                setMemoryMB(3072);
-                setPowerState("started");
-                setInMaintenanceMode(false);
-            }});
-        }};
-    }
 
     private void testStatsByDataCenters() {
         List<BillingStatsEntry> statsByDataCenter = statisticsService
@@ -163,9 +85,9 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
         assertEquals(entry.getEntity().getId(), DataCenter.DE_FRANKFURT.getId());
         assertEquals(entry.getStatistics().getTemplateCost(), BigDecimal.valueOf(0.0));
         assertEquals(entry.getStatistics().getArchiveCost(), BigDecimal.valueOf(0.0));
-        assertEquals(entry.getStatistics().getMonthlyEstimate(), BigDecimal.valueOf(44.53));
-        assertEquals(entry.getStatistics().getMonthToDate(), BigDecimal.valueOf(5.57));
-        assertEquals(entry.getStatistics().getCurrentHour(), BigDecimal.valueOf(0.1286));
+        assertEquals(entry.getStatistics().getMonthlyEstimate(), BigDecimal.valueOf(1.22));
+        assertEquals(entry.getStatistics().getMonthToDate(), BigDecimal.valueOf(0.14));
+        assertEquals(entry.getStatistics().getCurrentHour(), BigDecimal.valueOf(0.00357));
     }
 
     private void testStatsByServer() {
@@ -177,24 +99,15 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
             .groupByServer();
 
         assertNotNull(statsByServer);
-        assertEquals(statsByServer.size(), 2);
+        assertEquals(statsByServer.size(), 1);
 
         BillingStatsEntry<ServerMetadata> entry1 = statsByServer.get(0);
-        BillingStatsEntry<ServerMetadata> entry2 = statsByServer.get(1);
 
-        assertEquals(entry1.getEntity().getId(), FIRST_SERVER_ID);
         assertEquals(entry1.getStatistics().getTemplateCost(), BigDecimal.valueOf(0.0));
         assertEquals(entry1.getStatistics().getArchiveCost(), BigDecimal.valueOf(0.0));
-        assertEquals(entry1.getStatistics().getMonthlyEstimate(), BigDecimal.valueOf(20.6));
-        assertEquals(entry1.getStatistics().getMonthToDate(), BigDecimal.valueOf(4.88));
-        assertEquals(entry1.getStatistics().getCurrentHour(), BigDecimal.valueOf(0.0519));
-
-        assertEquals(entry2.getEntity().getId(), SECOND_SERVER_ID);
-        assertEquals(entry2.getStatistics().getTemplateCost(), BigDecimal.valueOf(0.0));
-        assertEquals(entry2.getStatistics().getArchiveCost(), BigDecimal.valueOf(0.0));
-        assertEquals(entry2.getStatistics().getMonthlyEstimate(), BigDecimal.valueOf(23.93));
-        assertEquals(entry2.getStatistics().getMonthToDate(), BigDecimal.valueOf(0.69));
-        assertEquals(entry2.getStatistics().getCurrentHour(), BigDecimal.valueOf(0.0767));
+        assertEquals(entry1.getStatistics().getMonthlyEstimate(), BigDecimal.valueOf(1.22));
+        assertEquals(entry1.getStatistics().getMonthToDate(), BigDecimal.valueOf(0.14));
+        assertEquals(entry1.getStatistics().getCurrentHour(), BigDecimal.valueOf(0.00357));
     }
 
     private void testStatsByGroup() {
@@ -207,24 +120,16 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
             .groupByGroup();
 
         assertNotNull(statsByGroup);
-        assertEquals(statsByGroup.size(), 2);
+        assertEquals(statsByGroup.size(), 1);
 
         BillingStatsEntry<GroupMetadata> entry1 = statsByGroup.get(0);
-        BillingStatsEntry<GroupMetadata> entry2 = statsByGroup.get(1);
 
         assertEquals(entry1.getEntity().getName(), DEFAULT_GROUP_NAME);
         assertEquals(entry1.getStatistics().getTemplateCost(), BigDecimal.valueOf(0.0));
         assertEquals(entry1.getStatistics().getArchiveCost(), BigDecimal.valueOf(0.0));
-        assertEquals(entry1.getStatistics().getMonthlyEstimate(), BigDecimal.valueOf(71.36));
-        assertEquals(entry1.getStatistics().getMonthToDate(), BigDecimal.valueOf(16.68));
-        assertEquals(entry1.getStatistics().getCurrentHour(), BigDecimal.valueOf(0.1805));
-
-        assertEquals(entry2.getEntity().getName(), SUB_GROUP_NAME);
-        assertEquals(entry2.getStatistics().getTemplateCost(), BigDecimal.ZERO);
-        assertEquals(entry2.getStatistics().getArchiveCost(), BigDecimal.ZERO);
-        assertEquals(entry2.getStatistics().getMonthlyEstimate(), BigDecimal.ZERO);
-        assertEquals(entry2.getStatistics().getMonthToDate(), BigDecimal.ZERO);
-        assertEquals(entry2.getStatistics().getCurrentHour(), BigDecimal.ZERO);
+        assertEquals(entry1.getStatistics().getMonthlyEstimate(), BigDecimal.valueOf(1.22));
+        assertEquals(entry1.getStatistics().getMonthToDate(), BigDecimal.valueOf(0.14));
+        assertEquals(entry1.getStatistics().getCurrentHour(), BigDecimal.valueOf(0.00357));
     }
 
     private void testSummarize() {
@@ -239,12 +144,13 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest {
 
         assertEquals(summarize.getTemplateCost(), BigDecimal.valueOf(0.0));
         assertEquals(summarize.getArchiveCost(), BigDecimal.valueOf(0.0));
-        assertEquals(summarize.getMonthlyEstimate(), BigDecimal.valueOf(71.36));
-        assertEquals(summarize.getMonthToDate(), BigDecimal.valueOf(16.68));
-        assertEquals(summarize.getCurrentHour(), BigDecimal.valueOf(0.1805));
+        assertEquals(summarize.getMonthlyEstimate(), BigDecimal.valueOf(1.22));
+        assertEquals(summarize.getMonthToDate(), BigDecimal.valueOf(0.14));
+        assertEquals(summarize.getCurrentHour(), BigDecimal.valueOf(0.00357));
     }
 
     @Test
+    @WireMockFileSource("/engine")
     public void testBillingStatsEngine() throws Exception {
         testSummarize();
     }

@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/datacenters/ALTD?groupLinks=true",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-datacenters-ALTD-ImzFx.json",
+    "headers" : {
+      "Cache-Control" : "max-age=300, private",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 18 Jun 2015 09:02:18 GMT",
+      "Content-Length" : "3063"
+    }
+  }
+}
