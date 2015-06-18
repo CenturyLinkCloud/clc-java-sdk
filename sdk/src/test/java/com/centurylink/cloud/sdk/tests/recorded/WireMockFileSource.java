@@ -14,6 +14,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, TYPE})
 public @interface WireMockFileSource {
 
-    String value();
+    String value() default "/";
 
 }

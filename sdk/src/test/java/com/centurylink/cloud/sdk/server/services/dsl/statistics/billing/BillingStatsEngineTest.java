@@ -150,7 +150,7 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest implements Wi
     }
 
     @Test
-    @WireMockFileSource("/engine")
+    @WireMockFileSource
     public void testBillingStatsEngine() throws Exception {
         testSummarize();
     }
