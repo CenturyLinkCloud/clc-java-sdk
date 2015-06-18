@@ -40,6 +40,11 @@ public class ServerCredentials {
         this.userName = userName;
     }
 
+    public ServerCredentials userName(String userNameValue) {
+        setUserName(userNameValue);
+        return this;
+    }
+
     /**
      * @return The password
      */
@@ -54,6 +59,11 @@ public class ServerCredentials {
     @JsonProperty("password")
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public ServerCredentials password(String passwordValue) {
+        setPassword(passwordValue);
+        return this;
     }
 
     @JsonAnyGetter

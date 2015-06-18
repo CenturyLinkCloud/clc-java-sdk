@@ -12,9 +12,6 @@ public interface SshClient {
 
     SshClient run(String command);
 
-    SshClient run(File script);
-
-    SshClient sudo(String command);
-
     OperationFuture<ShellResponse> execute() throws SshException;
+
 }
