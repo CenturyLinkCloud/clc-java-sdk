@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/servers/shutDown",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "[\"CA1ALTDPWROPS01\"]",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-servers-shutDown-M3V0c.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 18 Jun 2015 07:55:52 GMT",
+      "Content-Length" : "224"
+    }
+  }
+}

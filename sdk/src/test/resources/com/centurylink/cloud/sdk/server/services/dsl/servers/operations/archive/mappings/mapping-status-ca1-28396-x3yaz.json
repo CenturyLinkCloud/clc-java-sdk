@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/status/ca1-28396",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-status-ca1-28396-x3yaz.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 18 Jun 2015 10:16:35 GMT",
+      "Content-Length" : "141"
+    }
+  }
+}

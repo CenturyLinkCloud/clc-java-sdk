@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/ca1altdpwrops01/snapshots/2/restore",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-2-restore-CkgSU.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 18 Jun 2015 09:24:25 GMT",
+      "Content-Length" : "179"
+    }
+  }
+}

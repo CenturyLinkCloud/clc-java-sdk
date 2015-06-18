@@ -1,0 +1,19 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/status/ca1-28381",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-status-ca1-28381-zg3oh.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 18 Jun 2015 07:55:52 GMT",
+      "Content-Length" : "141"
+    }
+  }
+}

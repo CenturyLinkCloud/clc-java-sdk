@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD/68c30c5898584105902306f7f610b31b?serverDetail=detailed",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-68c30c5898584105902306f7f610b31b-SiHeY.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 18 Jun 2015 07:32:44 GMT",
+      "Content-Length" : "1284"
+    }
+  }
+}
