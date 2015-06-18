@@ -33,39 +33,48 @@ repositories {
     jcenter()
 }
 
+def logStacktraces = { ctx ->
+    ctx.testLogging {
+        showExceptions = true
+        showCauses = true
+        exceptionFormat = 'full' // full information about failed tests
+    }
+}
+
+def provideCredentials = { ctx, username, password ->
+    ctx.systemProperty "clc.username", username
+    ctx.systemProperty "clc.password", password
+}
+
+def provideSystemCredentials = { ctx ->
+    provideCredentials(
+        ctx,
+        System.getProperty("clc.username"),
+        System.getProperty("clc.password")
+    )
+}
+
 task runUnitTests(type: Test, dependsOn: 'compileTestJava') {
-    useTestNG() {
+    useTestNG {
         excludeGroups 'Integration', 'LongRunning', 'Samples', 'Recorded'
         parallel 'classes'
         threadCount 25
     }
 
-    testLogging {
-        showExceptions = true
-        showCauses = true
-        exceptionFormat = 'full' // full information about failed tests
-    }
-
-    systemProperty "clc.username", "cloud_user"
-    systemProperty "clc.password", "cloud_user_password"
+    logStacktraces(delegate)
+    provideCredentials(delegate, "cloud_user", "cloud_user_password")
 }
 
 task runRecordedTests(type: Test, dependsOn: 'compileTestJava') {
-    useTestNG() {
+    useTestNG {
         includeGroups 'Recorded'
     }
 
-    testLogging {
-        showExceptions = true
-        showCauses = true
-        exceptionFormat = 'full' // full information about failed tests
-    }
-
-    systemProperty "clc.username", "cloud_user"
-    systemProperty "clc.password", "cloud_user_password"
+    logStacktraces(delegate)
+    provideCredentials(delegate, "cloud_user", "cloud_user_password")
 }
 
-task jacocoAllTestsReport(type: JacocoReport) {
+task generateCoverageReport(type: JacocoReport) {
     sourceSets sourceSets.main
     executionData runUnitTests, runRecordedTests
 
@@ -76,23 +85,17 @@ task jacocoAllTestsReport(type: JacocoReport) {
     }
 }
 
-test () {
-    dependsOn(['runUnitTests', 'runRecordedTests'])
+task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
+    useTestNG {
+        includeGroups 'Integration', 'LongRunning'
+    }
+
+    logStacktraces(delegate)
+    provideSystemCredentials(delegate)
 }
 
-task runIntegrationTests(type: Test, dependsOn: 'compileTestJava') {
-    useTestNG() {
-        includeGroups 'LongRunning'
-    }
-
-    testLogging {
-        showExceptions = true
-        showCauses = true
-        exceptionFormat = 'full' // full information about failed tests
-    }
-
-    systemProperty "clc.username", System.getProperty("clc.username")
-    systemProperty "clc.password", System.getProperty("clc.password")
+test () {
+    dependsOn(['runUnitTests', 'runRecordedTests'])
 }
 
 javadoc {
