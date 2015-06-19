@@ -16,9 +16,9 @@
 package com.centurylink.cloud.sdk.server.services.dsl.servers.ip;
 
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpRequest;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.Subnet;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.PublicIpConverter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.Subnet;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortRangeConfig;
 import org.apache.commons.net.util.SubnetUtils;
@@ -59,7 +59,6 @@ public class PublicIpUtilTest {
     @Test
     public void testSubnet() {
         String ipAddress = "10.6.10.6";
-        String cidr = "100.0.50.1/17";
         String mask = "255.0.0.0";
         String cidrMask = "/17";
 
