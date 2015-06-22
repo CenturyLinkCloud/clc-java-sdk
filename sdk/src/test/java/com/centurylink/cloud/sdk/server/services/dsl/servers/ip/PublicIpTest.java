@@ -24,10 +24,8 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpCon
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
-import com.centurylink.cloud.sdk.tests.recorded.WireMockRecording;
 import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
@@ -35,14 +33,13 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 import static java.util.stream.Collectors.toList;
 
 /**
  * @author aliaksandr krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixin {
 
     private Server serverRef;
@@ -52,11 +49,11 @@ public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixi
 
     private void checkServerStarted() {
         ServerMetadata serverMetadata = serverService.findByRef(serverRef);
-        if (!serverMetadata.getDetails().getPowerState().equals("started")) {
+        if (!"started".equals(serverMetadata.getDetails().getPowerState())) {
             serverService.powerOn(serverRef);
         }
 
-        if (!serverMetadata.getStatus().equals("active")) {
+        if (!"active".equals(serverMetadata.getStatus())) {
             throw new RuntimeException("server " + serverMetadata.getId() + " is not in state active");
         }
     }

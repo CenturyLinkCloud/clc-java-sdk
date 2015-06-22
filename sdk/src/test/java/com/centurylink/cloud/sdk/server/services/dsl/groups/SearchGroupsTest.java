@@ -80,7 +80,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
     public void testFindByIdRef() {
         GroupMetadata group = groupService.findByRef(Group.refById(DE_ROOT_ID));
 
-        assert group.getDescription().equals("DE1 Hardware");
+        assertEquals(group.getDescription(), "DE1 Hardware");
     }
 
     @Test
@@ -90,17 +90,17 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
             .name("Archive")
         );
 
-        assert group.getName().equalsIgnoreCase("archive");
+        assertEquals(group.getName().toLowerCase(), "archive");
     }
 
     @Test
     public void testFindGroupByName() {
         List<GroupMetadata> groups = groupService.find(new GroupFilter()
-            .dataCentersWhere(d -> d.getId().equals("de1" /*Frankfurt*/))
+            .dataCentersWhere(d -> "de1".equals(d.getId()))
             .nameContains("MyServer")
         );
 
-        assert groups.get(0).getName().equals("MyServer");
+        assertEquals(groups.get(0).getName(), "MyServer");
     }
 
     @Test
@@ -110,7 +110,7 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
         );
 
         assertEquals(groups.size(), 1);
-        assert groups.get(0).getName().equals("MyServer");
+        assertEquals(groups.get(0).getName(), "MyServer");
     }
 
     @Test
