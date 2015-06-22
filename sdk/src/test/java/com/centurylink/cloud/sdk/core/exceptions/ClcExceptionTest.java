@@ -23,15 +23,15 @@ public class ClcExceptionTest {
     public void testConstructionWithFormatting() {
         Exception e = new ClcException("%s formatting works", "param");
 
-        assert e.getMessage().equals("param formatting works");
+        assert "param formatting works".equals(e.getMessage());
     }
 
     @Test
     public void testConstructorWithFormattingAndSuppressedException() {
         Exception e = new ClcException("%s formatting works", "parameters", new Exception("Cause"));
 
-        assert e.getMessage().equals("parameters formatting works");
-        assert e.getCause().getMessage().equals("Cause");
+        assert "parameters formatting works".equals(e.getMessage());
+        assert "Cause".equals(e.getCause().getMessage());
     }
 
 }

@@ -85,9 +85,9 @@ public class NetworkServiceTest extends AbstractNetworksSdkTest {
 
         List<NetworkMetadata> networks = networkService.findByDataCenter(DataCenter.CA_TORONTO_2);
 
-        assert networks.size() == 2;
-        assert networks.get(0).getName().equals("first_network");
-        assert networks.get(1).getNetworkId().equals("2");
+        assertEquals(networks.size(), 2);
+        assertEquals(networks.get(0).getName(), "first_network");
+        assertEquals(networks.get(1).getNetworkId(), "2");
     }
 
     private OngoingStubbing<DatacenterDeploymentCapabilitiesMetadata> mockNetworks(List<NetworkMetadata> networks) {
