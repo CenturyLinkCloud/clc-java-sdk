@@ -67,7 +67,7 @@ public class BaseServerResponse {
 
     public String findServerUuid() {
         for (Link curLink : links) {
-            if (curLink.getRel().equals("self")) {
+            if ("self".equals(curLink.getRel())) {
                 return curLink.getId();
             }
         }
@@ -78,7 +78,7 @@ public class BaseServerResponse {
     public String findStatusId() {
         if (links != null) {
             for (Link curLink : links) {
-                if (curLink.getRel().equals("status")) {
+                if ("status".equals(curLink.getRel())) {
                     return curLink.getId();
                 }
             }

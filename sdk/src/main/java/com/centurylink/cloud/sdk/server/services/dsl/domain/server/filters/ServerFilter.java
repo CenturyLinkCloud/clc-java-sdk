@@ -259,7 +259,12 @@ public class ServerFilter extends AbstractResourceFilter<ServerFilter> {
      * @return {@link GroupFilter}
      */
     public ServerFilter onlyActive() {
-        predicate = predicate.and(s -> s.getStatus().equals("active"));
+        predicate = predicate.and(
+            serverMetadata -> "active".equals(
+                serverMetadata.getStatus()
+            )
+        );
+
         return this;
     }
 

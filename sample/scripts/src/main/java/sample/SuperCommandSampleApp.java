@@ -154,7 +154,8 @@ public class SuperCommandSampleApp extends Assert {
     }
 
     private void checkServerIsStarted(String name) {
-        assert
+        assertEquals(
+            "started",
             serverService
                 .findLazy(new ServerFilter()
                     .onlyActive()
@@ -163,7 +164,7 @@ public class SuperCommandSampleApp extends Assert {
                 .findFirst().get()
                 .getDetails()
                 .getPowerState()
-                .equals("started");
+        );
     }
 
     @Test
