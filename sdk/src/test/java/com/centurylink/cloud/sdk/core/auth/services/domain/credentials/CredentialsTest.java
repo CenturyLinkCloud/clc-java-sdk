@@ -8,11 +8,11 @@ import org.testng.annotations.Test;
  */
 public class CredentialsTest {
 
-    private String userName = "user";
-    private String userPassword = "password";
-
     @Test
     public void testCredentials() {
+        String userName = "user";
+        String userPassword = "passwd";
+
         Credentials credentials = new Credentials(userName, userPassword);
 
         assert credentials.isEqualTo(new Credentials(userName, userPassword));

@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 public class StaticCredentialsProviderTest {
 
     private String userName = "user";
-    private String userPassword = "password";
+    private String userPassword = "passwd";
 
     @Test
     public void testConstructorWithUserParams() {

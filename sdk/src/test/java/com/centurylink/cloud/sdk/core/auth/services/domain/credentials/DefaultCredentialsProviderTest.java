@@ -11,10 +11,10 @@ public class DefaultCredentialsProviderTest {
     private String propertiesPath = "props.properties";
 
     private String userName = "user";
-    private String userPassword = "password";
+    private String userPassword = "passwd";
 
     private String userNameSysProp = "clc.login";
-    private String userPasswordSysProp = "clc.userpass";
+    private String userPasswordSysProp = "clc.userpasswd";
 
     @Test
     public void testDefaultConstructor() {

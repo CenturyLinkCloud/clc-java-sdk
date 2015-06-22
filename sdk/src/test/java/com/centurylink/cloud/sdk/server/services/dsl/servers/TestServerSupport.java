@@ -35,7 +35,8 @@ import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filt
  * @author ilya.drabenia
  */
 public class TestServerSupport {
-    public static final String PASSWORD = "1qa@WS3ed";
+
+    public static final String PASSWD = "1qa@WS3ed";
     private final ServerService serverService;
 
     public TestServerSupport(ServerService serverService) {
@@ -70,7 +71,7 @@ public class TestServerSupport {
             serverService.create(new CreateServerConfig()
                 .name("ALTRS1")
                 .type(STANDARD)
-                .password(PASSWORD)
+                .password(PASSWD)
 
                 .group(Group.refByName()
                     .dataCenter(DataCenter.refById(DE_FRANKFURT.getId()))
