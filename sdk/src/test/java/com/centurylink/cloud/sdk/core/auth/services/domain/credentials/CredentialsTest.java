@@ -11,7 +11,7 @@ public class CredentialsTest {
     @Test
     public void testCredentials() {
         String userName = "user";
-        String userPassword = "passwd";
+        String userPassword = "passwd"; //NOSONAR
 
         Credentials credentials = new Credentials(userName, userPassword);
 
