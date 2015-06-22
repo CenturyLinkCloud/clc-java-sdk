@@ -29,9 +29,10 @@ import java.util.function.Supplier;
  * @author ilya.drabenia
  */
 public class PropertiesFileCredentialsProvider implements CredentialsProvider {
+
     static final String DEFAULT_FILE_NAME = "centurylink-cloud.properties";
     static final String USERNAME_KEY = "clc.username";
-    static final String PASSWORD_KEY = "clc.password";
+    static final String PASSWD_KEY = "clc.password";
 
     private final Properties properties = new Properties();
     private final Supplier<Properties> propertiesLoader;
@@ -80,7 +81,7 @@ public class PropertiesFileCredentialsProvider implements CredentialsProvider {
     public Credentials getCredentials() {
         return new Credentials(
             properties.getProperty(USERNAME_KEY),
-            properties.getProperty(PASSWORD_KEY)
+            properties.getProperty(PASSWD_KEY)
         );
     }
 
