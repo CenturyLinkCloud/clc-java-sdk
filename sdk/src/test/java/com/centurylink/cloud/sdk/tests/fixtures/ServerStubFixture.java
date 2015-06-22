@@ -47,9 +47,9 @@ import static org.mockito.Mockito.when;
  */
 public class ServerStubFixture {
 
-    private final static String serverId = "de1altdtcrt777";
-    private final static String serverId2 = "de1altdtcrt888";
-    private final static String groupId = "e9cf5a7a9fad43a8a9184d0265ae076c";
+    private static final String serverId = "de1altdtcrt777";
+    private static final String serverId2 = "de1altdtcrt888";
+    private static final String groupId = "e9cf5a7a9fad43a8a9184d0265ae076c";
 
     private static Link link;
 

@@ -23,9 +23,10 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupF
  * {@inheritDoc}
  */
 public abstract class Group implements Reference<GroupFilter> {
-    public final static String ARCHIVE = "Archive";
-    public final static String TEMPLATES = "Templates";
-    public final static String DEFAULT_GROUP = "Default Group";
+
+    public static final String ARCHIVE = "Archive";
+    public static final String TEMPLATES = "Templates";
+    public static final String DEFAULT_GROUP = "Default Group";
 
     /**
      * Method allow to refer group by it's ID. Comparison is by full match and case sensitive.
