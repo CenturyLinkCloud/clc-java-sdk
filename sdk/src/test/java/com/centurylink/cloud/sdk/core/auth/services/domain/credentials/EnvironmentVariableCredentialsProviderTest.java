@@ -12,10 +12,10 @@ import org.testng.annotations.Test;
 public class EnvironmentVariableCredentialsProviderTest {
 
     private String userName = "user";
-    private String userPassword = "passwd";
+    private String userPassword = "passwd"; //NOSONAR
 
     private String userNameEnvProp = "CLC_USERNAME";
-    private String userPasswordEnvProp = "CLC_PASSWD";
+    private String userPasswordEnvProp = "CLC_PASSWD"; //NOSONAR
 
     CredentialsProvider mockProvider(CredentialsProvider provider) {
         CredentialsProvider spy = Mockito.spy(provider);
