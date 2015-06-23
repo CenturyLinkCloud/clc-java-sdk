@@ -59,13 +59,13 @@ public class SearchQueriesSampleApp extends Assert {
     private GroupService groupService;
     private TemplateService templateService;
 
-    private final String group1Name = "uat1";
-    private final String group2Name = "uat2";
+    private static final String group1Name = "uat1";
+    private static final String group2Name = "uat2";
 
-    private final String serverDe1Name = "sr-de1";
-    private final String serverDe2Name = "sr-de2";
-    private final String serverVa1Name = "sr-va1";
-    private final String serverVa2Name = "sr-va2";
+    private static final String serverDe1Name = "sr-de1";
+    private static final String serverDe2Name = "sr-de2";
+    private static final String serverVa1Name = "sr-va1";
+    private static final String serverVa2Name = "sr-va2";
 
     Server server2Va = Server.refByDescription(US_WEST_SANTA_CLARA, serverVa2Name);
 
