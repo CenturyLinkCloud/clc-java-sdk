@@ -95,15 +95,16 @@ public class SearchQueriesSampleApp extends Assert {
                     group(
                         group2Name,
                         "uat2 group description"
-                    )
-                    .subitems(
+                    ).subitems(
                         centOsServer(serverDe2Name)
                     )
                 ),
 
                 dataCenter(US_WEST_SANTA_CLARA).subitems(
-                    group(group1Name,
-                          "uat1 group description").subitems(
+                    group(
+                        group1Name,
+                        "uat1 group description"
+                    ).subitems(
                         centOsServer(serverVa1Name),
                         centOsServer(serverVa2Name)
                     )
