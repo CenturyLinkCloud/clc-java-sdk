@@ -59,7 +59,15 @@ public class SearchQueriesSampleApp extends Assert {
     private GroupService groupService;
     private TemplateService templateService;
 
-    Server server2Va = Server.refByDescription(US_WEST_SANTA_CLARA, "sr-va2");
+    private final String group1Name = "uat1";
+    private final String group2Name = "uat2";
+
+    private final String serverDe1Name = "sr-de1";
+    private final String serverDe2Name = "sr-de2";
+    private final String serverVa1Name = "sr-va1";
+    private final String serverVa2Name = "sr-va2";
+
+    Server server2Va = Server.refByDescription(US_WEST_SANTA_CLARA, serverVa2Name);
 
     public SearchQueriesSampleApp() {
         ClcSdk sdk = new ClcSdk(
@@ -78,21 +86,26 @@ public class SearchQueriesSampleApp extends Assert {
         groupService
             .defineInfrastructure(
                 dataCenter(DE_FRANKFURT).subitems(
-                    group("uat1",
-                          "uat1 group description").subitems(
-                        centOsServer("sr-de1")
+                    group(
+                        group1Name,
+                        "uat1 group description"
+                    ).subitems(
+                        centOsServer(serverDe1Name)
                     ),
-                    group("uat2",
-                          "uat2 group description").subitems(
-                        centOsServer("sr-de2")
+                    group(
+                        group2Name,
+                        "uat2 group description"
+                    )
+                    .subitems(
+                        centOsServer(serverDe2Name)
                     )
                 ),
 
                 dataCenter(US_WEST_SANTA_CLARA).subitems(
-                    group("uat1",
+                    group(group1Name,
                           "uat1 group description").subitems(
-                        centOsServer("sr-va1"),
-                        centOsServer("sr-va2")
+                        centOsServer(serverVa1Name),
+                        centOsServer(serverVa2Name)
                     )
                 )
             )
@@ -188,7 +201,7 @@ public class SearchQueriesSampleApp extends Assert {
                 .status(ACTIVE, ARCHIVED)
         );
 
-        checkServerMetadataList(serverMetadataList, "sr-de1", "sr-de2", "sr-va1", "sr-va2");
+        checkServerMetadataList(serverMetadataList, serverDe1Name, serverDe2Name, serverVa1Name, serverVa2Name);
     }
 
     /**
@@ -200,7 +213,7 @@ public class SearchQueriesSampleApp extends Assert {
             new ServerFilter().onlyActive()
         );
 
-        checkServerMetadataList(serverMetadataList, "sr-de1", "sr-de2", "sr-va1");
+        checkServerMetadataList(serverMetadataList, serverDe1Name, serverDe2Name, serverVa1Name);
     }
 
     /**
@@ -209,10 +222,10 @@ public class SearchQueriesSampleApp extends Assert {
     @Test(groups = {SAMPLES})
     public void findGroupServersTest() {
         List<ServerMetadata> serverMetadataList = serverService.find(
-            new ServerFilter().groupNameContains("uat1")
+            new ServerFilter().groupNameContains(group1Name)
         );
 
-        checkServerMetadataList(serverMetadataList, "sr-de1", "sr-va1");
+        checkServerMetadataList(serverMetadataList, serverDe1Name, serverVa1Name);
     }
 
     /**
@@ -226,7 +239,7 @@ public class SearchQueriesSampleApp extends Assert {
             )
         );
 
-        checkServerMetadataList(serverMetadataList, "sr-de1", "sr-de2");
+        checkServerMetadataList(serverMetadataList, serverDe1Name, serverDe2Name);
     }
 
     /**
@@ -253,10 +266,10 @@ public class SearchQueriesSampleApp extends Assert {
             new GroupFilter()
                 .dataCenters(DE_FRANKFURT)
                 .where(groupMetadata ->
-                    groupMetadata.getDescription() != null && groupMetadata.getDescription().contains("uat1")
+                    groupMetadata.getDescription() != null && groupMetadata.getDescription().contains(group1Name)
                 )
         );
 
-        checkGroupMetadataList(groupMetadataList, "uat1");
+        checkGroupMetadataList(groupMetadataList, group1Name);
     }
 }
