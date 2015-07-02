@@ -10,10 +10,10 @@ import org.testng.annotations.Test;
 public class SystemVariableCredentialsProviderTest {
 
     private String userName = "user";
-    private String userPassword = "password";
+    private String userPassword = "passwd"; //NOSONAR
 
     private String userNameSysProp = "clc._username";
-    private String userPasswordSysProp = "clc._password";
+    private String userPasswordSysProp = "clc._passwd"; //NOSONAR
 
     @BeforeClass
     void setup() {

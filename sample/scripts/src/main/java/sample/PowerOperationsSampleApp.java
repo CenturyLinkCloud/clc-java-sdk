@@ -146,7 +146,7 @@ public class PowerOperationsSampleApp extends Assert {
         assert
             serverService
                 .findLazy(new ServerFilter().groups(myServersGroup()))
-                .filter(s -> s.getDetails().getPowerState().equals("started"))
+                .filter(s -> "started".equals(s.getDetails().getPowerState()))
                 .count() == 3;
     }
 
@@ -208,12 +208,13 @@ public class PowerOperationsSampleApp extends Assert {
             )
             .waitUntilComplete();
 
-        assert
+        assertEquals(
+            "stopped",
             serverService
                 .findByRef(getMysqlServer())
                 .getDetails()
                 .getPowerState()
-                .equals("stopped");
+        );
     }
 
     @Test
@@ -224,12 +225,13 @@ public class PowerOperationsSampleApp extends Assert {
             .powerOn(getMysqlServer())
             .waitUntilComplete();
 
-        assert
+        assertEquals(
+            "started",
             serverService
                 .findByRef(getMysqlServer())
                 .getDetails()
                 .getPowerState()
-                .equals("started");
+        );
     }
 
 }

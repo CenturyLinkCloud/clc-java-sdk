@@ -40,7 +40,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 @SuppressWarnings("unchecked")
 public class BillingStatsEngineTest extends AbstractServersSdkTest implements WireMockMixin {
 
-    private final static String DEFAULT_GROUP_NAME = Group.DEFAULT_GROUP;
+    private static final String DEFAULT_GROUP_NAME = Group.DEFAULT_GROUP;
 
     @Inject
     StatisticsService statisticsService;

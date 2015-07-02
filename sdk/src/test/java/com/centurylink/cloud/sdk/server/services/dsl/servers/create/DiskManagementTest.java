@@ -86,13 +86,26 @@ public class DiskManagementTest extends AbstractServersSdkTest {
     @Test
     public void testCreateServerWithDisksOperation() {
         when(templateService.findByRef(any())).thenReturn(new TemplateMetadata());
-        when(groupService.findByRef(any())).thenReturn(new GroupMetadata(){{setLocationId("de1");}});
-        when(serverClient.findServerByUuid(any())).thenReturn(new ServerMetadata());
-        when(dataCenterService.getDeploymentCapabilities(any())).thenReturn(
-            new DatacenterDeploymentCapabilitiesMetadata() {{
-                setSupportsPremiumStorage(true);
-            }}
-        );
+
+        when(groupService.findByRef(any()))
+            .thenReturn(
+                    new GroupMetadata() {{
+                        setLocationId("de1");
+                    }}
+            );
+
+        when(serverClient.findServerByUuid(any()))
+            .thenReturn(
+                    new ServerMetadata()
+            );
+
+        when(dataCenterService.getDeploymentCapabilities(any()))
+            .thenReturn(
+                new DatacenterDeploymentCapabilitiesMetadata() {{
+                    setSupportsPremiumStorage(true);
+                }}
+            );
+
         when(serverClient.create(any()))
             .thenReturn(new BaseServerResponse(null, true, new ArrayList<Link>() {{
                 add(new Link() {{
@@ -121,18 +134,17 @@ public class DiskManagementTest extends AbstractServersSdkTest {
             )
         );
 
-
         ArgumentCaptor<CreateServerRequest> request = ArgumentCaptor.forClass(CreateServerRequest.class);
         Mockito.verify(serverClient).create(request.capture());
         List<DiskRequest> additionalDisks = request.getValue().getAdditionalDisks();
 
-        assert additionalDisks.size() == 2;
-        assert additionalDisks.get(0).getType().equals("raw");
-        assert additionalDisks.get(0).getSizeGB() == 15;
+        assertEquals(additionalDisks.size(), 2);
+        assertEquals(additionalDisks.get(0).getType(), "raw");
+        assertEquals(additionalDisks.get(0).getSizeGB(), Integer.valueOf(15));
 
-        assert additionalDisks.get(1).getType().equals("partitioned");
-        assert additionalDisks.get(1).getSizeGB() == 20;
-        assert additionalDisks.get(1).getPath().equals("/d1");
+        assertEquals(additionalDisks.get(1).getType(), "partitioned");
+        assertEquals(additionalDisks.get(1).getSizeGB(), Integer.valueOf(20));
+        assertEquals(additionalDisks.get(1).getPath(), "/d1");
     }
 
 }

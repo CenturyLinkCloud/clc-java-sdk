@@ -36,17 +36,17 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 @Test(groups = {RECORDED})
 public class ModifyServerTest extends AbstractServersSdkTest implements WireMockMixin {
 
-    private final static String initialDescription = "";
-    private final static Integer initialCpu = 1;
-    private final static Integer initialRam = 2;
+    private static final String initialDescription = "";
+    private static final Integer initialCpu = 1;
+    private static final Integer initialRam = 2;
 
-    private final static String modifiedDescription = "Description for tests";
-    private final static Integer modifiedCpu = 2;
-    private final static Integer modifiedRam = 4;
+    private static final String modifiedDescription = "Description for tests";
+    private static final Integer modifiedCpu = 2;
+    private static final Integer modifiedRam = 4;
 
-    private final static Integer disk1ModifiedSize = 3;
-    private final static Integer disk2ModifiedSize = 5;
-    private final static Integer disk3ModifiedSize = 19;
+    private static final Integer disk1ModifiedSize = 3;
+    private static final Integer disk2ModifiedSize = 5;
+    private static final Integer disk3ModifiedSize = 19;
 
     @Inject
     ServerService serverService;

@@ -124,7 +124,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
     @Test
     public void testFindAllTemplatesWithManagedOsCapabilities() {
         List<TemplateMetadata> results = templateService.find(new TemplateFilter()
-            .dataCentersWhere(d -> d.getId().equals("va1")) // sterling
+            .dataCentersWhere(d -> "va1".equals(d.getId()))
             .where(t -> t.getCapabilities().contains(MANAGED_OS_VALUE))
         );
 

@@ -40,7 +40,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 @WireMockFileSource("/get_billing_stats")
 public class GetBillingStatsTest extends AbstractServersSdkTest implements WireMockMixin {
 
-    private final static String groupName = "st-gp";
+    private static final String groupName = "st-gp";
 
     @Inject
     ServerService serverService;

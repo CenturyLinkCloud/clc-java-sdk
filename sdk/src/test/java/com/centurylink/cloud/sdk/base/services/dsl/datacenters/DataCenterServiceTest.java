@@ -62,14 +62,14 @@ public class DataCenterServiceTest extends AbstractSdkTest {
     public void testFindDataCenterByIdRef() {
         DataCenterMetadata dataCenter = dataCenterService.findByRef(DataCenter.refById("de1"));
 
-        assert dataCenter.getId().equalsIgnoreCase("de1");
+        assert "de1".equalsIgnoreCase(dataCenter.getId());
     }
 
     @Test
     public void testFindDataCenterByNameRef() {
         DataCenterMetadata dataCenter = dataCenterService.findByRef(DataCenter.refByName("FrankFurt"));
 
-        assert dataCenter.getId().equalsIgnoreCase("DE1");
+        assert "de1".equalsIgnoreCase(dataCenter.getId());
     }
 
     @Test

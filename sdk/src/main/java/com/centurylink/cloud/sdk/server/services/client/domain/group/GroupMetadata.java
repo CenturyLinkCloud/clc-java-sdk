@@ -390,7 +390,7 @@ public class GroupMetadata {
     @JsonIgnore
     public String getParentGroupId() {
         return this.getLinks().stream()
-                .filter(link -> link.getRel().equals("parentGroup"))
+                .filter(link -> "parentGroup".equals(link.getRel()))
                 .map(Link::getId)
                 .findFirst().orElse(null);
     }
