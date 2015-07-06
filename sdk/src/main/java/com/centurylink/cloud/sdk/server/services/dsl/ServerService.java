@@ -216,18 +216,20 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @return OperationFuture wrapper for list of ServerRef
      */
     public OperationFuture<List<Server>> delete(ServerFilter filter) {
-        List<Server> serverRefs = find(filter).stream()
-            .map(metadata -> metadata.asRefById())
+        List<Server> serverRefs = find(filter)
+            .stream()
+            .map(ServerMetadata::asRefById)
             .collect(toList());
+
         return delete(serverRefs.toArray(new Server[serverRefs.size()]));
     }
 
     String idByRef(Server ref) {
         if (ref.is(ServerByIdRef.class)) {
             return ref.as(ServerByIdRef.class).getId();
-        } else {
-            return findByRef(ref).getId();
         }
+
+        return findByRef(ref).getId();
     }
 
     /**
@@ -277,9 +279,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<Server>> powerOn(Server... serverRefs) {
         return powerOperationResponse(
-                Arrays.asList(serverRefs),
-                "Power On",
-                client.powerOn(ids(serverRefs))
+            Arrays.asList(serverRefs),
+            "Power On",
+            client.powerOn(ids(serverRefs))
         );
     }
 
@@ -806,8 +808,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public OperationFuture<Server> modifyPublicIp(Server server, ModifyPublicIpConfig config) {
         checkNotNull(config, "PublicIpConfig must be not null");
         List<IpAddress> ipAddresses = findByRef(server).getDetails().getIpAddresses();
+
         List<String> responseIds = ipAddresses.stream()
-            .map(address -> address.getPublicIp())
+            .map(IpAddress::getPublicIp)
             .filter(notNull())
             .map(ipAddress ->
                 client.modifyPublicIp(idByRef(server),
@@ -874,8 +877,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     }
 
     Server[] getRefsFromFilter(ServerFilter filter) {
-        List<Server> serverRefs = filter.getServerIds().stream()
-            .map(id -> Server.refById(id))
+        List<Server> serverRefs = filter.getServerIds()
+            .stream()
+            .map(Server::refById)
             .collect(toList());
 
         return serverRefs.toArray(new Server[serverRefs.size()]);
@@ -936,6 +940,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public OperationFuture<Server> removePublicIp(Server serverRef) {
         checkNotNull(serverRef, "Server reference must be not null");
         ServerMetadata serverMetadata = findByRef(serverRef);
+
         List<JobFuture> jobFutures = serverMetadata.getDetails().getIpAddresses()
             .stream()
             .map(IpAddress::getPublicIp)
@@ -1055,12 +1060,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     private Optional<String> findPublicIpWithOpenSshPort(Server server) {
         return findPublicIp(server)
             .stream()
-            .filter(ip ->
-                ip
-                    .getPorts()
-                    .stream()
-                    .filter(p -> p.getPort().equals(SSH))
-                    .count() > 0
+            .filter(ip -> ip
+                .getPorts()
+                .stream()
+                .filter(p -> p.getPort().equals(SSH))
+                .count() > 0
             )
             .map(PublicIpMetadata::getPublicIPAddress)
             .filter(notNull())

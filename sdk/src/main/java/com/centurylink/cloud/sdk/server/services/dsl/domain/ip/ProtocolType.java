@@ -19,5 +19,5 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.ip;
  * @author Ilya Drabenia
  */
 public enum ProtocolType {
-    TCP, EDP, ICMP;
+    TCP, UDP, ICMP;
 }
