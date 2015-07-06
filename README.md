@@ -5,7 +5,7 @@ See the [wiki](https://github.com/CenturyLinkCloud/clc-java-sdk/wiki) for CLC Ja
 
 Build process details
 ---------------------
-To build sources, you need to install Gradle 2.2.1 or later. To check out and build the ClcSDK source, issue the following commands:
+To build sources, you need to install Gradle 2.2.1 or later. To check out and build the CLC SDK source, issue the following commands:
 
 ```
 $ git clone git@github.com:CenturyLinkCloud/clc-java-sdk.git
@@ -21,7 +21,7 @@ section for details and examples of how to configure the CLC SDK.
 
 Example
 -------
-This example shows some of the functionality supported by the CLC Java SDK:
+This example shows some of the functionality supported by the CLC Java SDK.
 
 ```java
 import static com.centurylink.cloud.sdk.servers.services.domain.InfrastructureConfig.dataCenter;
