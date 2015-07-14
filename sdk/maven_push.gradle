@@ -50,8 +50,7 @@ uploadArchives {
 
             pom.artifactId = artifactId
             pom.groupId = groupId
-            println(version.replace('"', ''))
-            pom.version = version.replace('"', '')
+            pom.version = version
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
                 authentication(userName: ossrhUsername, password: ossrhPassword)
