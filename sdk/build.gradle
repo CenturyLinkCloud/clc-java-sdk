@@ -124,3 +124,5 @@ dependencies {
     testRuntime 'org.apache.logging.log4j:log4j-core:2.2'
     testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.2'
 }
+
+apply from: './maven_push.gradle'
