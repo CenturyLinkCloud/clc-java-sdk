@@ -34,8 +34,8 @@ public class ServerMonitoringConfigValidator {
         if (config.getInterval() == null) {
             config.interval(
                 config.getType() == MonitoringType.HOURLY
-                    ? config.DEFAULT_HOURLY_INTERVAL
-                    : config.DEFAULT_REALTIME_INTERVAL
+                    ? ServerMonitoringFilter.DEFAULT_HOURLY_INTERVAL
+                    : ServerMonitoringFilter.DEFAULT_REALTIME_INTERVAL
             );
         }
 
@@ -44,6 +44,7 @@ public class ServerMonitoringConfigValidator {
         if (config.getFrom().isAfter(to)) {
             throw new ClcClientException("Start date cannot be more than end date");
         }
+
         if (Duration.between(config.getFrom(), to).getSeconds() < config.getInterval().getSeconds()) {
             throw new ClcClientException("Interval must fit within start/end date");
         }
@@ -76,43 +77,45 @@ public class ServerMonitoringConfigValidator {
         public void validate() {
             checkMonitoringConfig(config);
 
-            if (config.getFrom().isBefore(OffsetDateTime.now().minusDays(config.MAX_HOURLY_PERIOD_DAYS))) {
+            if (config.getFrom().isBefore(OffsetDateTime.now().minusDays(ServerMonitoringFilter.MAX_HOURLY_PERIOD_DAYS))) {
                 throw new ClcClientException(String.format(
                     "Start date must be within the past %s day(s)",
-                    config.MAX_HOURLY_PERIOD_DAYS)
+                        ServerMonitoringFilter.MAX_HOURLY_PERIOD_DAYS)
                 );
             }
 
-            if (config.getInterval().toHours() < config.MIN_HOURLY_INTERVAL_HOURS) {
+            if (config.getInterval().toHours() < ServerMonitoringFilter.MIN_HOURLY_INTERVAL_HOURS) {
                 throw new ClcClientException(String.format(
                     "Interval must be not less than %s hour(s)",
-                    config.MIN_HOURLY_INTERVAL_HOURS)
+                        ServerMonitoringFilter.MIN_HOURLY_INTERVAL_HOURS)
                 );
             }
         }
     }
 
     class RealtimeMonitoringConfigValidator implements MonitoringConfigValidator {
+
         @Override
         public void validate() {
             checkMonitoringConfig(config);
 
-            if (config.getFrom().isBefore(OffsetDateTime.now().minusHours(config.MAX_REALTIME_PERIOD_HOURS))) {
+            if (config.getFrom().isBefore(
+                    OffsetDateTime.now().minusHours(ServerMonitoringFilter.MAX_REALTIME_PERIOD_HOURS))
+            ) {
                 throw new ClcClientException(String.format(
                     "Start date must be within the past %s hour(s)",
-                    config.MAX_REALTIME_PERIOD_HOURS)
+                        ServerMonitoringFilter.MAX_REALTIME_PERIOD_HOURS)
                 );
             }
 
-            if (config.getInterval().toMinutes() < config.MIN_REALTIME_INTERVAL_MINUTES) {
+            if (config.getInterval().toMinutes() < ServerMonitoringFilter.MIN_REALTIME_INTERVAL_MINUTES) {
                 throw new ClcClientException(String.format(
                     "Interval must be not less than %s minute(s)",
-                    config.MIN_REALTIME_INTERVAL_MINUTES)
+                        ServerMonitoringFilter.MIN_REALTIME_INTERVAL_MINUTES)
                 );
             }
         }
     }
 
-    class LatestMonitoringConfigValidator implements MonitoringConfigValidator {
-    }
+    class LatestMonitoringConfigValidator implements MonitoringConfigValidator {}
 }
