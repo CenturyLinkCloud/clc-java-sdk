@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/status/ca3-18476",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-status-ca3-18476-w4bUb.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 18 Aug 2015 07:22:53 GMT",
+      "Content-Length" : "141"
+    }
+  }
+}

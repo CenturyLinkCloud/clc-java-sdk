@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/datacenters/ALTD/ca3/deploymentCapabilities",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ca3-deploymentCapabilities-hCA4n.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 18 Aug 2015 07:22:26 GMT",
+      "Content-Length" : "1393"
+    }
+  }
+}

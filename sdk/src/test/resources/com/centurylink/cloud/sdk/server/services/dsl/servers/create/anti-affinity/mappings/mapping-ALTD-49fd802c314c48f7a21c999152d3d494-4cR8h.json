@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/49fd802c314c48f7a21c999152d3d494?uuid=true",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-49fd802c314c48f7a21c999152d3d494-4cR8h.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 18 Aug 2015 07:22:53 GMT",
+      "Content-Length" : "529"
+    }
+  }
+}

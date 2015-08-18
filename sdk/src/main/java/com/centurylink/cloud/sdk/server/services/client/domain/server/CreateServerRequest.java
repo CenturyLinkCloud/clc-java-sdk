@@ -57,6 +57,8 @@ public class CreateServerRequest {
 
     private boolean isManagedBackup;
 
+    private String antiAffinityPolicyId;
+
 
     /**
      * Name of the server to create. Alphanumeric characters and dashes only.
@@ -324,6 +326,26 @@ public class CreateServerRequest {
         }
 
         this.isManagedOS = isManagedOS;
+        return this;
+    }
+
+    /**
+     * ID of the Anti-Affinity policy to associate the server with. Only valid for hyperscale servers.
+     *
+     * @return the anti-affinity policy ID
+     */
+    public String getAntiAffinityPolicyId() {
+        return antiAffinityPolicyId;
+    }
+
+    /**
+     * Anti-affinity policy
+     *
+     * @param antiAffinityPolicyId the anti-affinity policy ID
+     * @return current instance
+     */
+    public CreateServerRequest antiAffinityPolicyId(String antiAffinityPolicyId) {
+        this.antiAffinityPolicyId = antiAffinityPolicyId;
         return this;
     }
 }

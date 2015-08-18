@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.server.services.client.domain.server;
 
+import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.annotation.Generated;
@@ -28,6 +29,7 @@ import java.util.Map;
 @JsonPropertyOrder({
         "ipAddresses",
         "alertPolicies",
+        "antiAffinityPolicy",
         "cpu",
         "diskCount",
         "hostName",
@@ -46,6 +48,8 @@ public class Details {
     private List<IpAddress> ipAddresses = new ArrayList<IpAddress>();
     @JsonProperty("alertPolicies")
     private List<Object> alertPolicies = new ArrayList<Object>();
+    @JsonProperty("antiAffinityPolicy")
+    private AntiAffinityPolicyMetadata antiAffinityPolicy;
     @JsonProperty("cpu")
     private Integer cpu;
     @JsonProperty("diskCount")
@@ -109,6 +113,26 @@ public class Details {
     @JsonProperty("alertPolicies")
     public void setAlertPolicies(List<Object> alertPolicies) {
         this.alertPolicies = alertPolicies;
+    }
+
+    /**
+     *
+     * @return
+     * The antiAffinityPolicy
+     */
+    @JsonProperty("antiAffinityPolicy")
+    public AntiAffinityPolicyMetadata getAntiAffinityPolicy() {
+        return antiAffinityPolicy;
+    }
+
+    /**
+     *
+     * @param antiAffinityPolicy
+     * The antiAffinityPolicy
+     */
+    @JsonProperty("antiAffinityPolicy")
+    public void setAntiAffinityPolicy(AntiAffinityPolicyMetadata antiAffinityPolicy) {
+        this.antiAffinityPolicy = antiAffinityPolicy;
     }
 
     /**

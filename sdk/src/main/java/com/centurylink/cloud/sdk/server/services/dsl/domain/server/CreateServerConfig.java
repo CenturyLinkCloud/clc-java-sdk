@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicy;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
 
@@ -37,6 +38,7 @@ public class CreateServerConfig implements ServerConfig {
     private NetworkConfig network = new NetworkConfig();
     private TimeToLive timeToLive;
     private boolean managedOS = false;
+    private AntiAffinityPolicy antiAffinityPolicy;
 
     public CompositeServerConfig count(int count) {
         return new CompositeServerConfig().server(this).count(count);
@@ -196,6 +198,15 @@ public class CreateServerConfig implements ServerConfig {
 
     public CreateServerConfig managedOs() {
         setManagedOS(true);
+        return this;
+    }
+
+    public AntiAffinityPolicy getAntiAffinityPolicy() {
+        return antiAffinityPolicy;
+    }
+
+    public CreateServerConfig antiAffinityPolicy(AntiAffinityPolicy antiAffinityPolicy) {
+        this.antiAffinityPolicy = antiAffinityPolicy;
         return this;
     }
 

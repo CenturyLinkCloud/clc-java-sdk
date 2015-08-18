@@ -1,0 +1,1 @@
+{"id":"0cd46a7624264494a095fc97d1c5b05f","name":"My policy","location":"CA2","links":[{"rel":"self","href":"/v2/antiAffinityPolicies/altd/0cd46a7624264494a095fc97d1c5b05f","verbs":["GET","DELETE","PUT"]},{"rel":"location","href":"/v2/datacenters/altd/CA2","id":"ca2","name":"CA2 - Canada (Toronto)"}]}

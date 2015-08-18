@@ -1,0 +1,1 @@
+{"server":"aap","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/ca3-18476","id":"ca3-18476"},{"rel":"self","href":"/v2/servers/ALTD/49fd802c314c48f7a21c999152d3d494?uuid=True","id":"49fd802c314c48f7a21c999152d3d494","verbs":["GET"]}]}

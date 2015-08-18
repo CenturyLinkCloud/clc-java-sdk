@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/ca3altdaap04",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-ALTD-ca3altdaap04-J4tqE.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Tue, 18 Aug 2015 07:24:38 GMT",
+      "Content-Length" : "131"
+    }
+  }
+}

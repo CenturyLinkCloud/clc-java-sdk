@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/antiAffinityPolicies/ALTD/0cd46a7624264494a095fc97d1c5b05f",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-0cd46a7624264494a095fc97d1c5b05f-1GzHl.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Mon, 17 Aug 2015 14:28:39 GMT",
+      "Content-Length" : "317"
+    }
+  }
+}

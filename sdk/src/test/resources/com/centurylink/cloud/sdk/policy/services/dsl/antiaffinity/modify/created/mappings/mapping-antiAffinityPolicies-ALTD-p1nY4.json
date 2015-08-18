@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/antiAffinityPolicies/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"My policy\",\"location\":\"ca2\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-antiAffinityPolicies-ALTD-p1nY4.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/antiAffinityPolicies/altd/90426bd978574dceac81b4c430fdd4bd",
+      "Date" : "Mon, 17 Aug 2015 15:48:06 GMT",
+      "Content-Length" : "301"
+    }
+  }
+}
