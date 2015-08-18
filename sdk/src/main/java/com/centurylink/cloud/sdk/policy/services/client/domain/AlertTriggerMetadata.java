@@ -15,36 +15,38 @@
 
 package com.centurylink.cloud.sdk.policy.services.client.domain;
 
-import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
-
 /**
  * @author Aliaksandr Krasitski
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class AntiAffinityPoliciesResponse {
-    @JsonProperty("items")
-    private List<AntiAffinityPolicyMetadata> items;
+public class AlertTriggerMetadata {
+    private String metric;
+    private String duration;
+    private Float threshold;
 
-    @JsonProperty
-    private List<Link> links;
-
-    public List<AntiAffinityPolicyMetadata> getItems() {
-        return items;
+    public AlertTriggerMetadata metric(String metric) {
+        this.metric = metric;
+        return this;
     }
 
-    public void setItems(List<AntiAffinityPolicyMetadata> items) {
-        this.items = items;
+    public String getMetric() {
+        return metric;
     }
 
-    public List<Link> getLinks() {
-        return links;
+    public AlertTriggerMetadata duration(String duration) {
+        this.duration = duration;
+        return this;
     }
 
-    public void setLinks(List<Link> links) {
-        this.links = links;
+    public String getDuration() {
+        return duration;
+    }
+
+    public AlertTriggerMetadata threshold(Float threshold) {
+        this.threshold = threshold;
+        return this;
+    }
+
+    public Float getThreshold() {
+        return threshold;
     }
 }

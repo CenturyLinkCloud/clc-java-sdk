@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/alertPolicies/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"My policy\",\"actions\":[{\"action\":\"email\",\"settings\":{\"recipients\":[\"test@test.com\"]}}],\"triggers\":[{\"metric\":\"memory\",\"duration\":\"00:05:00\",\"threshold\":95.0}]}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-alertPolicies-ALTD-5BtXm.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/alertPolicies/altd/69225c114d7b41e28348e182a0e6d2af",
+      "Date" : "Tue, 18 Aug 2015 12:13:15 GMT",
+      "Content-Length" : "328"
+    }
+  }
+}

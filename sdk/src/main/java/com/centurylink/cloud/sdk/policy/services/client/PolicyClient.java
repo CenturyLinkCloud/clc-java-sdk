@@ -18,11 +18,14 @@ package com.centurylink.cloud.sdk.policy.services.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPoliciesResponse;
+import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyRequest;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyRequest;
+import com.centurylink.cloud.sdk.policy.services.client.domain.PolicyListResponse;
 import com.google.inject.Inject;
 
+import javax.ws.rs.core.GenericType;
 import java.util.List;
 
 import static javax.ws.rs.client.Entity.entity;
@@ -67,12 +70,53 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
         return
             client("/antiAffinityPolicies/{accountAlias}")
                 .request()
-                .get(AntiAffinityPoliciesResponse.class)
+                .get(new GenericType<PolicyListResponse<AntiAffinityPolicyMetadata>>() {})
                 .getItems();
     }
 
     public void deleteAntiAffinityPolicy(String policyId) {
         client("/antiAffinityPolicies/{accountAlias}/{policyId}")
+            .resolveTemplate("policyId", policyId)
+            .request()
+            .delete();
+    }
+
+
+    public AlertPolicyMetadata createAlertPolicy(AlertPolicyRequest policyRequest) {
+        return
+            client("/alertPolicies/{accountAlias}")
+                .request()
+                .post(entity(policyRequest, APPLICATION_JSON_TYPE))
+                .readEntity(AlertPolicyMetadata.class);
+    }
+
+    public AlertPolicyMetadata modifyAlertPolicy(String policyId, AlertPolicyRequest policyRequest) {
+        return
+            client("/alertPolicies/{accountAlias}/{policyId}")
+                .resolveTemplate("policyId", policyId)
+                .request()
+                .put(entity(policyRequest, APPLICATION_JSON_TYPE))
+                .readEntity(AlertPolicyMetadata.class);
+    }
+
+    public AlertPolicyMetadata getAlertPolicy(String policyId) {
+        return
+            client("/alertPolicies/{accountAlias}/{policyId}")
+                .resolveTemplate("policyId", policyId)
+                .request()
+                .get(AlertPolicyMetadata.class);
+    }
+
+    public List<AlertPolicyMetadata> getAlertPolicies() {
+        return
+            client("/alertPolicies/{accountAlias}")
+                .request()
+                .get(new GenericType<PolicyListResponse<AlertPolicyMetadata>>() {})
+                .getItems();
+    }
+
+    public void deleteAlertPolicy(String policyId) {
+        client("/alertPolicies/{accountAlias}/{policyId}")
             .resolveTemplate("policyId", policyId)
             .request()
             .delete();

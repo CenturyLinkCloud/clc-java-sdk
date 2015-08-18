@@ -41,13 +41,11 @@ public class ModifyAntiAffinityPolicyTest extends AbstractPoliciesSdkTest implem
     AntiAffinityPolicy policy;
     AntiAffinityPolicyFilter filter;
 
-    private String policyName = "My policy";
-
-    private String newPolicyName = "New Policy Name";
-
     @Test
     @WireMockFileSource("created")
     public void createPolicy() {
+        String policyName = "My policy";
+
         policy =
             policyService.antiAffinity().create(
                 new AntiAffinityPolicyConfig()
@@ -69,6 +67,8 @@ public class ModifyAntiAffinityPolicyTest extends AbstractPoliciesSdkTest implem
     @Test
     @WireMockFileSource("updated")
     public void testModify() throws Exception {
+        String newPolicyName = "New Policy Name";
+
         policyService.antiAffinity()
             .modify(filter, new AntiAffinityPolicyConfig().name(newPolicyName))
             .waitUntilComplete()

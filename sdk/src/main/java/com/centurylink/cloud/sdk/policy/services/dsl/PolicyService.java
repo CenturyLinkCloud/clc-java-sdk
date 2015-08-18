@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 public class PolicyService {
 
     private final AntiAffinityService antiAffinityService;
+    private final AlertService alertService;
 
     @Inject
     public PolicyService(
@@ -32,12 +33,16 @@ public class PolicyService {
         DataCenterService dataCenterService
     ) {
         this.antiAffinityService = new AntiAffinityService(client, dataCenterService);
+        this.alertService = new AlertService(client);
     }
 
     public AntiAffinityService antiAffinity() {
         return antiAffinityService;
     }
 
+    public AlertService alert() {
+        return alertService;
+    }
 
 
 }
