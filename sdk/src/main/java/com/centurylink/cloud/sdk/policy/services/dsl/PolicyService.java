@@ -36,10 +36,18 @@ public class PolicyService {
         this.alertService = new AlertService(client);
     }
 
+    /**
+     * Gets anti-affinity policies service
+     * @return anti-affinity service
+     */
     public AntiAffinityService antiAffinity() {
         return antiAffinityService;
     }
 
+    /**
+     * Gets alert policies service
+     * @return alert service
+     */
     public AlertService alert() {
         return alertService;
     }

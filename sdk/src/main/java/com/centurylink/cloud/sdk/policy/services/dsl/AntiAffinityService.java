@@ -43,6 +43,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * Service provide operations for query and manipulate anti-affinity policies
+ *
  * @author Aliaksandr Krasitski
  */
 public class AntiAffinityService implements
@@ -56,6 +58,12 @@ public class AntiAffinityService implements
         this.dataCenterService = dataCenterService;
     }
 
+    /**
+     * Create Anti-affinity policy
+     *
+     * @param createConfig policy config
+     * @return OperationFuture wrapper for AntiAffinityPolicy
+     */
     public OperationFuture<AntiAffinityPolicy> create(AntiAffinityPolicyConfig createConfig) {
         AntiAffinityPolicyMetadata policy = client.createAntiAffinityPolicy(
             new AntiAffinityPolicyRequest()
@@ -69,6 +77,13 @@ public class AntiAffinityService implements
         );
     }
 
+    /**
+     * Update Anti-affinity policy
+     *
+     * @param policyRef policy reference
+     * @param modifyConfig update policy config
+     * @return OperationFuture wrapper for AntiAffinityPolicy
+     */
     public OperationFuture<AntiAffinityPolicy> modify(AntiAffinityPolicy policyRef,
         AntiAffinityPolicyConfig modifyConfig) {
 
@@ -84,6 +99,13 @@ public class AntiAffinityService implements
         );
     }
 
+    /**
+     * Update Anti-affinity policies
+     *
+     * @param policyRefs policy references
+     * @param modifyConfig update policy config
+     * @return OperationFuture wrapper for list of AntiAffinityPolicy
+     */
     public OperationFuture<List<AntiAffinityPolicy>> modify(List<AntiAffinityPolicy> policyRefs,
         AntiAffinityPolicyConfig modifyConfig) {
 
@@ -95,12 +117,25 @@ public class AntiAffinityService implements
         );
     }
 
+    /**
+     * Update Anti-affinity policies
+     *
+     * @param filter the search policies criteria
+     * @param modifyConfig update policy config
+     * @return OperationFuture wrapper for list of AntiAffinityPolicy
+     */
     public OperationFuture<List<AntiAffinityPolicy>> modify(AntiAffinityPolicyFilter filter,
         AntiAffinityPolicyConfig modifyConfig) {
 
         return modify(getRefsFromFilter(filter), modifyConfig);
     }
 
+    /**
+     * Remove Anti-affinity policy
+     *
+     * @param policyRef policy reference
+     * @return OperationFuture wrapper for AntiAffinityPolicy
+     */
     public OperationFuture<AntiAffinityPolicy> delete(AntiAffinityPolicy policyRef) {
         client.deleteAntiAffinityPolicy(findByRef(policyRef).getId());
 
@@ -110,6 +145,12 @@ public class AntiAffinityService implements
         );
     }
 
+    /**
+     * Remove Anti-affinity policies
+     *
+     * @param policyRefs policy references
+     * @return OperationFuture wrapper for list of AntiAffinityPolicy
+     */
     public OperationFuture<List<AntiAffinityPolicy>> delete(AntiAffinityPolicy... policyRefs) {
         List<AntiAffinityPolicy> policiesList = Arrays.asList(policyRefs);
 
@@ -123,6 +164,12 @@ public class AntiAffinityService implements
         );
     }
 
+    /**
+     * Remove Anti-affinity policies
+     *
+     * @param filter the search policies criteria
+     * @return OperationFuture wrapper for list of AntiAffinityPolicy
+     */
     public OperationFuture<List<AntiAffinityPolicy>> delete(AntiAffinityPolicyFilter filter) {
         List<AntiAffinityPolicy> policyRefs = getRefsFromFilter(filter);
         return delete(policyRefs.toArray(new AntiAffinityPolicy[policyRefs.size()]));

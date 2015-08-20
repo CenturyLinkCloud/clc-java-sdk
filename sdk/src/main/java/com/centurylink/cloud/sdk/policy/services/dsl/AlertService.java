@@ -50,6 +50,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * Service provide operations for query and manipulate alert policies
+ *
  * @author Aliaksandr Krasitski
  */
 public class AlertService implements
@@ -61,6 +63,12 @@ public class AlertService implements
         this.client = client;
     }
 
+    /**
+     * Create Alert policy
+     *
+     * @param createConfig policy config
+     * @return OperationFuture wrapper for AlertPolicy
+     */
     public OperationFuture<AlertPolicy> create(AlertPolicyConfig createConfig) {
         AlertPolicyMetadata policy = client.createAlertPolicy(makeRequest(createConfig));
 
@@ -105,6 +113,13 @@ public class AlertService implements
         return null;
     }
 
+    /**
+     * Update Alert policy
+     *
+     * @param policyRef policy reference
+     * @param modifyConfig update policy config
+     * @return OperationFuture wrapper for AlertPolicy
+     */
     public OperationFuture<AlertPolicy> modify(AlertPolicy policyRef,
         AlertPolicyConfig modifyConfig) {
 
@@ -135,6 +150,13 @@ public class AlertService implements
         );
     }
 
+    /**
+     * Update Alert policies
+     *
+     * @param policyRefs policy references
+     * @param modifyConfig update policy config
+     * @return OperationFuture wrapper for list of AlertPolicy
+     */
     public OperationFuture<List<AlertPolicy>> modify(List<AlertPolicy> policyRefs,
         AlertPolicyConfig modifyConfig) {
 
@@ -146,12 +168,25 @@ public class AlertService implements
         );
     }
 
+    /**
+     * Update Alert policies
+     *
+     * @param filter the search policies criteria
+     * @param modifyConfig update policy config
+     * @return OperationFuture wrapper for list of AlertPolicy
+     */
     public OperationFuture<List<AlertPolicy>> modify(AlertPolicyFilter filter,
         AlertPolicyConfig modifyConfig) {
 
         return modify(getRefsFromFilter(filter), modifyConfig);
     }
 
+    /**
+     * Remove Alert policy
+     *
+     * @param policyRef policy reference
+     * @return OperationFuture wrapper for AlertPolicy
+     */
     public OperationFuture<AlertPolicy> delete(AlertPolicy policyRef) {
         client.deleteAlertPolicy(findByRef(policyRef).getId());
 
@@ -161,6 +196,12 @@ public class AlertService implements
         );
     }
 
+    /**
+     * Remove Alert policies
+     *
+     * @param policyRefs policy references
+     * @return OperationFuture wrapper for list of AlertPolicy
+     */
     public OperationFuture<List<AlertPolicy>> delete(AlertPolicy... policyRefs) {
         List<AlertPolicy> policiesList = Arrays.asList(policyRefs);
 
@@ -174,6 +215,12 @@ public class AlertService implements
         );
     }
 
+    /**
+     * Remove Alert policies
+     *
+     * @param filter the search policies criteria
+     * @return OperationFuture wrapper for list of AlertPolicy
+     */
     public OperationFuture<List<AlertPolicy>> delete(AlertPolicyFilter filter) {
         List<AlertPolicy> policyRefs = getRefsFromFilter(filter);
         return delete(policyRefs.toArray(new AlertPolicy[policyRefs.size()]));
