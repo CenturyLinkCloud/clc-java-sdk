@@ -57,6 +57,8 @@ public class CreateServerRequest {
 
     private boolean isManagedBackup;
 
+    private List<CustomField> customFields;
+
 
     /**
      * Name of the server to create. Alphanumeric characters and dashes only.
@@ -324,6 +326,15 @@ public class CreateServerRequest {
         }
 
         this.isManagedOS = isManagedOS;
+        return this;
+    }
+
+    public List<CustomField> getCustomFields() {
+        return customFields;
+    }
+
+    public CreateServerRequest customFields(List<CustomField> fields) {
+        this.customFields = fields;
         return this;
     }
 }

@@ -13,29 +13,21 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.base.services.client.domain;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
+package com.centurylink.cloud.sdk.server.services.client.domain.server;
 
 /**
- * @author aliaksandr.krasitski
+ * @author Aliaksandr Krasitski
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class CustomField {
-    private String id;
+public class FieldOption {
+    private String name;
     private String value;
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public CustomField id(String id) {
-        setId(id);
-        return this;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getValue() {
@@ -44,10 +36,5 @@ public class CustomField {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public CustomField value(String value) {
-        setValue(value);
-        return this;
     }
 }

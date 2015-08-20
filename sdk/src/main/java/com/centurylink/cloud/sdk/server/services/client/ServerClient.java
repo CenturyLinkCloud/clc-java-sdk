@@ -31,6 +31,7 @@ import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServer
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateSnapshotRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ServerCredentials;
@@ -300,5 +301,12 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .resolveTemplate("serverId", serverId)
                 .request()
                 .get(ServerCredentials.class);
+    }
+
+    public List<CustomFieldMetadata> getCustomFields() {
+        return
+            client("/accounts/{accountAlias}/customFields")
+                .request()
+                .get(new GenericType<List<CustomFieldMetadata>>() {});
     }
 }

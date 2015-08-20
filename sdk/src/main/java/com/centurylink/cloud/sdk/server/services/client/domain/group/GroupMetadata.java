@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.server.services.client.domain.group;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.server.services.client.domain.ChangeInfo;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.GroupByIdRef;
@@ -77,7 +78,7 @@ public class GroupMetadata {
     @JsonProperty("changeInfo")
     private ChangeInfo changeInfo;
     @JsonProperty("customFields")
-    private List<Object> customFields = new ArrayList<Object>();
+    private List<CustomField> customFields = new ArrayList<>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -302,7 +303,7 @@ public class GroupMetadata {
      * The customFields
      */
     @JsonProperty("customFields")
-    public List<Object> getCustomFields() {
+    public List<CustomField> getCustomFields() {
         return customFields;
     }
 
@@ -312,7 +313,7 @@ public class GroupMetadata {
      * The customFields
      */
     @JsonProperty("customFields")
-    public void setCustomFields(List<Object> customFields) {
+    public void setCustomFields(List<CustomField> customFields) {
         this.customFields = customFields;
     }
 

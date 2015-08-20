@@ -132,7 +132,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
         checkNotNull(groupConfig.getParentGroup(), "ParentGroup of GroupConfig must be not null");
 
         GroupMetadata group = client.createGroup(
-                converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup())
+                converter.createGroupRequest(groupConfig, idByRef(groupConfig.getParentGroup()),
+                    groupConfig.getCustomFields() == null || groupConfig.getCustomFields().size() == 0 ?
+                        null : client.getCustomFields()
                 ));
 
         return new OperationFuture<>(
@@ -318,7 +320,9 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                 groupId,
                 converter.createUpdateGroupRequest(
                     groupConfig,
-                    groupConfig.getParentGroup() != null ? idByRef(groupConfig.getParentGroup()) : null)
+                    groupConfig.getParentGroup() != null ? idByRef(groupConfig.getParentGroup()) : null,
+                    groupConfig.getCustomFields() == null || groupConfig.getCustomFields().size() == 0 ?
+                        null : client.getCustomFields())
             );
     }
 

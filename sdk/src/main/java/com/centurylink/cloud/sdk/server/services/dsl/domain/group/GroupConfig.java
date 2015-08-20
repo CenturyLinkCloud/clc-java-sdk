@@ -15,11 +15,15 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.group;
 
-import com.centurylink.cloud.sdk.base.services.client.domain.CustomField;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Aliaksandr Krasitski
@@ -29,7 +33,7 @@ public class GroupConfig {
     private String name;
     private String description;
     private Group parentGroup;
-    private List<CustomField> customFields;
+    private List<CustomField> customFields = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -75,11 +79,18 @@ public class GroupConfig {
     }
 
     public void setCustomFields(List<CustomField> customFields) {
+        checkNotNull(customFields, "List of custom fields must be not a null");
         this.customFields = customFields;
     }
 
     public GroupConfig customFields(List<CustomField> customFields) {
         setCustomFields(customFields);
+        return this;
+    }
+
+    public GroupConfig customFields(CustomField... customFields) {
+        checkNotNull(customFields, "List of custom fields must be not a null");
+        this.customFields.addAll(Arrays.asList(customFields));
         return this;
     }
 }

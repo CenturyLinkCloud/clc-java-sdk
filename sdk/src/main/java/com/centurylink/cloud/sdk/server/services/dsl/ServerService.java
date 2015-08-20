@@ -88,7 +88,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
     public OperationFuture<ServerMetadata> create(CreateServerConfig command) {
         BaseServerResponse response = client
-            .create(serverConverter.buildCreateServerRequest(command));
+            .create(serverConverter.buildCreateServerRequest(command,
+                command.getCustomFields().isEmpty() ? null : client.getCustomFields()));
 
         ServerMetadata serverInfo = client
             .findServerByUuid(response.findServerUuid());
@@ -112,9 +113,17 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @return OperationFuture wrapper for ServerRef
      */
     public OperationFuture<Server> modify(Server server, ModifyServerConfig modifyServerConfig) {
-        List<ModifyServerRequest> request = serverConverter.buildModifyServerRequest(modifyServerConfig);
+        List<ModifyServerRequest> request = serverConverter.buildModifyServerRequest(modifyServerConfig,
+            modifyServerConfig.getCustomFields().isEmpty() ? null : client.getCustomFields());
 
         Link response = client.modify(idByRef(server), request);
+
+        if(response == null) {
+            return new OperationFuture<>(
+                server,
+                new NoWaitingJobFuture()
+            );
+        }
 
         return new OperationFuture<>(
             server,
@@ -133,14 +142,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         List<JobFuture> futures = serverList.stream()
             .map(
                 server ->
-                    baseServerResponse(
-                        server,
-                        client.modify(
-                            idByRef(server),
-                            serverConverter.buildModifyServerRequest(modifyServerConfig)
-                        )
-                    )
-                    .jobFuture()
+                    modify(server, modifyServerConfig).jobFuture()
             )
             .collect(toList());
 
