@@ -17,11 +17,15 @@ package com.centurylink.cloud.sdk.base.services.dsl;
 
 import com.centurylink.cloud.sdk.base.services.client.DataCentersClient;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
+import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenterByIdRef;
+import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
 import com.centurylink.cloud.sdk.core.services.QueryService;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.networks.refs.IdNetworkRef;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.networks.refs.NetworkRef;
 import com.google.inject.Inject;
 
 import java.util.List;
@@ -31,11 +35,11 @@ import java.util.stream.Stream;
  * @author ilya.drabenia
  */
 public class DataCenterService implements QueryService<DataCenter, DataCenterFilter, DataCenterMetadata> {
-    private final DataCentersClient serverClient;
+    private final DataCentersClient client;
 
     @Inject
-    public DataCenterService(DataCentersClient serverClient) {
-        this.serverClient = serverClient;
+    public DataCenterService(DataCentersClient client) {
+        this.client = client;
     }
 
     /**
@@ -47,11 +51,11 @@ public class DataCenterService implements QueryService<DataCenter, DataCenterFil
     }
 
     public List<DataCenterMetadata> findAll() {
-        return serverClient.findAllDataCenters();
+        return client.findAllDataCenters();
     }
 
     public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(DataCenter dataCenter) {
-        return serverClient.getDeploymentCapabilities(idByRef(dataCenter));
+        return client.getDeploymentCapabilities(idByRef(dataCenter));
     }
 
     String idByRef(DataCenter ref) {
@@ -60,5 +64,26 @@ public class DataCenterService implements QueryService<DataCenter, DataCenterFil
         } else {
             return findByRef(ref).getId();
         }
+    }
+
+    public NetworkMetadata findNetworkByRef(NetworkRef networkRef) {
+        if (networkRef.is(IdNetworkRef.class)) {
+            return
+                getDeploymentCapabilities(networkRef.getDataCenter())
+                    .findNetworkById(networkRef.as(IdNetworkRef.class).getId());
+        } else {
+            throw new ReferenceNotSupportedException(networkRef.getClass());
+        }
+    }
+
+    public List<NetworkMetadata> findNetworkByDataCenter(DataCenter dataCenter) {
+        return
+            client
+                .getDeploymentCapabilities(dataCenterId(dataCenter))
+                .getDeployableNetworks();
+    }
+
+    private String dataCenterId(DataCenter dataCenter) {
+        return findByRef(dataCenter).getId();
     }
 }

@@ -32,6 +32,7 @@ import java.util.Map;
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "ipAddresses",
+        "secondaryIPAddresses",
         "alertPolicies",
         "cpu",
         "diskCount",
@@ -49,6 +50,8 @@ public class Details {
 
     @JsonProperty("ipAddresses")
     private List<IpAddress> ipAddresses = new ArrayList<IpAddress>();
+    @JsonProperty("secondaryIPAddresses")
+    private List<IpAddress> secondaryIPAddresses = new ArrayList<>();
     @JsonProperty("alertPolicies")
     private List<Object> alertPolicies = new ArrayList<Object>();
     @JsonProperty("cpu")
@@ -94,6 +97,26 @@ public class Details {
     @JsonProperty("ipAddresses")
     public void setIpAddresses(List<IpAddress> ipAddresses) {
         this.ipAddresses = ipAddresses;
+    }
+
+    /**
+     *
+     * @return
+     * The secondaryIPAddresses
+     */
+    @JsonProperty("secondaryIPAddresses")
+    public List<IpAddress> getSecondaryIPAddresses() {
+        return secondaryIPAddresses;
+    }
+
+    /**
+     *
+     * @param secondaryIPAddresses
+     * The secondaryIPAddresses
+     */
+    @JsonProperty("secondaryIPAddresses")
+    public void setSecondaryIPAddresses(List<IpAddress> secondaryIPAddresses) {
+        this.secondaryIPAddresses = secondaryIPAddresses;
     }
 
     /**

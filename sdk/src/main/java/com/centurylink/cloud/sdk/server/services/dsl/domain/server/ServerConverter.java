@@ -18,18 +18,15 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.network.services.dsl.NetworkService;
-import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.DiskRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServerRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.PasswordProvider;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.PasswordProvider;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConfig;
 import com.google.inject.Inject;
 
 import java.util.ArrayList;
@@ -44,15 +41,13 @@ import static java.util.stream.Collectors.toList;
 public class ServerConverter {
     private final GroupService groupService;
     private final TemplateService templateService;
-    private final NetworkService networkService;
     private final DataCenterService dataCenterService;
 
     @Inject
     public ServerConverter(GroupService groupService, TemplateService templateService,
-                           NetworkService networkService, DataCenterService dataCenterService) {
+                           DataCenterService dataCenterService) {
         this.groupService = groupService;
         this.templateService = templateService;
-        this.networkService = networkService;
         this.dataCenterService = dataCenterService;
     }
 
@@ -101,8 +96,8 @@ public class ServerConverter {
 
                 .networkId(
                     (newServer.getNetwork().getNetwork() == null) ? null :
-                        networkService
-                            .findByRef(newServer.getNetwork().getNetwork())
+                        dataCenterService
+                            .findNetworkByRef(newServer.getNetwork().getNetwork())
                             .getNetworkId()
                 )
 

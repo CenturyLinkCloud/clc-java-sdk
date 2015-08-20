@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl;
 
+import com.centurylink.cloud.sdk.base.services.client.ExperimentalQueueClient;
 import com.centurylink.cloud.sdk.base.services.client.QueueClient;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.JobInfo;
@@ -24,8 +25,12 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWai
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
 import com.centurylink.cloud.sdk.core.services.QueryService;
+import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
+import com.centurylink.cloud.sdk.server.services.client.domain.network.AddNetworkRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateSnapshotRequest;
@@ -34,19 +39,22 @@ import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServ
 import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ServerCredentials;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ModifyServerConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
-import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.ModifyPublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.PublicIpConverter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.network.AddNetworkConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.network.IPAddressDetails;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.network.refs.Network;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.network.refs.NetworkByIdRef;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.SshClient;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.SshjClient;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ModifyServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.future.CreateServerJobFuture;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.ServerByIdRef;
 import com.google.inject.Inject;
 
@@ -74,16 +82,19 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     private final GroupService groupService;
     private final ServerClient client;
     private final QueueClient queueClient;
+    private final ExperimentalQueueClient experimentalQueueClient;
     private final PublicIpConverter publicIpConverter;
 
     @Inject
     public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient,
-                         GroupService groupService, PublicIpConverter publicIpConverter) {
+                         GroupService groupService, PublicIpConverter publicIpConverter,
+                         ExperimentalQueueClient experimentalQueueClient) {
         this.serverConverter = serverConverter;
         this.client = client;
         this.queueClient = queueClient;
         this.groupService = groupService;
         this.publicIpConverter = publicIpConverter;
+        this.experimentalQueueClient = experimentalQueueClient;
     }
 
     public OperationFuture<ServerMetadata> create(CreateServerConfig command) {
@@ -645,15 +656,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<Link> restore(Server server, Group group) {
         return baseServerResponse(
-                restore(server, groupService.findByRef(group).getId())
+            restore(server, groupService.findByRef(group).getId())
         );
     }
 
     private Link restore(Server server, String groupId) {
         return client.restore(
-                idByRef(server),
-                new RestoreServerRequest()
-                        .targetGroupId(groupId)
+            idByRef(server),
+            new RestoreServerRequest()
+                .targetGroupId(groupId)
         );
     }
 
@@ -840,8 +851,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         checkNotNull(publicIp, "public ip must not be null");
 
         Link response = client.modifyPublicIp(idByRef(server),
-                publicIp,
-                publicIpConverter.createPublicIpRequest(config)
+            publicIp,
+            publicIpConverter.createPublicIpRequest(config)
         );
 
         return new OperationFuture<>(
@@ -1063,10 +1074,10 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return findPublicIp(server)
             .stream()
             .filter(ip -> ip
-                .getPorts()
-                .stream()
-                .filter(p -> p.getPort().equals(SSH))
-                .count() > 0
+                    .getPorts()
+                    .stream()
+                    .filter(p -> p.getPort().equals(SSH))
+                    .count() > 0
             )
             .map(PublicIpMetadata::getPublicIPAddress)
             .filter(notNull())
@@ -1075,5 +1086,188 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
     public SshClient execSsh(Server... onServers) {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Add secondary network
+     *
+     * @param server server reference
+     * @param config secondary network config
+     * @return OperationFuture wrapper for Server
+     */
+    public OperationFuture<Server> addSecondaryNetwork(Server server, AddNetworkConfig config) {
+        ServerMetadata serverMetadata = findByRef(server);
+
+        SecondaryNetworkLink link = client.addSecondaryNetwork(
+            idByRef(server),
+            buildSecondaryNetworkRequest(config, serverMetadata.getLocationId())
+        );
+
+        return new OperationFuture<>(
+            server,
+            link.getOperationId(),
+            experimentalQueueClient
+        );
+    }
+
+    /**
+     * Add secondary network
+     *
+     * @param servers server references
+     * @param config secondary network config
+     * @return OperationFuture wrapper for list of Server
+     */
+    public OperationFuture<List<Server>> addSecondaryNetwork(List<Server> servers, AddNetworkConfig config) {
+        List<JobFuture> futures = servers.stream()
+            .map(server -> addSecondaryNetwork(server, config).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            servers,
+            new ParallelJobsFuture(futures)
+        );
+    }
+
+    /**
+     * Add secondary network
+     *
+     * @param filter the server search criteria
+     * @param config secondary network config
+     * @return OperationFuture wrapper for list of Server
+     */
+    public OperationFuture<List<Server>> addSecondaryNetwork(ServerFilter filter, AddNetworkConfig config) {
+        return addSecondaryNetwork(Arrays.asList(getRefsFromFilter(filter)), config);
+    }
+
+
+
+    /**
+     * Remove secondary network
+     *
+     * @param server server reference
+     * @param network secondary network reference
+     * @return OperationFuture wrapper for Server
+     */
+    public OperationFuture<Server> removeSecondaryNetwork(Server server, Network network) {
+        ServerMetadata serverMetadata = findByRef(server);
+
+        SecondaryNetworkLink link = client.removeSecondaryNetwork(
+            idByRef(server),
+            networkIdByRef(network, serverMetadata.getLocationId())
+        );
+
+        return new OperationFuture<>(
+            server,
+            link.getOperationId(),
+            experimentalQueueClient
+        );
+    }
+
+    /**
+     * Remove secondary network
+     *
+     * @param servers server references
+     * @param network secondary network reference
+     * @return OperationFuture wrapper for list of Server
+     */
+    public OperationFuture<List<Server>> removeSecondaryNetwork(List<Server> servers, Network network) {
+        List<JobFuture> futures = servers.stream()
+            .map(server -> removeSecondaryNetwork(server, network).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            servers,
+            new ParallelJobsFuture(futures)
+        );
+    }
+
+    /**
+     * Remove secondary network
+     *
+     * @param filter the server search criteria
+     * @param network secondary network reference
+     * @return OperationFuture wrapper for list of Server
+     */
+    public OperationFuture<List<Server>> removeSecondaryNetwork(ServerFilter filter, Network network) {
+        return removeSecondaryNetwork(Arrays.asList(getRefsFromFilter(filter)), network);
+    }
+
+    /**
+     * Remove all secondary networks
+     *
+     * @param server server reference
+     * @return OperationFuture wrapper for Server
+     */
+    public OperationFuture<Server> removeSecondaryNetworks(Server server) {
+        ServerMetadata serverMetadata = findByRef(server);
+
+        List<NetworkMetadata> networks = client.getNetworks(serverMetadata.getLocationId());
+
+        List<JobFuture> jobFutures = networks.stream()
+            .map(network -> client.getNetwork(
+                network.getId(),
+                serverMetadata.getLocationId(),
+                IPAddressDetails.CLAIMED.name()
+            ))
+            .filter(metadata -> {
+                List<String> serversInNetwork = metadata.getIpAddresses().stream()
+                    .filter(ip -> !ip.getPrimary())
+                    .map(com.centurylink.cloud.sdk.server.services.client.domain.network.IpAddress::getServer)
+                    .collect(toList());
+
+                return serversInNetwork.contains(serverMetadata.getName());
+            })
+            .map(metadata -> removeSecondaryNetwork(server, Network.refById(metadata.getId())).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            server,
+            new ParallelJobsFuture(jobFutures)
+        );
+    }
+
+    /**
+     * Remove all secondary networks
+     *
+     * @param servers server references
+     * @return OperationFuture wrapper for list of Server
+     */
+    public OperationFuture<List<Server>> removeSecondaryNetworks(List<Server> servers) {
+        List<JobFuture> futures = servers.stream()
+            .map(server -> removeSecondaryNetworks(server).jobFuture())
+            .collect(toList());
+
+        return new OperationFuture<>(
+            servers,
+            new ParallelJobsFuture(futures)
+        );
+    }
+
+    /**
+     * Remove secondary network
+     *
+     * @param filter the server search criteria
+     * @return OperationFuture wrapper for list of Server
+     */
+    public OperationFuture<List<Server>> removeSecondaryNetworks(ServerFilter filter) {
+        return removeSecondaryNetworks(Arrays.asList(getRefsFromFilter(filter)));
+    }
+
+    private String networkIdByRef(Network networkRef, String dataCenterId) {
+        if (networkRef instanceof NetworkByIdRef) {
+            return ((NetworkByIdRef)networkRef).getId();
+        }
+
+        return client.getNetworks(dataCenterId).stream()
+            .filter(networkRef.asFilter().getPredicate())
+            .findFirst()
+            .map(NetworkMetadata::getId)
+            .orElse(null);
+    }
+
+    private AddNetworkRequest buildSecondaryNetworkRequest(AddNetworkConfig config, String locationId) {
+        return new AddNetworkRequest()
+            .ipAddress(config.getIpAddress())
+            .networkId(networkIdByRef(config.getNetwork(), locationId));
     }
 }

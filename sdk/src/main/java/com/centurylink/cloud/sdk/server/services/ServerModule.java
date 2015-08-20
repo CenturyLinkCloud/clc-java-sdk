@@ -16,7 +16,6 @@
 package com.centurylink.cloud.sdk.server.services;
 
 import com.centurylink.cloud.sdk.base.services.BaseModule;
-import com.centurylink.cloud.sdk.network.services.NetworkModule;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
@@ -42,7 +41,6 @@ public class ServerModule extends AbstractModule {
         bind(InvoiceService.class);
 
         install(new BaseModule());
-        install(new NetworkModule());
     }
 
 }

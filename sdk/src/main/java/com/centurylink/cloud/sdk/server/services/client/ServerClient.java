@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.server.services.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
+import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.ClientBillingStats;
@@ -27,6 +28,8 @@ import com.centurylink.cloud.sdk.server.services.client.domain.group.ServerMonit
 import com.centurylink.cloud.sdk.server.services.client.domain.group.UpdateGroupRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.network.AddNetworkRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
@@ -247,7 +250,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
         return
             target
             .request()
-            .get(new GenericType<List<ServerMonitoringStatistics>>(){});
+            .get(new GenericType<List<ServerMonitoringStatistics>>() {
+            });
     }
 
     private BaseServerListResponse sendPowerOperationRequest(String operationName, List<String> serverIdList) {
@@ -308,7 +312,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
         return
             client("/accounts/{accountAlias}/customFields")
                 .request()
-                .get(new GenericType<List<CustomFieldMetadata>>() {});
+                .get(new GenericType<List<CustomFieldMetadata>>() {
+                });
     }
 
     public InvoiceData getInvoice(int year, int month, String pricingAccountAlias) {
@@ -319,5 +324,42 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .queryParam("pricingAccountAlias", pricingAccountAlias)
                 .request()
                 .get(InvoiceData.class);
+    }
+
+    public List<NetworkMetadata> getNetworks(String dataCenter) {
+        return
+            experimentalClient("/networks/{accountAlias}/{dataCenter}")
+                .resolveTemplate("dataCenter", dataCenter.toLowerCase())
+                .request()
+                .get(new GenericType<List<NetworkMetadata>>() {});
+    }
+
+    public NetworkMetadata getNetwork(String networkId, String dataCenter, String ipAddressesDetails) {
+        return
+            experimentalClient("/networks/{accountAlias}/{dataCenter}/{networkId}")
+                .resolveTemplate("dataCenter", dataCenter.toLowerCase())
+                .resolveTemplate("networkId", networkId)
+                .queryParam("ipAddresses", ipAddressesDetails.toLowerCase())
+                .request()
+                .get(NetworkMetadata.class);
+    }
+
+    public SecondaryNetworkLink addSecondaryNetwork(String server, AddNetworkRequest networkRequest) {
+        return
+            client("/servers/{accountAlias}/{server}/networks")
+                .resolveTemplate("server", server)
+                .request()
+                .post(entity(networkRequest, APPLICATION_JSON_TYPE))
+                .readEntity(SecondaryNetworkLink.class);
+    }
+
+    public SecondaryNetworkLink removeSecondaryNetwork(String server, String network) {
+        return
+            client("/servers/{accountAlias}/{server}/networks/{network}")
+                .resolveTemplate("server", server)
+                .resolveTemplate("network", network)
+                .request()
+                .delete()
+                .readEntity(SecondaryNetworkLink.class);
     }
 }
