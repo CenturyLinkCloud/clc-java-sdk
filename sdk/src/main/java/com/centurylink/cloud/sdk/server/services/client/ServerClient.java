@@ -36,6 +36,7 @@ import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServ
 import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ServerCredentials;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.invoice.InvoiceData;
 import com.google.inject.Inject;
 import org.apache.http.HttpStatus;
 
@@ -308,5 +309,15 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
             client("/accounts/{accountAlias}/customFields")
                 .request()
                 .get(new GenericType<List<CustomFieldMetadata>>() {});
+    }
+
+    public InvoiceData getInvoice(int year, int month, String pricingAccountAlias) {
+        return
+            client("/invoice/{accountAlias}/{year}/{month}")
+                .resolveTemplate("year", year)
+                .resolveTemplate("month", month)
+                .queryParam("pricingAccountAlias", pricingAccountAlias)
+                .request()
+                .get(InvoiceData.class);
     }
 }
