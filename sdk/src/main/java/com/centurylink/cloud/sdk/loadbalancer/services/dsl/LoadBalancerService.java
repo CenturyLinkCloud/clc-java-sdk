@@ -115,6 +115,34 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         );
     }
 
+    public OperationFuture<List<LoadBalancer>> update(
+            List<LoadBalancer> loadBalancerList,
+            LoadBalancerConfig config
+    ) {
+        loadBalancerList.forEach(loadBalancer -> update(loadBalancer, config));
+
+        return new OperationFuture<>(
+                loadBalancerList,
+                new NoWaitingJobFuture()
+        );
+    }
+
+    public OperationFuture<List<LoadBalancer>> update(
+            LoadBalancerFilter loadBalancerFilter,
+            LoadBalancerConfig config
+    ) {
+        checkNotNull(loadBalancerFilter, "Load balancer filter must be not null");
+
+        List<LoadBalancer> loadBalancerList = findLazy(loadBalancerFilter)
+                .map(metadata -> LoadBalancer.refById(
+                    metadata.getId(),
+                    DataCenter.refById(metadata.getDataCenterId())
+                ))
+                .collect(toList());
+
+        return update(loadBalancerList, config);
+    }
+
     public OperationFuture<LoadBalancer> delete(LoadBalancer loadBalancer) {
         LoadBalancerMetadata loadBalancerMetadata = findByRef(loadBalancer);
 
