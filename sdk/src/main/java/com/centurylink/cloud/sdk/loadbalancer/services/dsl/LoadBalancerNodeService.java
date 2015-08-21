@@ -15,8 +15,6 @@
 
 package com.centurylink.cloud.sdk.loadbalancer.services.dsl;
 
-import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
-import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.core.services.QueryService;
@@ -24,7 +22,6 @@ import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerNodeCl
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerNodeMetadata;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerPoolMetadata;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerNodeFilter;
-import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancer;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.node.LoadBalancerNode;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.LoadBalancerPool;
 import com.google.inject.Inject;
@@ -37,21 +34,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class LoadBalancerNodeService implements QueryService<LoadBalancerNode, LoadBalancerNodeFilter, LoadBalancerNodeMetadata> {
 
     private final LoadBalancerNodeClient loadBalancerNodeClient;
-    private final DataCenterService dataCenterService;
-    private final LoadBalancerService loadBalancerService;
     private final LoadBalancerPoolService loadBalancerPoolService;
 
     @Inject
     public LoadBalancerNodeService(
             LoadBalancerNodeClient loadBalancerNodeClient,
-            LoadBalancerService loadBalancerService,
-            LoadBalancerPoolService loadBalancerPoolService,
-            DataCenterService dataCenterService
+            LoadBalancerPoolService loadBalancerPoolService
     ) {
         this.loadBalancerNodeClient = loadBalancerNodeClient;
-        this.loadBalancerService = loadBalancerService;
         this.loadBalancerPoolService = loadBalancerPoolService;
-        this.dataCenterService = dataCenterService;
     }
 
     /**
@@ -82,12 +73,14 @@ public class LoadBalancerNodeService implements QueryService<LoadBalancerNode, L
             LoadBalancerPool loadBalancerPool,
             List<LoadBalancerNodeMetadata> nodesList
     ) {
-        LoadBalancer loadBalancer = loadBalancerPool.getLoadBalancer();
+        LoadBalancerPoolMetadata loadBalancerPoolMetadata = loadBalancerPoolService.findByRef(
+                loadBalancerPool
+        );
 
         loadBalancerNodeClient.update(
-                fetchDataCenterId(loadBalancer.getDataCenter()),
-                fetchLoadBalancerId(loadBalancer),
-                fetchLoadBalancerPoolId(loadBalancerPool),
+                loadBalancerPoolMetadata.getDataCenterId(),
+                loadBalancerPoolMetadata.getLoadBalancerId(),
+                loadBalancerPoolMetadata.getId(),
                 nodesList
         );
 
@@ -95,18 +88,6 @@ public class LoadBalancerNodeService implements QueryService<LoadBalancerNode, L
                 loadBalancerPool,
                 new NoWaitingJobFuture()
         );
-    }
-
-    private String fetchDataCenterId(DataCenter dataCenter) {
-        return dataCenterService.findByRef(dataCenter).getId();
-    }
-
-    private String fetchLoadBalancerId(LoadBalancer loadBalancer) {
-        return loadBalancerService.findByRef(loadBalancer).getId();
-    }
-
-    private String fetchLoadBalancerPoolId(LoadBalancerPool loadBalancerPool) {
-        return loadBalancerPoolService.findByRef(loadBalancerPool).getId();
     }
 
 }

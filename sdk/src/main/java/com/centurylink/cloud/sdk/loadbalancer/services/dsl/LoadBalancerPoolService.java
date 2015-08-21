@@ -15,7 +15,6 @@
 
 package com.centurylink.cloud.sdk.loadbalancer.services.dsl;
 
-import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.JobFuture;
@@ -45,18 +44,15 @@ import static java.util.stream.Collectors.toList;
 public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, LoadBalancerPoolFilter, LoadBalancerPoolMetadata> {
 
     private final LoadBalancerPoolClient loadBalancerPoolClient;
-    private final DataCenterService dataCenterService;
     private final LoadBalancerService loadBalancerService;
 
     @Inject
     public LoadBalancerPoolService(
             LoadBalancerPoolClient loadBalancerPoolClient,
-            LoadBalancerService loadBalancerService,
-            DataCenterService dataCenterService
+            LoadBalancerService loadBalancerService
     ) {
         this.loadBalancerPoolClient = loadBalancerPoolClient;
         this.loadBalancerService = loadBalancerService;
-        this.dataCenterService = dataCenterService;
     }
 
     /**
@@ -86,10 +82,11 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
 
     public OperationFuture<LoadBalancerPool> create(LoadBalancerPoolConfig config) {
         LoadBalancer loadBalancer = config.getLoadBalancer();
+        LoadBalancerMetadata loadBalancerMetadata = loadBalancerService.findByRef(loadBalancer);
 
         LoadBalancerPoolMetadata metadata = loadBalancerPoolClient.create(
-                fetchDataCenterId(loadBalancer.getDataCenter()),
-                fetchLoadBalancerId(loadBalancer),
+                loadBalancerMetadata.getDataCenterId(),
+                loadBalancerMetadata.getId(),
                 new LoadBalancerPoolRequest()
                         .port(config.getPort())
                         .method(config.getMethod())
@@ -103,12 +100,12 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
     }
 
     public OperationFuture<LoadBalancerPool> update(LoadBalancerPool loadBalancerPool, LoadBalancerPoolConfig config) {
-        LoadBalancer loadBalancer = config.getLoadBalancer();
+        LoadBalancerPoolMetadata loadBalancerPoolMetadata = findByRef(loadBalancerPool);
 
         loadBalancerPoolClient.update(
-                fetchDataCenterId(loadBalancer.getDataCenter()),
-                fetchLoadBalancerId(loadBalancer),
-                findByRef(loadBalancerPool).getId(),
+                loadBalancerPoolMetadata.getDataCenterId(),
+                loadBalancerPoolMetadata.getLoadBalancerId(),
+                loadBalancerPoolMetadata.getId(),
                 new LoadBalancerPoolRequest()
                         .method(config.getMethod())
                         .persistence(config.getPersistence())
@@ -121,12 +118,12 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
     }
 
     public OperationFuture<LoadBalancerPool> delete(LoadBalancerPool loadBalancerPool) {
-        LoadBalancer loadBalancer = loadBalancerPool.getLoadBalancer();
+        LoadBalancerPoolMetadata loadBalancerPoolMetadata = findByRef(loadBalancerPool);
 
         loadBalancerPoolClient.delete(
-                fetchDataCenterId(loadBalancer.getDataCenter()),
-                fetchLoadBalancerId(loadBalancer),
-                findByRef(loadBalancerPool).getId()
+                loadBalancerPoolMetadata.getDataCenterId(),
+                loadBalancerPoolMetadata.getLoadBalancerId(),
+                loadBalancerPoolMetadata.getId()
         );
 
         return new OperationFuture<>(
@@ -163,14 +160,6 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
                 loadBalancerPoolList,
                 new ParallelJobsFuture(jobs)
         );
-    }
-
-    private String fetchDataCenterId(DataCenter dataCenter) {
-        return dataCenterService.findByRef(dataCenter).getId();
-    }
-
-    private String fetchLoadBalancerId(LoadBalancer loadBalancer) {
-        return loadBalancerService.findByRef(loadBalancer).getId();
     }
 
 }

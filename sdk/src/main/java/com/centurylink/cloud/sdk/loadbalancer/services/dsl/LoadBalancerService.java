@@ -78,7 +78,7 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
     }
 
     public OperationFuture<LoadBalancer> create(LoadBalancerConfig config) {
-        String dataCenterId = fetchDataCenterId(config.getDataCenter());
+        String dataCenterId = dataCenterService.findByRef(config.getDataCenter()).getId();
 
         LoadBalancerMetadata loadBalancer = loadBalancerClient.create(
                 dataCenterId,
@@ -98,9 +98,11 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
     }
 
     public OperationFuture<LoadBalancer> update(LoadBalancer loadBalancer, LoadBalancerConfig config) {
+        LoadBalancerMetadata loadBalancerMetadata = findByRef(loadBalancer);
+
         loadBalancerClient.update(
-                fetchDataCenterId(loadBalancer.getDataCenter()),
-                findByRef(loadBalancer).getId(),
+                loadBalancerMetadata.getDataCenterId(),
+                loadBalancerMetadata.getId(),
                 new LoadBalancerRequest()
                         .name(config.getName())
                         .description(config.getDescription())
@@ -114,9 +116,11 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
     }
 
     public OperationFuture<LoadBalancer> delete(LoadBalancer loadBalancer) {
+        LoadBalancerMetadata loadBalancerMetadata = findByRef(loadBalancer);
+
         loadBalancerClient.delete(
-                fetchDataCenterId(loadBalancer.getDataCenter()),
-                findByRef(loadBalancer).getId()
+                loadBalancerMetadata.getDataCenterId(),
+                loadBalancerMetadata.getId()
         );
 
         return new OperationFuture<>(
@@ -151,9 +155,4 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
                 new ParallelJobsFuture(jobs)
         );
     }
-
-    private String fetchDataCenterId(DataCenter dataCenter) {
-        return dataCenterService.findByRef(dataCenter).getId();
-    }
-
 }
