@@ -77,6 +77,12 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
                 );
     }
 
+    /**
+     * Create load balancer
+     *
+     * @param config load balancer config
+     * @return OperationFuture wrapper for load balancer
+     */
     public OperationFuture<LoadBalancer> create(LoadBalancerConfig config) {
         String dataCenterId = dataCenterService.findByRef(config.getDataCenter()).getId();
 
@@ -97,6 +103,13 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         );
     }
 
+    /**
+     * Update load balancer
+     *
+     * @param loadBalancer load balancer
+     * @param config load balancer config
+     * @return OperationFuture wrapper for load balancer
+     */
     public OperationFuture<LoadBalancer> update(LoadBalancer loadBalancer, LoadBalancerConfig config) {
         LoadBalancerMetadata loadBalancerMetadata = findByRef(loadBalancer);
 
@@ -115,6 +128,13 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         );
     }
 
+    /**
+     * Update load balancer list
+     *
+     * @param loadBalancerList load balancer list
+     * @param config load balancer config
+     * @return OperationFuture wrapper for load balancer list
+     */
     public OperationFuture<List<LoadBalancer>> update(
             List<LoadBalancer> loadBalancerList,
             LoadBalancerConfig config
@@ -127,6 +147,13 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         );
     }
 
+    /**
+     * Update filtered load balancers
+     *
+     * @param loadBalancerFilter load balancer filter
+     * @param config load balancer config
+     * @return OperationFuture wrapper for load balancer list
+     */
     public OperationFuture<List<LoadBalancer>> update(
             LoadBalancerFilter loadBalancerFilter,
             LoadBalancerConfig config
@@ -143,6 +170,12 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         return update(loadBalancerList, config);
     }
 
+    /**
+     * Delete load balancer
+     *
+     * @param loadBalancer load balancer
+     * @return OperationFuture wrapper for load balancer
+     */
     public OperationFuture<LoadBalancer> delete(LoadBalancer loadBalancer) {
         LoadBalancerMetadata loadBalancerMetadata = findByRef(loadBalancer);
 
@@ -157,10 +190,22 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         );
     }
 
+    /**
+     * Delete array of load balancers
+     *
+     * @param loadBalancer array of load balancer
+     * @return OperationFuture wrapper for load balancer list
+     */
     public OperationFuture<List<LoadBalancer>> delete(LoadBalancer... loadBalancer) {
         return delete(Arrays.asList(loadBalancer));
     }
 
+    /**
+     * Delete filtered load balancers
+     *
+     * @param filter load balancer filter
+     * @return OperationFuture wrapper for load balancer list
+     */
     public OperationFuture<List<LoadBalancer>> delete(LoadBalancerFilter filter) {
         List<LoadBalancer> loadBalancerList = findLazy(filter)
                 .map(metadata -> LoadBalancer.refById(
@@ -172,6 +217,12 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         return delete(loadBalancerList);
     }
 
+    /**
+     * Delete load balancer list
+     *
+     * @param loadBalancerList load balancer list
+     * @return OperationFuture wrapper for load balancer list
+     */
     public OperationFuture<List<LoadBalancer>> delete(List<LoadBalancer> loadBalancerList) {
         List<JobFuture> jobs = loadBalancerList
                 .stream()

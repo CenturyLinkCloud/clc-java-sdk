@@ -59,16 +59,23 @@ public class LoadBalancerNodeService implements QueryService<LoadBalancerNode, L
         return
             loadBalancerPools
                 .flatMap(loadBalancerPoolMetadata -> loadBalancerNodeClient
-                    .getLoadBalancerNodes(
-                            loadBalancerPoolMetadata.getDataCenterId(),
-                            loadBalancerPoolMetadata.getLoadBalancerId(),
-                            loadBalancerPoolMetadata.getId()
-                    )
-                    .stream()
+                                .getLoadBalancerNodes(
+                                        loadBalancerPoolMetadata.getDataCenterId(),
+                                        loadBalancerPoolMetadata.getLoadBalancerId(),
+                                        loadBalancerPoolMetadata.getId()
+                                )
+                                .stream()
                 )
                 .filter(filter.getPredicate());
     }
 
+    /**
+     * Update load balancer node list of the load balancer pool
+     *
+     * @param loadBalancerPool load balancer pool
+     * @param nodesList node balancer node list
+     * @return OperationFuture wrapper for load balancer pool
+     */
     public OperationFuture<LoadBalancerPool> update(
             LoadBalancerPool loadBalancerPool,
             List<LoadBalancerNodeMetadata> nodesList

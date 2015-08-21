@@ -80,6 +80,12 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
                 );
     }
 
+    /**
+     * Create load balancer pool
+     *
+     * @param config load balancer pool config
+     * @return OperationFuture wrapper for load balancer pool
+     */
     public OperationFuture<LoadBalancerPool> create(LoadBalancerPoolConfig config) {
         LoadBalancer loadBalancer = config.getLoadBalancer();
         LoadBalancerMetadata loadBalancerMetadata = loadBalancerService.findByRef(loadBalancer);
@@ -99,6 +105,13 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         );
     }
 
+    /**
+     * Update load balancer pool
+     *
+     * @param loadBalancerPool load balancer pool
+     * @param config load balancer pool config
+     * @return OperationFuture wrapper for load balancer pool
+     */
     public OperationFuture<LoadBalancerPool> update(LoadBalancerPool loadBalancerPool, LoadBalancerPoolConfig config) {
         LoadBalancerPoolMetadata loadBalancerPoolMetadata = findByRef(loadBalancerPool);
 
@@ -117,6 +130,13 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         );
     }
 
+    /**
+     * Update load balancer pool list
+     *
+     * @param loadBalancerPoolList load balancer pool list
+     * @param config load balancer pool config
+     * @return OperationFuture wrapper for load balancer pool list
+     */
     public OperationFuture<List<LoadBalancerPool>> update(
             List<LoadBalancerPool> loadBalancerPoolList,
             LoadBalancerPoolConfig config
@@ -129,6 +149,13 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         );
     }
 
+    /**
+     * Update filtered balancer pools
+     *
+     * @param loadBalancerPoolFilter load balancer pool filter
+     * @param config load balancer pool config
+     * @return OperationFuture wrapper for load balancer pool list
+     */
     public OperationFuture<List<LoadBalancerPool>> update(
             LoadBalancerPoolFilter loadBalancerPoolFilter,
             LoadBalancerPoolConfig config
@@ -148,6 +175,12 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         return update(loadBalancerPoolList, config);
     }
 
+    /**
+     * Delete load balancer pool
+     *
+     * @param loadBalancerPool load balancer pool
+     * @return OperationFuture wrapper for load balancer pool
+     */
     public OperationFuture<LoadBalancerPool> delete(LoadBalancerPool loadBalancerPool) {
         LoadBalancerPoolMetadata loadBalancerPoolMetadata = findByRef(loadBalancerPool);
 
@@ -163,10 +196,21 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         );
     }
 
+    /**
+     * Delete array of load balancer pool
+     *
+     * @param loadBalancerPool array of load balancer pool
+     * @return OperationFuture wrapper for load balancer pool list
+     */
     public OperationFuture<List<LoadBalancerPool>> delete(LoadBalancerPool... loadBalancerPool) {
         return delete(Arrays.asList(loadBalancerPool));
     }
 
+    /**
+     * Delete filtered load balancer pools
+     * @param filter load balancer pool filter
+     * @return OperationFuture wrapper for load balancer pool list
+     */
     public OperationFuture<List<LoadBalancerPool>> delete(LoadBalancerPoolFilter filter) {
         List<LoadBalancerPool> loadBalancerPoolList = findLazy(filter)
                 .map(metadata -> LoadBalancerPool.refById(
@@ -181,6 +225,12 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         return delete(loadBalancerPoolList);
     }
 
+    /**
+     * Delete load balancer pool list
+     *
+     * @param loadBalancerPoolList load balancer pool list
+     * @return OperationFuture wrapper for load balancer pool list
+     */
     public OperationFuture<List<LoadBalancerPool>> delete(List<LoadBalancerPool> loadBalancerPoolList) {
         List<JobFuture> jobs = loadBalancerPoolList
                 .stream()
