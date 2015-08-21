@@ -1,0 +1,70 @@
+[
+  {
+    "id": "57de6742c8e442e393f7bb83b916567c",
+    "port": 443,
+    "method": "roundRobin",
+    "persistence": "standard",
+    "nodes": [
+      {
+        "status": "enabled",
+        "ipAddress": "66.155.4.73",
+        "privatePort": 8088
+      },
+      {
+        "status": "enabled",
+        "ipAddress": "66.155.4.73",
+        "privatePort": 8088
+      },
+      {
+        "status": "enabled",
+        "ipAddress": "66.155.4.73",
+        "privatePort": 8088
+      }
+    ],
+    "links": [
+      {
+        "rel": "self",
+        "href": "/v2/sharedLoadBalancers/altd/de1/32ba7c6bb3a24784b18f14cb2db9201a/pools/57de6742c8e442e393f7bb83b916567c",
+        "verbs": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ]
+      },
+      {
+        "rel": "nodes",
+        "href": "/v2/sharedLoadBalancers/altd/de1/32ba7c6bb3a24784b18f14cb2db9201a/pools/57de6742c8e442e393f7bb83b916567c/nodes",
+        "verbs": [
+          "GET",
+          "PUT"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "e46f762744df41739c0d675f3edb6cf7",
+    "port": 80,
+    "method": "leastConnection",
+    "persistence": "sticky",
+    "nodes": [],
+    "links": [
+      {
+        "rel": "self",
+        "href": "/v2/sharedLoadBalancers/altd/de1/32ba7c6bb3a24784b18f14cb2db9201a/pools/e46f762744df41739c0d675f3edb6cf7",
+        "verbs": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ]
+      },
+      {
+        "rel": "nodes",
+        "href": "/v2/sharedLoadBalancers/altd/de1/32ba7c6bb3a24784b18f14cb2db9201a/pools/e46f762744df41739c0d675f3edb6cf7/nodes",
+        "verbs": [
+          "GET",
+          "PUT"
+        ]
+      }
+    ]
+  }
+]

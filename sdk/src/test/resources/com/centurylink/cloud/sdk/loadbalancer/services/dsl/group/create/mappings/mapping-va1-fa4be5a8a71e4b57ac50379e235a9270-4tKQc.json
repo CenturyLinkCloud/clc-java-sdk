@@ -1,0 +1,16 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/va1/fa4be5a8a71e4b57ac50379e235a9270",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-va1-fa4be5a8a71e4b57ac50379e235a9270-4tKQc.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Wed, 19 Aug 2015 08:04:50 GMT"
+    }
+  }
+}

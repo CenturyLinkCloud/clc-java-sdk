@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/de1/b4c06dcc5d3842f29b7ac51cbb46af2b/pools",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-b4c06dcc5d3842f29b7ac51cbb46af2b-pools-IQEFX.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Thu, 20 Aug 2015 11:33:27 GMT",
+      "Content-Length" : "400"
+    }
+  }
+}
