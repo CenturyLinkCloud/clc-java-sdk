@@ -98,19 +98,19 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     }
 
     public OperationFuture<ServerMetadata> create(CreateServerConfig command) {
-        BaseServerResponse response = client
-            .create(serverConverter.buildCreateServerRequest(command,
-                command.getCustomFields().isEmpty() ? null : client.getCustomFields()));
+        BaseServerResponse response = client.create(
+            serverConverter.buildCreateServerRequest(
+                command,
+                command.getCustomFields().isEmpty() ? null : client.getCustomFields())
+        );
 
-        ServerMetadata serverInfo = client
-            .findServerByUuid(response.findServerUuid());
+        ServerMetadata serverInfo = client.findServerByUuid(response.findServerUuid());
 
         return new OperationFuture<>(
             serverInfo,
             new SequentialJobsFuture(
                 () ->
                     new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client),
-
                 () ->
                     addPublicIpIfNeeded(command, serverInfo)
             )

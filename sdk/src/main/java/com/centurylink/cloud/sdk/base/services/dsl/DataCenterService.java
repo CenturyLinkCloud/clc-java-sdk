@@ -79,11 +79,7 @@ public class DataCenterService implements QueryService<DataCenter, DataCenterFil
     public List<NetworkMetadata> findNetworkByDataCenter(DataCenter dataCenter) {
         return
             client
-                .getDeploymentCapabilities(dataCenterId(dataCenter))
+                .getDeploymentCapabilities(idByRef(dataCenter))
                 .getDeployableNetworks();
-    }
-
-    private String dataCenterId(DataCenter dataCenter) {
-        return findByRef(dataCenter).getId();
     }
 }

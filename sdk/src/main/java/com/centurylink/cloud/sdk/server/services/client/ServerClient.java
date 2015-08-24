@@ -334,30 +334,30 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .get(new GenericType<List<NetworkMetadata>>() {});
     }
 
-    public NetworkMetadata getNetwork(String networkId, String dataCenter, String ipAddressesDetails) {
+    public NetworkMetadata getNetwork(String networkId, String dataCenterId, String ipAddressesDetails) {
         return
             experimentalClient("/networks/{accountAlias}/{dataCenter}/{networkId}")
-                .resolveTemplate("dataCenter", dataCenter.toLowerCase())
+                .resolveTemplate("dataCenter", dataCenterId.toLowerCase())
                 .resolveTemplate("networkId", networkId)
                 .queryParam("ipAddresses", ipAddressesDetails.toLowerCase())
                 .request()
                 .get(NetworkMetadata.class);
     }
 
-    public SecondaryNetworkLink addSecondaryNetwork(String server, AddNetworkRequest networkRequest) {
+    public SecondaryNetworkLink addSecondaryNetwork(String serverId, AddNetworkRequest networkRequest) {
         return
             client("/servers/{accountAlias}/{server}/networks")
-                .resolveTemplate("server", server)
+                .resolveTemplate("server", serverId)
                 .request()
                 .post(entity(networkRequest, APPLICATION_JSON_TYPE))
                 .readEntity(SecondaryNetworkLink.class);
     }
 
-    public SecondaryNetworkLink removeSecondaryNetwork(String server, String network) {
+    public SecondaryNetworkLink removeSecondaryNetwork(String serverId, String networkId) {
         return
             client("/servers/{accountAlias}/{server}/networks/{network}")
-                .resolveTemplate("server", server)
-                .resolveTemplate("network", network)
+                .resolveTemplate("server", serverId)
+                .resolveTemplate("network", networkId)
                 .request()
                 .delete()
                 .readEntity(SecondaryNetworkLink.class);
