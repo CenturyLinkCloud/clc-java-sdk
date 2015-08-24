@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.policy.services.dsl;
 
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.policy.services.client.PolicyClient;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.PolicyConverter;
 import com.google.inject.Inject;
 
 /**
@@ -30,10 +31,11 @@ public class PolicyService {
     @Inject
     public PolicyService(
         PolicyClient client,
-        DataCenterService dataCenterService
+        DataCenterService dataCenterService,
+        PolicyConverter converter
     ) {
         this.antiAffinityService = new AntiAffinityService(client, dataCenterService);
-        this.alertService = new AlertService(client);
+        this.alertService = new AlertService(client, converter);
     }
 
     /**
