@@ -31,7 +31,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class SearchAntiAffinityPolicyTest extends AbstractPoliciesSdkTest implements WireMockMixin {
 
     @Inject

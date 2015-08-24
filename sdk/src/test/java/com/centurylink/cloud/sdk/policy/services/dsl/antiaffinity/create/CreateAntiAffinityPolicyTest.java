@@ -32,7 +32,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class CreateAntiAffinityPolicyTest extends AbstractPoliciesSdkTest implements WireMockMixin {
 
     @Inject

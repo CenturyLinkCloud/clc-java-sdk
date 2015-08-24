@@ -32,7 +32,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class SearchPolicyTest extends AbstractPoliciesSdkTest implements WireMockMixin {
 
     @Inject

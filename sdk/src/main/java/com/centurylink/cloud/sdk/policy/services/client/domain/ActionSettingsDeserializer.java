@@ -34,17 +34,16 @@ public class ActionSettingsDeserializer  extends JsonDeserializer<ActionSettings
     private static final String RECIPIENTS = "recipients";
 
     @Override
-    public ActionSettingsMetadata deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        TreeNode node = jp.getCodec().readTree(jp);
+    public ActionSettingsMetadata deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+            throws IOException {
+        TreeNode node = jsonParser.getCodec().readTree(jsonParser);
 
         //email settings
         if (node.get(RECIPIENTS).isArray()) {
             ArrayNode recipientsNode = ((ArrayNode)node.get(RECIPIENTS));
             List<String> recipients = new ArrayList<>(recipientsNode.size());
 
-            for (JsonNode recipient : recipientsNode) {
-                recipients.add(recipient.asText());
-            }
+            recipientsNode.forEach(recipient -> recipients.add(recipient.asText()));
 
             return new ActionSettingsEmailMetadata().recipients(recipients);
         }
