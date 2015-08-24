@@ -15,7 +15,7 @@
 
 package com.centurylink.cloud.sdk.server.services.client.domain.group;
 
-import com.centurylink.cloud.sdk.base.services.client.domain.CustomField;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
 
 import java.util.List;
 

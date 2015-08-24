@@ -16,11 +16,10 @@
 package com.centurylink.cloud.sdk.server.services;
 
 import com.centurylink.cloud.sdk.base.services.BaseModule;
-import com.centurylink.cloud.sdk.network.services.NetworkModule;
-import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
-import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
+import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
+import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
+import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerConverter;
 import com.google.inject.AbstractModule;
@@ -36,12 +35,12 @@ public class ServerModule extends AbstractModule {
 
         bind(ServerService.class);
         bind(ServerConverter.class);
-        bind(GroupConverter.class);
         bind(GroupService.class);
         bind(TemplateService.class);
 
+        bind(InvoiceService.class);
+
         install(new BaseModule());
-        install(new NetworkModule());
     }
 
 }

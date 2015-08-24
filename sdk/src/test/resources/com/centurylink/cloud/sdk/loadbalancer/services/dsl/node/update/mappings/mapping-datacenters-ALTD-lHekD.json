@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/datacenters/ALTD?groupLinks=true",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-datacenters-ALTD-lHekD.json",
+    "headers" : {
+      "Cache-Control" : "max-age=300, private",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Fri, 21 Aug 2015 08:00:15 GMT",
+      "Content-Length" : "3063"
+    }
+  }
+}

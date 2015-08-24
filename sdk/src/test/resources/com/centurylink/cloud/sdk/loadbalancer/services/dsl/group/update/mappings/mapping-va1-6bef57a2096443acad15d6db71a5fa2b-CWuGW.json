@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/va1/6bef57a2096443acad15d6db71a5fa2b",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Balancer2-upd\",\"description\":\"Balancer2-upd description\",\"status\":\"disabled\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-va1-6bef57a2096443acad15d6db71a5fa2b-CWuGW.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Wed, 19 Aug 2015 09:44:26 GMT"
+    }
+  }
+}

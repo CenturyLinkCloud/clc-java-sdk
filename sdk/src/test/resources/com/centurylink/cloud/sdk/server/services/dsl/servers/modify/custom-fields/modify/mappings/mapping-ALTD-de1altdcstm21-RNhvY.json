@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/de1altdcstm21",
+    "method" : "PATCH",
+    "bodyPatterns" : [ {
+      "equalToJson" : "[{\"op\":\"set\",\"member\":\"customFields\",\"value\":[{\"id\":\"64433178c3e3418a89894af103e5223b\",\"value\":\"1\"}]}]",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-ALTD-de1altdcstm21-RNhvY.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Wed, 19 Aug 2015 09:32:55 GMT"
+    }
+  }
+}

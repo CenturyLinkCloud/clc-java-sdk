@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/datacenters/ALTD?groupLinks=true",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-datacenters-ALTD-qWNcT.json",
+    "headers" : {
+      "Cache-Control" : "max-age=300, private",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 19 Aug 2015 09:42:06 GMT",
+      "Content-Length" : "3063"
+    }
+  }
+}

@@ -59,6 +59,8 @@ public class CreateServerRequest {
 
     private String antiAffinityPolicyId;
 
+    private List<CustomField> customFields;
+
 
     /**
      * Name of the server to create. Alphanumeric characters and dashes only.
@@ -346,6 +348,15 @@ public class CreateServerRequest {
      */
     public CreateServerRequest antiAffinityPolicyId(String antiAffinityPolicyId) {
         this.antiAffinityPolicyId = antiAffinityPolicyId;
+        return this;
+    }
+
+    public List<CustomField> getCustomFields() {
+        return customFields;
+    }
+
+    public CreateServerRequest customFields(List<CustomField> fields) {
+        this.customFields = fields;
         return this;
     }
 }

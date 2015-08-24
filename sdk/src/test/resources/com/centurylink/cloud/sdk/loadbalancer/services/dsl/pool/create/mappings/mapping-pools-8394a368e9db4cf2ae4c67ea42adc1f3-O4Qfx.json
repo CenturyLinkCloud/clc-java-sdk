@@ -1,0 +1,16 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/de1/32ba7c6bb3a24784b18f14cb2db9201a/pools/8394a368e9db4cf2ae4c67ea42adc1f3",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-pools-8394a368e9db4cf2ae4c67ea42adc1f3-O4Qfx.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Thu, 20 Aug 2015 10:59:41 GMT"
+    }
+  }
+}

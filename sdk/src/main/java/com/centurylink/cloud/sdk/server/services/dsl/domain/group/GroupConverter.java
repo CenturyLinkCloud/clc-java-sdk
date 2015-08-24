@@ -24,6 +24,8 @@ import com.centurylink.cloud.sdk.server.services.client.domain.group.MonitoringS
 import com.centurylink.cloud.sdk.server.services.client.domain.group.PatchOperation;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.SimplePatchOperation;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.UpdateGroupRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 
 import java.time.Duration;
@@ -33,20 +35,53 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
+import static java.util.stream.Collectors.toList;
+
 /**
  * @author ilya.drabenia
  */
 public class GroupConverter {
 
-    public CreateGroupRequest createGroupRequest(GroupConfig groupConfig, String parentGroupId) {
+    public CreateGroupRequest createGroupRequest(GroupConfig groupConfig, String parentGroupId,
+                                                 List<CustomFieldMetadata> customFieldsMetadata) {
+
+        List<CustomField> customFields = composeCustomFields(groupConfig.getCustomFields(), customFieldsMetadata);
         return new CreateGroupRequest()
             .name(groupConfig.getName())
             .description(groupConfig.getDescription())
             .parentGroupId(parentGroupId)
-            .customFields(groupConfig.getCustomFields());
+            .customFields(customFields.isEmpty() ? null : customFields);
     }
 
-    public UpdateGroupRequest createUpdateGroupRequest(GroupConfig groupConfig, String parentGroupId) {
+    private List<CustomField> composeCustomFields(List<CustomField> configFields,
+                                                  List<CustomFieldMetadata> customFieldsMetadata) {
+
+        if (customFieldsMetadata == null) {
+            return new ArrayList<>(0);
+        }
+
+        return configFields.stream()
+            .map(config -> {
+                CustomFieldMetadata found = customFieldsMetadata.stream()
+                    .filter(metadata -> metadata.getName().equals(config.getName()) ||
+                            metadata.getId().equals(config.getId())
+                    )
+                    .findFirst()
+                    .orElse(null);
+
+                if (found != null) {
+                    return new CustomField().id(found.getId()).value(config.getValue());
+                }
+
+                return null;
+            })
+            .filter(notNull())
+            .collect(toList());
+    }
+
+    public UpdateGroupRequest createUpdateGroupRequest(GroupConfig groupConfig, String parentGroupId,
+                                                       List<CustomFieldMetadata> customFieldsMetadata) {
         UpdateGroupRequest req = new UpdateGroupRequest();
 
         if (groupConfig.getName() != null) {
@@ -58,8 +93,10 @@ public class GroupConverter {
         if (parentGroupId != null) {
             req.add(new SimplePatchOperation(PatchOperation.GROUP_PARENT_ID, parentGroupId));
         }
-        if (groupConfig.getCustomFields() != null) {
-            req.add(new CustomFieldPatchOperation(groupConfig.getCustomFields()));
+        if (!groupConfig.getCustomFields().isEmpty()) {
+            req.add(new CustomFieldPatchOperation(
+                composeCustomFields(groupConfig.getCustomFields(), customFieldsMetadata))
+            );
         }
         return req;
     }

@@ -16,10 +16,16 @@
 package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicy;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
@@ -39,6 +45,7 @@ public class CreateServerConfig implements ServerConfig {
     private TimeToLive timeToLive;
     private boolean managedOS = false;
     private AntiAffinityPolicy antiAffinityPolicy;
+    private List<CustomField> customFields = new ArrayList<>();
 
     public CompositeServerConfig count(int count) {
         return new CompositeServerConfig().server(this).count(count);
@@ -207,6 +214,22 @@ public class CreateServerConfig implements ServerConfig {
 
     public CreateServerConfig antiAffinityPolicy(AntiAffinityPolicy antiAffinityPolicy) {
         this.antiAffinityPolicy = antiAffinityPolicy;
+        return this;
+    }
+
+    public List<CustomField> getCustomFields() {
+        return customFields;
+    }
+
+    public CreateServerConfig customFields(List<CustomField> customFields) {
+        checkNotNull(customFields, "List of custom fields must be not a null");
+        this.customFields = customFields;
+        return this;
+    }
+
+    public CreateServerConfig customFields(CustomField... customFields) {
+        checkNotNull(customFields, "List of custom fields must be not a null");
+        this.customFields.addAll(Arrays.asList(customFields));
         return this;
     }
 

@@ -18,19 +18,23 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.network.services.dsl.NetworkService;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.DiskRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServerRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.PasswordProvider;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.PasswordProvider;
 import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author ilya.drabenia
@@ -38,28 +42,28 @@ import java.util.List;
 public class ServerConverter {
     private final GroupService groupService;
     private final TemplateService templateService;
-    private final NetworkService networkService;
     private final DataCenterService dataCenterService;
     private final PolicyService policyService;
 
     @Inject
     public ServerConverter(GroupService groupService, TemplateService templateService,
-                           NetworkService networkService, DataCenterService dataCenterService,
-                           PolicyService policyService) {
+                           DataCenterService dataCenterService, PolicyService policyService) {
         this.groupService = groupService;
         this.templateService = templateService;
-        this.networkService = networkService;
         this.dataCenterService = dataCenterService;
         this.policyService = policyService;
     }
 
-    public CreateServerRequest buildCreateServerRequest(CreateServerConfig newServer) {
+    public CreateServerRequest buildCreateServerRequest(CreateServerConfig newServer,
+                                                        List<CustomFieldMetadata> customFieldsMetadata) {
         TemplateMetadata templateMetadata = templateService.findByRef(newServer.getTemplate());
         GroupMetadata groupMetadata = groupService.findByRef(newServer.getGroup());
 
         if (newServer.getType().equals(ServerType.HYPERSCALE)) {
             newServer.storageType(StorageType.HYPERSCALE);
         }
+
+        List<CustomField> newFields = composeCustomFields(newServer.getCustomFields(), customFieldsMetadata);
 
         return
             new CreateServerRequest()
@@ -95,8 +99,8 @@ public class ServerConverter {
 
                 .networkId(
                     (newServer.getNetwork().getNetwork() == null) ? null :
-                        networkService
-                            .findByRef(newServer.getNetwork().getNetwork())
+                        dataCenterService
+                            .findNetworkByRef(newServer.getNetwork().getNetwork())
                             .getNetworkId()
                 )
 
@@ -105,13 +109,39 @@ public class ServerConverter {
                     newServer.isManagedOS(),
                     templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
                 )
-
                 .antiAffinityPolicyId((newServer.getAntiAffinityPolicy()) == null ? null :
                     policyService.antiAffinity().findByRef(newServer.getAntiAffinityPolicy()).getId()
-                );
+                )
+                .customFields(newFields.isEmpty() ? null : newFields);
     }
 
-    public List<ModifyServerRequest> buildModifyServerRequest(ModifyServerConfig serverConfig) {
+    private List<CustomField> composeCustomFields(List<CustomField> configFields,
+                                                  List<CustomFieldMetadata> customFieldsMetadata) {
+
+        if (customFieldsMetadata == null) {
+            return new ArrayList<>(0);
+        }
+        return configFields.stream()
+            .map(config -> {
+                CustomFieldMetadata found = customFieldsMetadata.stream()
+                    .filter(metadata -> metadata.getName().equals(config.getName()) ||
+                            metadata.getId().equals(config.getId())
+                    )
+                    .findFirst()
+                    .orElse(null);
+
+                if (found != null) {
+                    return new CustomField().id(found.getId()).value(config.getValue());
+                }
+
+                return null;
+            })
+            .filter(notNull())
+            .collect(toList());
+    }
+
+    public List<ModifyServerRequest> buildModifyServerRequest(ModifyServerConfig serverConfig,
+                                                              List<CustomFieldMetadata> customFieldsMetadata) {
         List<ModifyServerRequest> result = new ArrayList<>();
 
         CredentialsConfig credentialsConfig = serverConfig.getCredentialsConfig();
@@ -143,6 +173,14 @@ public class ServerConverter {
                 new ModifyServerRequest<String>()
                     .member("groupId")
                     .value(serverConfig.getGroupId())
+            );
+        }
+
+        if (!serverConfig.getCustomFields().isEmpty()) {
+            result.add(
+                new ModifyServerRequest<List<CustomField>>()
+                    .member("customFields")
+                    .value(composeCustomFields(serverConfig.getCustomFields(), customFieldsMetadata))
             );
         }
 

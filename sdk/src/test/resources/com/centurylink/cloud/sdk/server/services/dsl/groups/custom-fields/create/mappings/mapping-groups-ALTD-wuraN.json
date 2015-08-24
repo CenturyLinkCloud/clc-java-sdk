@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"CSTM\",\"parentGroupId\":\"0712936001a14a7e9bb24f70fc3deaf1\",\"customFields\":[{\"id\":\"856812f0ec374641862b2662761f9d70\",\"value\":\"test user\"},{\"id\":\"64433178c3e3418a89894af103e5223b\",\"value\":\"1\"}]}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-groups-ALTD-wuraN.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/groups/altd/d301fdc9854044eba24c8383d2fb9292",
+      "Date" : "Wed, 19 Aug 2015 10:18:54 GMT",
+      "Content-Length" : "1647"
+    }
+  }
+}

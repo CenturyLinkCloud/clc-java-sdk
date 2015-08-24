@@ -27,6 +27,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  */
 public class SdkHttpClient {
     protected static String CLC_API_URL = "https://api.tier3.com/v2";
+    protected static String CLC_API_URL_EXPERIMENTAL = "https://api.tier3.com/v2-experimental";
 
     public static final SdkClientBuilder CLIENT_BUILDER =
         (SdkClientBuilder) ResteasyClientBuilder

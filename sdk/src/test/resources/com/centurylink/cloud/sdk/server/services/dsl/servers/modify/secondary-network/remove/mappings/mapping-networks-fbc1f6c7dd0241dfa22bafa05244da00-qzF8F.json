@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/de1altdweb598/networks/fbc1f6c7dd0241dfa22bafa05244da00",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-networks-fbc1f6c7dd0241dfa22bafa05244da00-qzF8F.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Thu, 20 Aug 2015 11:43:11 GMT",
+      "Content-Length" : "151"
+    }
+  }
+}
