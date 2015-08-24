@@ -44,4 +44,11 @@ public class AuthenticatedSdkHttpClient extends SdkHttpClient {
                 .target(CLC_API_URL + target)
                 .resolveTemplate("accountAlias", authentication.getAccountAlias());
     }
+
+    protected WebTarget experimentalClient(String target) {
+        return
+            buildClient()
+                .target(CLC_API_URL_EXPERIMENTAL + target)
+                .resolveTemplate("accountAlias", authentication.getAccountAlias());
+    }
 }

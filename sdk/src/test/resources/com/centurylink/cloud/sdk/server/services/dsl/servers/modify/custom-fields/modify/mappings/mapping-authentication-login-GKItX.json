@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/authentication/login",
+    "method" : "POST"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-authentication-login-GKItX.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 19 Aug 2015 09:32:53 GMT",
+      "Content-Length" : "740"
+    }
+  }
+}

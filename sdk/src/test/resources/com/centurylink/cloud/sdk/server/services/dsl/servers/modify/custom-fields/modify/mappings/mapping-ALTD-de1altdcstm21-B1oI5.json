@@ -1,0 +1,18 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/de1altdcstm21",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-ALTD-de1altdcstm21-B1oI5.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Wed, 19 Aug 2015 09:41:26 GMT",
+      "Content-Length" : "132"
+    }
+  }
+}

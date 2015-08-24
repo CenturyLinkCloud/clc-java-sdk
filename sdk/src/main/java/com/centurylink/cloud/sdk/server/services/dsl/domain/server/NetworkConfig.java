@@ -15,7 +15,7 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 
-import com.centurylink.cloud.sdk.network.services.dsl.domain.refs.NetworkRef;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.networks.refs.NetworkRef;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
 
 /**

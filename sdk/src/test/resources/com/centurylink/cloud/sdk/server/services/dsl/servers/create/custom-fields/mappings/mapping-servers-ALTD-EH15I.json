@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"CSTM\",\"description\":null,\"groupId\":\"0712936001a14a7e9bb24f70fc3deaf1\",\"sourceServerId\":\"CENTOS-6-64-TEMPLATE\",\"cpu\":1,\"memoryGB\":2,\"type\":\"standard\",\"storageType\":\"standard\",\"password\":null,\"primaryDns\":null,\"secondaryDns\":null,\"networkId\":null,\"additionalDisks\":[],\"ttl\":null,\"customFields\":[{\"id\":\"856812f0ec374641862b2662761f9d70\",\"value\":\"test user\"},{\"id\":\"64433178c3e3418a89894af103e5223b\",\"value\":\"1\"}],\"managedOS\":false,\"isManagedOS\":false}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-servers-ALTD-EH15I.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Tue, 18 Aug 2015 16:14:25 GMT",
+      "Content-Length" : "263"
+    }
+  }
+}

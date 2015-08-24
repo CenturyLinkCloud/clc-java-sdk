@@ -15,12 +15,21 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class ModifyServerConfig {
 
     private String groupId;
     private String description;
     private Machine machineConfig = new Machine();
     private CredentialsConfig credentialsConfig = new CredentialsConfig();
+    private List<CustomField> customFields = new ArrayList<>();
 
     public String getGroupId() {
         return groupId;
@@ -71,6 +80,22 @@ public class ModifyServerConfig {
 
     public ModifyServerConfig credentialsConfig(CredentialsConfig credentialsConfig) {
         setCredentialsConfig(credentialsConfig);
+        return this;
+    }
+
+    public List<CustomField> getCustomFields() {
+        return customFields;
+    }
+
+    public ModifyServerConfig customFields(List<CustomField> customFields) {
+        checkNotNull(customFields, "List of custom fields must be not a null");
+        this.customFields = customFields;
+        return this;
+    }
+
+    public ModifyServerConfig customFields(CustomField... customFields) {
+        checkNotNull(customFields, "List of custom fields must be not a null");
+        this.customFields.addAll(Arrays.asList(customFields));
         return this;
     }
 }

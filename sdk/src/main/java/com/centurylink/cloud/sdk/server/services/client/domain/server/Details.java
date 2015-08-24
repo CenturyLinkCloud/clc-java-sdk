@@ -15,7 +15,12 @@
 
 package com.centurylink.cloud.sdk.server.services.client.domain.server;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.annotation.Generated;
 import java.util.ArrayList;
@@ -27,6 +32,7 @@ import java.util.Map;
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
         "ipAddresses",
+        "secondaryIPAddresses",
         "alertPolicies",
         "cpu",
         "diskCount",
@@ -44,6 +50,8 @@ public class Details {
 
     @JsonProperty("ipAddresses")
     private List<IpAddress> ipAddresses = new ArrayList<IpAddress>();
+    @JsonProperty("secondaryIPAddresses")
+    private List<IpAddress> secondaryIPAddresses = new ArrayList<>();
     @JsonProperty("alertPolicies")
     private List<Object> alertPolicies = new ArrayList<Object>();
     @JsonProperty("cpu")
@@ -67,7 +75,7 @@ public class Details {
     @JsonProperty("snapshots")
     private List<Snapshot> snapshots = new ArrayList<Snapshot>();
     @JsonProperty("customFields")
-    private List<Object> customFields = new ArrayList<Object>();
+    private List<CustomField> customFields = new ArrayList<>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -89,6 +97,26 @@ public class Details {
     @JsonProperty("ipAddresses")
     public void setIpAddresses(List<IpAddress> ipAddresses) {
         this.ipAddresses = ipAddresses;
+    }
+
+    /**
+     *
+     * @return
+     * The secondaryIPAddresses
+     */
+    @JsonProperty("secondaryIPAddresses")
+    public List<IpAddress> getSecondaryIPAddresses() {
+        return secondaryIPAddresses;
+    }
+
+    /**
+     *
+     * @param secondaryIPAddresses
+     * The secondaryIPAddresses
+     */
+    @JsonProperty("secondaryIPAddresses")
+    public void setSecondaryIPAddresses(List<IpAddress> secondaryIPAddresses) {
+        this.secondaryIPAddresses = secondaryIPAddresses;
     }
 
     /**
@@ -317,7 +345,7 @@ public class Details {
      * The customFields
      */
     @JsonProperty("customFields")
-    public List<Object> getCustomFields() {
+    public List<CustomField> getCustomFields() {
         return customFields;
     }
 
@@ -327,7 +355,7 @@ public class Details {
      * The customFields
      */
     @JsonProperty("customFields")
-    public void setCustomFields(List<Object> customFields) {
+    public void setCustomFields(List<CustomField> customFields) {
         this.customFields = customFields;
     }
 

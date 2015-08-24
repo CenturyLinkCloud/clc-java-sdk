@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/authentication/login",
+    "method" : "POST"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-authentication-login-o9Dj3.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 19 Aug 2015 10:18:49 GMT",
+      "Content-Length" : "738"
+    }
+  }
+}
