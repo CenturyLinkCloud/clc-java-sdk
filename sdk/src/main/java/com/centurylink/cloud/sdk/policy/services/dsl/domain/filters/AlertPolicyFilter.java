@@ -63,6 +63,12 @@ public class AlertPolicyFilter extends AbstractResourceFilter<AlertPolicyFilter>
         return id(asList(ids));
     }
 
+    /**
+     * Method allow to filter policies by its IDs. Matching will be strong and case sensitive.
+     *
+     * @param ids is not null list of group IDs
+     * @return {@link AlertPolicyFilter}
+     */
     public AlertPolicyFilter id(List<String> ids) {
         checkNotNull(ids, "List of ids must be not a null");
 
@@ -71,6 +77,11 @@ public class AlertPolicyFilter extends AbstractResourceFilter<AlertPolicyFilter>
         return this;
     }
 
+    /**
+     * Method allow to filter policies by its references.
+     * @param policies is not null list of policy references
+     * @return {@link AlertPolicyFilter}
+     */
     public AlertPolicyFilter policies(AlertPolicy... policies) {
         allItemsNotNull(policies, "Anti-affinity Policies");
 

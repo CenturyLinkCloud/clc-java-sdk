@@ -103,6 +103,12 @@ public class AntiAffinityPolicyFilter extends AbstractResourceFilter<AntiAffinit
         return id(asList(ids));
     }
 
+    /**
+     * Method allow to filter policies by its IDs. Matching will be strong and case sensitive.
+     *
+     * @param ids is not null list of group IDs
+     * @return {@link AntiAffinityPolicyFilter}
+     */
     public AntiAffinityPolicyFilter id(List<String> ids) {
         checkNotNull(ids, "List of ids must be not a null");
 
@@ -111,6 +117,11 @@ public class AntiAffinityPolicyFilter extends AbstractResourceFilter<AntiAffinit
         return this;
     }
 
+    /**
+     * Method allow to filter policies by its references.
+     * @param policies is not null list of policy references
+     * @return {@link AntiAffinityPolicyFilter}
+     */
     public AntiAffinityPolicyFilter policies(AntiAffinityPolicy... policies) {
         allItemsNotNull(policies, "Anti-affinity Policies");
 
