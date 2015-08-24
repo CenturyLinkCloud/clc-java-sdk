@@ -1,0 +1,56 @@
+[
+  {
+    "id": "16ec5dce943e4d49b6590596a72f86a7",
+    "name": "1",
+    "description": "2",
+    "ipAddress": "206.128.157.40",
+    "status": "enabled",
+    "pools": [],
+    "links": [
+      {
+        "rel": "self",
+        "href": "/v2/sharedLoadBalancers/altd/va1/16ec5dce943e4d49b6590596a72f86a7",
+        "verbs": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ]
+      },
+      {
+        "rel": "pools",
+        "href": "/v2/sharedLoadBalancers/altd/va1/16ec5dce943e4d49b6590596a72f86a7/pools",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "6bef57a2096443acad15d6db71a5fa2b",
+    "name": "Balancer2-upd",
+    "description": "Balancer2-upd description",
+    "ipAddress": "206.128.159.242",
+    "status": "disabled",
+    "pools": [],
+    "links": [
+      {
+        "rel": "self",
+        "href": "/v2/sharedLoadBalancers/altd/va1/6bef57a2096443acad15d6db71a5fa2b",
+        "verbs": [
+          "GET",
+          "PUT",
+          "DELETE"
+        ]
+      },
+      {
+        "rel": "pools",
+        "href": "/v2/sharedLoadBalancers/altd/va1/6bef57a2096443acad15d6db71a5fa2b/pools",
+        "verbs": [
+          "GET",
+          "POST"
+        ]
+      }
+    ]
+  }
+]

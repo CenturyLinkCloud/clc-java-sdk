@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/va1",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Balancer2\",\"description\":\"Balancer2 description\",\"status\":\"enabled\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-va1-qh2JO.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Wed, 19 Aug 2015 08:01:15 GMT",
+      "Content-Length" : "335"
+    }
+  }
+}
