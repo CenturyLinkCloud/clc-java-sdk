@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Arrays.asList;
 
 public class LoadBalancerPoolFilter extends AbstractResourceFilter<LoadBalancerPoolFilter> {
@@ -55,22 +54,45 @@ public class LoadBalancerPoolFilter extends AbstractResourceFilter<LoadBalancerP
         this.predicate = predicate;
     }
 
+    /**
+     * Method allow to provide custom filter predicate for load balancers
+     *
+     * @param predicate is not null filtering expression
+     * @return {@link LoadBalancerPoolFilter}
+     */
     public LoadBalancerPoolFilter loadBalancersWhere(Predicate<LoadBalancerMetadata> predicate) {
-        checkNotNull(predicate, "Predicate must be not a null");
         loadBalancerFilter.where(predicate);
         return this;
     }
 
+    /**
+     * Method allow to filter by load balancers IDs. Filtering is strong case sensitive.
+     *
+     * @param ids the array of load balancer id
+     * @return {@link LoadBalancerPoolFilter}
+     */
     public LoadBalancerPoolFilter loadBalancers(String... ids) {
         loadBalancerFilter.id(ids);
         return this;
     }
 
+    /**
+     * Method allow to filter by load balancer references.
+     *
+     * @param loadBalancers is list of LoadBalancer references
+     * @return {@link LoadBalancerPoolFilter}
+     */
     public LoadBalancerPoolFilter loadBalancers(LoadBalancer... loadBalancers) {
         loadBalancerFilter.loadBalancers(loadBalancers);
         return this;
     }
 
+    /**
+     * Method allow to filter by load balancer pool references.
+     *
+     * @param loadBalancerPools is list of loadBalancerPool references
+     * @return {@link LoadBalancerPoolFilter}
+     */
     public LoadBalancerPoolFilter loadBalancerPools(LoadBalancerPool... loadBalancerPools) {
         predicate = predicate.and(Filter.or(
                 Streams.map(loadBalancerPools, LoadBalancerPool::asFilter)
@@ -79,6 +101,12 @@ public class LoadBalancerPoolFilter extends AbstractResourceFilter<LoadBalancerP
         return this;
     }
 
+    /**
+     * Method allow to provide custom filter predicate
+     *
+     * @param predicate is not null filtering expression
+     * @return {@link LoadBalancerPoolFilter}
+     */
     public LoadBalancerPoolFilter where(Predicate<LoadBalancerPoolMetadata> predicate) {
         this.predicate = this.predicate.and(predicate);
         return this;

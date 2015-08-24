@@ -26,7 +26,6 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.Load
 import java.util.function.Predicate;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class LoadBalancerNodeFilter extends AbstractResourceFilter<LoadBalancerNodeFilter> {
 
@@ -49,22 +48,45 @@ public class LoadBalancerNodeFilter extends AbstractResourceFilter<LoadBalancerN
         this.predicate = predicate;
     }
 
-    public LoadBalancerNodeFilter loadPoolsWhere(Predicate<LoadBalancerPoolMetadata> predicate) {
-        checkNotNull(predicate, "Predicate must be not a null");
+    /**
+     * Method allow to provide custom filter predicate for load balancer pools
+     *
+     * @param predicate is not null filtering expression
+     * @return {@link LoadBalancerNodeFilter}
+     */
+    public LoadBalancerNodeFilter loadBalancerPoolsWhere(Predicate<LoadBalancerPoolMetadata> predicate) {
         loadBalancerPoolFilter.where(predicate);
         return this;
     }
 
+    /**
+     * Method allow to filter by load balancer pool IDs. Filtering is strong case sensitive.
+     *
+     * @param ids the array of load balancer pool id
+     * @return {@link LoadBalancerNodeFilter}
+     */
     public LoadBalancerNodeFilter loadBalancerPools(String... ids) {
         loadBalancerPoolFilter.id(ids);
         return this;
     }
 
+    /**
+     * Method allow to filter by load balancer pool references.
+     *
+     * @param loadBalancerPools is list of LoadBalancerPool references
+     * @return {@link LoadBalancerNodeFilter}
+     */
     public LoadBalancerNodeFilter loadBalancerPools(LoadBalancerPool... loadBalancerPools) {
         loadBalancerPoolFilter.loadBalancerPools(loadBalancerPools);
         return this;
     }
 
+    /**
+     * Method allow to provide custom filter predicate
+     *
+     * @param predicate is not null filtering expression
+     * @return {@link LoadBalancerNodeFilter}
+     */
     public LoadBalancerNodeFilter where(Predicate<LoadBalancerNodeMetadata> predicate) {
         this.predicate = this.predicate.and(predicate);
         return this;
