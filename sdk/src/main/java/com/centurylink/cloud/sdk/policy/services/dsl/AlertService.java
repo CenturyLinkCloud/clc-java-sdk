@@ -21,21 +21,13 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWai
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.policy.services.client.PolicyClient;
-import com.centurylink.cloud.sdk.policy.services.client.domain.ActionSettingsEmailMetadata;
-import com.centurylink.cloud.sdk.policy.services.client.domain.ActionSettingsMetadata;
-import com.centurylink.cloud.sdk.policy.services.client.domain.AlertActionMetadata;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyRequest;
-import com.centurylink.cloud.sdk.policy.services.client.domain.AlertTriggerMetadata;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.ActionSettings;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.ActionSettingsEmail;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertAction;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertPolicyConfig;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertTrigger;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.PolicyConverter;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AlertPolicyFilter;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AlertPolicy;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -58,9 +50,11 @@ public class AlertService implements
     QueryService<AlertPolicy, AlertPolicyFilter, AlertPolicyMetadata> {
 
     private PolicyClient client;
+    private PolicyConverter converter;
 
-    public AlertService(PolicyClient client) {
+    public AlertService(PolicyClient client, PolicyConverter converter) {
         this.client = client;
+        this.converter = converter;
     }
 
     /**
@@ -70,47 +64,12 @@ public class AlertService implements
      * @return OperationFuture wrapper for AlertPolicy
      */
     public OperationFuture<AlertPolicy> create(AlertPolicyConfig createConfig) {
-        AlertPolicyMetadata policy = client.createAlertPolicy(makeRequest(createConfig));
+        AlertPolicyMetadata policy = client.createAlertPolicy(converter.buildCreateAlertPolicyRequest(createConfig));
 
         return new OperationFuture<>(
             AlertPolicy.refById(policy.getId()),
             new NoWaitingJobFuture()
         );
-    }
-
-    private AlertPolicyRequest makeRequest(AlertPolicyConfig config) {
-        return new AlertPolicyRequest()
-            .name(config.getName())
-            .actions(convertActions(config.getActions()))
-            .triggers(convertTriggers(config.getTriggers()));
-    }
-
-    private List<AlertActionMetadata> convertActions(List<AlertAction> actions) {
-        return actions.stream()
-            .map(action -> new AlertActionMetadata()
-                    .action(action.getAction())
-                    .settings(convertSettings(action.getSettings()))
-            )
-            .collect(toList());
-    }
-
-    private List<AlertTriggerMetadata> convertTriggers(List<AlertTrigger> triggers) {
-        return triggers.stream()
-            .map(trigger -> new AlertTriggerMetadata()
-                    .metric(trigger.getMetric().name().toLowerCase())
-                    .duration(trigger.getDuration().format(DateTimeFormatter.ISO_LOCAL_TIME))
-                    .threshold(trigger.getThreshold())
-            )
-            .collect(toList());
-    }
-
-    private ActionSettingsMetadata convertSettings(ActionSettings settings) {
-        if (settings instanceof ActionSettingsEmail) {
-            return new ActionSettingsEmailMetadata()
-                .recipients(((ActionSettingsEmail) settings).getRecipients());
-        }
-
-        return null;
     }
 
     /**
@@ -125,23 +84,10 @@ public class AlertService implements
 
         AlertPolicyMetadata policyToUpdate = findByRef(policyRef);
 
-        AlertPolicyRequest modifyRequest = new AlertPolicyRequest();
-
-        modifyRequest
-            .name(
-                (modifyConfig.getName() == null) ?
-                    policyToUpdate.getName() : modifyConfig.getName()
-        ).actions(
-            (modifyConfig.getActions().size() == 0) ?
-                policyToUpdate.getActions() : convertActions(modifyConfig.getActions())
-        ).triggers(
-            (modifyConfig.getTriggers().size() == 0) ?
-                policyToUpdate.getTriggers() : convertTriggers(modifyConfig.getTriggers())
-        );
 
         client.modifyAlertPolicy(
             policyToUpdate.getId(),
-            modifyRequest
+            converter.buildModifyAlertPolicyRequest(modifyConfig, policyToUpdate)
         );
 
         return new OperationFuture<>(
