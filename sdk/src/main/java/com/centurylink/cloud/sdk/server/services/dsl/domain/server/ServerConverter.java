@@ -18,6 +18,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
@@ -42,13 +43,15 @@ public class ServerConverter {
     private final GroupService groupService;
     private final TemplateService templateService;
     private final DataCenterService dataCenterService;
+    private final PolicyService policyService;
 
     @Inject
     public ServerConverter(GroupService groupService, TemplateService templateService,
-                           DataCenterService dataCenterService) {
+                           DataCenterService dataCenterService, PolicyService policyService) {
         this.groupService = groupService;
         this.templateService = templateService;
         this.dataCenterService = dataCenterService;
+        this.policyService = policyService;
     }
 
     public CreateServerRequest buildCreateServerRequest(CreateServerConfig newServer,
@@ -105,6 +108,9 @@ public class ServerConverter {
                 .managedOS(
                     newServer.isManagedOS(),
                     templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
+                )
+                .antiAffinityPolicyId((newServer.getAntiAffinityPolicy()) == null ? null :
+                    policyService.antiAffinity().findByRef(newServer.getAntiAffinityPolicy()).getId()
                 )
                 .customFields(newFields.isEmpty() ? null : newFields);
     }

@@ -1,0 +1,16 @@
+{
+  "request" : {
+    "url" : "/v2/alertPolicies/ALTD/4773be1c8cbc4109ab85496f4a85f256",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-ALTD-4773be1c8cbc4109ab85496f4a85f256-XEuy7.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Tue, 18 Aug 2015 11:13:03 GMT"
+    }
+  }
+}

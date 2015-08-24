@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/alertPolicies/ALTD/4773be1c8cbc4109ab85496f4a85f256",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-4773be1c8cbc4109ab85496f4a85f256-R16o4.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 18 Aug 2015 11:13:04 GMT",
+      "Content-Length" : "359"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/alertPolicies/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"My policy\",\"actions\":[{\"action\":\"email\",\"settings\":{\"recipients\":[\"user@company.com\"]}}],\"triggers\":[{\"metric\":\"cpu\",\"duration\":\"00:05:00\",\"threshold\":50.0}]}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-alertPolicies-ALTD-14Woe.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/alertPolicies/altd/4773be1c8cbc4109ab85496f4a85f256",
+      "Date" : "Tue, 18 Aug 2015 11:13:03 GMT",
+      "Content-Length" : "328"
+    }
+  }
+}

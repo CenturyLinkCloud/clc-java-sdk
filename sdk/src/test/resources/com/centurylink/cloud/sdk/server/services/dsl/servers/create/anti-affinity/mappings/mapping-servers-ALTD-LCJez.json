@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"AAP\",\"description\":null,\"groupId\":\"8e988358a4454e64be2c0354ccafdb1c\",\"sourceServerId\":\"RHEL-6-64-TEMPLATE\",\"cpu\":1,\"memoryGB\":2,\"type\":\"hyperscale\",\"storageType\":\"hyperscale\",\"password\":null,\"primaryDns\":null,\"secondaryDns\":null,\"networkId\":null,\"additionalDisks\":[],\"ttl\":null,\"antiAffinityPolicyId\":\"bd53da40a07b43b4b488f230b2c7dbcd\",\"managedOS\":false,\"isManagedOS\":false}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-servers-ALTD-LCJez.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Tue, 18 Aug 2015 07:22:39 GMT",
+      "Content-Length" : "262"
+    }
+  }
+}

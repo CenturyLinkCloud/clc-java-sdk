@@ -1,0 +1,1 @@
+{"id":"4773be1c8cbc4109ab85496f4a85f256","name":"My policy","actions":[{"action":"email","settings":{"recipients":["user@company.com"]}}],"links":[{"rel":"self","href":"/v2/alertPolicies/altd/4773be1c8cbc4109ab85496f4a85f256","verbs":["GET","DELETE","PUT"]}],"triggers":[{"metric":"cpu","duration":"00:05:00","threshold":50.0}]}

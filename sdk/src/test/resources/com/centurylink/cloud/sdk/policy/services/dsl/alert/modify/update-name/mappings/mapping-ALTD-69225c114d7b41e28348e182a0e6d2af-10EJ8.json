@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "url" : "/v2/alertPolicies/ALTD/69225c114d7b41e28348e182a0e6d2af",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"New Policy Name\",\"actions\":[{\"action\":\"email\",\"settings\":{\"recipients\":[\"test@test.com\"]}}],\"triggers\":[{\"metric\":\"memory\",\"duration\":\"00:05:00\",\"threshold\":95.0}]}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-69225c114d7b41e28348e182a0e6d2af-10EJ8.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 18 Aug 2015 12:16:13 GMT",
+      "Content-Length" : "360"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{"id":"69225c114d7b41e28348e182a0e6d2af","name":"My policy","actions":[{"action":"email","settings":{"recipients":["test@test.com"]}}],"links":[{"rel":"self","href":"/v2/alertPolicies/altd/69225c114d7b41e28348e182a0e6d2af","verbs":["GET","DELETE","PUT"]}],"triggers":[{"metric":"memory","duration":"00:05:00","threshold":95.0}]}
