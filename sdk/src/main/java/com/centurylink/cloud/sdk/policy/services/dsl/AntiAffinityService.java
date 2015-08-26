@@ -191,9 +191,7 @@ public class AntiAffinityService implements
 
         return
             filter.applyFindLazy(criteria -> {
-                if (isAlwaysTruePredicate(criteria.getPredicate()) &&
-                    isAlwaysTruePredicate(criteria.getDataCenterFilter().getPredicate()) &&
-                    criteria.getIds().size() > 0) {
+                if (isTruePredicate(criteria) && criteria.getIds().size() > 0) {
                     return
                         criteria.getIds().stream()
                             .map(nullable(curId -> client.getAntiAffinityPolicy(curId)))
@@ -214,9 +212,14 @@ public class AntiAffinityService implements
                         .filter((dataCenterIds.size() > 0) ?
                             combine(AntiAffinityPolicyMetadata::getLocation, in(dataCenterIds)) : alwaysTrue())
                         .filter((criteria.getIds().size() > 0) ?
-                                combine(AntiAffinityPolicyMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                            combine(AntiAffinityPolicyMetadata::getId, in(criteria.getIds())) : alwaysTrue()
                         );
 
             });
+    }
+
+    private boolean isTruePredicate(AntiAffinityPolicyFilter criteria) {
+        return isAlwaysTruePredicate(criteria.getPredicate()) &&
+            isAlwaysTruePredicate(criteria.getDataCenterFilter().getPredicate());
     }
 }
