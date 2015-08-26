@@ -198,24 +198,25 @@ public class AntiAffinityService implements
                         criteria.getIds().stream()
                             .map(nullable(curId -> client.getAntiAffinityPolicy(curId)))
                             .filter(notNull());
-                } else {
-                    List<String> dataCenterIds =
-                        dataCenterService
-                            .findLazy(criteria.getDataCenterFilter())
-                            .map(DataCenterMetadata::getId)
-                            .map(String::toUpperCase)
-                            .collect(toList());
-
-                    return
-                        client.getAntiAffinityPolicies()
-                            .stream()
-                            .filter(criteria.getPredicate())
-                            .filter((dataCenterIds.size() > 0) ?
-                                combine(AntiAffinityPolicyMetadata::getLocation, in(dataCenterIds)) : alwaysTrue())
-                            .filter((criteria.getIds().size() > 0) ?
-                                    combine(AntiAffinityPolicyMetadata::getId, in(criteria.getIds())) : alwaysTrue()
-                            );
                 }
+
+                List<String> dataCenterIds =
+                    dataCenterService
+                        .findLazy(criteria.getDataCenterFilter())
+                        .map(DataCenterMetadata::getId)
+                        .map(String::toUpperCase)
+                        .collect(toList());
+
+                return
+                    client.getAntiAffinityPolicies()
+                        .stream()
+                        .filter(criteria.getPredicate())
+                        .filter((dataCenterIds.size() > 0) ?
+                            combine(AntiAffinityPolicyMetadata::getLocation, in(dataCenterIds)) : alwaysTrue())
+                        .filter((criteria.getIds().size() > 0) ?
+                                combine(AntiAffinityPolicyMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                        );
+
             });
     }
 }
