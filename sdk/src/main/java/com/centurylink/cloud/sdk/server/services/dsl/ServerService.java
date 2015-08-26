@@ -33,7 +33,10 @@ import com.centurylink.cloud.sdk.server.services.client.domain.network.AddNetwor
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateSnapshotRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.IpAddress;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
@@ -49,7 +52,9 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.network.refs.Network
 import com.centurylink.cloud.sdk.server.services.dsl.domain.network.refs.NetworkByIdRef;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.SshClient;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.SshjClient;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CloneServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ImportServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ModifyServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
@@ -97,23 +102,71 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         this.experimentalQueueClient = experimentalQueueClient;
     }
 
-    public OperationFuture<ServerMetadata> create(CreateServerConfig command) {
+    public OperationFuture<ServerMetadata> create(CreateServerConfig config) {
         BaseServerResponse response = client.create(
             serverConverter.buildCreateServerRequest(
-                command,
-                command.getCustomFields().isEmpty() ? null : client.getCustomFields())
+                config,
+                config.getCustomFields().isEmpty() ?
+                    null :
+                    client.getCustomFields())
         );
 
+        return postProcessBuildServerResponse(response, config);
+    }
+
+    public OperationFuture<ServerMetadata> clone(CloneServerConfig config) {
+        BaseServerResponse response = client.clone(
+            serverConverter.buildCloneServerRequest(
+                config,
+                findByRef(config.getServer()),
+                findCredentials(config.getServer()),
+                config.getCustomFields().isEmpty() ?
+                    null :
+                    client.getCustomFields()
+                )
+        );
+
+        return postProcessBuildServerResponse(response, config);
+    }
+
+    public OperationFuture<ServerMetadata> importServer(ImportServerConfig config) {
+        BaseServerResponse response = client.importServer(
+            serverConverter.buildImportServerRequest(
+                config,
+                config.getCustomFields().isEmpty() ?
+                    null :
+                    client.getCustomFields()
+            )
+        );
+
+        return postProcessBuildServerResponse(response, config);
+    }
+
+    private <T extends CreateServerConfig> OperationFuture<ServerMetadata> postProcessBuildServerResponse(
+            BaseServerResponse response,
+            T config
+    ) {
         ServerMetadata serverInfo = client.findServerByUuid(response.findServerUuid());
 
-        return new OperationFuture<>(
-            serverInfo,
-            new SequentialJobsFuture(
-                () ->
-                    new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client),
-                () ->
-                    addPublicIpIfNeeded(command, serverInfo)
-            )
+        return
+            new OperationFuture<>(
+                serverInfo,
+                new SequentialJobsFuture(
+                    () -> new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client),
+                    () -> addPublicIpIfNeeded(config, serverInfo)
+                )
+            );
+    }
+
+    /**
+     * Get server credentials
+     *
+     * @param server server reference
+     * @return ServerCredentials
+     */
+    public ServerCredentials findCredentials(Server server) {
+        return client.getServerCredentials(
+                findByRef(server).getId()
         );
     }
 

@@ -76,6 +76,10 @@ public class CreateServerRequest {
         return this;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     /**
      * ID of the parent group. Retrieved from query to parent group,
      * or by looking at the URL on the UI pages in the Control Portal.
@@ -86,6 +90,10 @@ public class CreateServerRequest {
     public CreateServerRequest groupId(String groupId) {
         this.groupId = groupId;
         return this;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     /**
@@ -112,6 +120,10 @@ public class CreateServerRequest {
         return this;
     }
 
+    public void setCpu(Integer cpu) {
+        this.cpu = cpu;
+    }
+
     /**
      * Number of GB of memory to configure the server with (1-128)
      *
@@ -121,6 +133,10 @@ public class CreateServerRequest {
     public CreateServerRequest memoryGB(Integer memoryGB) {
         this.memoryGB = memoryGB;
         return this;
+    }
+
+    public void setMemoryGB(Integer memoryGB) {
+        this.memoryGB = memoryGB;
     }
 
     public String getDescription() {
@@ -204,11 +220,16 @@ public class CreateServerRequest {
      * @return current instance
      */
     public CreateServerRequest type(String type, boolean hasCapability) {
+        setType(type, hasCapability);
+        return this;
+    }
+
+    public void setType(String type, boolean hasCapability) {
         if (ServerType.HYPERSCALE.getCode().equals(type) && !hasCapability) {
             throw new IllegalArgumentException("Hyperscale server type is not available in selected data center");
         }
+
         this.type = type;
-        return this;
     }
 
     /**
@@ -228,11 +249,16 @@ public class CreateServerRequest {
      * @return current instance
      */
     public CreateServerRequest storageType(String storageType, boolean hasCapability) {
+        setStorageType(storageType, hasCapability);
+        return this;
+    }
+
+    public void setStorageType(String storageType, boolean hasCapability) {
         if (StorageType.PREMIUM.getCode().equals(storageType) && !hasCapability) {
             throw new IllegalArgumentException("Premium storage type is not supported by this datacenter");
         }
+
         this.storageType = storageType;
-        return this;
     }
 
     public String getPassword() {
@@ -242,6 +268,10 @@ public class CreateServerRequest {
     public CreateServerRequest password(String password) {
         this.password = password;
         return this;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPrimaryDns() {
@@ -323,12 +353,16 @@ public class CreateServerRequest {
     }
 
     public CreateServerRequest managedOS(boolean isManagedOS, boolean hasTemplateCapability) {
+        setManagedOS(isManagedOS, hasTemplateCapability);
+        return this;
+    }
+
+    public void setManagedOS(boolean isManagedOS, boolean hasTemplateCapability) {
         if (isManagedOS && !hasTemplateCapability) {
             throw new IllegalArgumentException("Managed OS capabilities is not supported by this template");
         }
 
         this.isManagedOS = isManagedOS;
-        return this;
     }
 
     /**
@@ -351,6 +385,10 @@ public class CreateServerRequest {
         return this;
     }
 
+    public void setAntiAffinityPolicyId(String antiAffinityPolicyId) {
+        this.antiAffinityPolicyId = antiAffinityPolicyId;
+    }
+
     public List<CustomField> getCustomFields() {
         return customFields;
     }
@@ -358,5 +396,9 @@ public class CreateServerRequest {
     public CreateServerRequest customFields(List<CustomField> fields) {
         this.customFields = fields;
         return this;
+    }
+
+    public void setCustomFields(List<CustomField> fields) {
+        this.customFields = fields;
     }
 }

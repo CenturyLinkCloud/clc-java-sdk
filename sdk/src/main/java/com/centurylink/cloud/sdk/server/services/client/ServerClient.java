@@ -32,9 +32,11 @@ import com.centurylink.cloud.sdk.server.services.client.domain.network.AddNetwor
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateSnapshotRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.ImportServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ServerCredentials;
@@ -77,6 +79,39 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 )
                 .readEntity(BaseServerResponse.class);
     }
+
+    /**
+     * Clone the server. Calls to this operation must include a token acquired
+     * from the authentication endpoint. See the Login API for information on acquiring
+     * this token.
+     *
+     * @param request the {@code CloneServerRequest} instance
+     * @return current instance
+     */
+    public BaseServerResponse clone(CloneServerRequest request) {
+        return
+            client("/servers/{accountAlias}")
+                .request()
+                .post(entity(request, APPLICATION_JSON_TYPE))
+                .readEntity(BaseServerResponse.class);
+    }
+
+    /**
+     * Import the server. Calls to this operation must include a token acquired
+     * from the authentication endpoint. See the Login API for information on acquiring
+     * this token.
+     *
+     * @param request the {@code ImportServerRequest} instance
+     * @return current instance
+     */
+    public BaseServerResponse importServer(ImportServerRequest request) {
+        return
+            client("/vmImport/{accountAlias}")
+                .request()
+                .post(entity(request, APPLICATION_JSON_TYPE))
+                .readEntity(BaseServerResponse.class);
+    }
+
 
     public BaseServerResponse delete(String serverId) {
         return
