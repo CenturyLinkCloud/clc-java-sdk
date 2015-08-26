@@ -34,7 +34,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class CreateWithCustomFieldsTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
@@ -45,12 +45,15 @@ public class CreateWithCustomFieldsTest extends AbstractServersSdkTest implement
     @Test
     @WireMockFileSource("custom-fields")
     public void testCreateServer() throws Exception {
+        String approvedValue = "test user";
+        String typeValue = "1";
+
         server =
             serverService.create(TestServerSupport.anyServerConfig()
                 .name("CSTM")
                 .customFields(
-                    new CustomField().name("Approved by").value("test user"),
-                    new CustomField().name("Type").value("1")
+                    new CustomField().name("Approved by").value(approvedValue),
+                    new CustomField().name("Type").value(typeValue)
                 )
             )
             .waitUntilComplete()
@@ -64,10 +67,10 @@ public class CreateWithCustomFieldsTest extends AbstractServersSdkTest implement
         assert customFields.size() == 2;
 
         customFields.forEach(field -> {
-            if (field.getName().equals("Type")) {
-                assert field.getValue().equals("1");
+            if ("Type".equals(field.getName())) {
+                assert typeValue.equals(field.getValue());
             } else {
-                assert field.getValue().equals("test user");
+                assert approvedValue.equals(field.getValue());
             }
         });
 

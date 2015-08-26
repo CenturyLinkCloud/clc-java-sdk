@@ -16,7 +16,6 @@
 package com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

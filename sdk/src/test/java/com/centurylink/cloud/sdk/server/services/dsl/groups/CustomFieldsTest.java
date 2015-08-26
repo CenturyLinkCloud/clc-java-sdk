@@ -34,7 +34,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class CustomFieldsTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
@@ -46,13 +46,16 @@ public class CustomFieldsTest extends AbstractServersSdkTest implements WireMock
     @Test
     @WireMockFileSource("custom-fields/create")
     public void testCreate() {
+        String approvedValue = "test user";
+        String typeValue = "1";
+
         groupRef =
             groupService.create(new GroupConfig()
                 .parentGroup(Group.refByName(DataCenter.DE_FRANKFURT, Group.DEFAULT_GROUP))
                 .name("CSTM")
                 .customFields(
-                    new CustomField().name("Approved by").value("test user"),
-                    new CustomField().name("Type").value("1")
+                    new CustomField().name("Approved by").value(approvedValue),
+                    new CustomField().name("Type").value(typeValue)
                 )
             )
             .waitUntilComplete()
@@ -64,10 +67,10 @@ public class CustomFieldsTest extends AbstractServersSdkTest implements WireMock
         assert customFields.size() == 2;
 
         customFields.forEach(field -> {
-            if (field.getName().equals("Type")) {
-                assert field.getValue().equals("1");
+            if ("Type".equals(field.getName())) {
+                assert typeValue.equals(field.getValue());
             } else {
-                assert field.getValue().equals("test user");
+                assert approvedValue.equals(field.getValue());
             }
         });
 
@@ -76,9 +79,11 @@ public class CustomFieldsTest extends AbstractServersSdkTest implements WireMock
     @Test
     @WireMockFileSource("custom-fields/modify")
     public void testModify() {
+        String newValue = "user";
+
         groupService.modify(groupRef, new GroupConfig()
             .customFields(
-                new CustomField().name("Approved by").value("user")
+                new CustomField().name("Approved by").value(newValue)
             ))
             .waitUntilComplete();
 
@@ -87,7 +92,7 @@ public class CustomFieldsTest extends AbstractServersSdkTest implements WireMock
         List<CustomField> customFields = groupMetadata.getCustomFields();
         assert customFields.size() == 1;
 
-        assert customFields.get(0).getValue().equals("user");
+        assert newValue.equals(customFields.get(0).getValue());
 
         deleteGroup();
     }

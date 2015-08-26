@@ -16,8 +16,12 @@
 package com.centurylink.cloud.sdk.base.services.client.domain.datacenters;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.fasterxml.jackson.annotation.*;
-import com.google.common.base.Objects;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.annotation.Generated;
 import java.util.ArrayList;

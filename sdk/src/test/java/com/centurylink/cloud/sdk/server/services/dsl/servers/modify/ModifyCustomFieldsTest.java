@@ -24,9 +24,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
-import com.centurylink.cloud.sdk.tests.recorded.WireMockRecording;
 import com.google.inject.Inject;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -36,8 +34,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
-//@WireMockRecording
+@Test(groups = {RECORDED})
 public class ModifyCustomFieldsTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
@@ -77,7 +74,7 @@ public class ModifyCustomFieldsTest extends AbstractServersSdkTest implements Wi
         List<CustomField> customFields = server.getDetails().getCustomFields();
 
         assert customFields.size() == 1;
-        assert customFields.get(0).getValue().equals("1");
+        assert "1".equals(customFields.get(0).getValue());
 
         deleteServer();
     }

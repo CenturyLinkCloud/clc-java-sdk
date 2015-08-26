@@ -22,7 +22,6 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.Paral
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.policy.services.client.PolicyClient;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyMetadata;
-import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyRequest;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertPolicyConfig;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.PolicyConverter;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AlertPolicyFilter;

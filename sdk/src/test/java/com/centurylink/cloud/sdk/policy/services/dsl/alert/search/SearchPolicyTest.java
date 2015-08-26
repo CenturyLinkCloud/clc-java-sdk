@@ -59,7 +59,7 @@ public class SearchPolicyTest extends AbstractPoliciesSdkTest implements WireMoc
 
         policies.forEach(policy -> {
                 AlertTriggerMetadata trigger = policy.getTriggers().get(0);
-                assertTrue(trigger.getMetric().equals(AlertTriggerMetric.CPU.name().toLowerCase()));
+                assertTrue(trigger.getMetric().equalsIgnoreCase(AlertTriggerMetric.CPU.name()));
                 assertTrue(trigger.getThreshold() > 20f);
             }
         );
