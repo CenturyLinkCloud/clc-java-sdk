@@ -31,7 +31,6 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 
 @Test(groups = {RECORDED})
-@WireMockFileSource
 public class CloneServerTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
