@@ -214,9 +214,7 @@ public class ServerConverter {
             }
         }
 
-        if (config.getTimeToLive() != null) {
-            config.setTimeToLive(config.getTimeToLive());
-        }
+        config.setTimeToLive(config.getTimeToLive());
 
         if (config.isManagedOS()) {
             request.managedOS(config.isManagedOS(), true);
