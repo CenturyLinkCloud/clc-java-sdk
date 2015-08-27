@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.servers;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CloneServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
@@ -64,6 +65,25 @@ public class TestServerSupport {
                 .version("6")
                 .architecture(CpuArchitecture.x86_64)
             );
+    }
+
+    public static CloneServerConfig getCloneServerConfig(Server server) {
+        CloneServerConfig config = (CloneServerConfig) new CloneServerConfig()
+            .name("CLNSV")
+            .type(STANDARD)
+            .group(Group.refByName()
+                    .name(DEFAULT_GROUP)
+                    .dataCenter(DE_FRANKFURT)
+            )
+            .machine(
+                new Machine()
+                    .cpuCount(1)
+                    .ram(2)
+            );
+
+        config.setServer(server);
+
+        return config;
     }
 
     public ServerMetadata createAnyServer() {

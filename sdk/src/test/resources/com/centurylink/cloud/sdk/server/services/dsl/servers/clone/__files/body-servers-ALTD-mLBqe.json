@@ -1,0 +1,1 @@
+{"server":"clnsv","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/de1-84394","id":"de1-84394"},{"rel":"self","href":"/v2/servers/ALTD/c75ffce5155e4c62b0ead46b5ead88c9?uuid=True","id":"c75ffce5155e4c62b0ead46b5ead88c9","verbs":["GET"]}]}
