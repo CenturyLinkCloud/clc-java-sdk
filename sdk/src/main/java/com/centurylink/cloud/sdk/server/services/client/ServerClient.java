@@ -63,14 +63,6 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
         super(authFilter, config);
     }
 
-    /**
-     * Creates a new server. Calls to this operation must include a token acquired
-     * from the authentication endpoint. See the Login API for information on acquiring
-     * this token.
-     *
-     * @param request the {@code CreateServerRequest} instance
-     * @return current instance
-     */
     public BaseServerResponse create(CreateServerRequest request) {
         return
             client("/servers/{accountAlias}")
@@ -80,14 +72,6 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .readEntity(BaseServerResponse.class);
     }
 
-    /**
-     * Clone the server. Calls to this operation must include a token acquired
-     * from the authentication endpoint. See the Login API for information on acquiring
-     * this token.
-     *
-     * @param request the {@code CloneServerRequest} instance
-     * @return current instance
-     */
     public BaseServerResponse clone(CloneServerRequest request) {
         return
             client("/servers/{accountAlias}")
@@ -96,14 +80,6 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .readEntity(BaseServerResponse.class);
     }
 
-    /**
-     * Import the server. Calls to this operation must include a token acquired
-     * from the authentication endpoint. See the Login API for information on acquiring
-     * this token.
-     *
-     * @param request the {@code ImportServerRequest} instance
-     * @return current instance
-     */
     public BaseServerResponse importServer(ImportServerRequest request) {
         return
             client("/vmImport/{accountAlias}")

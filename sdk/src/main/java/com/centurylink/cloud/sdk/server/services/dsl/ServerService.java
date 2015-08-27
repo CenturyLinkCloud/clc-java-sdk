@@ -102,6 +102,12 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         this.experimentalQueueClient = experimentalQueueClient;
     }
 
+    /**
+     * Create server
+     *
+     * @param config server config
+     * @return OperationFuture wrapper for ServerMetadata
+     */
     public OperationFuture<ServerMetadata> create(CreateServerConfig config) {
         BaseServerResponse response = client.create(
             serverConverter.buildCreateServerRequest(
@@ -114,6 +120,12 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return postProcessBuildServerResponse(response, config);
     }
 
+    /**
+     * Clone existing server
+     *
+     * @param config server config
+     * @return OperationFuture wrapper for ServerMetadata
+     */
     public OperationFuture<ServerMetadata> clone(CloneServerConfig config) {
         BaseServerResponse response = client.clone(
             serverConverter.buildCloneServerRequest(
@@ -129,6 +141,12 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return postProcessBuildServerResponse(response, config);
     }
 
+    /**
+     * Import server from ovf image
+     *
+     * @param config server config
+     * @return OperationFuture wrapper for ServerMetadata
+     */
     public OperationFuture<ServerMetadata> importServer(ImportServerConfig config) {
         BaseServerResponse response = client.importServer(
             serverConverter.buildImportServerRequest(

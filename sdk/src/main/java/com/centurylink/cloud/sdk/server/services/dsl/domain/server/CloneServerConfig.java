@@ -28,4 +28,9 @@ public class CloneServerConfig extends CreateServerConfig {
     public void setServer(Server server) {
         this.server = server;
     }
+
+    public CloneServerConfig server(Server server) {
+        setServer(server);
+        return this;
+    }
 }

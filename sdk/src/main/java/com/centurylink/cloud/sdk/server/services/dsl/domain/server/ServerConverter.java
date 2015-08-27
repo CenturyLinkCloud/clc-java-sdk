@@ -82,25 +82,25 @@ public class ServerConverter {
                 .cpu(config.getMachine().getCpuCount())
                 .memoryGB(config.getMachine().getRam())
                 .additionalDisks(
-                        buildDiskRequestList(
-                                config.getMachine().getDisks()
-                        )
+                    buildDiskRequestList(
+                        config.getMachine().getDisks()
+                    )
                 )
                 .password(config.getPassword())
                 .groupId(groupMetadata.getId())
 
                 .type(
-                        config.getType().getCode(),
-                        templateMetadata.hasCapability(TemplateMetadata.HYPERSCALE_VALUE)
+                    config.getType().getCode(),
+                    templateMetadata.hasCapability(TemplateMetadata.HYPERSCALE_VALUE)
                 )
 
                 .storageType(
-                        config.getStorageType().getCode(),
-                        dataCenterService
-                                .getDeploymentCapabilities(
-                                        DataCenter.refById(groupMetadata.getLocationId())
-                                )
-                                .getSupportsPremiumStorage()
+                    config.getStorageType().getCode(),
+                    dataCenterService
+                        .getDeploymentCapabilities(
+                            DataCenter.refById(groupMetadata.getLocationId())
+                        )
+                        .getSupportsPremiumStorage()
                 )
 
                 .sourceServerId(templateMetadata.getName())
@@ -108,19 +108,19 @@ public class ServerConverter {
                 .secondaryDns(config.getNetwork().getSecondaryDns())
 
                 .networkId(
-                        (config.getNetwork().getNetwork() == null) ? null :
-                                dataCenterService
-                                        .findNetworkByRef(config.getNetwork().getNetwork())
-                                        .getNetworkId()
+                    (config.getNetwork().getNetwork() == null) ? null :
+                        dataCenterService
+                            .findNetworkByRef(config.getNetwork().getNetwork())
+                            .getNetworkId()
                 )
 
                 .timeToLive(config.getTimeToLive())
                 .managedOS(
-                        config.isManagedOS(),
-                        templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
+                    config.isManagedOS(),
+                    templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
                 )
                 .antiAffinityPolicyId((config.getAntiAffinityPolicy()) == null ? null :
-                                policyService.antiAffinity().findByRef(config.getAntiAffinityPolicy()).getId()
+                    policyService.antiAffinity().findByRef(config.getAntiAffinityPolicy()).getId()
                 )
                 .customFields(newFields.isEmpty() ? null : newFields);
     }
@@ -254,7 +254,7 @@ public class ServerConverter {
                 .map(config -> {
                     CustomFieldMetadata found = customFieldsMetadata.stream()
                             .filter(metadata -> metadata.getName().equals(config.getName()) ||
-                                            metadata.getId().equals(config.getId())
+                                metadata.getId().equals(config.getId())
                             )
                             .findFirst()
                             .orElse(null);
@@ -279,37 +279,37 @@ public class ServerConverter {
                 && !credentialsConfig.getNewPassword().equals(credentialsConfig.getOldPassword())) {
 
             result.add(
-                    new ModifyServerRequest<PasswordProvider>()
-                            .member("password")
-                            .value(
-                                    new PasswordProvider()
-                                            .current(credentialsConfig.getOldPassword())
-                                            .password(credentialsConfig.getNewPassword())
-                            )
+                new ModifyServerRequest<PasswordProvider>()
+                    .member("password")
+                    .value(
+                        new PasswordProvider()
+                            .current(credentialsConfig.getOldPassword())
+                            .password(credentialsConfig.getNewPassword())
+                        )
             );
         }
 
         if (serverConfig.getDescription() != null) {
             result.add(
-                    new ModifyServerRequest<String>()
-                            .member("description")
-                            .value(serverConfig.getDescription())
+                new ModifyServerRequest<String>()
+                    .member("description")
+                    .value(serverConfig.getDescription())
             );
         }
 
         if (serverConfig.getGroupId() != null) {
             result.add(
-                    new ModifyServerRequest<String>()
-                            .member("groupId")
-                            .value(serverConfig.getGroupId())
+                new ModifyServerRequest<String>()
+                    .member("groupId")
+                    .value(serverConfig.getGroupId())
             );
         }
 
         if (!serverConfig.getCustomFields().isEmpty()) {
             result.add(
-                    new ModifyServerRequest<List<CustomField>>()
-                            .member("customFields")
-                            .value(composeCustomFields(serverConfig.getCustomFields(), customFieldsMetadata))
+                new ModifyServerRequest<List<CustomField>>()
+                    .member("customFields")
+                    .value(composeCustomFields(serverConfig.getCustomFields(), customFieldsMetadata))
             );
         }
 
