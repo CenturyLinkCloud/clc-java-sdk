@@ -27,6 +27,15 @@ public class CustomField {
     private String name;
     private String displayValue;
 
+    public CustomField() {
+
+    }
+
+    public CustomField(String name, String value) {
+        setName(name);
+        setValue(value);
+    }
+
     public String getId() {
         return id;
     }

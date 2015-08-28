@@ -20,8 +20,10 @@ import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
+import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.ServerModule;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
+import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
@@ -50,6 +52,12 @@ public class ClcSdk {
 
     @Inject
     StatisticsService statisticsService;
+
+    @Inject
+    PolicyService policyService;
+
+    @Inject
+    InvoiceService invoiceService;
 
     public ClcSdk() {
         this(new DefaultCredentialsProvider());
@@ -91,5 +99,13 @@ public class ClcSdk {
 
     public StatisticsService statisticsService() {
         return statisticsService;
+    }
+
+    public PolicyService policyService() {
+        return policyService;
+    }
+
+    public InvoiceService invoiceService() {
+        return invoiceService;
     }
 }
