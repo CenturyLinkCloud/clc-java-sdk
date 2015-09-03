@@ -78,7 +78,7 @@ public class PoliciesSampleApp extends Assert {
         policyService = sdk.policyService();
     }
 
-    @BeforeClass//(groups = {SAMPLES})
+    @BeforeClass(groups = {SAMPLES})
     public void init() {
         clearAll();
 
@@ -124,7 +124,7 @@ public class PoliciesSampleApp extends Assert {
             .waitUntilComplete().getResult().asRefById();
     }
 
-    @AfterClass//(groups = {SAMPLES})
+    @AfterClass(groups = {SAMPLES})
     public void deletePolicies() {
         clearAll();
     }
@@ -137,12 +137,12 @@ public class PoliciesSampleApp extends Assert {
     }
 
 
-    @Test//(groups = {SAMPLES})
+    @Test(groups = {SAMPLES})
     public void checkThatServerCreatedWithPolicy() {
         assertAntiAffinityPolicy(antiAffinityPolicyName);
     }
 
-    @Test//(groups = {SAMPLES})
+    @Test(groups = {SAMPLES})
     public void modifyPolicies() {
         policyService.alert().modify(alertPolicy,
             new AlertPolicyConfig()
@@ -159,13 +159,13 @@ public class PoliciesSampleApp extends Assert {
         ).waitUntilComplete();
     }
 
-    @Test//(groups = {SAMPLES})
+    @Test(groups = {SAMPLES})
     public void modifyPoliciesCheck() {
         assertAntiAffinityPolicy(newAntiAffinityPolicyName);
 
         AlertPolicyMetadata alertPolicyMetadata = policyService.alert().findByRef(alertPolicy);
-        List<String> recipients = ((ActionSettingsEmailMetadata)alertPolicyMetadata.getActions().get(0)
-            .getSettings()).getRecipients();
+        List<String> recipients = ((ActionSettingsEmailMetadata)alertPolicyMetadata.getActions().get(0).getSettings())
+            .getRecipients();
 
         assertEquals(
             recipients,
