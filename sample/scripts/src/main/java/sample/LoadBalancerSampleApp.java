@@ -129,17 +129,15 @@ public class LoadBalancerSampleApp extends Assert {
     private List<LoadBalancerNodeMetadata> composeNodeList() {
         List<LoadBalancerNodeMetadata> result = new ArrayList<>();
 
-        LoadBalancerNodeMetadata node1 = new LoadBalancerNodeMetadata() {{
-            setStatus(LoadBalancerStatus.ENABLED.getCode());
-            setIpAddress("10.135.238.12");
-            setPrivatePort(8088);
-        }};
+        LoadBalancerNodeMetadata node1 = new LoadBalancerNodeMetadata()
+            .status(LoadBalancerStatus.ENABLED.getCode())
+            .ipAddress("10.135.238.12")
+            .privatePort(8088);
 
-        LoadBalancerNodeMetadata node2 = new LoadBalancerNodeMetadata() {{
-            setStatus(LoadBalancerStatus.ENABLED.getCode());
-            setIpAddress("10.135.238.12");
-            setPrivatePort(8089);
-        }};
+        LoadBalancerNodeMetadata node2 = new LoadBalancerNodeMetadata()
+            .status(LoadBalancerStatus.ENABLED.getCode())
+            .ipAddress("10.135.238.12")
+            .privatePort(8089);
 
         result.add(node1);
         result.add(node2);
@@ -184,7 +182,7 @@ public class LoadBalancerSampleApp extends Assert {
         assertEquals(pool1Metadata.getNodes().size(), 0);
         setLoadBalancerNodes(pool1, composeNodeList());
 
-        pool1Metadata = loadBalancerPoolService.findByRef(pool1);
+        pool1Metadata = fetchLoadBalancerPoolMetadata(pool1);
         assertEquals(pool1Metadata.getNodes().size(), 2);
     }
 }
