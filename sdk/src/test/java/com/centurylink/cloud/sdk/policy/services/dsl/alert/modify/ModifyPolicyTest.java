@@ -134,9 +134,4 @@ public class ModifyPolicyTest extends AbstractPoliciesSdkTest implements WireMoc
         assertEquals(triggers.get(0).getDuration(), "00:10:00");
         assertEquals(triggers.get(0).getThreshold(), 40.0f);
     }
-
-    @AfterClass
-    public void deletePolicy() {
-        policyService.alert().delete(policy.asFilter());
-    }
 }
