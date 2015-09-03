@@ -42,19 +42,27 @@ public class CreateLoadBalancerTest extends AbstractLoadBalancerSdkTest implemen
 
     @Test
     public void testCreate() {
+        String name = "Balancer2";
+        String description = "Balancer2 description";
+
         loadBalancer = loadBalancerService
             .create(
                 new LoadBalancerConfig()
-                    .name("Balancer2")
-                    .description("Balancer2 description")
+                    .name(name)
+                    .description(description)
                     .status(LoadBalancerStatus.ENABLED)
                     .dataCenter(DataCenter.US_EAST_STERLING)
             )
             .waitUntilComplete()
             .getResult();
 
-        LoadBalancerMetadata createdLoadBalancerMetadata = loadBalancerService.findByRef(loadBalancer);
-        assertNotNull(createdLoadBalancerMetadata);
+        LoadBalancerMetadata metadata = loadBalancerService.findByRef(loadBalancer);
+
+        assertNotNull(metadata);
+        assertEquals(metadata.getName(), name);
+        assertEquals(metadata.getDescription(), description);
+        assertEquals(metadata.getStatus(), LoadBalancerStatus.ENABLED.getCode());
+        assertEquals(metadata.getDataCenterId(), DataCenter.US_EAST_STERLING.getId());
     }
 
     @AfterMethod

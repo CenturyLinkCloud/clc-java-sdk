@@ -44,8 +44,10 @@ public class CreateLoadBalancerPoolTest extends AbstractLoadBalancerSdkTest impl
 
     @Test
     public void testCreate() {
+        String loadBalancerId = "32ba7c6bb3a24784b18f14cb2db9201a";
+
         LoadBalancer loadBalancer = LoadBalancer.refById(
-                "32ba7c6bb3a24784b18f14cb2db9201a",
+                loadBalancerId,
                 DataCenter.DE_FRANKFURT
         );
 
@@ -61,7 +63,12 @@ public class CreateLoadBalancerPoolTest extends AbstractLoadBalancerSdkTest impl
             .getResult();
 
         LoadBalancerPoolMetadata metadata = loadBalancerPoolService.findByRef(loadBalancerPool);
+
         assertNotNull(metadata);
+        assertEquals(metadata.getPort(), Integer.valueOf(80));
+        assertEquals(metadata.getMethod(), LoadBalancerPoolMethod.ROUND_ROBIN.getCode());
+        assertEquals(metadata.getPersistence(), LoadBalancerPoolPersistence.STANDARD.getCode());
+        assertEquals(metadata.getLoadBalancerId(), loadBalancerId);
     }
 
     @AfterMethod
