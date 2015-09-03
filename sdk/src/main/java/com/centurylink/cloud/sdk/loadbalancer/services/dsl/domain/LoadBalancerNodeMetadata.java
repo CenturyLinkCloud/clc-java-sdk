@@ -49,6 +49,11 @@ public class LoadBalancerNodeMetadata {
         this.status = status;
     }
 
+    public LoadBalancerNodeMetadata status(String status) {
+        setStatus(status);
+        return this;
+    }
+
     public String getIpAddress() {
         return ipAddress;
     }
@@ -57,12 +62,22 @@ public class LoadBalancerNodeMetadata {
         this.ipAddress = ipAddress;
     }
 
+    public LoadBalancerNodeMetadata ipAddress(String ipAddress) {
+        setIpAddress(ipAddress);
+        return this;
+    }
+
     public Integer getPrivatePort() {
         return privatePort;
     }
 
     public void setPrivatePort(Integer privatePort) {
         this.privatePort = privatePort;
+    }
+
+    public LoadBalancerNodeMetadata privatePort(Integer privatePort) {
+        setPrivatePort(privatePort);
+        return this;
     }
 
     public String getDataCenterId() {

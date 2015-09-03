@@ -39,7 +39,7 @@ public class LoadBalancerPoolMetadata {
     @JsonProperty("id")
     private String id;
     @JsonProperty("port")
-    private String port;
+    private Integer port;
     @JsonProperty("method")
     private String method;
     @JsonProperty("persistence")
@@ -60,11 +60,11 @@ public class LoadBalancerPoolMetadata {
         this.id = id;
     }
 
-    public String getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(String port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 

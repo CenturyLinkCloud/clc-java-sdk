@@ -20,6 +20,9 @@ import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
+import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerNodeService;
+import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService;
+import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.ServerModule;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
@@ -58,6 +61,15 @@ public class ClcSdk {
 
     @Inject
     InvoiceService invoiceService;
+
+    @Inject
+    LoadBalancerService loadBalancerService;
+
+    @Inject
+    LoadBalancerPoolService loadBalancerPoolService;
+
+    @Inject
+    LoadBalancerNodeService loadBalancerNodeService;
 
     public ClcSdk() {
         this(new DefaultCredentialsProvider());
@@ -107,5 +119,17 @@ public class ClcSdk {
 
     public InvoiceService invoiceService() {
         return invoiceService;
+    }
+
+    public LoadBalancerService loadBalancerService() {
+        return loadBalancerService;
+    }
+
+    public LoadBalancerPoolService loadBalancerPoolService() {
+        return loadBalancerPoolService;
+    }
+
+    public LoadBalancerNodeService loadBalancerNodeService() {
+        return loadBalancerNodeService;
     }
 }
