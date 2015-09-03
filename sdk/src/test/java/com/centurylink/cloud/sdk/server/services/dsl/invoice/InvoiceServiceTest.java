@@ -31,7 +31,7 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class InvoiceServiceTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
@@ -40,9 +40,12 @@ public class InvoiceServiceTest extends AbstractServersSdkTest implements WireMo
     @Inject
     BearerAuthentication authentication;
 
+    private int month = 8;
+    private int year = 2015;
+    private LocalDate previousMonthDate = LocalDate.now().withMonth(month).withYear(year).minusMonths(1);
+
     @Test
     public void testInvoiceByParams() {
-        LocalDate previousMonthDate = LocalDate.now().minusMonths(1);
         InvoiceData data = invoiceService.getInvoice(previousMonthDate.getYear(), previousMonthDate.getMonthValue());
 
         assert data.getInvoiceDate().getYear() == previousMonthDate.getYear();
@@ -51,7 +54,7 @@ public class InvoiceServiceTest extends AbstractServersSdkTest implements WireMo
 
     @Test
     public void testInvoiceByDateByAlias() {
-        Calendar previousMonthDate = Calendar.getInstance();
+        Calendar previousMonthDate = getCalendar();
         previousMonthDate.add(Calendar.MONTH, -1);
         InvoiceData data = invoiceService.getInvoice(previousMonthDate.getTime(), authentication.getAccountAlias());
 
@@ -61,7 +64,7 @@ public class InvoiceServiceTest extends AbstractServersSdkTest implements WireMo
 
     @Test
     public void testInvoiceByDate() {
-        Calendar previousMonthDate = Calendar.getInstance();
+        Calendar previousMonthDate = getCalendar();
         previousMonthDate.add(Calendar.MONTH, -1);
         InvoiceData data = invoiceService.getInvoice(previousMonthDate.getTime());
 
@@ -69,9 +72,16 @@ public class InvoiceServiceTest extends AbstractServersSdkTest implements WireMo
         assert data.getInvoiceDate().getMonthValue() == previousMonthDate.get(Calendar.MONTH) + 2;
     }
 
+    private Calendar getCalendar() {
+        Calendar previousMonthDate = Calendar.getInstance();
+        previousMonthDate.set(Calendar.MONTH, month - 1);
+        previousMonthDate.set(Calendar.YEAR, year);
+
+        return previousMonthDate;
+    }
+
     @Test
     public void testInvoiceByLocalDate() {
-        LocalDate previousMonthDate = LocalDate.now().minusMonths(1);
         InvoiceData data = invoiceService.getInvoice(previousMonthDate);
 
         assert data.getInvoiceDate().getYear() == previousMonthDate.getYear();
