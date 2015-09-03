@@ -66,6 +66,9 @@ public class PoliciesSampleApp extends Assert {
     private String newAntiAffinityPolicyName = "Sample New York Anti-Affinity Policy New";
     private String[] newRecipients = new String[]{"sampleuser1@samplecompany.com", "sampleuser2@samplecompany.com"};
 
+    private int newDuration = 10;
+    private float newThreshold = 95f;
+
     public PoliciesSampleApp() {
         ClcSdk sdk = new ClcSdk(
             new DefaultCredentialsProvider()
@@ -75,9 +78,12 @@ public class PoliciesSampleApp extends Assert {
         policyService = sdk.policyService();
     }
 
-    @BeforeClass(groups = {SAMPLES})
+    @BeforeClass//(groups = {SAMPLES})
     public void init() {
         clearAll();
+
+        int initDuration = 5;
+        float initThreshold = 52f;
 
         alertPolicy = policyService.alert().create(
             new AlertPolicyConfig()
@@ -85,7 +91,7 @@ public class PoliciesSampleApp extends Assert {
                 .action(new AlertAction()
                     .settings(new ActionSettingsEmail("sampleuser@samplecompany.com")))
                 .triggers(
-                    new AlertTrigger().duration(5).metric(AlertTriggerMetric.CPU).threshold(52.0f)
+                    new AlertTrigger().duration(initDuration).metric(AlertTriggerMetric.CPU).threshold(initThreshold)
                 )
         ).waitUntilComplete().getResult();
 
@@ -118,7 +124,7 @@ public class PoliciesSampleApp extends Assert {
             .waitUntilComplete().getResult().asRefById();
     }
 
-    @AfterClass(groups = {SAMPLES})
+    @AfterClass//(groups = {SAMPLES})
     public void deletePolicies() {
         clearAll();
     }
@@ -131,19 +137,19 @@ public class PoliciesSampleApp extends Assert {
     }
 
 
-    @Test(groups = {SAMPLES})
+    @Test//(groups = {SAMPLES})
     public void checkThatServerCreatedWithPolicy() {
         assertAntiAffinityPolicy(antiAffinityPolicyName);
     }
 
-    @Test(groups = {SAMPLES})
+    @Test//(groups = {SAMPLES})
     public void modifyPolicies() {
         policyService.alert().modify(alertPolicy,
             new AlertPolicyConfig()
                 .action(new AlertAction()
                     .settings(new ActionSettingsEmail(newRecipients)))
                 .trigger(
-                    new AlertTrigger().duration(10).metric(AlertTriggerMetric.MEMORY).threshold(95f)
+                    new AlertTrigger().duration(newDuration).metric(AlertTriggerMetric.MEMORY).threshold(newThreshold)
                 )
         ).waitUntilComplete();
 
@@ -153,7 +159,7 @@ public class PoliciesSampleApp extends Assert {
         ).waitUntilComplete();
     }
 
-    @Test(groups = {SAMPLES})
+    @Test//(groups = {SAMPLES})
     public void modifyPoliciesCheck() {
         assertAntiAffinityPolicy(newAntiAffinityPolicyName);
 
@@ -168,12 +174,12 @@ public class PoliciesSampleApp extends Assert {
 
         assertEquals(
             alertPolicyMetadata.getTriggers().get(0).getThreshold(),
-            95f
+            newThreshold
         );
 
         assertEquals(
             alertPolicyMetadata.getTriggers().get(0).getDuration(),
-            "00:10:00"
+            "00:"+ newDuration + ":00"
         );
 
         assertEquals(
