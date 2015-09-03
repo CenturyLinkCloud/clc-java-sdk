@@ -39,7 +39,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class CreateWithAntiAffinityPolicyTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
@@ -60,9 +60,9 @@ public class CreateWithAntiAffinityPolicyTest extends AbstractServersSdkTest imp
                     .architecture(CpuArchitecture.x86_64)
                 )
                 .type(ServerType.HYPERSCALE)
-                    .antiAffinityPolicy(AntiAffinityPolicy.refByName()
-                        .name("Policy CA3")
-                        .dataCenter(CA_TORONTO_2)
+                .antiAffinityPolicy(AntiAffinityPolicy.refByName()
+                    .name("Policy CA3")
+                    .dataCenter(CA_TORONTO_2)
                 )
                 .group(Group.refByName()
                     .name(Group.DEFAULT_GROUP)
