@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 
-@Test(groups = {RECORDED})
+//@Test(groups = {RECORDED})
 public class SecondaryNetworkTest extends AbstractServersSdkTest implements WireMockMixin {
 
     private Server serverRef = Server.refById("de1altdweb598");
