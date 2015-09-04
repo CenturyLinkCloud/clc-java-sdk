@@ -16,7 +16,6 @@
 package com.centurylink.cloud.sdk.server.services.dsl.groups;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
@@ -25,12 +24,9 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.InfrastructureConfig
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -43,14 +39,13 @@ import static com.centurylink.cloud.sdk.server.services.SampleServerConfigs.apac
 import static com.centurylink.cloud.sdk.server.services.SampleServerConfigs.mysqlServer;
 import static com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig.group;
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static java.util.stream.Collectors.toList;
 
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
-public class InfrastructureTest extends AbstractServersSdkTest {
+@Test(groups = {RECORDED})
+public class InfrastructureTest extends AbstractServersSdkTest implements WireMockMixin {
 
     @Inject
     GroupService groupService;
@@ -58,31 +53,12 @@ public class InfrastructureTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    WireMockServer wireMockServer;
-
-    WireMock wireMock;
-
     private String name(String value) {
         return value;
     }
 
-    @BeforeClass
-    void start() {
-        SdkHttpClient.apiUrl("http://localhost:8081/v2");
-
-        wireMockServer = new WireMockServer(wireMockConfig()
-            .fileSource(new ClasspathFileSource(
-                "com/centurylink/cloud/sdk/server/services/dsl/groups/infrastructure"
-            ))
-            .port(8081)
-        );
-        wireMockServer.start();
-
-        WireMock.configureFor("localhost", 8081);
-        wireMock = new WireMock("localhost", 8081);
-    }
-
     @Test
+    @WireMockFileSource("infrastructure")
     public void testInfrastructure() throws Exception {
         checkInfrastructure(
             initConfig(
@@ -156,11 +132,5 @@ public class InfrastructureTest extends AbstractServersSdkTest {
                     .orElse(null);
                 checkGroup(group, nextConfig);
             });
-    }
-
-    @AfterClass
-    private void finish() throws Exception {
-        wireMockServer.stop();
-        SdkHttpClient.restoreUrl();
     }
 }

@@ -4,7 +4,6 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCen
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.DataCenterFilter;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.DiskUsageMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
@@ -22,12 +21,9 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.Serve
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.GuestUsage;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.MonitoringEntry;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.MonitoringStatsEntry;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
+import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import com.google.inject.Inject;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -37,7 +33,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static java.util.stream.Collectors.summingDouble;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toList;
@@ -45,9 +40,10 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author aliaksandr.krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 @SuppressWarnings("unchecked")
-public class MonitoringStatisticsTest extends AbstractServersSdkTest {
+@WireMockFileSource("monitoring")
+public class MonitoringStatisticsTest extends AbstractServersSdkTest implements WireMockMixin{
 
     @Inject
     StatisticsService statisticsService;
@@ -58,10 +54,6 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
     @Inject
     DataCenterService dataCenterService;
 
-    WireMockServer wireMockServer;
-
-    WireMock wireMock;
-
     ServerMonitoringFilter timeFilter = new ServerMonitoringFilter().last(Duration.ofDays(2));
 
     private DataCenter[] dataCenters = {DataCenter.DE_FRANKFURT};
@@ -71,22 +63,6 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
     List<String> serverIds = Arrays.asList("de1altdweb318", "de1altdweb424", "de1altdweb426", "de1altdweb443",
         "de1altdmd-srv324", "de1altdtcrt523", "de1altdtcrt738", "de1altdtcrt940");
-
-    @BeforeClass
-    void start() {
-        SdkHttpClient.apiUrl("http://localhost:8081/v2");
-
-        wireMockServer = new WireMockServer(wireMockConfig()
-            .fileSource(new ClasspathFileSource(
-                "com/centurylink/cloud/sdk/server/services/dsl/statistics/monitoring"
-            ))
-            .port(8081)
-        );
-        wireMockServer.start();
-
-        WireMock.configureFor("localhost", 8081);
-        wireMock = new WireMock("localhost", 8081);
-    }
 
     @Test
     public void testGroupByDataCenter() {
@@ -353,11 +329,5 @@ public class MonitoringStatisticsTest extends AbstractServersSdkTest {
 
     private void assertDoubleValues(double expected, double actual, String assertMessage) {
         assertEquals(expected, actual, DELTA, assertMessage);
-    }
-
-    @AfterClass
-    public void finish() {
-        wireMockServer.stop();
-        SdkHttpClient.restoreUrl();
     }
 }
