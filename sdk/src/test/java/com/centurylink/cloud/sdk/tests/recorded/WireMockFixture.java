@@ -1,7 +1,6 @@
 package com.centurylink.cloud.sdk.tests.recorded;
 
 import com.centurylink.cloud.sdk.core.client.SdkHttpClient;
-import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.ClasspathFileSource;
 
@@ -42,7 +41,7 @@ public class WireMockFixture {
     }
 
     public static void startServerFor(Object instance, Method testMethod) {
-        SdkHttpClient.apiUrl("http://localhost:8081/v2");
+        SdkHttpClient.apiUrl("http://localhost:8081/");
 
         setWireMockServer(new WireMockServer(wireMockConfig()
             .fileSource(new ClasspathFileSource(fileSourcePath(instance, testMethod)))

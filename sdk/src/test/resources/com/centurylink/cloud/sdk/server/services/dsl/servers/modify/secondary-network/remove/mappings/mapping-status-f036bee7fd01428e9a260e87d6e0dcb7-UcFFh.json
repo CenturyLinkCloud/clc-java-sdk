@@ -1,11 +1,11 @@
 {
   "request" : {
-    "url" : "/v2/servers/ALTD/de1altdweb598",
+    "url" : "/v2-experimental/operations/ALTD/status/f036bee7fd01428e9a260e87d6e0dcb7",
     "method" : "GET"
   },
   "response" : {
     "status" : 200,
-    "bodyFileName" : "body-ALTD-de1altdweb598-Jy6eP.json",
+    "bodyFileName" : "body-status-f036bee7fd01428e9a260e87d6e0dcb7-UcFFh.json",
     "headers" : {
       "Cache-Control" : "no-cache",
       "Pragma" : "no-cache",
@@ -13,8 +13,8 @@
       "Content-Encoding" : "gzip",
       "Expires" : "-1",
       "Vary" : "Accept-Encoding",
-      "Date" : "Thu, 20 Aug 2015 11:43:08 GMT",
-      "Content-Length" : "1177"
+      "Date" : "Fri, 04 Sep 2015 08:58:09 GMT",
+      "Content-Length" : "139"
     }
   }
 }

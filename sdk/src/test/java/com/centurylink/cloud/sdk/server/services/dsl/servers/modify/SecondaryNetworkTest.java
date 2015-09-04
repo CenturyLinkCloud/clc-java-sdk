@@ -28,47 +28,47 @@ import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 
-//@Test(groups = {RECORDED})
+@Test(groups = {RECORDED})
 public class SecondaryNetworkTest extends AbstractServersSdkTest implements WireMockMixin {
 
-//    private Server serverRef = Server.refById("de1altdweb598");
-//
-//    @Inject
-//    ServerService serverService;
-//
-//    ServerMetadata serverMetadata;
-//
-//    @Test
-//    @WireMockFileSource("secondary-network/add")
-//    public void testAddSecondaryNetwork() {
-//        serverService.addSecondaryNetwork(
-//            serverRef.asFilter(),
-//            new AddNetworkConfig().network(Network.refById("fbc1f6c7dd0241dfa22bafa05244da00"))
-//        ).waitUntilComplete();
-//    }
-//
-//    @Test
-//    @WireMockFileSource("secondary-network/add-assert")
-//    public void testAddSecondaryNetworkAssert() {
-//        serverMetadata = serverService.findByRef(serverRef);
-//
-//        assert serverMetadata.getDetails().getSecondaryIPAddresses().size() == 1;
-//    }
-//
-//    @Test
-//    @WireMockFileSource("secondary-network/remove")
-//    public void testRemoveSecondaryNetwork() {
-//        serverService.removeSecondaryNetworks(
-//            serverRef.asFilter()
-//        ).waitUntilComplete();
-//    }
-//
-//    @Test
-//    @WireMockFileSource("secondary-network/remove-assert")
-//    public void testRemoveSecondaryNetworkAssert() {
-//        serverMetadata = serverService.findByRef(serverRef);
-//
-//        assert serverMetadata.getDetails().getSecondaryIPAddresses().size() == 0;
-//    }
+    private Server serverRef = Server.refById("de1altdweb598");
+
+    @Inject
+    ServerService serverService;
+
+    ServerMetadata serverMetadata;
+
+    @Test
+    @WireMockFileSource("secondary-network/add")
+    public void testAddSecondaryNetwork() {
+        serverService.addSecondaryNetwork(
+            serverRef.asFilter(),
+            new AddNetworkConfig().network(Network.refById("fbc1f6c7dd0241dfa22bafa05244da00"))
+        ).waitUntilComplete();
+    }
+
+    @Test
+    @WireMockFileSource("secondary-network/add-assert")
+    public void testAddSecondaryNetworkAssert() {
+        serverMetadata = serverService.findByRef(serverRef);
+
+        assert serverMetadata.getDetails().getSecondaryIPAddresses().size() == 1;
+    }
+
+    @Test
+    @WireMockFileSource("secondary-network/remove")
+    public void testRemoveSecondaryNetwork() {
+        serverService.removeSecondaryNetworks(
+            serverRef.asFilter()
+        ).waitUntilComplete();
+    }
+
+    @Test
+    @WireMockFileSource("secondary-network/remove-assert")
+    public void testRemoveSecondaryNetworkAssert() {
+        serverMetadata = serverService.findByRef(serverRef);
+
+        assert serverMetadata.getDetails().getSecondaryIPAddresses().size() == 0;
+    }
 
 }

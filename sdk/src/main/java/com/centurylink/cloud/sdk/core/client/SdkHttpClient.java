@@ -26,20 +26,34 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * @author ilya.drabenia
  */
 public class SdkHttpClient {
-    protected static String CLC_API_URL = "https://api.tier3.com/v2";
-    protected static String CLC_API_URL_EXPERIMENTAL = "https://api.tier3.com/v2-experimental";
+    private static final String INIT_API_DOMAIN = "https://api.tier3.com/";
+    private static String API_DOMAIN = INIT_API_DOMAIN;
+
+    protected static String CLC_API_URL;
+    protected static String CLC_API_URL_EXPERIMENTAL;
 
     public static final SdkClientBuilder CLIENT_BUILDER =
         (SdkClientBuilder) ResteasyClientBuilder
             .newBuilder()
             .register(new ErrorProcessingFilter());
 
+    static {
+        updateApiUrl();
+    }
+
     public static void apiUrl(String url) {
-        CLC_API_URL = url;
+        API_DOMAIN = url;
+        updateApiUrl();
     }
 
     public static void restoreUrl() {
-        CLC_API_URL = "https://api.tier3.com/v2";
+        API_DOMAIN = INIT_API_DOMAIN;
+        updateApiUrl();
+    }
+
+    private static void updateApiUrl() {
+        CLC_API_URL = API_DOMAIN + "v2";
+        CLC_API_URL_EXPERIMENTAL = API_DOMAIN + "v2-experimental";
     }
 
     public SdkHttpClient(SdkConfiguration config) {

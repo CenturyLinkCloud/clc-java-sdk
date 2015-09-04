@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/networks/ALTD/de1/5f75bcd83292477089ad47ab90f135f3?ipAddresses=claimed",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-de1-5f75bcd83292477089ad47ab90f135f3-BX3dk.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Fri, 04 Sep 2015 08:58:09 GMT",
+      "Content-Length" : "469"
+    }
+  }
+}
