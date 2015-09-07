@@ -20,11 +20,13 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.Da
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
+import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.MonitoringType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.invoice.InvoiceData;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
@@ -38,6 +40,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -56,6 +59,7 @@ public class StatisticsSampleApp extends Assert {
     private ServerService serverService;
     private GroupService groupService;
     private StatisticsService statisticsService;
+    private InvoiceService invoiceService;
 
     public StatisticsSampleApp() {
         ClcSdk sdk = new ClcSdk(
@@ -65,6 +69,7 @@ public class StatisticsSampleApp extends Assert {
         serverService = sdk.serverService();
         groupService = sdk.groupService();
         statisticsService = sdk.statisticsService();
+        invoiceService = sdk.invoiceService();
     }
 
     @BeforeClass(groups = {SAMPLES})
@@ -255,5 +260,27 @@ public class StatisticsSampleApp extends Assert {
             .groupByDataCenter();
 
         assertNotNull(stats);
+    }
+
+    /**
+     * Step 8. App query invoice statistics for previous month
+     */
+    @Test(groups = {SAMPLES})
+    public void getInvoiceDataForPreviousMonth() {
+        InvoiceData invoice = invoiceService.getInvoice(
+            LocalDate.now().minusMonths(1)
+        );
+
+        assertNotNull(invoice);
+    }
+
+    /**
+     * Step 8. App query invoice statistics for Jan-15
+     */
+    @Test(groups = {SAMPLES})
+    public void getInvoiceDataForStartOf2015() {
+        InvoiceData invoice = invoiceService.getInvoice(2015, 1);
+
+        assertNotNull(invoice);
     }
 }
