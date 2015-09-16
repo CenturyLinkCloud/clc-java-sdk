@@ -13,18 +13,18 @@
  * limitations under the License.
  */
 
-/*
-// To declare projects as part of a multi-project build use the 'include' method
-include 'shared'
-include 'api'
-include 'services:webservice'
-*/
+package com.centurylink.cloud.sdk;
 
-rootProject.name = 'clc-java-sdk'
+import org.springframework.context.annotation.Import;
 
-include 'sdk'
-include 'sample:web-app:app'
-include 'sample:web-app:client'
-include 'sample:scripts'
-include 'sdk-spring-adapter'
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+@Import(ClcSpringConfig.class)
+public @interface EnableClcSdk {}
