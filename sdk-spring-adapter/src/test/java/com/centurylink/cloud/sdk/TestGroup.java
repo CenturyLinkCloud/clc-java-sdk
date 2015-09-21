@@ -13,18 +13,9 @@
  * limitations under the License.
  */
 
-/*
-// To declare projects as part of a multi-project build use the 'include' method
-include 'shared'
-include 'api'
-include 'services:webservice'
-*/
+package com.centurylink.cloud.sdk;
 
-rootProject.name = 'clc-java-sdk'
+public interface TestGroup {
 
-include 'sdk'
-include 'sample:web-app:app'
-include 'sample:web-app:client'
-include 'sample:scripts'
-include 'sdk-spring-adapter'
-
+    String SPRING_ADAPTER = "SpringAdapter";
+}
