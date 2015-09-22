@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/firewallPolicies/ALTD/de1",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"enabled\":true,\"destinationAccount\":\"ALTD\",\"source\":[\"10.110.5.13/32\",\"10.110.5.13/32\",\"10.110.5.13/32\"],\"destination\":[\"10.110.5.13/32\",\"10.110.5.13/32\"],\"ports\":[\"tcp/1-600\"]}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-ALTD-de1-wTH0R.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "http://api.tier3.com/v2-experimental/firewallPolicies/altd/de1/a83f0e6d1d43471690943076466ade76",
+      "Date" : "Tue, 22 Sep 2015 13:16:59 GMT",
+      "Content-Length" : "162"
+    }
+  }
+}
