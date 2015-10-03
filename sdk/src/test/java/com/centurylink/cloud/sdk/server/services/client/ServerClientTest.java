@@ -1,5 +1,6 @@
 package com.centurylink.cloud.sdk.server.services.client;
 
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ServerCredentials;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
@@ -7,7 +8,6 @@ import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.tests.fixtures.SingleServerFixture;
 import org.testng.annotations.Test;
 
-import javax.inject.Inject;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;

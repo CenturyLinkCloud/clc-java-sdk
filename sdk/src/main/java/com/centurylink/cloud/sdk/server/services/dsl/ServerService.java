@@ -26,6 +26,7 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.Paral
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
@@ -61,7 +62,6 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.Serve
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.future.CreateServerJobFuture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.ServerByIdRef;
-import com.google.inject.Inject;
 
 import java.util.Arrays;
 import java.util.List;

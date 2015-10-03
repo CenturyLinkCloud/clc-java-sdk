@@ -16,14 +16,15 @@
 package com.centurylink.cloud.sdk.policy.services;
 
 import com.centurylink.cloud.sdk.base.services.BaseModule;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.policy.services.client.PolicyClient;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
-import com.google.inject.AbstractModule;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.PolicyConverter;
 
 /**
  * @author Aliaksandr Krasitski
  */
-public class PolicyModule extends AbstractModule {
+public class PolicyModule extends Module {
 
     @Override
     protected void configure() {
@@ -31,6 +32,7 @@ public class PolicyModule extends AbstractModule {
 
         bind(PolicyClient.class);
         bind(PolicyService.class);
+        bind(PolicyConverter.class);
     }
 
 }

@@ -19,6 +19,7 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deploym
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
@@ -34,7 +35,6 @@ import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.S
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
-import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;

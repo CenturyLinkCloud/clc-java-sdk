@@ -16,13 +16,13 @@
 package com.centurylink.cloud.sdk.tests;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
+import com.centurylink.cloud.sdk.core.config.SdkConfigurationBuilder;
+import com.centurylink.cloud.sdk.core.injector.SdkInjector;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.tests.mocks.BindMocksModule;
-import com.centurylink.cloud.sdk.tests.mocks.BindSpiesModule;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.Guice;
-import com.google.inject.Module;
-import com.google.inject.util.Modules;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -31,6 +31,7 @@ import org.testng.annotations.BeforeMethod;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
@@ -46,16 +47,22 @@ public abstract class AbstractSdkTest extends Assert {
     @BeforeClass(alwaysRun = true)
     @BeforeMethod(alwaysRun = true)
     public void injectDependencies() {
-        Guice
+        SdkInjector
             .createInjector(composeModules())
             .injectMembers(this);
     }
 
-    private Module composeModules() {
-        return Modules.override(modules()).with(
-            new BindMocksModule(this),
-            new BindSpiesModule(this)
-        );
+    private List<Module> composeModules() {
+        return new ArrayList<Module>() {{
+            add(new Module() {
+                @Override
+                protected void configure() {
+                    bindInstance(SdkConfiguration.class, new SdkConfigurationBuilder().build());
+                }
+            });
+            addAll(modules());
+            add(new BindMocksModule(AbstractSdkTest.this));
+        }};
     }
 
     protected List<Module> list(Module... modules) {

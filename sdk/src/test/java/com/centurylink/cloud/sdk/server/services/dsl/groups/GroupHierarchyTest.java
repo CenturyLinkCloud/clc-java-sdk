@@ -15,25 +15,22 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.groups;
 
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
-import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
-import static com.centurylink.cloud.sdk.server.services.SampleServerConfigs.apacheHttpServer;
-import static com.centurylink.cloud.sdk.server.services.SampleServerConfigs.mysqlServer;
-import static com.centurylink.cloud.sdk.server.services.SampleServerConfigs.nginxServer;
-import static com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig.group;
+import static com.centurylink.cloud.sdk.server.services.SampleServerConfigs.*;
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 import static com.centurylink.cloud.sdk.tests.TestGroups.LONG_RUNNING;
 import static java.util.stream.Collectors.toList;

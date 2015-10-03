@@ -16,6 +16,7 @@
 package com.centurylink.cloud.sdk.policy.services.dsl.antiaffinity.modify;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.AbstractPoliciesSdkTest;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
@@ -24,7 +25,6 @@ import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AntiAffinity
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicy;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
-import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;

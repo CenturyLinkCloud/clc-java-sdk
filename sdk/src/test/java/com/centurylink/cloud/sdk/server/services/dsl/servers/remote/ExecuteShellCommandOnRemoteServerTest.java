@@ -16,12 +16,12 @@
 package com.centurylink.cloud.sdk.server.services.dsl.servers.remote;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.domain.ShellResponse;
-import com.google.inject.Inject;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;

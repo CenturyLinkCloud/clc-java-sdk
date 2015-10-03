@@ -16,10 +16,10 @@
 package com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future;
 
 import com.centurylink.cloud.sdk.base.services.client.QueueClient;
-import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting.SingleWaitingLoop;
-import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting.WaitingLoop;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.JobInfo;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.exceptions.JobFailedException;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting.SingleWaitingLoop;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting.WaitingLoop;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -16,10 +16,10 @@
 package com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.TemplateFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType;
 
 import static com.google.common.base.Strings.nullToEmpty;
 

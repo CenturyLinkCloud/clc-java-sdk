@@ -15,16 +15,11 @@
 
 package com.centurylink.cloud.sdk.server.services;
 
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskType;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.NetworkConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerType;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.*;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
 
 import java.time.ZonedDateTime;

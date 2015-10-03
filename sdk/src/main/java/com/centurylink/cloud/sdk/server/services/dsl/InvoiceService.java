@@ -15,9 +15,9 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl;
 
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.invoice.InvoiceData;
-import com.google.inject.Inject;
 
 import java.time.LocalDate;
 import java.util.Calendar;

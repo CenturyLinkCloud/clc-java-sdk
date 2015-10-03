@@ -19,7 +19,7 @@ import com.centurylink.cloud.sdk.base.services.client.domain.queue.GetStatusResp
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.google.inject.Inject;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 
 /**
  * @author Ilya Drabenia

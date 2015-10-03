@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.policy.services.dsl.alert.create;
 
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.AbstractPoliciesSdkTest;
 import com.centurylink.cloud.sdk.policy.services.client.domain.ActionSettingsEmailMetadata;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AlertActionMetadata;
@@ -28,7 +29,6 @@ import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertTrigger;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertTriggerMetric;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AlertPolicy;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
-import com.google.inject.Inject;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 

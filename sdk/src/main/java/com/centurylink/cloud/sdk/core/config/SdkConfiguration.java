@@ -15,7 +15,7 @@
 
 package com.centurylink.cloud.sdk.core.config;
 
-import com.google.inject.AbstractModule;
+import com.centurylink.cloud.sdk.core.injector.Module;
 
 /**
  * @author Ilya Drabenia
@@ -73,11 +73,11 @@ public class SdkConfiguration {
         return socketTimeout;
     }
 
-    public AbstractModule asModule() {
-        return new AbstractModule() {
+    public Module asModule() {
+        return new Module() {
             @Override
             protected void configure() {
-                bind(SdkConfiguration.class).toInstance(SdkConfiguration.this);
+                bindInstance(SdkConfiguration.class, SdkConfiguration.this);
             }
         };
     }

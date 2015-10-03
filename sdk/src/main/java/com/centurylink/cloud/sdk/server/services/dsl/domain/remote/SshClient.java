@@ -3,8 +3,6 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.remote;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.domain.ShellResponse;
 
-import java.io.File;
-
 /**
  * @author Anton Karavayeu
  */

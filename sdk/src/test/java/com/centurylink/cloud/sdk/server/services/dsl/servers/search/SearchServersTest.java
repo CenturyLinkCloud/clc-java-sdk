@@ -18,6 +18,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.servers.search;
 import com.centurylink.cloud.sdk.base.services.client.DataCentersClient;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
@@ -27,9 +28,8 @@ import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.PowerState;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerStatus;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
-import com.google.inject.Inject;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -50,10 +50,10 @@ public class SearchServersTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    @Inject @Spy
+    @Inject @Mock
     DataCentersClient dataCentersClient;
 
-    @Inject @Spy
+    @Inject @Mock
     ServerClient serverClient;
 
     @BeforeMethod

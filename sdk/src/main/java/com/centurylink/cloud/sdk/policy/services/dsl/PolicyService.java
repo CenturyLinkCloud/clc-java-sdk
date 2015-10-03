@@ -16,9 +16,9 @@
 package com.centurylink.cloud.sdk.policy.services.dsl;
 
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.client.PolicyClient;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.PolicyConverter;
-import com.google.inject.Inject;
 
 /**
  * @author Aliaksandr Krasitski

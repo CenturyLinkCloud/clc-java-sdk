@@ -15,8 +15,9 @@
 
 package com.centurylink.cloud.sdk.tests.mocks;
 
+
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.core.services.ClcServiceException;
-import com.centurylink.cloud.sdk.tests.TestModule;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -26,7 +27,7 @@ import java.util.stream.Stream;
 /**
  * @author Ilya Drabenia
  */
-public class BindMocksModule extends TestModule {
+public class BindMocksModule extends Module {
     private final Object target;
 
     public BindMocksModule(Object target) {
@@ -43,7 +44,7 @@ public class BindMocksModule extends TestModule {
         Stream
             .of(declaredFields())
             .filter(f -> f.isAnnotationPresent(Mock.class))
-            .forEach(f -> bind((Class<Object>) f.getType()).toInstance(fieldValue(f)));
+            .forEach(f -> bindInstance(f.getType(), fieldValue(f)));
     }
 
     private Field[] declaredFields() {

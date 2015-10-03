@@ -24,11 +24,9 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deploym
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.core.injector.Inject;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.google.inject.Module;
-import com.google.inject.util.Modules;
 import org.mockito.stubbing.OngoingStubbing;
 import org.testng.annotations.Test;
 
@@ -54,12 +52,12 @@ public class NetworkTest extends AbstractSdkTest {
 
     @Override
     protected List<Module> modules() {
-        return list(new AuthModule(), Modules.override(new BaseModule()).with(new AbstractModule() {
+        return list(new AuthModule(), new BaseModule(), new Module() {
             @Override
             protected void configure() {
-                bind(DataCentersClient.class).toInstance(mock(DataCentersClient.class));
+                bindInstance(DataCentersClient.class, mock(DataCentersClient.class));
             }
-        }));
+        });
     }
 
     @Test

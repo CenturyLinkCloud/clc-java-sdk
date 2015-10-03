@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.servers.create;
 
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
@@ -23,7 +24,6 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
-import com.google.inject.Inject;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
 import static com.google.common.base.Strings.isNullOrEmpty;

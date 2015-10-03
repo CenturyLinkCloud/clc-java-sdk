@@ -18,6 +18,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.groups;
 import com.centurylink.cloud.sdk.base.services.client.DataCentersClient;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
@@ -26,9 +27,8 @@ import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.google.common.collect.Sets;
-import com.google.inject.Inject;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -54,11 +54,11 @@ public class SearchGroupsTest extends AbstractServersSdkTest {
     GroupService groupService;
 
     @Inject
-    @Spy
+    @Mock
     ServerClient serverClient;
 
     @Inject
-    @Spy
+    @Mock
     DataCentersClient dataCentersClient;
 
     @BeforeMethod

@@ -16,7 +16,9 @@
 package com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.core.function.Streams;
 import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
+import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.SingleFilterEvaluation;
@@ -24,8 +26,6 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerMe
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerPoolMetadata;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancer;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.LoadBalancerPool;
-import com.centurylink.cloud.sdk.core.services.filter.Filter;
-import com.centurylink.cloud.sdk.core.function.Streams;
 
 import java.util.ArrayList;
 import java.util.List;

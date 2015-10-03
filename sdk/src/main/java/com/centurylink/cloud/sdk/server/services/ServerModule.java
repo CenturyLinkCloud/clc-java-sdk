@@ -16,18 +16,20 @@
 package com.centurylink.cloud.sdk.server.services;
 
 import com.centurylink.cloud.sdk.base.services.BaseModule;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConverter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerConverter;
-import com.google.inject.AbstractModule;
 
 /**
  * @author ilya.drabenia
  */
-public class ServerModule extends AbstractModule {
+public class ServerModule extends Module {
 
     @Override
     protected void configure() {
@@ -36,9 +38,12 @@ public class ServerModule extends AbstractModule {
         bind(ServerService.class);
         bind(ServerConverter.class);
         bind(GroupService.class);
+        bind(GroupConverter.class);
         bind(TemplateService.class);
+        bind(PublicIpConverter.class);
 
         bind(InvoiceService.class);
+        bindSupplier(ServerService.class);
 
         install(new BaseModule());
     }

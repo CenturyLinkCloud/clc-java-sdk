@@ -17,15 +17,16 @@ package com.centurylink.cloud.sdk.server.services.dsl.servers.search;
 
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
-import com.centurylink.cloud.sdk.tests.TestGroups;
-import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.util.List;
+
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
 
 /**
  * @author Aliaksandr Krasitski
@@ -38,7 +39,7 @@ public class SearchServersInSubGroupsTest extends AbstractServersSdkTest {
     @Inject
     DataCenterService dataCenterService;
 
-    @Test(groups = TestGroups.INTEGRATION)
+    @Test(groups = INTEGRATION)
     public void testSearchActiveServers() {
         String rootGroupId = dataCenterService.findByRef(DataCenter.DE_FRANKFURT).getGroup().getId();
         ServerFilter serverFilter = new ServerFilter()

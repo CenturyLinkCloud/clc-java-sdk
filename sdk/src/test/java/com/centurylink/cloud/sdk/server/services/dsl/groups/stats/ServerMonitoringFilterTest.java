@@ -16,9 +16,9 @@
 package com.centurylink.cloud.sdk.server.services.dsl.groups.stats;
 
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.MonitoringStatisticRequest;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConverter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.MonitoringType;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.MonitoringStatisticRequest;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.ServerMonitoringFilter;
 import org.testng.annotations.Test;
 

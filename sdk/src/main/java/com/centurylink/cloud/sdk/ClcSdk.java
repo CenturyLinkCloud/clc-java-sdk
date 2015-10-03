@@ -15,23 +15,22 @@
 
 package com.centurylink.cloud.sdk;
 
+import com.centurylink.cloud.sdk.base.services.BaseModule;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
+import com.centurylink.cloud.sdk.core.injector.Inject;
+import com.centurylink.cloud.sdk.core.injector.SdkInjector;
+import com.centurylink.cloud.sdk.loadbalancer.services.LoadBalancerModule;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerNodeService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
+import com.centurylink.cloud.sdk.policy.services.PolicyModule;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.ServerModule;
-import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
-import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
-import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
-import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
+import com.centurylink.cloud.sdk.server.services.dsl.*;
 
 /**
  * @author ilya.drabenia
@@ -80,11 +79,14 @@ public class ClcSdk {
     }
 
     public ClcSdk(CredentialsProvider credentialsProvider, SdkConfiguration config) {
-        Guice
+        SdkInjector
             .createInjector(
                 config.asModule(),
+                new BaseModule(),
                 new AuthModule(credentialsProvider),
-                new ServerModule()
+                new ServerModule(),
+                new PolicyModule(),
+                new LoadBalancerModule()
             )
             .injectMembers(this);
     }

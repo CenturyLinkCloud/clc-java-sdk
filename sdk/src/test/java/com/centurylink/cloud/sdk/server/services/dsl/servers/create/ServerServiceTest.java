@@ -15,11 +15,11 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.servers.create;
 
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.refs.ReferenceNotResolvedException;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.google.inject.Inject;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;

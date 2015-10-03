@@ -16,8 +16,8 @@
 package com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.grouping;
 
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.BillingStats;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.BillingStatsEntry;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.Statistics;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.filter.BillingStatsFilter;

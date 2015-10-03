@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.loadbalancer.services.dsl;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerNodeClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerNodeMetadata;
@@ -24,7 +25,6 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerPo
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerNodeFilter;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.node.LoadBalancerNode;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.LoadBalancerPool;
-import com.google.inject.Inject;
 
 import java.util.List;
 import java.util.stream.Stream;

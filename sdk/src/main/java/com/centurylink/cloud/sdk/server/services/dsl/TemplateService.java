@@ -19,10 +19,10 @@ import com.centurylink.cloud.sdk.base.services.client.DataCentersClient;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
-import com.google.inject.Inject;
 
 import java.util.stream.Stream;
 

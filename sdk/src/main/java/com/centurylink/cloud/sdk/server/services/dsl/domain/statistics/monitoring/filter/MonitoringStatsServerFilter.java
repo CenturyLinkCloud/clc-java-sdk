@@ -2,8 +2,8 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitori
 
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
 
 import java.util.List;
 

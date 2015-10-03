@@ -18,12 +18,8 @@ package com.centurylink.cloud.sdk.policy.services.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyMetadata;
-import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyRequest;
-import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
-import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyRequest;
-import com.centurylink.cloud.sdk.policy.services.client.domain.PolicyListResponse;
-import com.google.inject.Inject;
+import com.centurylink.cloud.sdk.core.injector.Inject;
+import com.centurylink.cloud.sdk.policy.services.client.domain.*;
 
 import javax.ws.rs.core.GenericType;
 import java.util.List;

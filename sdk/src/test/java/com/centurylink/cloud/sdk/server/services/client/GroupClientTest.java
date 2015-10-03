@@ -16,9 +16,9 @@
 package com.centurylink.cloud.sdk.server.services.client;
 
 import com.centurylink.cloud.sdk.base.services.client.DataCentersClient;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
-import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.DE_FRANKFURT;

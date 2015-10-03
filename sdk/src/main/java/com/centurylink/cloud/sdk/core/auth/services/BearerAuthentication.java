@@ -22,7 +22,7 @@ import com.centurylink.cloud.sdk.core.auth.services.domain.AuthToken;
 import com.centurylink.cloud.sdk.core.auth.services.domain.SessionCredentials;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.Credentials;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
-import com.google.inject.Inject;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;

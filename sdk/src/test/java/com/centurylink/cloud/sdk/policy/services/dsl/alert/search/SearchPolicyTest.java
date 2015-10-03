@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.policy.services.dsl.alert.search;
 
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.AbstractPoliciesSdkTest;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AlertTriggerMetadata;
@@ -24,7 +25,6 @@ import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AlertPolicyF
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import org.testng.annotations.Test;
 
-import javax.inject.Inject;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;

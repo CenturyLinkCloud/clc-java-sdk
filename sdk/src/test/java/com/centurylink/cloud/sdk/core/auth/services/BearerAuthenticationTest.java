@@ -18,6 +18,7 @@ package com.centurylink.cloud.sdk.core.auth.services;
 import com.centurylink.cloud.sdk.core.auth.client.LoginClient;
 import com.centurylink.cloud.sdk.core.auth.client.domain.LoginResponse;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
+import com.centurylink.cloud.sdk.tests.TestGroups;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ClientRequestContext;
