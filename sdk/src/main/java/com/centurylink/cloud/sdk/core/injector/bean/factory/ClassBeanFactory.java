@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * @author Ilya Drabenia
  */
-public class ClassBeanFactory extends BeanFactory {
+public class ClassBeanFactory implements BeanFactory {
     private final AtomicReference<Object> instance = new AtomicReference<>();
     private final Class type;
 

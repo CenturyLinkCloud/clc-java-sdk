@@ -20,8 +20,9 @@ import java.util.Map;
 /**
  * @author Ilya Drabenia
  */
-public abstract class BeanFactory {
+@FunctionalInterface
+public interface BeanFactory {
 
-    public abstract Object getBean(Map<Class, BeanFactory> registryVal);
+    Object getBean(Map<Class, BeanFactory> registryVal);
 
 }

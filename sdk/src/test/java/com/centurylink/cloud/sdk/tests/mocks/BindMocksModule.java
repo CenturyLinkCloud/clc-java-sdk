@@ -44,7 +44,7 @@ public class BindMocksModule extends Module {
         Stream
             .of(declaredFields())
             .filter(f -> f.isAnnotationPresent(Mock.class))
-            .forEach(f -> bindInstance(f.getType(), fieldValue(f)));
+            .forEach(f -> bind(f.getType(), fieldValue(f)));
     }
 
     private Field[] declaredFields() {

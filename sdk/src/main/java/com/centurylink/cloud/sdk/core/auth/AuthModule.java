@@ -39,7 +39,7 @@ public class AuthModule extends Module {
     protected void configure() {
         bind(LoginClient.class);
         bind(BearerAuthentication.class);
-        bindInstance(CredentialsProvider.class, credentialsProvider);
+        bind(CredentialsProvider.class, credentialsProvider);
     }
 
 }

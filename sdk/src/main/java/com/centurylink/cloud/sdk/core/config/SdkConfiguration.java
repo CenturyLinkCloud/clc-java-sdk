@@ -77,7 +77,7 @@ public class SdkConfiguration {
         return new Module() {
             @Override
             protected void configure() {
-                bindInstance(SdkConfiguration.class, SdkConfiguration.this);
+                bind(SdkConfiguration.class, SdkConfiguration.this);
             }
         };
     }

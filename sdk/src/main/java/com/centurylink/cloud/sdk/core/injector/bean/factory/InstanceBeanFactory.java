@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * @author Ilya Drabenia
  */
-public class InstanceBeanFactory extends BeanFactory {
+public class InstanceBeanFactory implements BeanFactory {
     private final Object instance;
 
     public InstanceBeanFactory(Object instance) {

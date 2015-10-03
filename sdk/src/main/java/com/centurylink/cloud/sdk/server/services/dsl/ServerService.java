@@ -66,6 +66,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.ServerBy
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;

@@ -18,13 +18,11 @@ package com.centurylink.cloud.sdk.core.injector;
 import com.centurylink.cloud.sdk.core.injector.bean.factory.BeanFactory;
 import com.centurylink.cloud.sdk.core.injector.bean.factory.ClassBeanFactory;
 import com.centurylink.cloud.sdk.core.injector.bean.factory.InstanceBeanFactory;
-import com.centurylink.cloud.sdk.core.injector.bean.factory.SupplierBeanFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  * @author Ilya Drabenia
@@ -39,12 +37,12 @@ public abstract class Module {
         registry.put(type, new ClassBeanFactory(type));
     }
 
-    protected <T> void bindInstance(Class<T> type, Object instance) {
+    protected <T> void bind(Class<T> type, Object instance) {
         registry.put(type, new InstanceBeanFactory(instance));
     }
 
-    protected <T> void bindSupplier(Class<T> type) {
-        registry.put(Supplier.class, new SupplierBeanFactory(type));
+    protected <T> void bind(Class<T> type, BeanFactory beanFactory) {
+        registry.put(type, beanFactory);
     }
 
     protected <T> void install(Module module) {

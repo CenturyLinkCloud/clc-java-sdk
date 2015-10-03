@@ -24,7 +24,7 @@ import org.mockito.Mockito;
 public abstract class TestModule extends Module {
 
     public <T> TestModule mock(Class<T> type) {
-        bindInstance(type, Mockito.mock(type));
+        bind(type, Mockito.mock(type));
         return this;
     }
 

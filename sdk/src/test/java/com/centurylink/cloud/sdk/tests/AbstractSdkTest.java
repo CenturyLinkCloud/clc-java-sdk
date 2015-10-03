@@ -57,7 +57,7 @@ public abstract class AbstractSdkTest extends Assert {
             add(new Module() {
                 @Override
                 protected void configure() {
-                    bindInstance(SdkConfiguration.class, new SdkConfigurationBuilder().build());
+                    bind(SdkConfiguration.class, new SdkConfigurationBuilder().build());
                 }
             });
             addAll(modules());

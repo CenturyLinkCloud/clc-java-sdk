@@ -65,10 +65,12 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     private final Supplier<ServerService> serverServiceProvider;
     private final QueueClient queueClient;
 
+    public interface ServerServiceSupplier extends Supplier<ServerService> {}
+
     @Inject
     public GroupService(ServerClient client, GroupConverter converter,
                         DataCenterService dataCenterService, QueueClient queueClient,
-                        Supplier<ServerService> serverServiceProvider) {
+                        ServerServiceSupplier serverServiceProvider) {
         this.client = client;
         this.converter = converter;
         this.dataCenterService = dataCenterService;

@@ -47,7 +47,7 @@ public class FindServerByRefTest extends AbstractServersSdkTest {
         return list(new AuthModule(), new ServerModule(), new Module() {
             @Override
             protected void configure() {
-                bindInstance(ServerClient.class, mock(ServerClient.class));
+                bind(ServerClient.class, mock(ServerClient.class));
             }
         });
     }

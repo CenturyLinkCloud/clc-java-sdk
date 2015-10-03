@@ -55,7 +55,7 @@ public class NetworkTest extends AbstractSdkTest {
         return list(new AuthModule(), new BaseModule(), new Module() {
             @Override
             protected void configure() {
-                bindInstance(DataCentersClient.class, mock(DataCentersClient.class));
+                bind(DataCentersClient.class, mock(DataCentersClient.class));
             }
         });
     }
