@@ -34,7 +34,7 @@ public class ServerModule extends Module {
     }
 
     private ServerServiceSupplier serverServiceSupplier(Map<Class, BeanFactory> registry) {
-        return (ServerServiceSupplier) () -> (ServerService) registry.get(ServerService.class).getBean(registry);
+        return () -> (ServerService) registry.get(ServerService.class).getBean(registry);
     }
 
 }
