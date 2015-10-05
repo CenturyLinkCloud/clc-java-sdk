@@ -20,7 +20,6 @@ import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.*;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpRequest;
@@ -44,7 +43,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  */
 public class ServerClient extends AuthenticatedSdkHttpClient {
 
-    @Inject
     public ServerClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }

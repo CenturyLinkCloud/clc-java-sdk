@@ -25,7 +25,6 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataC
 import com.centurylink.cloud.sdk.base.services.dsl.domain.networks.refs.IdNetworkRef;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.networks.refs.NetworkRef;
 import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 
 import java.util.List;
@@ -37,7 +36,6 @@ import java.util.stream.Stream;
 public class DataCenterService implements QueryService<DataCenter, DataCenterFilter, DataCenterMetadata> {
     private final DataCentersClient client;
 
-    @Inject
     public DataCenterService(DataCentersClient client) {
         this.client = client;
     }

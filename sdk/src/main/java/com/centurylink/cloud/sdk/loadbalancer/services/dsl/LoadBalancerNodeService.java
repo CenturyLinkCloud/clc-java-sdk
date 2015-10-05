@@ -17,7 +17,6 @@ package com.centurylink.cloud.sdk.loadbalancer.services.dsl;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerNodeClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerNodeMetadata;
@@ -36,7 +35,6 @@ public class LoadBalancerNodeService implements QueryService<LoadBalancerNode, L
     private final LoadBalancerNodeClient loadBalancerNodeClient;
     private final LoadBalancerPoolService loadBalancerPoolService;
 
-    @Inject
     public LoadBalancerNodeService(
             LoadBalancerNodeClient loadBalancerNodeClient,
             LoadBalancerPoolService loadBalancerPoolService

@@ -24,7 +24,6 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.JobFu
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
@@ -67,7 +66,6 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
 
     public interface ServerServiceSupplier extends Supplier<ServerService> {}
 
-    @Inject
     public GroupService(ServerClient client, GroupConverter converter,
                         DataCenterService dataCenterService, QueueClient queueClient,
                         ServerServiceSupplier serverServiceProvider) {

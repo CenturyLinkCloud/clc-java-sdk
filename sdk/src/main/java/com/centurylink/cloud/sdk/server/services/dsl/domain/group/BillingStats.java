@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BillingStats {
-
     private String date;
     private List<GroupBilling> groups = new ArrayList<>();
 

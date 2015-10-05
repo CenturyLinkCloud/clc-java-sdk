@@ -26,7 +26,6 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.Paral
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
@@ -34,10 +33,7 @@ import com.centurylink.cloud.sdk.server.services.client.domain.network.AddNetwor
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.IpAddress;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
@@ -66,7 +62,6 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.ServerBy
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
@@ -91,7 +86,6 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     private final ExperimentalQueueClient experimentalQueueClient;
     private final PublicIpConverter publicIpConverter;
 
-    @Inject
     public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient,
                          GroupService groupService, PublicIpConverter publicIpConverter,
                          ExperimentalQueueClient experimentalQueueClient) {

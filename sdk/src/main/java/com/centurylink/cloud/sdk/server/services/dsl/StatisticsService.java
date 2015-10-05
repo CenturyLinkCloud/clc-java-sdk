@@ -17,7 +17,6 @@ package com.centurylink.cloud.sdk.server.services.dsl;
 
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.BillingStatsEngine;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.MonitoringStatsEngine;
 
@@ -32,7 +31,6 @@ public class StatisticsService {
 
     private BearerAuthentication authentication;
 
-    @Inject
     public StatisticsService(
             ServerService serverService,
             GroupService groupService,

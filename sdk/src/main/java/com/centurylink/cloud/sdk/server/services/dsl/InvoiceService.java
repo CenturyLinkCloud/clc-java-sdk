@@ -15,7 +15,6 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl;
 
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.invoice.InvoiceData;
 
@@ -30,7 +29,6 @@ public class InvoiceService {
 
     private final ServerClient client;
 
-    @Inject
     public InvoiceService(ServerClient client) {
         this.client = client;
     }

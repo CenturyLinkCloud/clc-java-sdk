@@ -19,14 +19,12 @@ import com.centurylink.cloud.sdk.base.services.client.domain.queue.GetStatusResp
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 
 /**
  * @author Ilya Drabenia
  */
 public class QueueClient extends AuthenticatedSdkHttpClient {
 
-    @Inject
     public QueueClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }

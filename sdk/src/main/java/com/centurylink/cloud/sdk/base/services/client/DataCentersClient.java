@@ -22,7 +22,6 @@ import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -35,7 +34,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class DataCentersClient extends AuthenticatedSdkHttpClient {
 
-    @Inject
     public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }

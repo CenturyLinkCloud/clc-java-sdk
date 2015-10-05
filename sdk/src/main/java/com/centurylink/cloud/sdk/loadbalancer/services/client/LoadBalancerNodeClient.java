@@ -18,7 +18,6 @@ package com.centurylink.cloud.sdk.loadbalancer.services.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerNodeMetadata;
 
 import javax.ws.rs.core.GenericType;
@@ -29,7 +28,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 public class LoadBalancerNodeClient extends AuthenticatedSdkHttpClient {
 
-    @Inject
     public LoadBalancerNodeClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }

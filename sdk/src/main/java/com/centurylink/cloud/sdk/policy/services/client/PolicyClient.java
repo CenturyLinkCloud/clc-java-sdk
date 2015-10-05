@@ -18,7 +18,6 @@ package com.centurylink.cloud.sdk.policy.services.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.client.domain.*;
 
 import javax.ws.rs.core.GenericType;
@@ -32,7 +31,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  */
 public class PolicyClient extends AuthenticatedSdkHttpClient {
 
-    @Inject
     public PolicyClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }

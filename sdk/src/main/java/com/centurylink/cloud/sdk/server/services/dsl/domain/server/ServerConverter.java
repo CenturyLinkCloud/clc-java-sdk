@@ -19,7 +19,6 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deploym
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
@@ -49,7 +48,6 @@ public class ServerConverter {
     private final DataCenterService dataCenterService;
     private final PolicyService policyService;
 
-    @Inject
     public ServerConverter(
             GroupService groupService,
             TemplateService templateService,

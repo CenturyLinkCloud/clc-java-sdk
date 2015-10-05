@@ -22,7 +22,6 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.JobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.domain.LoadBalancerRequest;
@@ -42,7 +41,6 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancer, LoadB
     private final LoadBalancerClient loadBalancerClient;
     private final DataCenterService dataCenterService;
 
-    @Inject
     public LoadBalancerPoolService(LoadBalancerClient loadBalancerClient, DataCenterService dataCenterService) {
         this.loadBalancerClient = loadBalancerClient;
         this.dataCenterService = dataCenterService;
