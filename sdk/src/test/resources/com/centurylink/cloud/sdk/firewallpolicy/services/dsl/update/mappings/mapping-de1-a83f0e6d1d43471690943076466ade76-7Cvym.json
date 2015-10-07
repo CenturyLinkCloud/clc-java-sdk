@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/firewallPolicies/ALTD/de1/a83f0e6d1d43471690943076466ade76",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"enabled\":false,\"destinationAccount\":null,\"source\":[\"10.110.37.12/32\",\"10.110.37.13/32\"],\"destination\":[\"10.110.37.12/32\"],\"ports\":[\"udp/8080\"]}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-de1-a83f0e6d1d43471690943076466ade76-7Cvym.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Tue, 22 Sep 2015 13:17:42 GMT"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/firewallPolicies/ALTD/de1/a83f0e6d1d43471690943076466ade76",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-de1-a83f0e6d1d43471690943076466ade76-KwyXA.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Tue, 22 Sep 2015 13:18:27 GMT"
+    }
+  }
+}
