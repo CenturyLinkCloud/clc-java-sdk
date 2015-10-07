@@ -15,32 +15,26 @@
 
 package com.centurylink.cloud.sdk.server.services;
 
-import com.centurylink.cloud.sdk.base.services.BaseModule;
-import com.centurylink.cloud.sdk.server.services.client.ServerClient;
-import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
-import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
+import com.centurylink.cloud.sdk.core.injector.Module;
+import com.centurylink.cloud.sdk.core.injector.bean.factory.BeanFactory;
+import com.centurylink.cloud.sdk.server.services.dsl.GroupService.ServerServiceSupplier;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerConverter;
-import com.google.inject.AbstractModule;
+
+import java.util.Map;
 
 /**
  * @author ilya.drabenia
  */
-public class ServerModule extends AbstractModule {
+public class ServerModule extends Module {
 
     @Override
     protected void configure() {
-        bind(ServerClient.class);
-
         bind(ServerService.class);
-        bind(ServerConverter.class);
-        bind(GroupService.class);
-        bind(TemplateService.class);
+        bind(ServerServiceSupplier.class, this::serverServiceSupplier);
+    }
 
-        bind(InvoiceService.class);
-
-        install(new BaseModule());
+    private ServerServiceSupplier serverServiceSupplier(Map<Class, BeanFactory> registry) {
+        return () -> (ServerService) registry.get(ServerService.class).getBean(registry);
     }
 
 }

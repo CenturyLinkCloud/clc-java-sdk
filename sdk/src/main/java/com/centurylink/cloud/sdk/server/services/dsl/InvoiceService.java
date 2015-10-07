@@ -17,7 +17,6 @@ package com.centurylink.cloud.sdk.server.services.dsl;
 
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.invoice.InvoiceData;
-import com.google.inject.Inject;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -30,7 +29,6 @@ public class InvoiceService {
 
     private final ServerClient client;
 
-    @Inject
     public InvoiceService(ServerClient client) {
         this.client = client;
     }

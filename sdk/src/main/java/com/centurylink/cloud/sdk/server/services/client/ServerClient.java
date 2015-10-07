@@ -17,32 +17,17 @@ package com.centurylink.cloud.sdk.server.services.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
-import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.ClientBillingStats;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.CreateGroupRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.MonitoringStatisticRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.ServerMonitoringStatistics;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.UpdateGroupRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.*;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.AddNetworkRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerListResponse;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.ImportServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.ServerCredentials;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.*;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.invoice.InvoiceData;
-import com.google.inject.Inject;
 import org.apache.http.HttpStatus;
 
 import javax.ws.rs.client.WebTarget;
@@ -58,7 +43,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  */
 public class ServerClient extends AuthenticatedSdkHttpClient {
 
-    @Inject
     public ServerClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }

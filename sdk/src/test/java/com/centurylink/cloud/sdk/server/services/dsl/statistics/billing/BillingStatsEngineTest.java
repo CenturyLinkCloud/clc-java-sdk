@@ -17,18 +17,18 @@ package com.centurylink.cloud.sdk.server.services.dsl.statistics.billing;
 
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.Statistics;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.BillingStatsEntry;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.Statistics;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
-import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;

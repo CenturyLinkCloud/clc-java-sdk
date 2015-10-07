@@ -29,17 +29,13 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerCo
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerMetadata;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerFilter;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancer;
-import com.google.inject.Inject;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
-import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
-import static com.centurylink.cloud.sdk.core.function.Predicates.in;
+import static com.centurylink.cloud.sdk.core.function.Predicates.*;
 import static com.google.common.base.Preconditions.checkNotNull;
-
 import static java.util.stream.Collectors.toList;
 
 public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalancerFilter, LoadBalancerMetadata> {
@@ -47,7 +43,6 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
     private final LoadBalancerClient loadBalancerClient;
     private final DataCenterService dataCenterService;
 
-    @Inject
     public LoadBalancerService(LoadBalancerClient loadBalancerClient, DataCenterService dataCenterService) {
         this.loadBalancerClient = loadBalancerClient;
         this.dataCenterService = dataCenterService;

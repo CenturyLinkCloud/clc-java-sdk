@@ -17,14 +17,14 @@ package com.centurylink.cloud.sdk.server.services.dsl.servers;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CloneServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
-import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.US_CENTRAL_SALT_LAKE_CITY;

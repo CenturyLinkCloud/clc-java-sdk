@@ -23,11 +23,11 @@ import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.PowerState;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerStatus;
 
 import java.util.ArrayList;

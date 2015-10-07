@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk;
 
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,7 +24,8 @@ import org.springframework.context.annotation.Configuration;
 public class TestConfig {
 
     @Bean
-    public ClcSdk clcSdkConfig() {
-        return new ClcSdk();
+    public SdkConfiguration clcSdkConfig() {
+        return SdkConfiguration.DEFAULT;
     }
+
 }

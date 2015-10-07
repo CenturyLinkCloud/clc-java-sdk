@@ -15,16 +15,16 @@
 
 package com.centurylink.cloud.sdk.tests;
 
-import com.google.inject.AbstractModule;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import org.mockito.Mockito;
 
 /**
  * @author Ilya Drabenia
  */
-public abstract class TestModule extends AbstractModule {
+public abstract class TestModule extends Module {
 
     public <T> TestModule mock(Class<T> type) {
-        bind(type).toInstance(Mockito.mock(type));
+        bind(type, Mockito.mock(type));
         return this;
     }
 

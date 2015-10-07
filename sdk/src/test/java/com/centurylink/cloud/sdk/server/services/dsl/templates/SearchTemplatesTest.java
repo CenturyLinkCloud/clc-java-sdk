@@ -20,17 +20,17 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.GetData
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.TemplateMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.TemplateFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsFilter;
-import com.google.inject.Inject;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -50,7 +50,7 @@ public class SearchTemplatesTest extends AbstractServersSdkTest {
     @Inject
     TemplateService templateService;
 
-    @Inject @Spy
+    @Inject @Mock
     DataCentersClient dataCentersClient;
 
     @BeforeMethod

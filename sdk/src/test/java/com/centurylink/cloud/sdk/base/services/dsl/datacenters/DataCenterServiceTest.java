@@ -24,11 +24,11 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.Da
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenterByIdRef;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.core.injector.Inject;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
-import com.google.inject.Inject;
-import com.google.inject.Module;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -43,7 +43,7 @@ public class DataCenterServiceTest extends AbstractSdkTest {
     @Inject
     DataCenterService dataCenterService;
 
-    @Inject @Spy
+    @Inject @Mock
     DataCentersClient dataCentersClient;
 
     @Override

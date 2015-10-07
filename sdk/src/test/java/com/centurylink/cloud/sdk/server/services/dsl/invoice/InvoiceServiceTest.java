@@ -16,11 +16,11 @@
 package com.centurylink.cloud.sdk.server.services.dsl.invoice;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.invoice.InvoiceData;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
-import com.google.inject.Inject;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;

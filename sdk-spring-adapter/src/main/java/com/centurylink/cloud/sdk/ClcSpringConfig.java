@@ -17,6 +17,8 @@ package com.centurylink.cloud.sdk;
 
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.CredentialsProvider;
+import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCredentialsProvider;
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerNodeService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
@@ -27,72 +29,86 @@ import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class ClcSpringConfig {
 
-    private ClcSdk clcSdk;
+@Configuration
+public class ClcSpringConfig implements InitializingBean {
+
+    private CredentialsProvider credentialsProvider = new DefaultCredentialsProvider();
+    private SdkConfiguration sdkConfig = SdkConfiguration.DEFAULT;
+    private ClcSdk sdk;
 
     @Autowired(required = false)
-    public void setSdk(ClcSdk clcSdk) {
-        this.clcSdk = clcSdk != null ? clcSdk : new ClcSdk();
+    public void setClcSdkConfig(SdkConfiguration sdkConfig) {
+        this.sdkConfig = sdkConfig;
+    }
+
+    @Autowired(required = false)
+    public void setClcCredentialsProvider(CredentialsProvider provider) {
+        this.credentialsProvider = provider;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        sdk = new ClcSdk(credentialsProvider, sdkConfig);
     }
 
     @Bean
-    public ServerService serverService() {
-        return clcSdk.serverService();
+    public ServerService clcServerService() {
+        return sdk.serverService();
     }
 
     @Bean
-    public GroupService groupService() {
-        return clcSdk.groupService();
+    public GroupService clcGroupService() {
+        return sdk.groupService();
     }
 
     @Bean
-    public TemplateService templateService() {
-        return clcSdk.templateService();
+    public TemplateService clcTemplateService() {
+        return sdk.templateService();
     }
 
     @Bean
-    public DataCenterService dataCenterService() {
-        return clcSdk.dataCenterService();
+    public DataCenterService clcDataCenterService() {
+        return sdk.dataCenterService();
     }
 
     @Bean
-    public CredentialsProvider getCredentialsProvider() {
-        return clcSdk.getCredentialsProvider();
+    public ClcSdk clcSdk() {
+        return sdk;
     }
 
     @Bean
-    public StatisticsService statisticsService() {
-        return clcSdk.statisticsService();
+    public StatisticsService clcStatisticsService() {
+        return sdk.statisticsService();
     }
 
     @Bean
-    public PolicyService policyService() {
-        return clcSdk.policyService();
+    public PolicyService clcPolicyService() {
+        return sdk.policyService();
     }
 
     @Bean
-    public InvoiceService invoiceService() {
-        return clcSdk.invoiceService();
+    public InvoiceService clcInvoiceService() {
+        return sdk.invoiceService();
     }
 
     @Bean
-    public LoadBalancerService loadBalancerService() {
-        return clcSdk.loadBalancerService();
+    public LoadBalancerService clcLoadBalancerService() {
+        return sdk.loadBalancerService();
     }
 
     @Bean
-    public LoadBalancerPoolService loadBalancerPoolService() {
-        return clcSdk.loadBalancerPoolService();
+    public LoadBalancerPoolService clcLoadBalancerPoolService() {
+        return sdk.loadBalancerPoolService();
     }
 
     @Bean
-    public LoadBalancerNodeService loadBalancerNodeService() {
-        return clcSdk.loadBalancerNodeService();
+    public LoadBalancerNodeService clcLoadBalancerNodeService() {
+        return sdk.loadBalancerNodeService();
     }
 }

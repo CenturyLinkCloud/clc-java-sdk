@@ -32,9 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
-import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
-import static com.centurylink.cloud.sdk.core.function.Predicates.in;
+import static com.centurylink.cloud.sdk.core.function.Predicates.*;
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Arrays.asList;

@@ -16,15 +16,15 @@
 package com.centurylink.cloud.sdk.loadbalancer.services;
 
 import com.centurylink.cloud.sdk.base.services.BaseModule;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerNodeClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerPoolClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerNodeService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
-import com.google.inject.AbstractModule;
 
-public class LoadBalancerModule extends AbstractModule {
+public class LoadBalancerModule extends Module {
 
     @Override
     protected void configure() {

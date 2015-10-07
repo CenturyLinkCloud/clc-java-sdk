@@ -16,6 +16,7 @@
 package com.centurylink.cloud.sdk.loadbalancer.services.dsl.group;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.loadbalancer.services.AbstractLoadBalancerSdkTest;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerMetadata;
@@ -25,7 +26,6 @@ import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import org.testng.annotations.Test;
 
-import javax.inject.Inject;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;

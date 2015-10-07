@@ -16,16 +16,16 @@
 package com.centurylink.cloud.sdk.server.services.dsl.groups.stats;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
+import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.SamplingEntry;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.ServerMonitoringStatistics;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
-import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.ServerMonitoringFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.GroupByIdRef;
-import com.google.inject.Inject;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -100,6 +100,6 @@ public class GetServerMonitoringStatsTest extends AbstractServersSdkTest {
 
     private void checkStat(Integer value, boolean isEmpty) {
         Integer zero = 0;
-        assertTrue(isEmpty ? value == zero : value >=zero);
+        assertTrue(isEmpty ? value == zero : value >= zero);
     }
 }

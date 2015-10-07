@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.policy.services.dsl.alert.modify;
 
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.AbstractPoliciesSdkTest;
 import com.centurylink.cloud.sdk.policy.services.client.domain.ActionSettingsEmailMetadata;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AlertActionMetadata;
@@ -30,8 +31,6 @@ import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AlertPolicyF
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AlertPolicy;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
-import com.google.inject.Inject;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;

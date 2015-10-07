@@ -20,25 +20,24 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deploym
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.injector.Inject;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
-import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskType;
-import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 import com.centurylink.cloud.sdk.server.services.ServerModule;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.DiskRequest;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
+import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
+import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 import com.centurylink.cloud.sdk.tests.TestModule;
-import com.google.inject.Inject;
-import com.google.inject.Module;
-import com.google.inject.util.Modules;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
@@ -71,7 +70,7 @@ public class DiskManagementTest extends AbstractServersSdkTest {
 
     @Override
     protected List<Module> modules() {
-        return list(new AuthModule(), Modules.override(new ServerModule()).with(new TestModule() {
+        return list(new AuthModule(), new ServerModule(), new TestModule() {
             @Override
             protected void configure() {
                 this
@@ -80,7 +79,7 @@ public class DiskManagementTest extends AbstractServersSdkTest {
                     .mock(GroupService.class)
                     .mock(DataCenterService.class);
             }
-        }));
+        });
     }
 
     @Test

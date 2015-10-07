@@ -33,10 +33,7 @@ import com.centurylink.cloud.sdk.server.services.client.domain.network.AddNetwor
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerListResponse;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.BaseServerResponse;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateSnapshotRequest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomFieldMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.IpAddress;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ModifyServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.RestoreServerRequest;
@@ -61,7 +58,6 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.Serve
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.future.CreateServerJobFuture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.ServerByIdRef;
-import com.google.inject.Inject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -90,7 +86,6 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     private final ExperimentalQueueClient experimentalQueueClient;
     private final PublicIpConverter publicIpConverter;
 
-    @Inject
     public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient,
                          GroupService groupService, PublicIpConverter publicIpConverter,
                          ExperimentalQueueClient experimentalQueueClient) {

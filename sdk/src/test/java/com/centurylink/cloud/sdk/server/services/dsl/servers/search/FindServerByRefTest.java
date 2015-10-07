@@ -16,16 +16,14 @@
 package com.centurylink.cloud.sdk.server.services.dsl.servers.search;
 
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.core.injector.Inject;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.ServerModule;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.google.inject.Module;
-import com.google.inject.util.Modules;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -46,13 +44,12 @@ public class FindServerByRefTest extends AbstractServersSdkTest {
 
     @Override
     protected List<Module> modules() {
-        return list(new AuthModule(), Modules.override(new ServerModule()).with(new AbstractModule() {
+        return list(new AuthModule(), new ServerModule(), new Module() {
             @Override
             protected void configure() {
-                bind(ServerClient.class)
-                    .toInstance(mock(ServerClient.class));
+                bind(ServerClient.class, mock(ServerClient.class));
             }
-        }));
+        });
     }
     
     @Test

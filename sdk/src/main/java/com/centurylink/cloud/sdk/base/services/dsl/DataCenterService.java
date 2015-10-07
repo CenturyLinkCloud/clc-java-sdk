@@ -16,17 +16,16 @@
 package com.centurylink.cloud.sdk.base.services.dsl;
 
 import com.centurylink.cloud.sdk.base.services.client.DataCentersClient;
+import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.NetworkMetadata;
-import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.DataCenterFilter;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenterByIdRef;
-import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
-import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.networks.refs.IdNetworkRef;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.networks.refs.NetworkRef;
-import com.google.inject.Inject;
+import com.centurylink.cloud.sdk.core.exceptions.ReferenceNotSupportedException;
+import com.centurylink.cloud.sdk.core.services.QueryService;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -37,7 +36,6 @@ import java.util.stream.Stream;
 public class DataCenterService implements QueryService<DataCenter, DataCenterFilter, DataCenterMetadata> {
     private final DataCentersClient client;
 
-    @Inject
     public DataCenterService(DataCentersClient client) {
         this.client = client;
     }

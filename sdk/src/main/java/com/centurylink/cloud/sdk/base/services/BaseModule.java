@@ -18,12 +18,12 @@ package com.centurylink.cloud.sdk.base.services;
 import com.centurylink.cloud.sdk.base.services.client.DataCentersClient;
 import com.centurylink.cloud.sdk.base.services.client.QueueClient;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
-import com.google.inject.AbstractModule;
+import com.centurylink.cloud.sdk.core.injector.Module;
 
 /**
  * @author ilya.drabenia
  */
-public class BaseModule extends AbstractModule {
+public class BaseModule extends Module {
 
     @Override
     protected void configure() {

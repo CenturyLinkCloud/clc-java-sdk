@@ -34,7 +34,6 @@ import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.S
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
-import com.google.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,6 @@ public class ServerConverter {
     private final DataCenterService dataCenterService;
     private final PolicyService policyService;
 
-    @Inject
     public ServerConverter(
             GroupService groupService,
             TemplateService templateService,

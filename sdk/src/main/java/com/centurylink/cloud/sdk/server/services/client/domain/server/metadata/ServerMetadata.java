@@ -16,9 +16,9 @@
 package com.centurylink.cloud.sdk.server.services.client.domain.server.metadata;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.client.domain.ChangeInfo;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.Details;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.ServerByIdRef;
 import com.fasterxml.jackson.annotation.*;
 

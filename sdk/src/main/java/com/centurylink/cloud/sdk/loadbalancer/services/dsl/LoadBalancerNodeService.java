@@ -24,7 +24,6 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerPo
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerNodeFilter;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.node.LoadBalancerNode;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.LoadBalancerPool;
-import com.google.inject.Inject;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -36,7 +35,6 @@ public class LoadBalancerNodeService implements QueryService<LoadBalancerNode, L
     private final LoadBalancerNodeClient loadBalancerNodeClient;
     private final LoadBalancerPoolService loadBalancerPoolService;
 
-    @Inject
     public LoadBalancerNodeService(
             LoadBalancerNodeClient loadBalancerNodeClient,
             LoadBalancerPoolService loadBalancerPoolService

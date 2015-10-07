@@ -16,8 +16,8 @@
 package com.centurylink.cloud.sdk.loadbalancer.services;
 
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
-import com.google.inject.Module;
 
 import java.util.List;
 

@@ -25,30 +25,21 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWai
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.InfrastructureConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.ServerMonitoringStatistics;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.BillingStats;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConverter;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig;
-import com.centurylink.cloud.sdk.server.services.dsl.domain.group.ServerMonitoringFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.InfrastructureConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.*;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CompositeServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
@@ -70,13 +61,14 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     private final ServerClient client;
     private final GroupConverter converter;
     private final DataCenterService dataCenterService;
-    private final Provider<ServerService> serverServiceProvider;
+    private final Supplier<ServerService> serverServiceProvider;
     private final QueueClient queueClient;
 
-    @Inject
+    public interface ServerServiceSupplier extends Supplier<ServerService> {}
+
     public GroupService(ServerClient client, GroupConverter converter,
                         DataCenterService dataCenterService, QueueClient queueClient,
-                        Provider<ServerService> serverServiceProvider) {
+                        ServerServiceSupplier serverServiceProvider) {
         this.client = client;
         this.converter = converter;
         this.dataCenterService = dataCenterService;

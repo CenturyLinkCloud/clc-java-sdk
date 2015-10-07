@@ -18,23 +18,26 @@ package com.centurylink.cloud.sdk.core.client.errors;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.StaticCredentialsProvider;
-import com.centurylink.cloud.sdk.tests.TestGroups;
-import com.google.inject.Guice;
+import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
+import com.centurylink.cloud.sdk.core.injector.SdkInjector;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.client.ClientRequestContext;
 
+import static com.centurylink.cloud.sdk.tests.TestGroups.INTEGRATION;
+
 /**
  * @author ilya.drabenia
  */
-@Test(groups = TestGroups.INTEGRATION)
+@Test(groups = INTEGRATION)
 public class ErrorProcessingFilterTest {
 
     @Test(expectedExceptions = ClcBadRequestException.class)
     public void testIncorrectLogin() throws Throwable {
-        Guice
+        SdkInjector
             .createInjector(
+                SdkConfiguration.DEFAULT.asModule(),
                 new AuthModule(new StaticCredentialsProvider("12345", "456789"))
             )
             .getInstance(BearerAuthentication.class)
