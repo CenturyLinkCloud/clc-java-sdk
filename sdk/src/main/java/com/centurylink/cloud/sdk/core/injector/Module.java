@@ -45,7 +45,7 @@ public abstract class Module {
         registry.put(type, beanFactory);
     }
 
-    protected <T> void install(Module module) {
+    protected void install(Module module) {
         dependentModules.add(module);
     }
 
