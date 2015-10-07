@@ -18,9 +18,9 @@ package com.centurylink.cloud.sdk.firewallpolicy.services;
 import com.centurylink.cloud.sdk.base.services.BaseModule;
 import com.centurylink.cloud.sdk.policy.services.client.PolicyClient;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
-import com.google.inject.AbstractModule;
+import com.centurylink.cloud.sdk.core.injector.Module;
 
-public class FirewallPolicyModule extends AbstractModule {
+public class FirewallPolicyModule extends Module {
 
     @Override
     protected void configure() {

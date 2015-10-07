@@ -18,12 +18,12 @@ package com.centurylink.cloud.sdk.firewallpolicy.services;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.FirewallPolicyService;
 import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyConfig;
 import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.refs.FirewallPolicy;
 import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
-import com.google.inject.Inject;
-import com.google.inject.Module;
+import com.centurylink.cloud.sdk.core.injector.Module;
 
 import java.util.ArrayList;
 import java.util.List;

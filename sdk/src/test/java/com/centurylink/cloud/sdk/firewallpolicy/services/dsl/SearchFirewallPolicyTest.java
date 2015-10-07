@@ -25,7 +25,6 @@ import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,10 +47,13 @@ public class SearchFirewallPolicyTest extends AbstractFirewallPolicySdkTest impl
 
         assertNotNull(firewallPolicyMetadataList);
         assertEquals(firewallPolicyMetadataList.size(), 2);
+        assertEquals(firewallPolicyMetadataList.get(0).getDataCenterId(), DataCenter.DE_FRANKFURT.getId());
+        assertEquals(firewallPolicyMetadataList.get(1).getDataCenterId(), DataCenter.DE_FRANKFURT.getId());
 
         FirewallPolicyMetadata firewallPolicy1Metadata = firewallPolicyService.findByRef(firewallPolicyList.get(0));
 
         assertNotNull(firewallPolicy1Metadata);
+        assertEquals(firewallPolicy1Metadata.getDataCenterId(), DataCenter.DE_FRANKFURT.getId());
     }
 
     @AfterMethod

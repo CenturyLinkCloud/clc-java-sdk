@@ -29,7 +29,6 @@ import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPoli
 import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyMetadata;
 import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.filter.FirewallPolicyFilter;
 import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.refs.FirewallPolicy;
-import com.google.inject.Inject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,9 +45,8 @@ public class FirewallPolicyService implements QueryService<FirewallPolicy, Firew
     private final FirewallPolicyClient firewallPolicyClient;
     private final DataCenterService dataCenterService;
 
-    @Inject
-    public FirewallPolicyService(FirewallPolicyClient loadBalancerClient, DataCenterService dataCenterService) {
-        this.firewallPolicyClient = loadBalancerClient;
+    public FirewallPolicyService(FirewallPolicyClient firewallPolicyClient, DataCenterService dataCenterService) {
+        this.firewallPolicyClient = firewallPolicyClient;
         this.dataCenterService = dataCenterService;
     }
 
@@ -151,7 +149,7 @@ public class FirewallPolicyService implements QueryService<FirewallPolicy, Firew
             FirewallPolicyFilter firewallPolicyFilter,
             FirewallPolicyConfig config
     ) {
-        checkNotNull(firewallPolicyFilter, "Load balancer filter must be not null");
+        checkNotNull(firewallPolicyFilter, "Firewall policy filter must be not null");
 
         List<FirewallPolicy> firewallPolicyList = findLazy(firewallPolicyFilter)
             .map(metadata -> FirewallPolicy.refById(

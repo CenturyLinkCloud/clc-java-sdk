@@ -20,7 +20,6 @@ import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.firewallpolicy.services.client.domain.FirewallPolicyRequest;
 import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyMetadata;
-import com.google.inject.Inject;
 
 import javax.ws.rs.core.GenericType;
 import java.util.List;
@@ -32,7 +31,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 public class FirewallPolicyClient extends AuthenticatedSdkHttpClient {
 
-    @Inject
     public FirewallPolicyClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }
