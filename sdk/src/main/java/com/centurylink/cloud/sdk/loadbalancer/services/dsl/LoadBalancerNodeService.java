@@ -28,7 +28,7 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.Load
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 
 public class LoadBalancerNodeService implements QueryService<LoadBalancerNode, LoadBalancerNodeFilter, LoadBalancerNodeMetadata> {
 

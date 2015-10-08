@@ -17,7 +17,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.network.refs;
 
 import com.centurylink.cloud.sdk.server.services.dsl.domain.network.filters.NetworkFilter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 
 /**
  * Reference that allow to find unique network by it's ID and owned data center reference

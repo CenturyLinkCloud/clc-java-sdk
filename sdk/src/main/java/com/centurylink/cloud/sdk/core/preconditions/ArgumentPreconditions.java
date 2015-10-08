@@ -15,8 +15,6 @@
 
 package com.centurylink.cloud.sdk.core.preconditions;
 
-import com.google.common.base.Preconditions;
-
 import java.util.List;
 
 import static java.lang.String.format;

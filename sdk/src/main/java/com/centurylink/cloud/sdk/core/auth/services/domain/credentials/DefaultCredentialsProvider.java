@@ -2,7 +2,8 @@ package com.centurylink.cloud.sdk.core.auth.services.domain.credentials;
 
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.centurylink.cloud.sdk.core.util.Strings.isNullOrEmpty;
+
 
 public class DefaultCredentialsProvider implements CredentialsProvider {
 

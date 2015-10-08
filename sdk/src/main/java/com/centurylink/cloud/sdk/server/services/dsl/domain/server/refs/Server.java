@@ -19,7 +19,8 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataC
 import com.centurylink.cloud.sdk.core.services.refs.Reference;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
+
 
 /**
  * {@inheritDoc}

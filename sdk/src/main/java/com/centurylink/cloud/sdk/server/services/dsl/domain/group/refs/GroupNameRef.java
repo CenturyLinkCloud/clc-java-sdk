@@ -18,7 +18,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.filters.GroupFilter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 
 /**
  * Reference that allow to find group by owned data center and group name

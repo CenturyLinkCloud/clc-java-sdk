@@ -28,8 +28,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkArgument;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**

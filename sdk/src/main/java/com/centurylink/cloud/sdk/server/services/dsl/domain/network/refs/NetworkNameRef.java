@@ -18,7 +18,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.network.refs;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.network.filters.NetworkFilter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 
 /**
  * Reference that allow to find network by owned data center and network name

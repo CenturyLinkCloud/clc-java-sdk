@@ -22,7 +22,7 @@ import com.centurylink.cloud.sdk.core.services.refs.ReferenceNotResolvedExceptio
 
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 
 /**
  * @author Ilya Drabenia

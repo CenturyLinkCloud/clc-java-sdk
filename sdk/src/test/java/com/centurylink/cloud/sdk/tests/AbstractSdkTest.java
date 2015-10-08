@@ -36,7 +36,6 @@ import java.util.List;
 
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.google.common.collect.Iterables.toArray;
 import static java.util.Arrays.asList;
 
 /**
@@ -95,22 +94,23 @@ public abstract class AbstractSdkTest extends Assert {
     }
 
     // wiremock mixin support
-    @BeforeMethod(groups = RECORDED)
+    @BeforeMethod(groups = {RECORDED})
     public void startWireMockServer(Method method) {
         execMixinMethodIfExists("initWireMock", method);
     }
 
 
-    @AfterMethod(groups = RECORDED)
+    @AfterMethod(groups = {RECORDED})
     public void stopWireMockServer() {
         execMixinMethodIfExists("destroyWireMock");
     }
 
     private void execMixinMethodIfExists(String methodName, Object... args) {
         try {
+            List<Class<?>> parameterTypes = map(args, Object::getClass);
             Method initWireMockMethod = this.getClass().getMethod(
                 methodName,
-                toArray(map(args, Object::getClass), Class.class)
+                parameterTypes.toArray(new Class[parameterTypes.size()])
             );
 
             if (initWireMockMethod != null) {
