@@ -31,9 +31,6 @@ public class SubnetUtils {
 
     private int netmask = 0;
     private int address = 0;
-    private int network = 0;
-    private int broadcast = 0;
-
 
 
     /**
@@ -73,11 +70,6 @@ public class SubnetUtils {
                 netmask |= (1 << 31 - j);
             }
 
-            /* Calculate base network address */
-            network = (address & netmask);
-
-            /* Calculate broadcast address */
-            broadcast = network | ~(netmask);
         } else {
             throw new IllegalArgumentException("Could not parse [" + mask + "]");
         }
