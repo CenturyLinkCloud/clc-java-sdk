@@ -61,9 +61,9 @@ public class UpdateLoadBalancerTest extends AbstractLoadBalancerSdkTest implemen
             .waitUntilComplete()
             .getResult();
 
-        loadBalancerService
+        loadBalancer = loadBalancerService
             .update(
-                new LoadBalancerFilter().loadBalancers(loadBalancer),
+                loadBalancer,
                 new LoadBalancerConfig()
                     .name(updatedName)
                     .description(updatedDescription)

@@ -61,6 +61,8 @@ public class StatisticsSampleApp extends Assert {
     private StatisticsService statisticsService;
     private InvoiceService invoiceService;
 
+    private String nameCriteria = "uat-s";
+
     public StatisticsSampleApp() {
         ClcSdk sdk = new ClcSdk(
             new DefaultCredentialsProvider()
@@ -136,7 +138,7 @@ public class StatisticsSampleApp extends Assert {
             .waitUntilComplete();
 
         groupService
-            .delete(new GroupFilter().nameContains("uat-s"))
+            .delete(new GroupFilter().nameContains(nameCriteria))
             .waitUntilComplete();
     }
 
@@ -164,7 +166,7 @@ public class StatisticsSampleApp extends Assert {
         List<BillingStatsEntry> stats = statisticsService
             .billingStats()
             .forGroups(
-                new GroupFilter().nameContains("uat-s")
+                new GroupFilter().nameContains(nameCriteria)
             )
             .groupByDataCenter();
 
@@ -212,7 +214,7 @@ public class StatisticsSampleApp extends Assert {
         List<MonitoringStatsEntry> stats = statisticsService
             .monitoringStats()
             .forGroups(
-                new GroupFilter().nameContains("uat-s")
+                new GroupFilter().nameContains(nameCriteria)
             )
             .forTime(new ServerMonitoringFilter().last(Duration.ofDays(2)))
             .groupByDataCenter();
