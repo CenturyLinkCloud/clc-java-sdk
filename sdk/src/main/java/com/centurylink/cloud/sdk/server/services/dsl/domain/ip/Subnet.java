@@ -15,8 +15,6 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.ip;
 
-import org.apache.commons.net.util.SubnetUtils;
-
 /**
  * @author Ilya Drabenia
  */
@@ -77,10 +75,10 @@ public class Subnet {
         }
         if (ipAddress != null) {
             if (mask != null) {
-                return new SubnetUtils(ipAddress, mask).getInfo().getCidrSignature();
+                return new SubnetUtils(ipAddress, mask).getCidrSignature();
             }
             if (cidrMask != null) {
-                return new SubnetUtils(ipAddress+cidrMask).getInfo().getCidrSignature();
+                return new SubnetUtils(ipAddress+cidrMask).getCidrSignature();
             }
         }
         return null;

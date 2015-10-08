@@ -19,15 +19,15 @@ import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpReques
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.PublicIpConverter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.Subnet;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.SubnetUtils;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortRangeConfig;
-import org.apache.commons.net.util.SubnetUtils;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
 /**
- * Created by aliaksandr.krasitski on 4/28/2015.
+ * @author aliaksandr.krasitski
  */
 public class PublicIpUtilTest {
 
@@ -69,9 +69,9 @@ public class PublicIpUtilTest {
         assertEquals(subnet.getCidr(), null, "cidr should be null because ipAddress not specified");
 
         subnet.ipAddress(ipAddress);
-        assertEquals(subnet.getCidr(), new SubnetUtils(ipAddress, mask).getInfo().getCidrSignature(), "check constructing subnet from ipAddress and net mask");
+        assertEquals(subnet.getCidr(), new SubnetUtils(ipAddress, mask).getCidrSignature(), "check constructing subnet from ipAddress and net mask");
 
         subnet = new Subnet().ipAddress(ipAddress).cidrMask(cidrMask);
-        assertEquals(subnet.getCidr(), new SubnetUtils(ipAddress+cidrMask).getInfo().getCidrSignature(), "check constructing subnet from ipAddress and cidrMask");
+        assertEquals(subnet.getCidr(), new SubnetUtils(ipAddress+cidrMask).getCidrSignature(), "check constructing subnet from ipAddress and cidrMask");
     }
 }
