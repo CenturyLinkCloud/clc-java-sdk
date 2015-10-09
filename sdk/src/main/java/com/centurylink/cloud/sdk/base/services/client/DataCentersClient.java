@@ -19,12 +19,11 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCen
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.GetDataCenterListResponse;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deployment.capabilities.DatacenterDeploymentCapabilitiesMetadata;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
+import com.centurylink.cloud.sdk.core.cache.Cache;
+import com.centurylink.cloud.sdk.core.cache.CacheLoader;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.ClcClientException;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -45,10 +44,9 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
                 .request().get(DatacenterDeploymentCapabilitiesMetadata.class);
     }
 
-    private LoadingCache<String, DataCenterMetadata> dataCenterCache = CacheBuilder.newBuilder()
+    private Cache<String, DataCenterMetadata> dataCenterCache = new Cache<String, DataCenterMetadata>()
         .maximumSize(20)
         .expireAfterWrite(1, TimeUnit.HOURS)
-        .refreshAfterWrite(1, TimeUnit.HOURS)
         .build(
             new CacheLoader<String, DataCenterMetadata>() {
                 @Override
@@ -76,10 +74,9 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
 
     private static final String ALL_DATACENTERS_KEY = "";
 
-    private LoadingCache<String, GetDataCenterListResponse> allDataCentersCache = CacheBuilder.newBuilder()
+    private Cache<String, GetDataCenterListResponse> allDataCentersCache = new Cache<String, GetDataCenterListResponse>()
         .maximumSize(20)
         .expireAfterWrite(1, TimeUnit.HOURS)
-        .refreshAfterWrite(1, TimeUnit.HOURS)
         .build(
             new CacheLoader<String, GetDataCenterListResponse>() {
                 @Override
