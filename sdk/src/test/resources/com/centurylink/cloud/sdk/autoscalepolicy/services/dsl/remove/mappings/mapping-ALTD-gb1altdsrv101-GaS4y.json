@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/gb1altdsrv101",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-gb1altdsrv101-GaS4y.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Fri, 09 Oct 2015 13:49:05 GMT",
+      "Content-Length" : "1028"
+    }
+  }
+}

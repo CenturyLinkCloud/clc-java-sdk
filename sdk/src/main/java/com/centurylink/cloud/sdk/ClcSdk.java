@@ -15,6 +15,8 @@
 
 package com.centurylink.cloud.sdk;
 
+import com.centurylink.cloud.sdk.autoscalepolicy.services.AutoscalePolicyModule;
+import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.AutoscalePolicyService;
 import com.centurylink.cloud.sdk.base.services.BaseModule;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
@@ -23,6 +25,8 @@ import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCr
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.injector.SdkInjector;
+import com.centurylink.cloud.sdk.firewallpolicy.services.FirewallPolicyModule;
+import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.FirewallPolicyService;
 import com.centurylink.cloud.sdk.loadbalancer.services.LoadBalancerModule;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerNodeService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService;
@@ -70,6 +74,12 @@ public class ClcSdk {
     @Inject
     LoadBalancerNodeService loadBalancerNodeService;
 
+    @Inject
+    FirewallPolicyService firewallPolicyService;
+
+    @Inject
+    AutoscalePolicyService autoscalePolicyService;
+
     public ClcSdk() {
         this(new DefaultCredentialsProvider());
     }
@@ -86,7 +96,9 @@ public class ClcSdk {
                 new AuthModule(credentialsProvider),
                 new ServerModule(),
                 new PolicyModule(),
-                new LoadBalancerModule()
+                new LoadBalancerModule(),
+                new FirewallPolicyModule(),
+                new AutoscalePolicyModule()
             )
             .injectMembers(this);
     }
@@ -133,5 +145,13 @@ public class ClcSdk {
 
     public LoadBalancerNodeService loadBalancerNodeService() {
         return loadBalancerNodeService;
+    }
+
+    public FirewallPolicyService loadFirewallPolicyService() {
+        return firewallPolicyService;
+    }
+
+    public AutoscalePolicyService loadAutoscalePolicyService() {
+        return autoscalePolicyService;
     }
 }

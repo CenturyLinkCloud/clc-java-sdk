@@ -1,0 +1,17 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/gb1altdsrv101/cpuAutoscalePolicy",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 404,
+    "bodyFileName" : "body-gb1altdsrv101-cpuAutoscalePolicy-P59DO.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Fri, 09 Oct 2015 13:49:10 GMT",
+      "Content-Length" : "0"
+    }
+  }
+}
