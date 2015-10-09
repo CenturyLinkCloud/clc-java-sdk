@@ -43,6 +43,13 @@ public class ClassBeanFactory implements BeanFactory {
     }
 
     private Object createBean(Map<Class, BeanFactory> registry) {
+        if (type.getDeclaredConstructors().length == 0) {
+            throw new ClcException(
+                "Could not instantiate " + type.getCanonicalName() + ". " +
+                "It must provide constructor or bean instantiation rules."
+            );
+        }
+
         Constructor constructor = type.getDeclaredConstructors()[0];
         Class[] paramTypes = constructor.getParameterTypes();
 
