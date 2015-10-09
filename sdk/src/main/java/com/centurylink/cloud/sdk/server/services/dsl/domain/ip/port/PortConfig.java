@@ -15,8 +15,8 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port;
 
+import com.centurylink.cloud.sdk.core.preconditions.Preconditions;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.ProtocolType;
-import com.google.common.base.Preconditions;
 
 /**
  * @author Ilya Drabenia

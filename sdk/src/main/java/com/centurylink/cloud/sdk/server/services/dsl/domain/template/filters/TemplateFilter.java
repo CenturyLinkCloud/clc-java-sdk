@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static java.util.Arrays.asList;
 
 /**

@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.allItemsNotNull;
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
-import static com.google.common.collect.Iterables.toArray;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -89,7 +88,7 @@ public class ParallelJobsFuture implements JobFuture {
     private CompletableFuture[] array(Stream<CompletableFuture> futures) {
         List<CompletableFuture> futureList = futures.collect(toList());
 
-        return toArray(futureList, CompletableFuture.class);
+        return futureList.toArray(new CompletableFuture[futureList.size()]);
     }
 
     private Void throwSummaryExceptionIfNeeded(Void val) {

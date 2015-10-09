@@ -21,7 +21,7 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.excep
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting.SingleWaitingLoop;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting.WaitingLoop;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 
 /**
  * @author Ilya Drabenia

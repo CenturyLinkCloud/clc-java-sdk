@@ -34,7 +34,7 @@ import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.CA_TORONTO_2;
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.centurylink.cloud.sdk.core.util.Strings.isNullOrEmpty;
 
 /**
  * @author Aliaksandr Krasitski

@@ -57,6 +57,7 @@ public class SdkInjector {
         return new SdkInjector(asList(modules));
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getInstance(Class<T> type) {
         return (T) registry.get(type).getBean(registry);
     }

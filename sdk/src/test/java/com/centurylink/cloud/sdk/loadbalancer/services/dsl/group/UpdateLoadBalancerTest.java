@@ -22,6 +22,7 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerConfig;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerMetadata;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerStatus;
+import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerFilter;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancer;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;

@@ -37,6 +37,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.DE_FRANKFURT;
@@ -50,7 +52,6 @@ import static com.centurylink.cloud.sdk.server.services.dsl.domain.server.Server
 import static com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerType.STANDARD;
 import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture.x86_64;
 import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType.CENTOS;
-import static com.google.common.collect.Sets.newHashSet;
 import static sample.SamplesTestsConstants.SAMPLES;
 
 public class SearchQueriesSampleApp extends Assert {
@@ -59,13 +60,13 @@ public class SearchQueriesSampleApp extends Assert {
     private GroupService groupService;
     private TemplateService templateService;
 
-    private static final String group1Name = "uat1";
-    private static final String group2Name = "uat2";
+    private String group1Name = "uat1";
+    private String group2Name = "uat2";
 
-    private static final String serverDe1Name = "sr-de1";
-    private static final String serverDe2Name = "sr-de2";
-    private static final String serverVa1Name = "sr-va1";
-    private static final String serverVa2Name = "sr-va2";
+    private String serverDe1Name = "sr-de1";
+    private String serverDe2Name = "sr-de2";
+    private String serverVa1Name = "sr-va1";
+    private String serverVa2Name = "sr-va2";
 
     Server server2Va = Server.refByDescription(US_WEST_SANTA_CLARA, serverVa2Name);
 
@@ -176,8 +177,8 @@ public class SearchQueriesSampleApp extends Assert {
         assertEquals(serverMetadataList.size(), expectedServerDescs.length);
 
         assertEquals(
-            newHashSet(map(serverMetadataList, ServerMetadata::getDescription)),
-            newHashSet(expectedServerDescs)
+            new HashSet<>(map(serverMetadataList, ServerMetadata::getDescription)),
+            new HashSet<>(Arrays.asList(expectedServerDescs))
         );
     }
 
@@ -187,8 +188,8 @@ public class SearchQueriesSampleApp extends Assert {
         assertEquals(groupMetadataList.size(), expectedGroupNames.length);
 
         assertEquals(
-            newHashSet(map(groupMetadataList, GroupMetadata::getName)),
-            newHashSet(expectedGroupNames)
+            new HashSet<>(map(groupMetadataList, GroupMetadata::getName)),
+            new HashSet<>(Arrays.asList(expectedGroupNames))
         );
     }
 

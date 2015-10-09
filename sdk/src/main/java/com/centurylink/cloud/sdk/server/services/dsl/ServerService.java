@@ -72,7 +72,7 @@ import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
 import static com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig.SSH;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**

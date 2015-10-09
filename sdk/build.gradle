@@ -107,15 +107,11 @@ javadoc {
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.7'
 
-    compile 'commons-net:commons-net:3.3'
-
     compile 'org.jboss.resteasy:resteasy-client:3.0.11.Final'
     compile 'org.jboss.resteasy:resteasy-jackson2-provider:3.0.11.Final'
     compile 'org.apache.httpcomponents:httpcore:4.3.3'
     compile 'org.apache.httpcomponents:httpclient:4.3.3'
     compile 'com.hierynomus:sshj:0.11.0'
-
-    compile 'com.google.guava:guava:18.0'
 
     testCompile 'org.testng:testng:6.8.21'
     testCompile "org.mockito:mockito-core:1.10.19"

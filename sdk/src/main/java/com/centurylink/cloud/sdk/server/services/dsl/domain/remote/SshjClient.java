@@ -2,9 +2,9 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.remote;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.core.preconditions.Preconditions;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ServerCredentials;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.domain.ShellResponse;
-import com.google.common.base.Preconditions;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session;

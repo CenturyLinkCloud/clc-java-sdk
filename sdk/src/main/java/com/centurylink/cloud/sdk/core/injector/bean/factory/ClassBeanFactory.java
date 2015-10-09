@@ -43,10 +43,28 @@ public class ClassBeanFactory implements BeanFactory {
     }
 
     private Object createBean(Map<Class, BeanFactory> registry) {
+        if (type.getDeclaredConstructors().length == 0) {
+            throw new ClcException(
+                "Could not instantiate " + type.getCanonicalName() + ". " +
+                "It must provide constructor or bean instantiation rules."
+            );
+        }
+
         Constructor constructor = type.getDeclaredConstructors()[0];
         Class[] paramTypes = constructor.getParameterTypes();
+        Object[] params = resolveDependencies(registry, paramTypes);
 
+        try {
+            return params.length > 0 ? constructor.newInstance(params) : constructor.newInstance();
+        } catch (InstantiationException | IllegalAccessException
+            | InvocationTargetException e) {
+            throw new ClcException(e);
+        }
+    }
+
+    private Object[] resolveDependencies(Map<Class, BeanFactory> registry, Class[] paramTypes) {
         Object[] params = new Object[paramTypes.length];
+
         for (int i = 0; i < paramTypes.length; i++) {
             BeanFactory factory = registry.get(paramTypes[i]);
 
@@ -57,11 +75,6 @@ public class ClassBeanFactory implements BeanFactory {
             params[i] = registry.get(paramTypes[i]).getBean(registry);
         }
 
-        try {
-            return params.length > 0 ? constructor.newInstance(params) : constructor.newInstance();
-        } catch (InstantiationException | IllegalAccessException
-            | InvocationTargetException e) {
-            throw new ClcException(e);
-        }
+        return params;
     }
 }

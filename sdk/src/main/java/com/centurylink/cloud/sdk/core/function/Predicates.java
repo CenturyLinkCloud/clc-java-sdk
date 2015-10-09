@@ -21,8 +21,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Strings.nullToEmpty;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.util.Strings.nullToEmpty;
 
 /**
  * @author Ilya Drabenia
@@ -41,7 +41,7 @@ public abstract class Predicates {
         return
             predicate != null &&
             predicate instanceof ConstPredicate &&
-            ConstPredicate.cast(predicate).getDefaultValue() == true;
+            ConstPredicate.cast(predicate).getDefaultValue();
     }
 
     public static <T> Predicate<T> alwaysFalse() {

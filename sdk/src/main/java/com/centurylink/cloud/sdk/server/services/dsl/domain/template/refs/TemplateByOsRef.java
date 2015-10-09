@@ -21,7 +21,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType;
 
-import static com.google.common.base.Strings.nullToEmpty;
+import static com.centurylink.cloud.sdk.core.util.Strings.nullToEmpty;
 
 /**
  * @author ilya.drabenia

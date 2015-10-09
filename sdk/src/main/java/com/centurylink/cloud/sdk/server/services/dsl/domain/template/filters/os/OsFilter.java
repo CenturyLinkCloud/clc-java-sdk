@@ -19,7 +19,7 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deploym
 
 import java.util.function.Predicate;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 
 /**
  * Class used for filter predefined image operating system types

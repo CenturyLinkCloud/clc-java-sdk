@@ -15,7 +15,8 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 
-import com.google.common.base.Preconditions;
+
+import com.centurylink.cloud.sdk.core.preconditions.Preconditions;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

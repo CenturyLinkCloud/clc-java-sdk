@@ -48,7 +48,7 @@ public class LoadBalancerSampleApp extends Assert {
     private LoadBalancerPoolService loadBalancerPoolService;
     private LoadBalancerNodeService loadBalancerNodeService;
 
-    private final DataCenter dataCenter = DataCenter.US_EAST_STERLING;
+    private static final DataCenter dataCenter = DataCenter.US_EAST_STERLING;
 
 
     public LoadBalancerSampleApp() {

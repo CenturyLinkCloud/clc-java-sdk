@@ -26,7 +26,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Templa
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.centurylink.cloud.sdk.core.util.Strings.isNullOrEmpty;
 
 /**
  * @author Ilya Drabenia

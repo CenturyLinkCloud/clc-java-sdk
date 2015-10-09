@@ -47,17 +47,6 @@ public class PublicIpTest extends AbstractServersSdkTest implements WireMockMixi
     @Inject
     ServerService serverService;
 
-    private void checkServerStarted() {
-        ServerMetadata serverMetadata = serverService.findByRef(serverRef);
-        if (!"started".equals(serverMetadata.getDetails().getPowerState())) {
-            serverService.powerOn(serverRef);
-        }
-
-        if (!"active".equals(serverMetadata.getStatus())) {
-            throw new RuntimeException("server " + serverMetadata.getId() + " is not in state active");
-        }
-    }
-
     private List<IpAddress> getIpAddresses() {
         return serverService.findByRef(serverRef).getDetails().getIpAddresses();
     }

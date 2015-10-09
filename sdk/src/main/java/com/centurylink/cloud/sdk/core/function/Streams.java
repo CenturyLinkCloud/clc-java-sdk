@@ -18,7 +18,7 @@ package com.centurylink.cloud.sdk.core.function;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 

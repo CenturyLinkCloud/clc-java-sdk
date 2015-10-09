@@ -1,7 +1,7 @@
 package com.centurylink.cloud.sdk.server.services.dsl.domain.remote.domain;
 
 import com.centurylink.cloud.sdk.core.ToStringMixin;
-import com.google.common.base.Preconditions;
+import com.centurylink.cloud.sdk.core.preconditions.Preconditions;
 
 /**
  * @author Anton Karavayeu

@@ -15,7 +15,7 @@
 
 package com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting;
 
-import com.google.common.base.Throwables;
+import com.centurylink.cloud.sdk.core.util.Throwables;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
