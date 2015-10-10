@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/gb1altdsrv101/cpuAutoscalePolicy",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"id\":\"02c9a0551e494c0fa6ede693268c0216\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-gb1altdsrv101-cpuAutoscalePolicy-HK7ti.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Fri, 09 Oct 2015 11:38:29 GMT",
+      "Content-Length" : "238"
+    }
+  }
+}

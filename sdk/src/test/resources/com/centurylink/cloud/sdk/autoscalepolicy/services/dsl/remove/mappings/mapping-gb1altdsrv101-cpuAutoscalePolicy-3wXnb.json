@@ -1,0 +1,16 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/gb1altdsrv101/cpuAutoscalePolicy",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-gb1altdsrv101-cpuAutoscalePolicy-3wXnb.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Fri, 09 Oct 2015 13:49:08 GMT"
+    }
+  }
+}
