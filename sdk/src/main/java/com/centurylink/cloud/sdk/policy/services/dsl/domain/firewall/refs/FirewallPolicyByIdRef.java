@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.refs;
+package com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.refs;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.filter.FirewallPolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.filter.FirewallPolicyFilter;
 
 public class FirewallPolicyByIdRef extends FirewallPolicy {
     private final String id;

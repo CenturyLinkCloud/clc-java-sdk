@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.firewallpolicy.services.client.domain;
+package com.centurylink.cloud.sdk.policy.services.client.domain.firewall;
 
 import java.util.ArrayList;
 import java.util.List;

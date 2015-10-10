@@ -13,15 +13,16 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.firewallpolicy.services;
+package com.centurylink.cloud.sdk.policy.services;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.injector.Inject;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.FirewallPolicyService;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyConfig;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.refs.FirewallPolicy;
+import com.centurylink.cloud.sdk.policy.services.dsl.FirewallPolicyService;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyConfig;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.refs.FirewallPolicy;
+import com.centurylink.cloud.sdk.policy.services.FirewallPolicyModule;
 import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 import com.centurylink.cloud.sdk.core.injector.Module;
 

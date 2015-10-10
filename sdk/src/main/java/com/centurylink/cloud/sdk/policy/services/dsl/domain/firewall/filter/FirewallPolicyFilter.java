@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.filter;
+package com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.filter;
 
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.filters.DataCenterFilter;
@@ -24,8 +24,8 @@ import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.SingleFilterEvaluation;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyMetadata;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.refs.FirewallPolicy;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.refs.FirewallPolicy;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerMetadata;
 
 import java.util.ArrayList;

@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.firewallpolicy.services.dsl;
+package com.centurylink.cloud.sdk.policy.services.dsl.firewall;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.firewallpolicy.services.AbstractFirewallPolicySdkTest;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyMetadata;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.filter.FirewallPolicyFilter;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.refs.FirewallPolicy;
+import com.centurylink.cloud.sdk.policy.services.AbstractFirewallPolicySdkTest;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.filter.FirewallPolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.refs.FirewallPolicy;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import org.testng.annotations.AfterMethod;

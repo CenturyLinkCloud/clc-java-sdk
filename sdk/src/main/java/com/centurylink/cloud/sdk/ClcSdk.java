@@ -25,8 +25,8 @@ import com.centurylink.cloud.sdk.core.auth.services.domain.credentials.DefaultCr
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.core.injector.SdkInjector;
-import com.centurylink.cloud.sdk.firewallpolicy.services.FirewallPolicyModule;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.FirewallPolicyService;
+import com.centurylink.cloud.sdk.policy.services.FirewallPolicyModule;
+import com.centurylink.cloud.sdk.policy.services.dsl.FirewallPolicyService;
 import com.centurylink.cloud.sdk.loadbalancer.services.LoadBalancerModule;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerNodeService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService;

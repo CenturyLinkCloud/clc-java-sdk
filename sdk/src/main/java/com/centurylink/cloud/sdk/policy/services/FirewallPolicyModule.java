@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.firewallpolicy.services;
+package com.centurylink.cloud.sdk.policy.services;
 
 import com.centurylink.cloud.sdk.base.services.BaseModule;
 import com.centurylink.cloud.sdk.policy.services.client.PolicyClient;

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.firewallpolicy.services.dsl;
+package com.centurylink.cloud.sdk.policy.services.dsl;
 
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
@@ -23,12 +23,12 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.JobFu
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.services.QueryService;
-import com.centurylink.cloud.sdk.firewallpolicy.services.client.FirewallPolicyClient;
-import com.centurylink.cloud.sdk.firewallpolicy.services.client.domain.FirewallPolicyRequest;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyConfig;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyMetadata;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.filter.FirewallPolicyFilter;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.refs.FirewallPolicy;
+import com.centurylink.cloud.sdk.policy.services.client.FirewallPolicyClient;
+import com.centurylink.cloud.sdk.policy.services.client.domain.firewall.FirewallPolicyRequest;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyConfig;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.filter.FirewallPolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.refs.FirewallPolicy;
 
 import java.util.Arrays;
 import java.util.List;

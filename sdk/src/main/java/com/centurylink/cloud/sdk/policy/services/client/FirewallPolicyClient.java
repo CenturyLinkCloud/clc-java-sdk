@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.firewallpolicy.services.client;
+package com.centurylink.cloud.sdk.policy.services.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.firewallpolicy.services.client.domain.FirewallPolicyRequest;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.firewall.FirewallPolicyRequest;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyMetadata;
 
 import javax.ws.rs.core.GenericType;
 import java.util.List;
