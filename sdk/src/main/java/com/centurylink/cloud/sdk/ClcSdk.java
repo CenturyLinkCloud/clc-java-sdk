@@ -15,8 +15,8 @@
 
 package com.centurylink.cloud.sdk;
 
-import com.centurylink.cloud.sdk.autoscalepolicy.services.AutoscalePolicyModule;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.AutoscalePolicyService;
+import com.centurylink.cloud.sdk.policy.services.AutoscalePolicyModule;
+import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
 import com.centurylink.cloud.sdk.base.services.BaseModule;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.core.auth.AuthModule;

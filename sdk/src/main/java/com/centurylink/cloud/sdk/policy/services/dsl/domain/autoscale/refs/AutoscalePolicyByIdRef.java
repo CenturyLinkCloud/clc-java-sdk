@@ -13,23 +13,22 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.autoscalepolicy.services.client.domain;
+package com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.filter.AutoscalePolicyFilter;
 
+public class AutoscalePolicyByIdRef extends AutoscalePolicy {
+    private final String id;
 
-public class SetAutoscalePolicyRequest {
-
-    String id;
+    AutoscalePolicyByIdRef(String id) {
+        this.id = id;
+    }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public SetAutoscalePolicyRequest id(String id) {
-        setId(id);
-        return this;
+    @Override
+    public AutoscalePolicyFilter asFilter() {
+        return new AutoscalePolicyFilter().id(id);
     }
 }

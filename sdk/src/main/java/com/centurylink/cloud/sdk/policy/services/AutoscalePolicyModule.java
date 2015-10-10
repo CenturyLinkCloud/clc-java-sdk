@@ -13,25 +13,21 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.autoscalepolicy.services;
+package com.centurylink.cloud.sdk.policy.services;
 
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.AutoscalePolicyService;
-import com.centurylink.cloud.sdk.core.auth.AuthModule;
-import com.centurylink.cloud.sdk.core.injector.Inject;
+import com.centurylink.cloud.sdk.policy.services.client.AutoscalePolicyClient;
+import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
+import com.centurylink.cloud.sdk.base.services.BaseModule;
 import com.centurylink.cloud.sdk.core.injector.Module;
-import com.centurylink.cloud.sdk.server.services.ServerModule;
-import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 
-import java.util.List;
-
-public class AbstractAutoscalePolicySdkTest extends AbstractSdkTest {
-
-    @Inject
-    protected AutoscalePolicyService autoscalePolicyService;
+public class AutoscalePolicyModule extends Module {
 
     @Override
-    protected List<Module> modules() {
-        return list(new AuthModule(), new AutoscalePolicyModule(), new ServerModule());
+    protected void configure() {
+        install(new BaseModule());
+
+        bind(AutoscalePolicyClient.class);
+        bind(AutoscalePolicyService.class);
     }
 
 }

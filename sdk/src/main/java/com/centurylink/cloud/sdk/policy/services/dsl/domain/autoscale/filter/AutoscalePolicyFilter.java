@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.filter;
+package com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.filter;
 
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.AutoscalePolicyMetadata;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.refs.AutoscalePolicy;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs.AutoscalePolicy;
 import com.centurylink.cloud.sdk.core.function.Predicates;
 import com.centurylink.cloud.sdk.core.function.Streams;
 import com.centurylink.cloud.sdk.core.services.filter.AbstractResourceFilter;
@@ -89,7 +89,6 @@ public class AutoscalePolicyFilter extends AbstractResourceFilter<AutoscalePolic
 
         evaluation = new AndEvaluation<>(evaluation, otherFilter, AutoscalePolicyMetadata::getName);
         return this;
-
     }
 
     /**

@@ -13,23 +13,23 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.refs;
+package com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs;
 
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.filter.AutoscalePolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.filter.AutoscalePolicyFilter;
+import com.centurylink.cloud.sdk.core.services.refs.Reference;
 
-public class AutoscalePolicyByNameRef extends AutoscalePolicy {
-    private final String name;
+/**
+ * {@inheritDoc}
+ */
+public abstract class AutoscalePolicy implements Reference<AutoscalePolicyFilter> {
 
-    AutoscalePolicyByNameRef(String name) {
-        this.name = name;
+    public static AutoscalePolicyByIdRef refById(String id) {
+        return new AutoscalePolicyByIdRef(id);
     }
 
-    public String getName() {
-        return name;
-    }
 
     @Override
-    public AutoscalePolicyFilter asFilter() {
-        return new AutoscalePolicyFilter().names(name);
+    public String toString() {
+        return this.toReadableString();
     }
 }

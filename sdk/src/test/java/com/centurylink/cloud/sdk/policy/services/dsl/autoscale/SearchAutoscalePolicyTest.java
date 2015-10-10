@@ -13,24 +13,16 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.autoscalepolicy.services.dsl;
+package com.centurylink.cloud.sdk.policy.services.dsl.autoscale;
 
-import com.centurylink.cloud.sdk.autoscalepolicy.services.AbstractAutoscalePolicySdkTest;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.AutoscalePolicyMetadata;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.filter.AutoscalePolicyFilter;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.refs.AutoscalePolicy;
-import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
-import com.centurylink.cloud.sdk.firewallpolicy.services.AbstractFirewallPolicySdkTest;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.FirewallPolicyMetadata;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.filter.FirewallPolicyFilter;
-import com.centurylink.cloud.sdk.firewallpolicy.services.dsl.domain.refs.FirewallPolicy;
+import com.centurylink.cloud.sdk.policy.services.AbstractAutoscalePolicySdkTest;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.filter.AutoscalePolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs.AutoscalePolicy;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
-import com.centurylink.cloud.sdk.tests.recorded.WireMockRecording;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;

@@ -1,4 +1,4 @@
-package com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain;
+package com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale;
 
 public class AutoscalePolicyScaleDownWindow {
 

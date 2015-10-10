@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.autoscalepolicy.services.dsl;
+package com.centurylink.cloud.sdk.policy.services.dsl;
 
-import com.centurylink.cloud.sdk.autoscalepolicy.services.client.AutoscalePolicyClient;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.client.domain.SetAutoscalePolicyRequest;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.AutoscalePolicyMetadata;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.filter.AutoscalePolicyFilter;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.refs.AutoscalePolicy;
+import com.centurylink.cloud.sdk.policy.services.client.AutoscalePolicyClient;
+import com.centurylink.cloud.sdk.policy.services.client.domain.autoscale.SetAutoscalePolicyRequest;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.filter.AutoscalePolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs.AutoscalePolicy;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.JobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;

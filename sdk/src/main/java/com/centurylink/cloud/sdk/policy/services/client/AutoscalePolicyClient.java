@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.autoscalepolicy.services.client;
+package com.centurylink.cloud.sdk.policy.services.client;
 
-import com.centurylink.cloud.sdk.autoscalepolicy.services.client.domain.SetAutoscalePolicyRequest;
-import com.centurylink.cloud.sdk.autoscalepolicy.services.dsl.domain.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.autoscale.SetAutoscalePolicyRequest;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.errors.ClcHttpClientException;
