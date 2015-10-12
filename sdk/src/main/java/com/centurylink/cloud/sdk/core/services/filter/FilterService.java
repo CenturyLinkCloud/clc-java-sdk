@@ -15,7 +15,7 @@
 
 package com.centurylink.cloud.sdk.core.services.filter;
 
-import com.centurylink.cloud.sdk.core.pool.ClcThreadPool;
+import com.centurylink.cloud.sdk.core.services.SdkThreadPool;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
  */
 public interface FilterService<F extends Filter<F>, M> {
 
-    static final ForkJoinPool POOL = ClcThreadPool.getPool();
+    static final ForkJoinPool POOL = SdkThreadPool.get();
 
     /**
      * Method find all resources satisfied by specified filter
