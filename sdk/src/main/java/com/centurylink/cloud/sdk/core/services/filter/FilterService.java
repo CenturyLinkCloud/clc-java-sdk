@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
  */
 public interface FilterService<F extends Filter<F>, M> {
 
-    static final ForkJoinPool POOL = SdkThreadPool.get();
+    static final ForkJoinPool POOL = SdkThreadPool.getForkJoinPool();
 
     /**
      * Method find all resources satisfied by specified filter
