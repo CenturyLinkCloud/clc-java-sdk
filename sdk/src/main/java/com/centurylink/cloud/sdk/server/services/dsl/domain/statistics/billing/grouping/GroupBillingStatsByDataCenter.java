@@ -63,12 +63,14 @@ public class GroupBillingStatsByDataCenter extends GroupBillingStatsBy {
                     DataCenter.refById(groupMetadata.getLocationId())
                 );
 
-                if (dataCenterMap.get(dataCenterMetadata) != null) {
-                    aggregateStats(dataCenterMap.get(dataCenterMetadata), groupBilling);
-                } else {
-                    Statistics statistics = new Statistics();
-                    aggregateStats(statistics, groupBilling);
-                    dataCenterMap.put(dataCenterMetadata, statistics);
+                synchronized (this) {
+                    if (dataCenterMap.get(dataCenterMetadata) != null) {
+                        aggregateStats(dataCenterMap.get(dataCenterMetadata), groupBilling);
+                    } else {
+                        Statistics statistics = new Statistics();
+                        aggregateStats(statistics, groupBilling);
+                        dataCenterMap.put(dataCenterMetadata, statistics);
+                    }
                 }
             }
         );

@@ -48,7 +48,7 @@ public abstract class GroupBillingStatsBy {
         );
     }
 
-    protected void aggregateStats(Statistics statistics, ServerBilling serverBilling) {
+    protected synchronized void aggregateStats(Statistics statistics, ServerBilling serverBilling) {
         statistics
             .archiveCost(
                 statistics.getArchiveCost().add(serverBilling.getArchiveCost())
