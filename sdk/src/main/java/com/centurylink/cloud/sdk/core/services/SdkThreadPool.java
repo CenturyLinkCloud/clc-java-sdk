@@ -17,13 +17,21 @@ package com.centurylink.cloud.sdk.core.services;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author Ilya Drabenia
  */
 public abstract class SdkThreadPool {
 
-    public static final Executor threadPool = Executors.newCachedThreadPool();
+    private static final Executor threadPool = Executors.newCachedThreadPool();
+    private static final int PARALLELISM_LEVEL = 32;
+    private static ForkJoinPool pool = new ForkJoinPool(PARALLELISM_LEVEL);
+
+
+    public static ForkJoinPool getForkJoinPool() {
+        return pool;
+    }
 
     public static Executor get() {
         return threadPool;
