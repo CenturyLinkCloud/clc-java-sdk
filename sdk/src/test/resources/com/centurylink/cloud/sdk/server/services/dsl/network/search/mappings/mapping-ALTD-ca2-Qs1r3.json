@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/networks/ALTD/ca2",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-ca2-Qs1r3.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 13 Oct 2015 10:38:24 GMT",
+      "Content-Length" : "404"
+    }
+  }
+}

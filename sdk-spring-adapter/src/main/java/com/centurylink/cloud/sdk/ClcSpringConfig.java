@@ -22,9 +22,12 @@ import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerNodeService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
+import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
+import com.centurylink.cloud.sdk.policy.services.dsl.FirewallPolicyService;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.InvoiceService;
+import com.centurylink.cloud.sdk.server.services.dsl.NetworkService;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.StatisticsService;
 import com.centurylink.cloud.sdk.server.services.dsl.TemplateService;
@@ -110,5 +113,20 @@ public class ClcSpringConfig implements InitializingBean {
     @Bean
     public LoadBalancerNodeService clcLoadBalancerNodeService() {
         return sdk.loadBalancerNodeService();
+    }
+
+    @Bean
+    public FirewallPolicyService clcFirewallPolicyService() {
+        return sdk.loadFirewallPolicyService();
+    }
+
+    @Bean
+    public AutoscalePolicyService clcAutoscalePolicyService() {
+        return sdk.loadAutoscalePolicyService();
+    }
+
+    @Bean
+    public NetworkService clcNetworkService() {
+        return sdk.loadNetworkService();
     }
 }

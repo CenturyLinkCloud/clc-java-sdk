@@ -33,6 +33,7 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolServi
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
 import com.centurylink.cloud.sdk.policy.services.PolicyModule;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
+import com.centurylink.cloud.sdk.server.services.NetworkModule;
 import com.centurylink.cloud.sdk.server.services.ServerModule;
 import com.centurylink.cloud.sdk.server.services.dsl.*;
 
@@ -80,6 +81,9 @@ public class ClcSdk {
     @Inject
     AutoscalePolicyService autoscalePolicyService;
 
+    @Inject
+    NetworkService networkService;
+
     public ClcSdk() {
         this(new DefaultCredentialsProvider());
     }
@@ -98,7 +102,8 @@ public class ClcSdk {
                 new PolicyModule(),
                 new LoadBalancerModule(),
                 new FirewallPolicyModule(),
-                new AutoscalePolicyModule()
+                new AutoscalePolicyModule(),
+                new NetworkModule()
             )
             .injectMembers(this);
     }
@@ -153,5 +158,9 @@ public class ClcSdk {
 
     public AutoscalePolicyService loadAutoscalePolicyService() {
         return autoscalePolicyService;
+    }
+
+    public NetworkService loadNetworkService() {
+        return networkService;
     }
 }

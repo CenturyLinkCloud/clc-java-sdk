@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/networks/ALTD/va1/2067ad2d3e8a42ae9eb78ef2f82855d8/release",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "bodyFileName" : "body-2067ad2d3e8a42ae9eb78ef2f82855d8-release-YEMak.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Tue, 13 Oct 2015 15:27:20 GMT",
+      "Content-Length" : "56"
+    }
+  }
+}
