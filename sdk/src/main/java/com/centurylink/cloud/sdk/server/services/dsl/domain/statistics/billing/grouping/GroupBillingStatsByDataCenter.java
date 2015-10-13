@@ -29,6 +29,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.f
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
 
@@ -50,7 +51,7 @@ public class GroupBillingStatsByDataCenter extends GroupBillingStatsBy {
     @Override
     public List<BillingStatsEntry> group(List<BillingStats> billingStatsList) {
 
-        Map<DataCenterMetadata, Statistics> dataCenterMap = new HashMap<>();
+        Map<DataCenterMetadata, Statistics> dataCenterMap = new ConcurrentHashMap<>();
 
         executeParallel(
             billingStatsList.stream().map(BillingStats::getGroups).flatMap(List::stream),
@@ -63,14 +64,12 @@ public class GroupBillingStatsByDataCenter extends GroupBillingStatsBy {
                     DataCenter.refById(groupMetadata.getLocationId())
                 );
 
-                synchronized (this) {
-                    if (dataCenterMap.get(dataCenterMetadata) != null) {
-                        aggregateStats(dataCenterMap.get(dataCenterMetadata), groupBilling);
-                    } else {
-                        Statistics statistics = new Statistics();
-                        aggregateStats(statistics, groupBilling);
-                        dataCenterMap.put(dataCenterMetadata, statistics);
-                    }
+                if (dataCenterMap.get(dataCenterMetadata) != null) {
+                    aggregateStats(dataCenterMap.get(dataCenterMetadata), groupBilling);
+                } else {
+                    Statistics statistics = new Statistics();
+                    aggregateStats(statistics, groupBilling);
+                    dataCenterMap.put(dataCenterMetadata, statistics);
                 }
             }
         );
