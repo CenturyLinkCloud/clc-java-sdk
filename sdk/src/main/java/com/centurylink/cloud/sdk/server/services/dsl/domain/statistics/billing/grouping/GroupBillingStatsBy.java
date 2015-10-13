@@ -38,14 +38,11 @@ public abstract class GroupBillingStatsBy {
     }
 
     protected void aggregateStats(Statistics statistics, GroupBilling groupBilling) {
-        executeParallel(
-            groupBilling.getServers().stream(),
-            serverBilling -> {
-                if (checkServerId(serverBilling)) {
-                    aggregateStats(statistics, serverBilling);
-                }
+        groupBilling.getServers().stream().forEach(serverBilling -> {
+            if (checkServerId(serverBilling)) {
+                aggregateStats(statistics, serverBilling);
             }
-        );
+        });
     }
 
     protected synchronized void aggregateStats(Statistics statistics, ServerBilling serverBilling) {
