@@ -10,12 +10,15 @@ To use spring adapter you need:
 @EnableClcSdk
 class MyConfig {
 
-   @Bean
-   public ClcSdk clcSdkConfig() {
-      return new ClcSdk(
-          credentialsProvider, config
-      );
-   }
+    @Bean
+    public CredentialsProvider clcCredentialsProvider() {
+        return new StaticCredentialsProvider("john.doe", "strong_password");
+    }
+
+    @Bean
+    public SdkConfiguration clcSdkConfig() {
+        return new SdkConfigurationBuilder().build();
+    }
 
 }
 
