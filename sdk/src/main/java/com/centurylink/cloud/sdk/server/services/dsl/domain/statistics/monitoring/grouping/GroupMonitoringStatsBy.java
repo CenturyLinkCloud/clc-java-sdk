@@ -16,10 +16,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
+import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
 import static java.util.stream.Collectors.summingDouble;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toList;
@@ -36,7 +38,7 @@ public abstract class GroupMonitoringStatsBy {
     }
 
     protected List<MonitoringEntry> convertEntry(List<SamplingEntry> entries) {
-        return entries.stream()
+        return executeParallel(entries.stream()
             .map(entry -> new MonitoringEntry()
                 .timestamp(entry.getTimestamp())
                 .cpu(entry.getCpu())
@@ -49,27 +51,28 @@ public abstract class GroupMonitoringStatsBy {
                 .diskUsage(convertDiskUsage(entry.getDiskUsage()))
                 .guestDiskUsage(convertGuestUsage(entry.getGuestDiskUsage()))
             )
-            .collect(toList());
+        );
     }
 
     protected List<DiskUsage> convertDiskUsage(List<DiskUsageMetadata> list) {
-        return list.stream()
-            .map(metadata -> new DiskUsage()
-                .id(metadata.getId())
-                .capacityMB(metadata.getCapacityMB()))
-            .collect(toList());
+        return executeParallel(list.stream()
+                .map(metadata -> new DiskUsage()
+                    .id(metadata.getId())
+                    .capacityMB(metadata.getCapacityMB())
+                )
+        );
     }
 
     protected List<GuestUsage> convertGuestUsage(List<GuestUsageMetadata> list) {
-        return list.stream()
+        return executeParallel(list.stream()
             .map(metadata -> new GuestUsage()
                 .path(metadata.getPath())
                 .capacityMB(metadata.getCapacityMB())
                 .consumedMB(metadata.getConsumedMB()))
-            .collect(toList());
+            );
     }
 
-    protected void collectStats(Map<String, List<MonitoringEntry>> plainGrouping,
+    protected synchronized void collectStats(Map<String, List<MonitoringEntry>> plainGrouping,
                                 String key,
                                 List<SamplingEntry> stats,
                                 boolean distinct) {
@@ -86,13 +89,16 @@ public abstract class GroupMonitoringStatsBy {
         Map<Group, List<ServerMonitoringStatistics>> stats) {
 
         Map<String, ServerMonitoringStatistics> distinctMap = new HashMap<>();
-        stats.values().stream()
-            .flatMap(List::stream)
-            .forEach(stat -> {
-                if (!distinctMap.containsKey(stat.getName())) {
-                    distinctMap.put(stat.getName(), stat);
+        executeParallel(
+            stats.values().stream().flatMap(List::stream),
+            stat -> {
+                synchronized (this) {
+                    if (!distinctMap.containsKey(stat.getName())) {
+                        distinctMap.put(stat.getName(), stat);
+                    }
                 }
-            });
+            }
+        );
 
         return new ArrayList<>(distinctMap.values());
     }
@@ -104,21 +110,20 @@ public abstract class GroupMonitoringStatsBy {
 
     @SuppressWarnings("unchecked")
     protected List<MonitoringStatsEntry> aggregate(List<MonitoringStatsEntry> plainEntries) {
-        return plainEntries.stream()
+        return executeParallel(plainEntries.stream()
             .map(entry -> {
-                List<MonitoringEntry> resultEntries = ((List<OffsetDateTime>) entry.getStatistics().stream()
+                List<OffsetDateTime> timestamps = ((List<OffsetDateTime>) executeParallel(entry.getStatistics().stream()
                     //select distinct timestamps
                     .map(e -> ((MonitoringEntry) e).getTimestamp())
-                    .distinct()
-                    .collect(toList()))
+                    .distinct()));
 
-                    .stream()
+                List<MonitoringEntry> resultEntries = executeParallel(timestamps.stream()
                     .map(time -> aggregateMonitoringEntry(entry, time))
-                    .collect(toList());
+                    );
 
                 return new MonitoringStatsEntry(entry.getEntity(), resultEntries);
             })
-            .collect(toList());
+        );
     }
 
     @SuppressWarnings("unchecked")
@@ -152,24 +157,25 @@ public abstract class GroupMonitoringStatsBy {
     }
 
     private List<DiskUsage> aggregateDiskUsage(List<DiskUsage> flatList) {
-        Map<String, List<DiskUsage>> map = new HashMap<>();
+        Map<String, List<DiskUsage>> map = new ConcurrentHashMap<>();
         flatList.stream()
             .forEach(item -> {
-                if (map.get(item.getId()) == null) {
-                    map.put(item.getId(), new ArrayList<>());
-                }
-                map.get(item.getId()).add(new DiskUsage().id(item.getId()).capacityMB(item.getCapacityMB()));
-            });
+            String id = item.getId();
+            if (map.get(id) == null) {
+                map.put(id, new ArrayList<>());
+            }
+            map.get(id).add(new DiskUsage().id(id).capacityMB(item.getCapacityMB()));
+        });
 
-        return map.keySet().stream()
+        return executeParallel(map.keySet().stream()
             .map(key ->
-                new DiskUsage()
-                    .id(key)
-                    .capacityMB(
-                        map.get(key).stream()
-                            .collect(summingInt(DiskUsage::getCapacityMB)))
+                    new DiskUsage()
+                        .id(key)
+                        .capacityMB(
+                            map.get(key).stream()
+                                .collect(summingInt(DiskUsage::getCapacityMB)))
             )
-            .collect(toList());
+        );
     }
 
     private List<GuestUsage> aggregateGuestUsage(List<GuestUsage> flatList) {
@@ -187,17 +193,17 @@ public abstract class GroupMonitoringStatsBy {
                 );
             });
 
-        return map.keySet().stream()
-            .map(key ->
-                new GuestUsage()
-                    .path(key)
-                    .capacityMB(
-                        map.get(key).stream()
-                            .collect(summingInt(GuestUsage::getCapacityMB)))
-                    .consumedMB(
-                        map.get(key).stream()
-                            .collect(summingInt(GuestUsage::getConsumedMB)))
-            )
-            .collect(toList());
+        return executeParallel(map.keySet().stream()
+                .map(key ->
+                        new GuestUsage()
+                            .path(key)
+                            .capacityMB(
+                                map.get(key).stream()
+                                    .collect(summingInt(GuestUsage::getCapacityMB)))
+                            .consumedMB(
+                                map.get(key).stream()
+                                    .collect(summingInt(GuestUsage::getConsumedMB)))
+                )
+        );
     }
 }

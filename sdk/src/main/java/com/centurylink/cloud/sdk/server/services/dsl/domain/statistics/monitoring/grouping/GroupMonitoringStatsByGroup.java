@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
+
 public class GroupMonitoringStatsByGroup extends GroupMonitoringStatsBy {
 
     private GroupService groupService;
@@ -35,8 +37,8 @@ public class GroupMonitoringStatsByGroup extends GroupMonitoringStatsBy {
         Map<String, List<MonitoringEntry>> plainGroupMap = new HashMap<>();
 
         stats.forEach((group, statsList) ->
-            statsList.stream()
-                .forEach(stat -> {
+            executeParallel(statsList.stream(),
+                stat -> {
                     String key = serverService.findByRef(Server.refById(stat.getName())).getGroupId();
                     if (group.asFilter().getIds().contains(key) || aggregateSubItems)
                         collectStats(plainGroupMap,
@@ -44,7 +46,8 @@ public class GroupMonitoringStatsByGroup extends GroupMonitoringStatsBy {
                             stat.getStats(),
                             false
                         );
-                })
+                }
+            )
         );
 
         return aggregate(convertToMonitoringEntries(plainGroupMap));
@@ -52,13 +55,14 @@ public class GroupMonitoringStatsByGroup extends GroupMonitoringStatsBy {
 
     private List<MonitoringStatsEntry> convertToMonitoringEntries(Map<String, List<MonitoringEntry>> plainGroupMap) {
 
-        List<MonitoringStatsEntry> result = new ArrayList<>();
-        plainGroupMap.forEach(
-            (key, statistics) -> result.add(
-                createMonitoringStatsEntry(groupService.findByRef(Group.refById(key)), statistics)
+        return executeParallel(
+            plainGroupMap.entrySet().stream().map(
+                entry ->
+                    createMonitoringStatsEntry(
+                        groupService.findByRef(Group.refById(entry.getKey())),
+                        entry.getValue()
+                    )
             )
         );
-
-        return result;
     }
 }
