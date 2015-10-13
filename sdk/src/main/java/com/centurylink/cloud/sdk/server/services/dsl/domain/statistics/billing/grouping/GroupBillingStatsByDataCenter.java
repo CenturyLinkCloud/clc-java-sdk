@@ -26,10 +26,11 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.B
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.Statistics;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.filter.BillingStatsFilter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
 
 public class GroupBillingStatsByDataCenter extends GroupBillingStatsBy {
 
@@ -48,21 +49,21 @@ public class GroupBillingStatsByDataCenter extends GroupBillingStatsBy {
 
     @Override
     public List<BillingStatsEntry> group(List<BillingStats> billingStatsList) {
-        List<BillingStatsEntry> result = new ArrayList<>();
 
         Map<DataCenterMetadata, Statistics> dataCenterMap = new HashMap<>();
 
-        billingStatsList.forEach(
-            billingStats -> billingStats.getGroups().forEach(
-                groupBilling -> {
-                    GroupMetadata groupMetadata = groupService.findByRef(
-                            Group.refById(groupBilling.getGroupId())
-                    );
+        executeParallel(
+            billingStatsList.stream().map(BillingStats::getGroups).flatMap(List::stream),
+            groupBilling -> {
+                GroupMetadata groupMetadata = groupService.findByRef(
+                    Group.refById(groupBilling.getGroupId())
+                );
 
-                    DataCenterMetadata dataCenterMetadata = dataCenterService.findByRef(
-                            DataCenter.refById(groupMetadata.getLocationId())
-                    );
+                DataCenterMetadata dataCenterMetadata = dataCenterService.findByRef(
+                    DataCenter.refById(groupMetadata.getLocationId())
+                );
 
+                synchronized (this) {
                     if (dataCenterMap.get(dataCenterMetadata) != null) {
                         aggregateStats(dataCenterMap.get(dataCenterMetadata), groupBilling);
                     } else {
@@ -71,15 +72,14 @@ public class GroupBillingStatsByDataCenter extends GroupBillingStatsBy {
                         dataCenterMap.put(dataCenterMetadata, statistics);
                     }
                 }
-            )
+            }
         );
 
-        dataCenterMap.forEach(
-            (dataCenterMetadata, statistics) -> result.add(
-                createBillingStatsEntry(dataCenterMetadata, statistics)
-            )
+        return executeParallel(
+            dataCenterMap.entrySet().stream()
+                .map(
+                    entry -> createBillingStatsEntry(entry.getKey(), entry.getValue())
+                )
         );
-
-        return result;
     }
 }

@@ -25,6 +25,8 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.f
 
 import java.util.List;
 
+import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
+
 public abstract class GroupBillingStatsBy {
 
     protected BillingStatsFilter statsFilter;
@@ -36,7 +38,8 @@ public abstract class GroupBillingStatsBy {
     }
 
     protected void aggregateStats(Statistics statistics, GroupBilling groupBilling) {
-        groupBilling.getServers().forEach(
+        executeParallel(
+            groupBilling.getServers().stream(),
             serverBilling -> {
                 if (checkServerId(serverBilling)) {
                     aggregateStats(statistics, serverBilling);
@@ -45,7 +48,7 @@ public abstract class GroupBillingStatsBy {
         );
     }
 
-    protected void aggregateStats(Statistics statistics, ServerBilling serverBilling) {
+    protected synchronized void aggregateStats(Statistics statistics, ServerBilling serverBilling) {
         statistics
             .archiveCost(
                 statistics.getArchiveCost().add(serverBilling.getArchiveCost())
@@ -81,10 +84,9 @@ public abstract class GroupBillingStatsBy {
     public Statistics summarize(List<BillingStats> billingStatsList) {
         Statistics statistics = new Statistics();
 
-        billingStatsList.forEach(
-            billingStats -> billingStats.getGroups().forEach(
-                groupBilling -> aggregateStats(statistics, groupBilling)
-            )
+        executeParallel(
+            billingStatsList.stream().map(BillingStats::getGroups).flatMap(List::stream),
+            groupBilling -> aggregateStats(statistics, groupBilling)
         );
 
         return statistics;

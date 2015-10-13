@@ -17,13 +17,16 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.
 
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.BillingStats;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupBilling;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.BillingStatsEntry;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.Statistics;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.filter.BillingStatsFilter;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
+import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
 
 public class GroupBillingStatsByServer extends GroupBillingStatsBy {
 
@@ -36,31 +39,31 @@ public class GroupBillingStatsByServer extends GroupBillingStatsBy {
 
     @Override
     public List<BillingStatsEntry> group(List<BillingStats> billingStatsList) {
-        List<BillingStatsEntry> result = new ArrayList<>();
 
-        billingStatsList.forEach(
-            billingStats ->
-                billingStats.getGroups().forEach(
-                    groupBilling -> groupBilling.getServers().forEach(
-                        serverBilling -> {
-                            if (checkServerId(serverBilling)) {
-                                Statistics statistics = new Statistics();
-                                aggregateStats(statistics, serverBilling);
+        return executeParallel(
+            billingStatsList.stream()
+                .map(BillingStats::getGroups)
+                .flatMap(List::stream)
+                .map(GroupBilling::getServers)
+                .flatMap(List::stream)
+                .map(
+                    serverBilling -> {
+                        if (checkServerId(serverBilling)) {
+                            Statistics statistics = new Statistics();
+                            aggregateStats(statistics, serverBilling);
 
-                                result.add(
-                                    createBillingStatsEntry(
-                                        serverService.findByRef(
-                                            Server.refById(serverBilling.getServerId())
-                                        ),
-                                        statistics
-                                    )
+                            return
+                                createBillingStatsEntry(
+                                    serverService.findByRef(
+                                        Server.refById(serverBilling.getServerId())
+                                    ),
+                                    statistics
                                 );
-                            }
                         }
-                    )
+                        return null;
+                    }
                 )
-        );
-
-        return result;
+                .filter(notNull())
+            );
     }
 }

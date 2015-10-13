@@ -22,8 +22,9 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.B
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.Statistics;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.billing.filter.BillingStatsFilter;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
 
 public class GroupBillingStatsByGroup extends GroupBillingStatsBy {
 
@@ -36,27 +37,27 @@ public class GroupBillingStatsByGroup extends GroupBillingStatsBy {
 
     @Override
     public List<BillingStatsEntry> group(List<BillingStats> billingStatsList) {
-        List<BillingStatsEntry> result = new ArrayList<>();
 
-        billingStatsList.forEach(
-            billingStats ->
-                billingStats.getGroups().forEach(
-                    groupBilling -> {
-                        Statistics statistics = new Statistics();
-                        aggregateStats(statistics, groupBilling);
+        return
+            executeParallel(
+                billingStatsList.stream()
+                    .map(BillingStats::getGroups)
+                    .flatMap(List::stream)
+                    .map(
+                        groupBilling -> {
+                            Statistics statistics = new Statistics();
+                            aggregateStats(statistics, groupBilling);
 
-                        result.add(
-                            createBillingStatsEntry(
-                                groupService.findByRef(
-                                    Group.refById(groupBilling.getGroupId())
-                                ),
-                                statistics
-                            )
-                        );
-                    }
-                )
-        );
-
-        return result;
+                            return
+                                createBillingStatsEntry(
+                                    groupService.findByRef(
+                                        Group.refById(groupBilling.getGroupId())
+                                    ),
+                                    statistics
+                                );
+                        }
+                    )
+            );
     }
+
 }

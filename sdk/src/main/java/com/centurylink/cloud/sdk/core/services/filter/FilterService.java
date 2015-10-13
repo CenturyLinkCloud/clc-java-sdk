@@ -18,19 +18,14 @@ package com.centurylink.cloud.sdk.core.services.filter;
 import com.centurylink.cloud.sdk.core.services.SdkThreadPool;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author Ilya Drabenia
  */
 public interface FilterService<F extends Filter<F>, M> {
-
-    static final ForkJoinPool POOL = SdkThreadPool.getForkJoinPool();
 
     /**
      * Method find all resources satisfied by specified filter
@@ -41,13 +36,7 @@ public interface FilterService<F extends Filter<F>, M> {
     default List<M> find(F filter) {
         checkNotNull(filter, "Filter must be not a null");
 
-        try {
-            return POOL.submit(() ->
-                findLazy(filter).parallel().collect(toList())
-            ).get();
-        } catch (InterruptedException | ExecutionException e) {
-            return findLazy(filter).collect(toList());
-        }
+        return SdkThreadPool.executeParallel(findLazy(filter));
     }
 
     /**
