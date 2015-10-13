@@ -15,9 +15,15 @@
 
 package com.centurylink.cloud.sdk.core.services;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Ilya Drabenia
@@ -28,13 +34,27 @@ public abstract class SdkThreadPool {
     private static final int PARALLELISM_LEVEL = 32;
     private static ForkJoinPool pool = new ForkJoinPool(PARALLELISM_LEVEL);
 
-
-    public static ForkJoinPool getForkJoinPool() {
-        return pool;
-    }
-
     public static Executor get() {
         return threadPool;
     }
 
+    public static <M> List<M> executeParallel(Stream<M> stream) {
+        try {
+            return pool.submit(() ->
+                    stream.parallel().collect(toList())
+            ).get();
+        } catch (InterruptedException | ExecutionException e) {
+            return stream.collect(toList());
+        }
+    }
+
+    public static <M> void executeParallel(Stream<M> stream, Consumer<M> consumer) {
+        try {
+            pool.submit(() ->
+                    stream.parallel().forEach(consumer)
+            ).get();
+        } catch (InterruptedException | ExecutionException e) {
+            stream.forEach(consumer);
+        }
+    }
 }
