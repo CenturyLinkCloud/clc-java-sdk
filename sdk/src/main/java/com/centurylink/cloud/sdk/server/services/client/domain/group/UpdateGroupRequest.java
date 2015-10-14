@@ -27,15 +27,15 @@ import java.util.List;
 public class UpdateGroupRequest {
     private List<PatchOperation> operations;
 
-    public List<PatchOperation> getOperations() {
-        return operations;
-    }
-
     public UpdateGroupRequest() {
     }
 
     public UpdateGroupRequest(List<PatchOperation> operations) {
         this.operations = operations;
+    }
+
+    public List<PatchOperation> getOperations() {
+        return operations;
     }
 
     public UpdateGroupRequest add(PatchOperation operation) {

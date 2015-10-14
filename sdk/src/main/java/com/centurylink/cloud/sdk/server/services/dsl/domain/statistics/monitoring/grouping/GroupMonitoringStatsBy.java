@@ -1,6 +1,5 @@
 package com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.grouping;
 
-import com.centurylink.cloud.sdk.core.function.Streams;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.DiskUsageMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GuestUsageMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.SamplingEntry;
@@ -23,7 +22,6 @@ import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
 import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
-import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
 import static java.util.stream.Collectors.summingDouble;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toList;
@@ -32,46 +30,46 @@ public abstract class GroupMonitoringStatsBy {
 
     protected MonitoringStatsFilter statsFilter;
 
-    public abstract List<MonitoringStatsEntry> group(Map<Group, List<ServerMonitoringStatistics>> monitoringStats);
-
     public GroupMonitoringStatsBy(MonitoringStatsFilter statsFilter) {
         checkNotNull(statsFilter, "Filter must be not a null");
         this.statsFilter = statsFilter;
     }
 
+    public abstract List<MonitoringStatsEntry> group(Map<Group, List<ServerMonitoringStatistics>> monitoringStats);
+
     protected List<MonitoringEntry> convertEntry(List<SamplingEntry> entries) {
         return
             map(entries, entry ->
-                new MonitoringEntry()
-                    .timestamp(entry.getTimestamp())
-                    .cpu(entry.getCpu())
-                    .cpuPercent(entry.getCpuPercent())
-                    .diskUsageTotalCapacityMB(entry.getDiskUsageTotalCapacityMB())
-                    .memoryMB(entry.getMemoryMB())
-                    .memoryPercent(entry.getMemoryPercent())
-                    .networkReceivedKBps(entry.getNetworkReceivedKbps())
-                    .networkTransmittedKBps(entry.getNetworkTransmittedKbps())
-                    .diskUsage(convertDiskUsage(entry.getDiskUsage()))
-                    .guestDiskUsage(convertGuestUsage(entry.getGuestDiskUsage()))
+                    new MonitoringEntry()
+                        .timestamp(entry.getTimestamp())
+                        .cpu(entry.getCpu())
+                        .cpuPercent(entry.getCpuPercent())
+                        .diskUsageTotalCapacityMB(entry.getDiskUsageTotalCapacityMB())
+                        .memoryMB(entry.getMemoryMB())
+                        .memoryPercent(entry.getMemoryPercent())
+                        .networkReceivedKBps(entry.getNetworkReceivedKbps())
+                        .networkTransmittedKBps(entry.getNetworkTransmittedKbps())
+                        .diskUsage(convertDiskUsage(entry.getDiskUsage()))
+                        .guestDiskUsage(convertGuestUsage(entry.getGuestDiskUsage()))
             );
     }
 
     protected List<DiskUsage> convertDiskUsage(List<DiskUsageMetadata> list) {
         return
             map(list, metadata ->
-                new DiskUsage()
-                    .id(metadata.getId())
-                    .capacityMB(metadata.getCapacityMB())
+                    new DiskUsage()
+                        .id(metadata.getId())
+                        .capacityMB(metadata.getCapacityMB())
             );
     }
 
     protected List<GuestUsage> convertGuestUsage(List<GuestUsageMetadata> list) {
         return
             map(list, metadata ->
-                new GuestUsage()
-                    .path(metadata.getPath())
-                    .capacityMB(metadata.getCapacityMB())
-                    .consumedMB(metadata.getConsumedMB())
+                    new GuestUsage()
+                        .path(metadata.getPath())
+                        .capacityMB(metadata.getCapacityMB())
+                        .consumedMB(metadata.getConsumedMB())
             );
     }
 
@@ -122,7 +120,7 @@ public abstract class GroupMonitoringStatsBy {
                         ((List<OffsetDateTime>) entry
                             .getStatistics()
                             .stream()
-                            //select distinct timestamps
+                                //select distinct timestamps
                             .map(e -> ((MonitoringEntry) e).getTimestamp())
                             .distinct()
                             .collect(toList()));
@@ -184,14 +182,14 @@ public abstract class GroupMonitoringStatsBy {
                 .keySet()
                 .stream()
                 .map(key ->
-                    new DiskUsage()
-                        .id(key)
-                        .capacityMB(
-                            map
-                                .get(key)
-                                .stream()
-                                .collect(summingInt(DiskUsage::getCapacityMB))
-                        )
+                        new DiskUsage()
+                            .id(key)
+                            .capacityMB(
+                                map
+                                    .get(key)
+                                    .stream()
+                                    .collect(summingInt(DiskUsage::getCapacityMB))
+                            )
                 )
                 .collect(toList());
     }
@@ -216,10 +214,10 @@ public abstract class GroupMonitoringStatsBy {
                 .keySet()
                 .stream()
                 .map(key ->
-                    new GuestUsage()
-                        .path(key)
-                        .capacityMB(map.get(key).stream().collect(summingInt(GuestUsage::getCapacityMB)))
-                        .consumedMB(map.get(key).stream().collect(summingInt(GuestUsage::getConsumedMB)))
+                        new GuestUsage()
+                            .path(key)
+                            .capacityMB(map.get(key).stream().collect(summingInt(GuestUsage::getCapacityMB)))
+                            .consumedMB(map.get(key).stream().collect(summingInt(GuestUsage::getConsumedMB)))
                 )
                 .collect(toList());
     }

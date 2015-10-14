@@ -22,7 +22,6 @@ import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMe
 import com.centurylink.cloud.sdk.server.services.client.domain.network.UpdateNetworkRequest;
 
 import javax.ws.rs.core.GenericType;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 

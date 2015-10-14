@@ -11,8 +11,6 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitorin
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.filter.MonitoringStatsFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.statistics.monitoring.filter.MonitoringStatsServerFilter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,17 +24,17 @@ public class GroupMonitoringStatsByServer extends GroupMonitoringStatsBy {
 
     private ServerService serverService;
 
+    public GroupMonitoringStatsByServer(ServerService serverService, MonitoringStatsFilter statsFilter) {
+        super(statsFilter);
+        this.serverService = serverService;
+    }
+
     private Predicate<ServerMonitoringStatistics> filterServers() {
         if (statsFilter instanceof MonitoringStatsServerFilter) {
             List<String> serverIdsRestrictions = ((MonitoringStatsServerFilter)statsFilter).getServerIdRestrictionsList();
             return (stat -> serverIdsRestrictions.isEmpty() || serverIdsRestrictions.contains(stat.getName()));
         }
         return Predicates.alwaysTrue();
-    }
-
-    public GroupMonitoringStatsByServer(ServerService serverService, MonitoringStatsFilter statsFilter) {
-        super(statsFilter);
-        this.serverService = serverService;
     }
 
     @Override

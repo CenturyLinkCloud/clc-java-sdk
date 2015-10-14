@@ -22,15 +22,15 @@ public class CreateSnapshotRequest {
     private Integer snapshotExpirationDays;
     private List<String> serverIds;
 
-    private final Integer defaultExpiration = 10;
+    private static final Integer DEFAULT_EXPIRATION = 10;
 
     public Integer getSnapshotExpirationDays() {
         return snapshotExpirationDays;
     }
 
     public void setSnapshotExpirationDays(Integer snapshotExpirationDays) {
-        if (snapshotExpirationDays == null || snapshotExpirationDays <= 0 || snapshotExpirationDays > defaultExpiration) {
-            this.snapshotExpirationDays = defaultExpiration;
+        if (snapshotExpirationDays == null || snapshotExpirationDays <= 0 || snapshotExpirationDays > DEFAULT_EXPIRATION) {
+            this.snapshotExpirationDays = DEFAULT_EXPIRATION;
         } else {
             this.snapshotExpirationDays = snapshotExpirationDays;
         }

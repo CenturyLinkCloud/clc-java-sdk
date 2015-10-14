@@ -41,6 +41,19 @@ public class SdkHttpClient {
         updateApiUrl();
     }
 
+    public SdkHttpClient(SdkConfiguration config) {
+        CLIENT_BUILDER
+            .maxRetries(config.getMaxRetries())
+            .proxyConfig(
+                config.getProxyHost(),
+                config.getProxyPort(),
+                config.getProxyScheme(),
+                config.getProxyUsername(),
+                config.getProxyPassword()
+            )
+            .socketTimeout(config.getSocketTimeout(), MILLISECONDS);
+    }
+
     public static void apiUrl(String url) {
         API_DOMAIN = url;
         updateApiUrl();
@@ -54,19 +67,6 @@ public class SdkHttpClient {
     private static void updateApiUrl() {
         CLC_API_URL = API_DOMAIN + "v2";
         CLC_API_URL_EXPERIMENTAL = API_DOMAIN + "v2-experimental";
-    }
-
-    public SdkHttpClient(SdkConfiguration config) {
-        CLIENT_BUILDER
-            .maxRetries(config.getMaxRetries())
-            .proxyConfig(
-                config.getProxyHost(),
-                config.getProxyPort(),
-                config.getProxyScheme(),
-                config.getProxyUsername(),
-                config.getProxyPassword()
-            )
-            .socketTimeout(config.getSocketTimeout(), MILLISECONDS);
     }
 
     protected ResteasyClient buildClient() {
