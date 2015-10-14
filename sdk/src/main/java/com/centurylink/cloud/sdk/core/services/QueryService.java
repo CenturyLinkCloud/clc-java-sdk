@@ -57,4 +57,12 @@ public interface QueryService<R extends Reference<F>, F extends Filter<F>, M>
         }
     }
 
+    default void checkFilter(Filter<F> filter) {
+        checkNotNull(filter, "Filter must be not null");
+    }
+
+    default void checkFilter(Filter<F> filter, String filterName) {
+        checkNotNull(filter, filterName + " must be not null");
+    }
+
 }

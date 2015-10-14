@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/networks/ALTD/va1/09518bea62ad42beac3b318d25287c84",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"vlan_upd_2820_10.127.220\",\"description\":\"vlan_desc_upd_2820_10.127.220\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-va1-09518bea62ad42beac3b318d25287c84-h3PlD.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Tue, 13 Oct 2015 11:18:04 GMT"
+    }
+  }
+}

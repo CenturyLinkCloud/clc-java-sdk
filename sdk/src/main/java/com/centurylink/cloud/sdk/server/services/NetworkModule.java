@@ -15,20 +15,19 @@
 
 package com.centurylink.cloud.sdk.server.services;
 
-import com.centurylink.cloud.sdk.core.auth.AuthModule;
+import com.centurylink.cloud.sdk.base.services.BaseModule;
 import com.centurylink.cloud.sdk.core.injector.Module;
-import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
+import com.centurylink.cloud.sdk.server.services.client.NetworkClient;
+import com.centurylink.cloud.sdk.server.services.dsl.NetworkService;
 
-import java.util.List;
-
-/**
- * @author ilya.drabenia
- */
-public class AbstractServersSdkTest extends AbstractSdkTest {
+public class NetworkModule extends Module {
 
     @Override
-    protected List<Module> modules() {
-        return list(new AuthModule(), new ServerModule(), new NetworkModule());
+    protected void configure() {
+        install(new BaseModule());
+
+        bind(NetworkClient.class);
+        bind(NetworkService.class);
     }
 
 }

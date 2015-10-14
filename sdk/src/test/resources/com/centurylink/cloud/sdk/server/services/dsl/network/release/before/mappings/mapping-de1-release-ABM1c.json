@@ -1,0 +1,22 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/networks/ALTD/809297928f1d4224b9b9927f745bc082/de1/release",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 404,
+    "bodyFileName" : "body-de1-release-ABM1c.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Tue, 13 Oct 2015 15:16:25 GMT",
+      "Content-Length" : "52"
+    }
+  }
+}
