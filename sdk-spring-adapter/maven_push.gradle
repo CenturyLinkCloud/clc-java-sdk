@@ -48,9 +48,9 @@ uploadArchives {
             }
 
             pom.project {
-                name 'CenturyLink sdk adapter'
+                name 'CenturyLink sdk spring adapter'
                 packaging 'jar'
-                description 'CenturyLink Java Sdk adapter'
+                description 'CenturyLink Java Sdk spring adapter'
                 url 'https://github.com/CenturyLinkCloud/clc-java-sdk'
 
                 scm {
