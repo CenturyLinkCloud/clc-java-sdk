@@ -15,7 +15,7 @@
       "Pragma" : "no-cache",
       "Content-Type" : "application/json; charset=utf-8",
       "Expires" : "-1",
-      "Location" : "http://api.tier3.com/v2-experimental/firewallPolicies/altd/de1/308e96948ece4287af847a47df188a8a",
+      "Location" : "http://api.ctl.io/v2-experimental/firewallPolicies/altd/de1/308e96948ece4287af847a47df188a8a",
       "Date" : "Mon, 21 Sep 2015 21:08:56 GMT",
       "Content-Length" : "162"
     }

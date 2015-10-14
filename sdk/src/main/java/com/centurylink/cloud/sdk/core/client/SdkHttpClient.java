@@ -26,7 +26,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * @author ilya.drabenia
  */
 public class SdkHttpClient {
-    private static final String INIT_API_DOMAIN = "https://api.tier3.com/";
+    private static final String INIT_API_DOMAIN = "https://api.ctl.io/";
     private static String API_DOMAIN = INIT_API_DOMAIN;
 
     protected static String CLC_API_URL;
