@@ -40,12 +40,14 @@ public class GroupMonitoringStatsByGroup extends GroupMonitoringStatsBy {
             executeParallel(statsList.stream(),
                 stat -> {
                     String key = serverService.findByRef(Server.refById(stat.getName())).getGroupId();
-                    if (group.asFilter().getIds().contains(key) || aggregateSubItems)
+
+                    if (group.asFilter().getIds().contains(key) || aggregateSubItems) {
                         collectStats(plainGroupMap,
                             key,
                             stat.getStats(),
                             false
                         );
+                    }
                 }
             )
         );
@@ -54,7 +56,6 @@ public class GroupMonitoringStatsByGroup extends GroupMonitoringStatsBy {
     }
 
     private List<MonitoringStatsEntry> convertToMonitoringEntries(Map<String, List<MonitoringEntry>> plainGroupMap) {
-
         return executeParallel(
             plainGroupMap.entrySet().stream().map(
                 entry ->
