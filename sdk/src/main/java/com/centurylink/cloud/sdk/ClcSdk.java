@@ -152,15 +152,15 @@ public class ClcSdk {
         return loadBalancerNodeService;
     }
 
-    public FirewallPolicyService loadFirewallPolicyService() {
+    public FirewallPolicyService firewallPolicyService() {
         return firewallPolicyService;
     }
 
-    public AutoscalePolicyService loadAutoscalePolicyService() {
+    public AutoscalePolicyService autoscalePolicyService() {
         return autoscalePolicyService;
     }
 
-    public NetworkService loadNetworkService() {
+    public NetworkService networkService() {
         return networkService;
     }
 }

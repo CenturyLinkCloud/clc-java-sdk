@@ -117,16 +117,16 @@ public class ClcSpringConfig implements InitializingBean {
 
     @Bean
     public FirewallPolicyService clcFirewallPolicyService() {
-        return sdk.loadFirewallPolicyService();
+        return sdk.firewallPolicyService();
     }
 
     @Bean
     public AutoscalePolicyService clcAutoscalePolicyService() {
-        return sdk.loadAutoscalePolicyService();
+        return sdk.autoscalePolicyService();
     }
 
     @Bean
     public NetworkService clcNetworkService() {
-        return sdk.loadNetworkService();
+        return sdk.networkService();
     }
 }
