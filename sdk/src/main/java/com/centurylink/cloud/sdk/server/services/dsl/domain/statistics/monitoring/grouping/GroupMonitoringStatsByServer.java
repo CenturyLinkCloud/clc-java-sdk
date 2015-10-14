@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 public class GroupMonitoringStatsByServer extends GroupMonitoringStatsBy {
@@ -40,43 +42,49 @@ public class GroupMonitoringStatsByServer extends GroupMonitoringStatsBy {
     @Override
     public List<MonitoringStatsEntry> group(Map<Group, List<ServerMonitoringStatistics>> stats) {
         Map<String, List<MonitoringEntry>> plainGroupMap = new HashMap<>();
-        selectServersStatsDistinct(stats).stream()
+
+        selectServersStatsDistinct(stats)
+            .stream()
             .filter(filterServers())
-            .forEach(stat ->
-                    collectStats(plainGroupMap,
-                        stat.getName(),
-                        stat.getStats(),
-                        true
-                    )
-            );
+            .forEach(stat -> collectStats(
+                plainGroupMap,
+                stat.getName(),
+                stat.getStats(),
+                true
+            ));
 
         return aggregate(convertToMonitoringEntries(plainGroupMap));
     }
 
     public List<MonitoringStatsEntry> summarize(Map<Group, List<ServerMonitoringStatistics>> monitoringStatsMap,
                                                    String accountAlias) {
-        List<MonitoringEntry> monitoringEntries = monitoringStatsMap.values().stream()
-            .flatMap(List::stream)
-            .filter(filterServers())
-            .map(stat -> convertEntry(stat.getStats()))
-            .flatMap(List::stream)
-            .collect(toList());
+        List<MonitoringEntry> monitoringEntries =
+            monitoringStatsMap
+                .values()
+                .stream()
+                .flatMap(List::stream)
+                .filter(filterServers())
+                .map(stat -> convertEntry(stat.getStats()))
+                .flatMap(List::stream)
+                .collect(toList());
 
-        return aggregate(Arrays.asList(createMonitoringStatsEntry(
+        return aggregate(asList(createMonitoringStatsEntry(
             new AccountMetadata(accountAlias),
             monitoringEntries
         )));
     }
 
     private List<MonitoringStatsEntry> convertToMonitoringEntries(Map<String, List<MonitoringEntry>> plainGroupMap) {
-
-        List<MonitoringStatsEntry> result = new ArrayList<>();
-        plainGroupMap.forEach(
-            (key, statistics) -> result.add(
-                createMonitoringStatsEntry(serverService.findByRef(Server.refById(key)), statistics)
-            )
+        return executeParallel(
+            plainGroupMap
+                .entrySet()
+                .stream()
+                .map(entry ->
+                    createMonitoringStatsEntry(
+                        serverService.findByRef(Server.refById(entry.getKey())),
+                        entry.getValue()
+                    )
+                )
         );
-
-        return result;
     }
 }
