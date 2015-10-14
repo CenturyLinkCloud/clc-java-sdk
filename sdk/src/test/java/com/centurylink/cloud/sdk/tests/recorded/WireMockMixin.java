@@ -13,7 +13,7 @@ public interface WireMockMixin {
         if (this.getClass().getAnnotation(WireMockRecording.class) == null) {
             WireMockFixture.startServerFor(this, testingMethod);
         } else {
-            SdkHttpClient.apiUrl("http://localhost:8089/");
+            SdkHttpClient.apiUrl("http://localhost:8080/");
         }
     }
 

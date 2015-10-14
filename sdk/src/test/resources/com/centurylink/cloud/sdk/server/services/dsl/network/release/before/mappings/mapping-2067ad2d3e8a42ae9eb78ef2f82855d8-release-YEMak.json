@@ -8,7 +8,7 @@
     } ]
   },
   "response" : {
-    "status" : 400,
+    "status" : 200,
     "bodyFileName" : "body-2067ad2d3e8a42ae9eb78ef2f82855d8-release-YEMak.json",
     "headers" : {
       "Cache-Control" : "no-cache",

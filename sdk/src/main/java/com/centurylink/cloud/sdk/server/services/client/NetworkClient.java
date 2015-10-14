@@ -52,7 +52,7 @@ public class NetworkClient extends AuthenticatedSdkHttpClient {
             experimentalClient("/networks/{accountAlias}/{dataCenterId}/claim")
                 .resolveTemplate("dataCenterId", dataCenterId)
                 .request()
-                .post(entity(new HashMap(), APPLICATION_JSON_TYPE))
+                .post(entity(new HashMap<>(), APPLICATION_JSON_TYPE))
                 .readEntity(NetworkMetadata.class);
 
         setDatacenter(metadata, dataCenterId);

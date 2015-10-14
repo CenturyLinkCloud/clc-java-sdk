@@ -8,7 +8,7 @@
     } ]
   },
   "response" : {
-    "status" : 400,
+    "status" : 200,
     "bodyFileName" : "body-809297928f1d4224b9b9927f745bc082-release-SX3w0.json",
     "headers" : {
       "Cache-Control" : "no-cache",
