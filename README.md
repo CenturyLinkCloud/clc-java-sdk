@@ -3,6 +3,27 @@ Documentation
 -------------
 See the [wiki](https://github.com/CenturyLinkCloud/clc-java-sdk/wiki) for CLC Java SDK getting-started and user guides.
 
+Installation
+------------
+
+If you use Maven or Gradle, you can simply add the CLC SDK as a dependency.
+
+Maven: 
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.centurylink.cloud</groupId>
+        <artifactId>java-sdk</artifactId>
+        <version>1.1.0</version>
+    </dependency>
+</dependencies>
+```
+
+Gradle:
+```groovy
+compile 'com.centurylink.cloud:java-sdk:1.1.0'
+```
+
 Build process details
 ---------------------
 To build sources, you need to install Gradle 2.2.1 or later. To check out and build the CLC SDK source, issue the following commands:
