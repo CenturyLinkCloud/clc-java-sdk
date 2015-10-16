@@ -24,18 +24,8 @@ Gradle:
 compile 'com.centurylink.cloud:java-sdk:1.1.0'
 ```
 
-Build process details
----------------------
-To build sources, you need to install Gradle 2.2.1 or later. To check out and build the CLC SDK source, issue the following commands:
-
-```
-$ git clone git@github.com:CenturyLinkCloud/clc-java-sdk.git
-$ cd clc-java-sdk
-$ gradle build
-```
-
-Configuration details
----------------------
+Configuration
+-------------
 
 Please see the [SDK configuration](https://github.com/CenturyLinkCloud/clc-java-sdk/wiki/2.11-SDK-configuration)
 section for details and examples of how to configure the CLC SDK.
@@ -78,6 +68,17 @@ serverService
     )
     .waitUntilComplete();
 ```
+
+Build Process
+---------------------
+To build sources, you need to install Gradle 2.2.1 or later. To check out and build the CLC SDK source, issue the following commands:
+
+```
+$ git clone git@github.com:CenturyLinkCloud/clc-java-sdk.git
+$ cd clc-java-sdk
+$ gradle build
+```
+
 
 License
 -------
