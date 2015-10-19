@@ -117,8 +117,8 @@ public class ServerConverter {
                     config.isManagedOS(),
                     templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
                 )
-                .antiAffinityPolicyId((config.getAntiAffinityPolicy()) == null ? null :
-                    policyService.antiAffinity().findByRef(config.getAntiAffinityPolicy()).getId()
+                .antiAffinityPolicyId((config.getMachine().getAntiAffinityPolicy()) == null ? null :
+                    policyService.antiAffinity().findByRef(config.getMachine().getAntiAffinityPolicy()).getId()
                 )
                 .customFields(newFields.isEmpty() ? null : newFields);
     }
@@ -218,11 +218,11 @@ public class ServerConverter {
             request.managedOS(config.isManagedOS(), true);
         }
 
-        if (config.getAntiAffinityPolicy() != null) {
+        if (config.getMachine().getAntiAffinityPolicy() != null) {
             request.antiAffinityPolicyId(
                 policyService
                     .antiAffinity()
-                    .findByRef(config.getAntiAffinityPolicy())
+                    .findByRef(config.getMachine().getAntiAffinityPolicy())
                     .getId()
             );
         }

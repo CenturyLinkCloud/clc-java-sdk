@@ -15,6 +15,8 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicy;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class Machine {
     private Integer cpuCount;
     private Integer ram;
     private List<DiskConfig> disks = new ArrayList<>();
+
+    private AntiAffinityPolicy antiAffinityPolicy;
 
     public Integer getCpuCount() {
         return cpuCount;
@@ -62,6 +66,15 @@ public class Machine {
 
     public Machine disk(DiskConfig diskConfig) {
         disks.add(diskConfig);
+        return this;
+    }
+
+    public AntiAffinityPolicy getAntiAffinityPolicy() {
+        return antiAffinityPolicy;
+    }
+
+    public Machine antiAffinityPolicy(AntiAffinityPolicy antiAffinityPolicy) {
+        this.antiAffinityPolicy = antiAffinityPolicy;
         return this;
     }
 }
