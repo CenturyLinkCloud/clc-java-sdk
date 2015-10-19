@@ -107,21 +107,21 @@ public class PoliciesSampleApp extends Assert {
             .description("Sample server for policies")
             .type(HYPERSCALE)
             .machine(new Machine()
-                    .cpuCount(1)
-                    .ram(1)
+                .cpuCount(1)
+                .ram(1)
+                .antiAffinityPolicy(antiAffinityPolicy)
             )
             .template(Template.refByOs()
-                    .dataCenter(DataCenter.US_EAST_NEW_YORK)
-                    .type(CENTOS)
-                    .version("6")
-                    .architecture(x86_64)
+                .dataCenter(DataCenter.US_EAST_NEW_YORK)
+                .type(CENTOS)
+                .version("6")
+                .architecture(x86_64)
             )
             .timeToLive(
                 ZonedDateTime.now().plusHours(2)
             )
-            .antiAffinityPolicy(antiAffinityPolicy)
-            )
-            .waitUntilComplete().getResult().asRefById();
+        )
+        .waitUntilComplete().getResult().asRefById();
     }
 
     @AfterClass(groups = {SAMPLES})

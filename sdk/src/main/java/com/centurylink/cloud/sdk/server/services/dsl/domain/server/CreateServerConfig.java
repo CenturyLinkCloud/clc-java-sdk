@@ -44,7 +44,6 @@ public class CreateServerConfig implements ServerConfig {
     private NetworkConfig network = new NetworkConfig();
     private TimeToLive timeToLive;
     private boolean managedOS = false;
-    private AntiAffinityPolicy antiAffinityPolicy;
     private List<CustomField> customFields = new ArrayList<>();
 
     public CompositeServerConfig count(int count) {
@@ -205,15 +204,6 @@ public class CreateServerConfig implements ServerConfig {
 
     public CreateServerConfig managedOs() {
         setManagedOS(true);
-        return this;
-    }
-
-    public AntiAffinityPolicy getAntiAffinityPolicy() {
-        return antiAffinityPolicy;
-    }
-
-    public CreateServerConfig antiAffinityPolicy(AntiAffinityPolicy antiAffinityPolicy) {
-        this.antiAffinityPolicy = antiAffinityPolicy;
         return this;
     }
 
