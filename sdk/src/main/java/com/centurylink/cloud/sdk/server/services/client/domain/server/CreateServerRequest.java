@@ -61,6 +61,8 @@ public class CreateServerRequest {
 
     private List<CustomField> customFields;
 
+    private String cpuAutoscalePolicyId;
+
 
     /**
      * Name of the server to create. Alphanumeric characters and dashes only.
@@ -400,5 +402,25 @@ public class CreateServerRequest {
 
     public void setCustomFields(List<CustomField> fields) {
         this.customFields = fields;
+    }
+
+    /**
+     * ID of the Autoscale policy to associate the server with.
+     *
+     * @return the auto scale policy ID
+     */
+    public String getCpuAutoscalePolicyId() {
+        return cpuAutoscalePolicyId;
+    }
+
+    /**
+     * Autoscale policy
+     *
+     * @param cpuAutoscalePolicyId the auto scale policy ID
+     * @return current instance
+     */
+    public CreateServerRequest cpuAutoscalePolicyId(String cpuAutoscalePolicyId) {
+        this.cpuAutoscalePolicyId = cpuAutoscalePolicyId;
+        return this;
     }
 }

@@ -27,6 +27,9 @@ public abstract class AutoscalePolicy implements Reference<AutoscalePolicyFilter
         return new AutoscalePolicyByIdRef(id);
     }
 
+    public static AutoscalePolicyByNameRef refByName(String name) {
+        return new AutoscalePolicyByNameRef(name);
+    }
 
     @Override
     public String toString() {

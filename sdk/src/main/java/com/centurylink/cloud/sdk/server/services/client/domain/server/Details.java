@@ -16,6 +16,7 @@
 package com.centurylink.cloud.sdk.server.services.client.domain.server;
 
 import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -58,6 +59,8 @@ public class Details {
     private List<Object> alertPolicies = new ArrayList<Object>();
     @JsonProperty("antiAffinityPolicy")
     private AntiAffinityPolicyMetadata antiAffinityPolicy;
+    @JsonProperty("cpuAutoscalePolicy")
+    private AutoscalePolicyMetadata autoscalePolicy;
     @JsonProperty("cpu")
     private Integer cpu;
     @JsonProperty("diskCount")
@@ -161,6 +164,26 @@ public class Details {
     @JsonProperty("antiAffinityPolicy")
     public void setAntiAffinityPolicy(AntiAffinityPolicyMetadata antiAffinityPolicy) {
         this.antiAffinityPolicy = antiAffinityPolicy;
+    }
+
+    /**
+     *
+     * @return
+     * The autoscalePolicy
+     */
+    @JsonProperty("cpuAutoscalePolicy")
+    public AutoscalePolicyMetadata getAutoscalePolicy() {
+        return autoscalePolicy;
+    }
+
+    /**
+     *
+     * @param autoscalePolicy
+     * The autoscalePolicy
+     */
+    @JsonProperty("cpuAutoscalePolicy")
+    public void setAutoscalePolicy(AutoscalePolicyMetadata autoscalePolicy) {
+        this.autoscalePolicy = autoscalePolicy;
     }
 
     /**
