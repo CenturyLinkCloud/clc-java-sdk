@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/status/ca3-24194",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-status-ca3-24194-G3Bwt.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 20 Oct 2015 14:02:56 GMT",
+      "Content-Length" : "141"
+    }
+  }
+}
