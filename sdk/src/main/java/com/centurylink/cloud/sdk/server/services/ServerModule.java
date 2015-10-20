@@ -17,8 +17,10 @@ package com.centurylink.cloud.sdk.server.services;
 
 import com.centurylink.cloud.sdk.core.injector.Module;
 import com.centurylink.cloud.sdk.core.injector.bean.factory.BeanFactory;
+import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService.ServerServiceSupplier;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerConverter.AutoscalePolicyServiceSupplier;
 
 import java.util.Map;
 
@@ -31,10 +33,15 @@ public class ServerModule extends Module {
     protected void configure() {
         bind(ServerService.class);
         bind(ServerServiceSupplier.class, this::serverServiceSupplier);
+        bind(AutoscalePolicyServiceSupplier.class, this::autoScalePolicyServiceSupplier);
     }
 
     private ServerServiceSupplier serverServiceSupplier(Map<Class, BeanFactory> registry) {
         return () -> (ServerService) registry.get(ServerService.class).getBean(registry);
+    }
+
+    private AutoscalePolicyServiceSupplier autoScalePolicyServiceSupplier(Map<Class, BeanFactory> registry) {
+        return () -> (AutoscalePolicyService) registry.get(AutoscalePolicyService.class).getBean(registry);
     }
 
 }

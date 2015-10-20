@@ -15,9 +15,6 @@
 
 package com.centurylink.cloud.sdk.policy.services.dsl;
 
-import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
-import com.centurylink.cloud.sdk.policy.services.client.PolicyClient;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.PolicyConverter;
 
 /**
  * @author Aliaksandr Krasitski
@@ -28,12 +25,11 @@ public class PolicyService {
     private final AlertService alertService;
 
     public PolicyService(
-        PolicyClient client,
-        DataCenterService dataCenterService,
-        PolicyConverter converter
+        AntiAffinityService antiAffinityService,
+        AlertService alertService
     ) {
-        this.antiAffinityService = new AntiAffinityService(client, dataCenterService);
-        this.alertService = new AlertService(client, converter);
+        this.antiAffinityService = antiAffinityService;
+        this.alertService = alertService;
     }
 
     /**
@@ -51,6 +47,4 @@ public class PolicyService {
     public AlertService alert() {
         return alertService;
     }
-
-
 }

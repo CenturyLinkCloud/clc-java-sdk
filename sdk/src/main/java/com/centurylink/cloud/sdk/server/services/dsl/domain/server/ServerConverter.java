@@ -19,6 +19,7 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deploym
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
+import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
@@ -37,6 +38,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static java.util.stream.Collectors.toList;
@@ -47,22 +49,31 @@ public class ServerConverter {
     private final TemplateService templateService;
     private final DataCenterService dataCenterService;
     private final PolicyService policyService;
+    private final Supplier<AutoscalePolicyService> autoscalePolicyServiceSupplier;
+
+    public interface AutoscalePolicyServiceSupplier extends Supplier<AutoscalePolicyService> {}
 
     public ServerConverter(
-            GroupService groupService,
-            TemplateService templateService,
-            DataCenterService dataCenterService,
-            PolicyService policyService
+        GroupService groupService,
+        TemplateService templateService,
+        DataCenterService dataCenterService,
+        PolicyService policyService,
+        AutoscalePolicyServiceSupplier autoscalePolicyServiceSupplier
     ) {
         this.groupService = groupService;
         this.templateService = templateService;
         this.dataCenterService = dataCenterService;
         this.policyService = policyService;
+        this.autoscalePolicyServiceSupplier = autoscalePolicyServiceSupplier;
+    }
+
+    private AutoscalePolicyService autoscalePolicyService() {
+        return autoscalePolicyServiceSupplier.get();
     }
 
     public CreateServerRequest buildCreateServerRequest(
-            CreateServerConfig config,
-            List<CustomFieldMetadata> customFieldsMetadata
+        CreateServerConfig config,
+        List<CustomFieldMetadata> customFieldsMetadata
     ) {
         GroupMetadata groupMetadata = groupService.findByRef(config.getGroup());
         TemplateMetadata templateMetadata = templateService.findByRef(config.getTemplate());
@@ -118,16 +129,19 @@ public class ServerConverter {
                     templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
                 )
                 .antiAffinityPolicyId((config.getMachine().getAntiAffinityPolicy()) == null ? null :
-                    policyService.antiAffinity().findByRef(config.getMachine().getAntiAffinityPolicy()).getId()
+                        policyService.antiAffinity().findByRef(config.getMachine().getAntiAffinityPolicy()).getId()
+                )
+                .cpuAutoscalePolicyId((config.getMachine().getAutoscalePolicy()) == null ? null :
+                        autoscalePolicyService().findByRef(config.getMachine().getAutoscalePolicy()).getId()
                 )
                 .customFields(newFields.isEmpty() ? null : newFields);
     }
 
     public CloneServerRequest buildCloneServerRequest(
-            CloneServerConfig config,
-            ServerMetadata serverMetadata,
-            ServerCredentials serverCredentials,
-            List<CustomFieldMetadata> customFieldsMetadata
+        CloneServerConfig config,
+        ServerMetadata serverMetadata,
+        ServerCredentials serverCredentials,
+        List<CustomFieldMetadata> customFieldsMetadata
     ) {
         if (config.getGroup() == null) {
             config.setGroup(
@@ -145,8 +159,8 @@ public class ServerConverter {
     }
 
     public ImportServerRequest buildImportServerRequest(
-            ImportServerConfig config,
-            List<CustomFieldMetadata> customFieldsMetadata
+        ImportServerConfig config,
+        List<CustomFieldMetadata> customFieldsMetadata
     ) {
         if (config.getGroup() == null) {
             throw new ClcException("Group does not set in server config");
@@ -162,9 +176,9 @@ public class ServerConverter {
     }
 
     private <T extends CreateServerConfig, V extends CreateServerRequest> void fillBuildServerRequest(
-            T config,
-            V request,
-            List<CustomFieldMetadata> customFieldsMetadata
+        T config,
+        V request,
+        List<CustomFieldMetadata> customFieldsMetadata
     ) {
         if (config.getType().equals(ServerType.HYPERSCALE)) {
             config.storageType(StorageType.HYPERSCALE);
@@ -177,7 +191,7 @@ public class ServerConverter {
             request.setCpu(config.getMachine().getCpuCount());
             request.setMemoryGB(config.getMachine().getRam());
             request.setAdditionalDisks(
-                    buildDiskRequestList(config.getMachine().getDisks())
+                buildDiskRequestList(config.getMachine().getDisks())
             );
         }
 
@@ -227,9 +241,17 @@ public class ServerConverter {
             );
         }
 
+        if (config.getMachine().getAutoscalePolicy() != null) {
+            request.cpuAutoscalePolicyId(
+                autoscalePolicyService()
+                    .findByRef(config.getMachine().getAutoscalePolicy())
+                    .getId()
+            );
+        }
+
         if (!config.getCustomFields().isEmpty()) {
             request.customFields(
-                    composeCustomFields(config.getCustomFields(), customFieldsMetadata)
+                composeCustomFields(config.getCustomFields(), customFieldsMetadata)
             );
         }
 
@@ -239,40 +261,40 @@ public class ServerConverter {
     }
 
     private List<CustomField> composeCustomFields(
-            List<CustomField> configFields,
-            List<CustomFieldMetadata> customFieldsMetadata
+        List<CustomField> configFields,
+        List<CustomFieldMetadata> customFieldsMetadata
     ) {
         if (customFieldsMetadata == null) {
             return new ArrayList<>(0);
         }
 
         return configFields.stream()
-                .map(config -> {
-                    CustomFieldMetadata found = customFieldsMetadata.stream()
-                            .filter(metadata -> metadata.getName().equals(config.getName()) ||
-                                metadata.getId().equals(config.getId())
-                            )
-                            .findFirst()
-                            .orElse(null);
+            .map(config -> {
+                CustomFieldMetadata found = customFieldsMetadata.stream()
+                    .filter(metadata -> metadata.getName().equals(config.getName()) ||
+                            metadata.getId().equals(config.getId())
+                    )
+                    .findFirst()
+                    .orElse(null);
 
-                    if (found != null) {
-                        return new CustomField().id(found.getId()).value(config.getValue());
-                    }
+                if (found != null) {
+                    return new CustomField().id(found.getId()).value(config.getValue());
+                }
 
-                    return null;
-                })
-                .filter(notNull())
-                .collect(toList());
+                return null;
+            })
+            .filter(notNull())
+            .collect(toList());
     }
 
     public List<ModifyServerRequest> buildModifyServerRequest(ModifyServerConfig serverConfig,
-                                                              List<CustomFieldMetadata> customFieldsMetadata) {
+        List<CustomFieldMetadata> customFieldsMetadata) {
         List<ModifyServerRequest> result = new ArrayList<>();
 
         CredentialsConfig credentialsConfig = serverConfig.getCredentialsConfig();
 
         if (credentialsConfig.getNewPassword() != null
-                && !credentialsConfig.getNewPassword().equals(credentialsConfig.getOldPassword())) {
+            && !credentialsConfig.getNewPassword().equals(credentialsConfig.getOldPassword())) {
 
             result.add(
                 new ModifyServerRequest<PasswordProvider>()
@@ -281,7 +303,7 @@ public class ServerConverter {
                         new PasswordProvider()
                             .current(credentialsConfig.getOldPassword())
                             .password(credentialsConfig.getNewPassword())
-                        )
+                    )
             );
         }
 

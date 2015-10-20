@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/autoscalePolicies/ALTD/ca38f0ad9de341f6a002857c48402526",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-ca38f0ad9de341f6a002857c48402526-faEWz.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Mon, 19 Oct 2015 14:00:41 GMT",
+      "Content-Length" : "353"
+    }
+  }
+}

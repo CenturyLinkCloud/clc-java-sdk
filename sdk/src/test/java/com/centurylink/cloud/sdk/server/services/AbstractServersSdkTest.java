@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.server.services;
 
 import com.centurylink.cloud.sdk.core.auth.AuthModule;
 import com.centurylink.cloud.sdk.core.injector.Module;
+import com.centurylink.cloud.sdk.policy.services.AutoscalePolicyModule;
 import com.centurylink.cloud.sdk.tests.AbstractSdkTest;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class AbstractServersSdkTest extends AbstractSdkTest {
 
     @Override
     protected List<Module> modules() {
-        return list(new AuthModule(), new ServerModule(), new NetworkModule());
+        return list(new AuthModule(), new ServerModule(), new NetworkModule(), new AutoscalePolicyModule());
     }
 
 }
