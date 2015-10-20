@@ -19,6 +19,7 @@ import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.deploym
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
+import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
@@ -37,6 +38,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static java.util.stream.Collectors.toList;
@@ -47,17 +49,26 @@ public class ServerConverter {
     private final TemplateService templateService;
     private final DataCenterService dataCenterService;
     private final PolicyService policyService;
+    private final Supplier<AutoscalePolicyService> autoscalePolicyServiceSupplier;
+
+    public interface AutoscalePolicyServiceSupplier extends Supplier<AutoscalePolicyService> {}
 
     public ServerConverter(
         GroupService groupService,
         TemplateService templateService,
         DataCenterService dataCenterService,
-        PolicyService policyService
+        PolicyService policyService,
+        AutoscalePolicyServiceSupplier autoscalePolicyServiceSupplier
     ) {
         this.groupService = groupService;
         this.templateService = templateService;
         this.dataCenterService = dataCenterService;
         this.policyService = policyService;
+        this.autoscalePolicyServiceSupplier = autoscalePolicyServiceSupplier;
+    }
+
+    private AutoscalePolicyService autoscalePolicyService() {
+        return autoscalePolicyServiceSupplier.get();
     }
 
     public CreateServerRequest buildCreateServerRequest(
@@ -121,7 +132,7 @@ public class ServerConverter {
                         policyService.antiAffinity().findByRef(config.getMachine().getAntiAffinityPolicy()).getId()
                 )
                 .cpuAutoscalePolicyId((config.getMachine().getAutoscalePolicy()) == null ? null :
-                        policyService.autoscale().findByRef(config.getMachine().getAutoscalePolicy()).getId()
+                        autoscalePolicyService().findByRef(config.getMachine().getAutoscalePolicy()).getId()
                 )
                 .customFields(newFields.isEmpty() ? null : newFields);
     }
@@ -232,7 +243,7 @@ public class ServerConverter {
 
         if (config.getMachine().getAutoscalePolicy() != null) {
             request.cpuAutoscalePolicyId(
-                policyService.autoscale()
+                autoscalePolicyService()
                     .findByRef(config.getMachine().getAutoscalePolicy())
                     .getId()
             );

@@ -1,0 +1,1 @@
+{"server":"asp","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/ca3-24069","id":"ca3-24069"},{"rel":"self","href":"/v2/servers/ALTD/a3654dc673c740cda99a47e67e851aea?uuid=True","id":"a3654dc673c740cda99a47e67e851aea","verbs":["GET"]}]}

@@ -47,12 +47,4 @@ public class PolicyService {
     public AlertService alert() {
         return alertService;
     }
-
-    /**
-     * Gets autoscale policy service
-     * @return auto scale service
-     */
-    public AutoscalePolicyService autoscale() {
-        return null;
-    }
 }
