@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.centurylink.cloud.sdk.core.services.SdkThreadPool.executeParallel;
 import static java.util.stream.Collectors.toList;
 
 public class GroupMonitoringStatsByDataCenter extends GroupMonitoringStatsBy {
@@ -35,24 +36,25 @@ public class GroupMonitoringStatsByDataCenter extends GroupMonitoringStatsBy {
     public List<MonitoringStatsEntry> group(Map<Group, List<ServerMonitoringStatistics>> stats) {
         Map<String, List<MonitoringEntry>> plainGroupMap = new HashMap<>();
 
-        selectServersStatsDistinct(stats).stream()
-            .forEach(stat ->
+        executeParallel(
+            selectServersStatsDistinct(stats).stream(),
+            stat ->
                 collectStats(plainGroupMap,
                     serverService.findByRef(Server.refById(stat.getName())).getLocationId(),
                     stat.getStats(),
                     false
                 )
-            );
+        );
 
         return aggregate(convertToMonitoringEntries(plainGroupMap));
     }
 
     private List<MonitoringStatsEntry> convertToMonitoringEntries(Map<String, List<MonitoringEntry>> plainGroupMap) {
-        return plainGroupMap.keySet().stream()
+        return executeParallel(plainGroupMap.keySet().stream()
             .map(key -> createMonitoringStatsEntry(
                 dataCenterService.findByRef(DataCenter.refById(key)),
                 plainGroupMap.get(key))
             )
-            .collect(toList());
+        );
     }
 }

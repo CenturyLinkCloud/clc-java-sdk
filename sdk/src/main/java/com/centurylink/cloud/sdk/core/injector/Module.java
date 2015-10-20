@@ -31,7 +31,7 @@ public abstract class Module {
     private final Map<Class, BeanFactory> registry = new HashMap<>();
     private final List<Module> dependentModules = new ArrayList<>();
 
-    abstract protected void configure();
+    protected abstract void configure();
 
     protected <T> void bind(Class<T> type) {
         registry.put(type, new ClassBeanFactory(type));

@@ -31,11 +31,11 @@ public abstract class GroupBillingStatsBy {
 
     protected BillingStatsFilter statsFilter;
 
-    public abstract List<BillingStatsEntry> group(List<BillingStats> billingStatsList);
-
     public GroupBillingStatsBy(BillingStatsFilter statsFilter) {
         this.statsFilter = statsFilter;
     }
+
+    public abstract List<BillingStatsEntry> group(List<BillingStats> billingStatsList);
 
     protected void aggregateStats(Statistics statistics, GroupBilling groupBilling) {
         groupBilling.getServers().stream().forEach(serverBilling -> {

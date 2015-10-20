@@ -35,7 +35,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class ParallelJobsFuture implements JobFuture {
     private final ErrorsContainer errors =
-            new ErrorsContainer((msg) -> new JobFailedException(msg));
+            new ErrorsContainer(msg -> new JobFailedException(msg));
 
     private final Stream<JobFuture> jobs;
 

@@ -28,7 +28,7 @@ public class AbstractServersSdkTest extends AbstractSdkTest {
 
     @Override
     protected List<Module> modules() {
-        return list(new AuthModule(), new ServerModule());
+        return list(new AuthModule(), new ServerModule(), new NetworkModule());
     }
 
 }

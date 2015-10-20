@@ -33,17 +33,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class DataCentersClient extends AuthenticatedSdkHttpClient {
 
-    public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {
-        super(authFilter, config);
-    }
-
-    public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(String dataCenterId) {
-        return
-            client("/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .request().get(DatacenterDeploymentCapabilitiesMetadata.class);
-    }
-
     private Cache<String, DataCenterMetadata> dataCenterCache = new Cache<String, DataCenterMetadata>()
         .maximumSize(20)
         .expireAfterWrite(1, TimeUnit.HOURS)
@@ -55,6 +44,31 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
                 }
             }
         );
+
+    private static final String ALL_DATACENTERS_KEY = "";
+
+    private Cache<String, GetDataCenterListResponse> allDataCentersCache = new Cache<String, GetDataCenterListResponse>()
+        .maximumSize(20)
+        .expireAfterWrite(1, TimeUnit.HOURS)
+        .build(
+            new CacheLoader<String, GetDataCenterListResponse>() {
+                @Override
+                public GetDataCenterListResponse load(String id) throws Exception {
+                    return loadAllDataCenters();
+                }
+            }
+        );
+
+    public DataCentersClient(BearerAuthentication authFilter, SdkConfiguration config) {
+        super(authFilter, config);
+    }
+
+    public DatacenterDeploymentCapabilitiesMetadata getDeploymentCapabilities(String dataCenterId) {
+        return
+            client("/datacenters/{accountAlias}/{dataCenterId}/deploymentCapabilities")
+                .resolveTemplate("dataCenterId", dataCenterId)
+                .request().get(DatacenterDeploymentCapabilitiesMetadata.class);
+    }
 
     public DataCenterMetadata getDataCenter(String dataCenterId) {
         try {
@@ -71,20 +85,6 @@ public class DataCentersClient extends AuthenticatedSdkHttpClient {
             .resolveTemplate("dataCenterId", dataCenterId)
             .request().get(DataCenterMetadata.class);
     }
-
-    private static final String ALL_DATACENTERS_KEY = "";
-
-    private Cache<String, GetDataCenterListResponse> allDataCentersCache = new Cache<String, GetDataCenterListResponse>()
-        .maximumSize(20)
-        .expireAfterWrite(1, TimeUnit.HOURS)
-        .build(
-            new CacheLoader<String, GetDataCenterListResponse>() {
-                @Override
-                public GetDataCenterListResponse load(String id) throws Exception {
-                    return loadAllDataCenters();
-                }
-            }
-        );
 
     public GetDataCenterListResponse findAllDataCenters() {
         try {

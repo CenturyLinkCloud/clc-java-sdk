@@ -57,9 +57,11 @@ public class NetworkMetadata {
     @JsonProperty("vlan")
     private Integer vlan;
     @JsonProperty("ipAddresses")
-    private List<IpAddress> ipAddresses = new ArrayList<IpAddress>();
+    private List<IpAddress> ipAddresses = new ArrayList<>();
     @JsonProperty("links")
-    private List<Link> links = new ArrayList<Link>();
+    private List<Link> links = new ArrayList<>();
+
+    private String dataCenterId;
 
     /**
      *
@@ -259,5 +261,13 @@ public class NetworkMetadata {
     @JsonProperty("links")
     public void setLinks(List<Link> links) {
         this.links = links;
+    }
+
+    public String getDataCenterId() {
+        return dataCenterId;
+    }
+
+    public void setDataCenterId(String dataCenterId) {
+        this.dataCenterId = dataCenterId;
     }
 }

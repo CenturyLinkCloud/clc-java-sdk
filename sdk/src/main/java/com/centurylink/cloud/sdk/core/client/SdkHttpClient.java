@@ -26,7 +26,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * @author ilya.drabenia
  */
 public class SdkHttpClient {
-    private static final String INIT_API_DOMAIN = "https://api.tier3.com/";
+    private static final String INIT_API_DOMAIN = "https://api.ctl.io/";
     private static String API_DOMAIN = INIT_API_DOMAIN;
 
     protected static String CLC_API_URL;
@@ -39,6 +39,19 @@ public class SdkHttpClient {
 
     static {
         updateApiUrl();
+    }
+
+    public SdkHttpClient(SdkConfiguration config) {
+        CLIENT_BUILDER
+            .maxRetries(config.getMaxRetries())
+            .proxyConfig(
+                config.getProxyHost(),
+                config.getProxyPort(),
+                config.getProxyScheme(),
+                config.getProxyUsername(),
+                config.getProxyPassword()
+            )
+            .socketTimeout(config.getSocketTimeout(), MILLISECONDS);
     }
 
     public static void apiUrl(String url) {
@@ -54,19 +67,6 @@ public class SdkHttpClient {
     private static void updateApiUrl() {
         CLC_API_URL = API_DOMAIN + "v2";
         CLC_API_URL_EXPERIMENTAL = API_DOMAIN + "v2-experimental";
-    }
-
-    public SdkHttpClient(SdkConfiguration config) {
-        CLIENT_BUILDER
-            .maxRetries(config.getMaxRetries())
-            .proxyConfig(
-                config.getProxyHost(),
-                config.getProxyPort(),
-                config.getProxyScheme(),
-                config.getProxyUsername(),
-                config.getProxyPassword()
-            )
-            .socketTimeout(config.getSocketTimeout(), MILLISECONDS);
     }
 
     protected ResteasyClient buildClient() {

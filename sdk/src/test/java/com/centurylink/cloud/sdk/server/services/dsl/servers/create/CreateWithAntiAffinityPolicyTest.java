@@ -21,6 +21,7 @@ import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
@@ -60,9 +61,14 @@ public class CreateWithAntiAffinityPolicyTest extends AbstractServersSdkTest imp
                     .architecture(CpuArchitecture.x86_64)
                 )
                 .type(ServerType.HYPERSCALE)
-                .antiAffinityPolicy(AntiAffinityPolicy.refByName()
-                    .name("Policy CA3")
-                    .dataCenter(CA_TORONTO_2)
+
+                .machine(new Machine()
+                    .cpuCount(1)
+                    .ram(2)
+                    .antiAffinityPolicy(AntiAffinityPolicy.refByName()
+                        .name("Policy CA3")
+                        .dataCenter(CA_TORONTO_2)
+                    )
                 )
                 .group(Group.refByName()
                     .name(Group.DEFAULT_GROUP)

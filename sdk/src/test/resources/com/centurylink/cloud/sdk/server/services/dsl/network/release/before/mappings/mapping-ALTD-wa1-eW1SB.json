@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/networks/ALTD/wa1",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-wa1-eW1SB.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 13 Oct 2015 15:15:32 GMT",
+      "Content-Length" : "399"
+    }
+  }
+}

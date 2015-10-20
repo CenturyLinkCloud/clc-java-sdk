@@ -40,10 +40,6 @@ public class ClcException extends RuntimeException {
         }
     }
 
-    private Object lastItem(Object[] arguments) {
-        return arguments[arguments.length - 1];
-    }
-
     public ClcException(String message) {
         super(message);
     }
@@ -54,6 +50,10 @@ public class ClcException extends RuntimeException {
 
     public ClcException(Throwable cause) {
         super(cause);
+    }
+
+    private Object lastItem(Object[] arguments) {
+        return arguments[arguments.length - 1];
     }
 
     public List<Exception> getSubExceptions() {

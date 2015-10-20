@@ -21,6 +21,11 @@ package com.centurylink.cloud.sdk.server.services.client.domain.group;
 public class SimplePatchOperation extends PatchOperation {
     private String value;
 
+    public SimplePatchOperation(String member, String value) {
+        this.value = value;
+        setMember(member);
+    }
+
     public String getValue() {
         return value;
     }
@@ -37,10 +42,5 @@ public class SimplePatchOperation extends PatchOperation {
     public SimplePatchOperation member(String member) {
         setMember(member);
         return this;
-    }
-
-    public SimplePatchOperation(String member, String value) {
-        this.value = value;
-        setMember(member);
     }
 }
