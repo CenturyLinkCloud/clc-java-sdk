@@ -56,7 +56,7 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         checkNotNull(filter, "Filter must be not a null");
 
         Stream<DataCenterMetadata> dataCenters = dataCenterService.findLazy(
-                filter.getDataCenterFilter()
+            filter.getDataCenterFilter()
         );
 
         return
@@ -82,17 +82,17 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         String dataCenterId = dataCenterService.findByRef(config.getDataCenter()).getId();
 
         LoadBalancerMetadata loadBalancer = loadBalancerClient.create(
-                dataCenterId,
-                new LoadBalancerRequest()
-                        .name(config.getName())
-                        .description(config.getDescription())
-                        .status(config.getStatus())
+            dataCenterId,
+            new LoadBalancerRequest()
+                .name(config.getName())
+                .description(config.getDescription())
+                .status(config.getStatus())
         );
 
         return new OperationFuture<>(
             LoadBalancer.refById(
-                    loadBalancer.getId(),
-                    DataCenter.refById(dataCenterId)
+                loadBalancer.getId(),
+                DataCenter.refById(dataCenterId)
             ),
             new NoWaitingJobFuture()
         );
@@ -109,17 +109,17 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         LoadBalancerMetadata loadBalancerMetadata = findByRef(loadBalancer);
 
         loadBalancerClient.update(
-                loadBalancerMetadata.getDataCenterId(),
-                loadBalancerMetadata.getId(),
-                new LoadBalancerRequest()
-                        .name(config.getName())
-                        .description(config.getDescription())
-                        .status(config.getStatus())
+            loadBalancerMetadata.getDataCenterId(),
+            loadBalancerMetadata.getId(),
+            new LoadBalancerRequest()
+                .name(config.getName())
+                .description(config.getDescription())
+                .status(config.getStatus())
         );
 
         return new OperationFuture<>(
-                loadBalancer,
-                new NoWaitingJobFuture()
+            loadBalancer,
+            new NoWaitingJobFuture()
         );
     }
 
@@ -137,8 +137,8 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         loadBalancerList.forEach(loadBalancer -> update(loadBalancer, config));
 
         return new OperationFuture<>(
-                loadBalancerList,
-                new NoWaitingJobFuture()
+            loadBalancerList,
+            new NoWaitingJobFuture()
         );
     }
 
@@ -175,13 +175,13 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
         LoadBalancerMetadata loadBalancerMetadata = findByRef(loadBalancer);
 
         loadBalancerClient.delete(
-                loadBalancerMetadata.getDataCenterId(),
-                loadBalancerMetadata.getId()
+            loadBalancerMetadata.getDataCenterId(),
+            loadBalancerMetadata.getId()
         );
 
         return new OperationFuture<>(
-                loadBalancer,
-                new NoWaitingJobFuture()
+            loadBalancer,
+            new NoWaitingJobFuture()
         );
     }
 
@@ -204,8 +204,8 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
     public OperationFuture<List<LoadBalancer>> delete(LoadBalancerFilter filter) {
         List<LoadBalancer> loadBalancerList = findLazy(filter)
                 .map(metadata -> LoadBalancer.refById(
-                        metadata.getId(),
-                        DataCenter.refById(metadata.getDataCenterId()))
+                    metadata.getId(),
+                    DataCenter.refById(metadata.getDataCenterId()))
                 )
                 .collect(toList());
 
@@ -219,14 +219,15 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
      * @return OperationFuture wrapper for load balancer list
      */
     public OperationFuture<List<LoadBalancer>> delete(List<LoadBalancer> loadBalancerList) {
-        List<JobFuture> jobs = loadBalancerList
+        List<JobFuture> jobs =
+            loadBalancerList
                 .stream()
                 .map(reference -> delete(reference).jobFuture())
                 .collect(toList());
 
         return new OperationFuture<>(
-                loadBalancerList,
-                new ParallelJobsFuture(jobs)
+            loadBalancerList,
+            new ParallelJobsFuture(jobs)
         );
     }
 }
