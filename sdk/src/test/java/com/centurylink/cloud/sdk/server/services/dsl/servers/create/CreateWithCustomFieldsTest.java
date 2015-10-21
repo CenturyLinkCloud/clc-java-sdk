@@ -20,6 +20,7 @@ import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
@@ -29,7 +30,6 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.centurylink.cloud.sdk.core.util.Strings.isNullOrEmpty;
 
 /**
  * @author Aliaksandr Krasitski
@@ -40,7 +40,7 @@ public class CreateWithCustomFieldsTest extends AbstractServersSdkTest implement
     @Inject
     ServerService serverService;
 
-    ServerMetadata server;
+    Server server;
 
     @Test
     @WireMockFileSource("custom-fields")
@@ -59,11 +59,11 @@ public class CreateWithCustomFieldsTest extends AbstractServersSdkTest implement
             .waitUntilComplete()
             .getResult();
 
-        assert !isNullOrEmpty(server.getId());
+        assert server != null;
 
-        server = serverService.findByRef(server.asRefById());
+        ServerMetadata serverMetadata = serverService.findByRef(server);
 
-        List<CustomField> customFields = server.getDetails().getCustomFields();
+        List<CustomField> customFields = serverMetadata.getDetails().getCustomFields();
         assert customFields.size() == 2;
 
         customFields.forEach(field -> {
@@ -78,7 +78,7 @@ public class CreateWithCustomFieldsTest extends AbstractServersSdkTest implement
 
     @AfterMethod
     public void deleteServer() {
-        serverService.delete(server.asRefById().asFilter());
+        serverService.delete(server.asFilter());
     }
 
 }

@@ -35,7 +35,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.CA_TORONTO_2;
-import static com.centurylink.cloud.sdk.core.util.Strings.isNullOrEmpty;
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 
 /**
@@ -50,7 +49,7 @@ public class CreateWithAutoscalePolicyTest extends AbstractServersSdkTest implem
     @Inject
     ServerService serverService;
 
-    ServerMetadata server;
+    Server server;
 
     @Test
     @WireMockFileSource("autoscale")
@@ -80,13 +79,13 @@ public class CreateWithAutoscalePolicyTest extends AbstractServersSdkTest implem
             .waitUntilComplete()
             .getResult();
 
-        assert !isNullOrEmpty(server.getId());
+        assert server != null;
 
-        ServerMetadata metadata = serverService.findByRef(Server.refById(server.getId()));
+        ServerMetadata metadata = serverService.findByRef(server);
         assert metadata.getDetails().getAutoscalePolicy() != null;
 
         AutoscalePolicyMetadata autoscalePolicy =
-            autoscalePolicyService.getAutoscalePolicyOnServer(server.asRefById());
+            autoscalePolicyService.getAutoscalePolicyOnServer(server);
         assert autoscalePolicy != null;
 
         assertEquals(metadata.getDetails().getAutoscalePolicy().getId(), autoscalePolicy.getId());
@@ -96,7 +95,7 @@ public class CreateWithAutoscalePolicyTest extends AbstractServersSdkTest implem
 
     @AfterMethod
     public void deleteServer() {
-        serverService.delete(server.asRefById());
+        serverService.delete(server);
     }
 
 }

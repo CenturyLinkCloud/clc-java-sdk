@@ -61,7 +61,7 @@ public class SingleServerFixture {
         return server;
     }
 
-    @BeforeSuite(groups = LONG_RUNNING)
+    @BeforeSuite(groups = {LONG_RUNNING})
     public void createServer() {
         instance = this;
 
@@ -95,15 +95,14 @@ public class SingleServerFixture {
                     )
                 )
                 .waitUntilComplete()
-                .getResult()
-                .asRefById();
+                .getResult();
 
         assertThatServerProperlyStarted(
             loadMetadataOf(server)
         );
     }
 
-    @AfterSuite(groups = LONG_RUNNING)
+    @AfterSuite(groups = {LONG_RUNNING})
     public void deleteServer() {
         ServerMetadata serverStateBeforeDelete = loadMetadataOf(server);
 

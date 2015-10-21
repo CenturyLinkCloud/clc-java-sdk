@@ -53,8 +53,7 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
                     .name(DEFAULT_GROUP)
                 ))
                 .waitUntilComplete()
-                .getResult()
-                .asRefById();
+                .getResult();
     }
 
     @DataProvider(name = "sshSamples")

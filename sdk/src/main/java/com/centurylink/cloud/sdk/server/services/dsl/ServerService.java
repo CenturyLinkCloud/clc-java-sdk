@@ -106,9 +106,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Create server
      *
      * @param config server config
-     * @return OperationFuture wrapper for ServerMetadata
+     * @return OperationFuture wrapper for Server
      */
-    public OperationFuture<ServerMetadata> create(CreateServerConfig config) {
+    public OperationFuture<Server> create(CreateServerConfig config) {
         BaseServerResponse response = client.create(
             serverConverter.buildCreateServerRequest(
                 config,
@@ -124,9 +124,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Clone existing server
      *
      * @param config server config
-     * @return OperationFuture wrapper for ServerMetadata
+     * @return OperationFuture wrapper for Server
      */
-    public OperationFuture<ServerMetadata> clone(CloneServerConfig config) {
+    public OperationFuture<Server> clone(CloneServerConfig config) {
         BaseServerResponse response = client.clone(
             serverConverter.buildCloneServerRequest(
                 config,
@@ -145,9 +145,9 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Import server from ovf image
      *
      * @param config server config
-     * @return OperationFuture wrapper for ServerMetadata
+     * @return OperationFuture wrapper for Server
      */
-    public OperationFuture<ServerMetadata> importServer(ImportServerConfig config) {
+    public OperationFuture<Server> importServer(ImportServerConfig config) {
         BaseServerResponse response = client.importServer(
             serverConverter.buildImportServerRequest(
                 config,
@@ -160,7 +160,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         return postProcessBuildServerResponse(response, config);
     }
 
-    private <T extends CreateServerConfig> OperationFuture<ServerMetadata> postProcessBuildServerResponse(
+    private <T extends CreateServerConfig> OperationFuture<Server> postProcessBuildServerResponse(
             BaseServerResponse response,
             T config
     ) {
@@ -168,7 +168,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
         return
             new OperationFuture<>(
-                serverInfo,
+                serverInfo.asRefById(),
                 new SequentialJobsFuture(
                     () -> new CreateServerJobFuture(response.findStatusId(), serverInfo.getId(), queueClient, client),
                     () -> addPublicIpIfNeeded(config, serverInfo)

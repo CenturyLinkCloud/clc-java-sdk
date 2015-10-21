@@ -35,7 +35,6 @@ import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.CA_TORONTO_2;
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.centurylink.cloud.sdk.core.util.Strings.isNullOrEmpty;
 
 /**
  * @author Aliaksandr Krasitski
@@ -46,7 +45,7 @@ public class CreateWithAntiAffinityPolicyTest extends AbstractServersSdkTest imp
     @Inject
     ServerService serverService;
 
-    ServerMetadata server;
+    Server server;
 
     @Test
     @WireMockFileSource("anti-affinity")
@@ -78,16 +77,16 @@ public class CreateWithAntiAffinityPolicyTest extends AbstractServersSdkTest imp
             .waitUntilComplete()
             .getResult();
 
-        assert !isNullOrEmpty(server.getId());
+        assert server != null;
 
-        ServerMetadata metadata = serverService.findByRef(Server.refById(server.getId()));
+        ServerMetadata metadata = serverService.findByRef(server);
 
         assertEquals(metadata.getDetails().getAntiAffinityPolicy().getName(), "Policy CA3");
     }
 
     @AfterMethod
     public void deleteServer() {
-        serverService.delete(server.asRefById());
+        serverService.delete(server);
     }
 
 }

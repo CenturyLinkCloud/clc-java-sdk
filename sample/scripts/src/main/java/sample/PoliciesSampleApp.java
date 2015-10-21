@@ -121,7 +121,7 @@ public class PoliciesSampleApp extends Assert {
                 ZonedDateTime.now().plusHours(2)
             )
         )
-        .waitUntilComplete().getResult().asRefById();
+        .waitUntilComplete().getResult();
     }
 
     @AfterClass(groups = {SAMPLES})

@@ -86,7 +86,7 @@ public class TestServerSupport {
         return config;
     }
 
-    public ServerMetadata createAnyServer() {
+    public Server createAnyServer() {
         return
             serverService.create(new CreateServerConfig()
                 .name("ALTRS1")

@@ -19,7 +19,6 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataC
 import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.GroupService;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.BillingStats;
@@ -27,6 +26,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.GroupByIdRef;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
@@ -48,7 +48,7 @@ public class GetBillingStatsTest extends AbstractServersSdkTest implements WireM
     @Inject
     GroupService groupService;
 
-    ServerMetadata serverMetadata;
+    Server server;
 
     GroupByIdRef group;
     GroupMetadata groupMetadata;
@@ -62,7 +62,7 @@ public class GetBillingStatsTest extends AbstractServersSdkTest implements WireM
     @AfterMethod
     public void tearDown() {
         serverService
-            .delete(serverMetadata.asRefById());
+            .delete(server);
 
         groupService
             .delete(group);
@@ -86,7 +86,7 @@ public class GetBillingStatsTest extends AbstractServersSdkTest implements WireM
     }
 
     private void initServer() {
-        serverMetadata = serverService.create(
+        server = serverService.create(
             TestServerSupport
                 .anyServerConfig()
                     .name("st-srv")

@@ -46,7 +46,7 @@ public class ModifyWithAutoscalePolicyTest extends AbstractServersSdkTest implem
     @Inject
     ServerService serverService;
 
-    ServerMetadata server;
+    Server server;
 
     @Test
     @WireMockFileSource("autoscale/create")
@@ -56,19 +56,19 @@ public class ModifyWithAutoscalePolicyTest extends AbstractServersSdkTest implem
             serverService.create(TestServerSupport.anyServerConfig()
                 .name("ASP")
                 .machine(new Machine()
-                    .cpuCount(1)
-                    .ram(2)
-                    .autoscalePolicy(AutoscalePolicy.refByName(policyName))
+                        .cpuCount(1)
+                        .ram(2)
+                        .autoscalePolicy(AutoscalePolicy.refByName(policyName))
                 )
                 .group(Group.refByName()
-                    .name(Group.DEFAULT_GROUP)
-                    .dataCenter(CA_TORONTO_2)
+                        .name(Group.DEFAULT_GROUP)
+                        .dataCenter(CA_TORONTO_2)
                 )
             )
             .waitUntilComplete()
             .getResult();
 
-        ServerMetadata metadata = serverService.findByRef(Server.refById(server.getId()));
+        ServerMetadata metadata = serverService.findByRef(server);
         assert metadata.getDetails().getAutoscalePolicy() != null;
     }
 
@@ -78,7 +78,7 @@ public class ModifyWithAutoscalePolicyTest extends AbstractServersSdkTest implem
         String newPolicyName = "Autoscale Policy 2";
 
         serverService.modify(
-            server.asRefById(),
+            server,
             new ModifyServerConfig().machineConfig(
                 new Machine()
                     .autoscalePolicy(AutoscalePolicy.refByName(newPolicyName))
@@ -87,10 +87,10 @@ public class ModifyWithAutoscalePolicyTest extends AbstractServersSdkTest implem
         )
         .waitUntilComplete();
 
-        ServerMetadata metadata = serverService.findByRef(server.asRefById());
+        ServerMetadata metadata = serverService.findByRef(server);
         assert metadata.getDetails().getAutoscalePolicy() != null;
 
-        AutoscalePolicyMetadata autoscalePolicy = autoscalePolicyService.getAutoscalePolicyOnServer(server.asRefById());
+        AutoscalePolicyMetadata autoscalePolicy = autoscalePolicyService.getAutoscalePolicyOnServer(server);
         assert autoscalePolicy != null;
 
         assertEquals(metadata.getDetails().getAutoscalePolicy().getId(), autoscalePolicy.getId());

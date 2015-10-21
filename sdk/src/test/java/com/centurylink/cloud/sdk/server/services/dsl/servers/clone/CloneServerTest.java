@@ -35,17 +35,18 @@ public class CloneServerTest extends AbstractServersSdkTest implements WireMockM
     @Inject
     ServerService serverService;
 
-    ServerMetadata serverMetadata;
+    Server server;
 
     @Test
     public void testCloneSever() {
-        Server server = Server.refById("de1altdcln04");
 
-        CloneServerConfig config = TestServerSupport.getCloneServerConfig(server);
+        CloneServerConfig config = TestServerSupport.getCloneServerConfig(Server.refById("de1altdcln04"));
 
-        serverMetadata = serverService.clone(config)
+        server = serverService.clone(config)
             .waitUntilComplete()
             .getResult();
+
+        ServerMetadata serverMetadata = serverService.findByRef(server);
 
         assertNotNull(serverMetadata);
         assertNotNull(serverMetadata.getId());
@@ -57,7 +58,7 @@ public class CloneServerTest extends AbstractServersSdkTest implements WireMockM
 
     @AfterMethod
     public void deleteServer() {
-        serverService.delete(serverMetadata.asRefById().asFilter());
+        serverService.delete(server.asFilter());
     }
 
 }

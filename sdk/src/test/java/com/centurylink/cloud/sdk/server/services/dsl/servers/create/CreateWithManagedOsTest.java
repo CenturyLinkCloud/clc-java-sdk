@@ -17,16 +17,15 @@ package com.centurylink.cloud.sdk.server.services.dsl.servers.create;
 
 import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 
 import static com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter.US_EAST_STERLING;
-import static com.centurylink.cloud.sdk.core.util.Strings.isNullOrEmpty;
 
 /**
  * @author Ilya Drabenia
@@ -37,7 +36,7 @@ public class CreateWithManagedOsTest extends AbstractServersSdkTest {
     @Inject
     ServerService serverService;
 
-    ServerMetadata server;
+    Server server;
 
 //    @Test
     public void testCreateWithManagedOS() {
@@ -59,12 +58,12 @@ public class CreateWithManagedOsTest extends AbstractServersSdkTest {
             .waitUntilComplete()
             .getResult();
 
-        assert !isNullOrEmpty(server.getId());
+        assert server != null;
     }
 
 //    @AfterMethod
     public void deleteServer() {
-        serverService.delete(server.asRefById());
+        serverService.delete(server);
     }
 
 }

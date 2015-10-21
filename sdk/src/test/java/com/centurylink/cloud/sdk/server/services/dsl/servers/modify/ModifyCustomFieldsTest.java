@@ -40,7 +40,7 @@ public class ModifyCustomFieldsTest extends AbstractServersSdkTest implements Wi
     @Inject
     ServerService serverService;
 
-    ServerMetadata server;
+    Server server;
 
     @Test
     @WireMockFileSource("custom-fields/create")
@@ -60,18 +60,17 @@ public class ModifyCustomFieldsTest extends AbstractServersSdkTest implements Wi
     @Test
     @WireMockFileSource("custom-fields/modify")
     public void modifyServer() {
-        Server serverRef = server.asRefById();
 
-        serverService.modify(serverRef,
+        serverService.modify(server,
             new ModifyServerConfig()
                 .customFields(new CustomField().name("Type").value("1"))
             )
             .waitUntilComplete()
             .getResult();
 
-        server = serverService.findByRef(serverRef);
+        ServerMetadata serverMetadata = serverService.findByRef(server);
 
-        List<CustomField> customFields = server.getDetails().getCustomFields();
+        List<CustomField> customFields = serverMetadata.getDetails().getCustomFields();
 
         assert customFields.size() == 1;
         assert "1".equals(customFields.get(0).getValue());
@@ -80,7 +79,7 @@ public class ModifyCustomFieldsTest extends AbstractServersSdkTest implements Wi
     }
 
     private void deleteServer() {
-        serverService.delete(server.asRefById());
+        serverService.delete(server);
     }
 
 }

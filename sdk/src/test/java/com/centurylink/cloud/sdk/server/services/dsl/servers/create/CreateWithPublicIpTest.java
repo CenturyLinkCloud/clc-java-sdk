@@ -17,10 +17,10 @@ package com.centurylink.cloud.sdk.server.services.dsl.servers.create;
 
 import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
-import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
 import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.NetworkConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
@@ -28,7 +28,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
-import static com.centurylink.cloud.sdk.core.util.Strings.isNullOrEmpty;
 
 /**
  * @author Ilya Drabenia
@@ -39,7 +38,7 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest implements Wi
     @Inject
     ServerService serverService;
 
-    ServerMetadata server;
+    Server server;
 
     @Test
     @WireMockFileSource("/ip")
@@ -56,12 +55,12 @@ public class CreateWithPublicIpTest extends AbstractServersSdkTest implements Wi
             .waitUntilComplete()
             .getResult();
 
-        assert !isNullOrEmpty(server.getId());
+        assert server != null;
     }
 
     @AfterMethod
     public void deleteServer() {
-        serverService.delete(server.asRefById().asFilter());
+        serverService.delete(server.asFilter());
     }
 
 }

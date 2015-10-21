@@ -23,6 +23,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.DiskConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ModifyServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.servers.TestServerSupport;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
@@ -51,10 +52,12 @@ public class ModifyServerTest extends AbstractServersSdkTest implements WireMock
     @Inject
     ServerService serverService;
 
+    Server server;
+
     ServerMetadata serverMetadata;
 
     private void createServer() {
-        serverMetadata = serverService.create(
+        server = serverService.create(
             TestServerSupport
                 .anyServerConfig()
                 .name("md-srv")
@@ -69,11 +72,11 @@ public class ModifyServerTest extends AbstractServersSdkTest implements WireMock
         .getResult();
 
         fetchLastServerMetadata();
-        assertNotNull(serverMetadata);
+        assertNotNull(server);
     }
 
     private void deleteServer() {
-        serverService.delete(serverMetadata.asRefById());
+        serverService.delete(server);
     }
 
     private void sendModifyRequest() {
@@ -94,11 +97,11 @@ public class ModifyServerTest extends AbstractServersSdkTest implements WireMock
             .machineConfig(machineConfig)
             .description(modifiedDescription);
 
-        serverService.modify(serverMetadata.asRefById(), modifyServerConfig).waitUntilComplete();
+        serverService.modify(server, modifyServerConfig).waitUntilComplete();
     }
 
     private void fetchLastServerMetadata() {
-        serverMetadata = serverService.findByRef(serverMetadata.asRefById());
+        serverMetadata = serverService.findByRef(server);
     }
 
     private void checkInitialServerState() {
