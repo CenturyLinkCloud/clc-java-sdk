@@ -40,8 +40,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ClcSpringConfig implements InitializingBean {
-
-    private CredentialsProvider credentialsProvider = new DefaultCredentialsProvider();
+    private CredentialsProvider credentialsProvider;
     private SdkConfiguration sdkConfig = SdkConfiguration.DEFAULT;
     private ClcSdk sdk;
 
@@ -57,7 +56,11 @@ public class ClcSpringConfig implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        sdk = new ClcSdk(credentialsProvider, sdkConfig);
+        sdk =
+            new ClcSdk(
+                (credentialsProvider != null) ? credentialsProvider : new DefaultCredentialsProvider(),
+                sdkConfig
+            );
     }
 
     @Bean
