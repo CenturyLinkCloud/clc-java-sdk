@@ -16,7 +16,7 @@ Maven:
 
 Gradle:
 ```groovy
-compile 'com.centurylink.cloud:spring-clc-sdk:1.1.0'
+compile 'com.centurylink.cloud:spring-clc-sdk:1.1.1'
 ```
 
 
