@@ -54,19 +54,19 @@ public class ModifyWithAutoscalePolicyTest extends AbstractServersSdkTest implem
         String policyName = "Autoscale Policy 1";
         server =
             serverService.create(TestServerSupport.anyServerConfig()
-                    .name("ASP")
-                    .machine(new Machine()
-                            .cpuCount(1)
-                            .ram(2)
-                            .autoscalePolicy(AutoscalePolicy.refByName(policyName))
-                    )
-                    .group(Group.refByName()
-                            .name(Group.DEFAULT_GROUP)
-                            .dataCenter(CA_TORONTO_2)
-                    )
+                .name("ASP")
+                .machine(new Machine()
+                    .cpuCount(1)
+                    .ram(2)
+                    .autoscalePolicy(AutoscalePolicy.refByName(policyName))
+                )
+                .group(Group.refByName()
+                    .name(Group.DEFAULT_GROUP)
+                    .dataCenter(CA_TORONTO_2)
+                )
             )
-                .waitUntilComplete()
-                .getResult();
+            .waitUntilComplete()
+            .getResult();
 
         ServerMetadata metadata = serverService.findByRef(Server.refById(server.getId()));
         assert metadata.getDetails().getAutoscalePolicy() != null;

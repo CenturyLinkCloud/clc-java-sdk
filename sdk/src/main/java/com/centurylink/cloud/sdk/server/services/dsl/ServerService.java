@@ -202,7 +202,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
         OperationFuture<Server> modifyServerFuture;
 
-        if(response == null) {
+        if (response == null) {
             modifyServerFuture = new OperationFuture<>(
                 server,
                 new NoWaitingJobFuture()
@@ -215,7 +215,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             );
         }
 
-        if(modifyServerConfig.getMachineConfig() != null &&
+        if (modifyServerConfig.getMachineConfig() != null &&
             modifyServerConfig.getMachineConfig().getAutoscalePolicy() != null) {
 
             return new OperationFuture<>(
