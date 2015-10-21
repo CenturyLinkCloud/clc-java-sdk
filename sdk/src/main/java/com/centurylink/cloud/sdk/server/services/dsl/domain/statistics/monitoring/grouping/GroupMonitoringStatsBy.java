@@ -40,36 +40,36 @@ public abstract class GroupMonitoringStatsBy {
     protected List<MonitoringEntry> convertEntry(List<SamplingEntry> entries) {
         return
             map(entries, entry ->
-                    new MonitoringEntry()
-                        .timestamp(entry.getTimestamp())
-                        .cpu(entry.getCpu())
-                        .cpuPercent(entry.getCpuPercent())
-                        .diskUsageTotalCapacityMB(entry.getDiskUsageTotalCapacityMB())
-                        .memoryMB(entry.getMemoryMB())
-                        .memoryPercent(entry.getMemoryPercent())
-                        .networkReceivedKBps(entry.getNetworkReceivedKbps())
-                        .networkTransmittedKBps(entry.getNetworkTransmittedKbps())
-                        .diskUsage(convertDiskUsage(entry.getDiskUsage()))
-                        .guestDiskUsage(convertGuestUsage(entry.getGuestDiskUsage()))
+                new MonitoringEntry()
+                    .timestamp(entry.getTimestamp())
+                    .cpu(entry.getCpu())
+                    .cpuPercent(entry.getCpuPercent())
+                    .diskUsageTotalCapacityMB(entry.getDiskUsageTotalCapacityMB())
+                    .memoryMB(entry.getMemoryMB())
+                    .memoryPercent(entry.getMemoryPercent())
+                    .networkReceivedKBps(entry.getNetworkReceivedKbps())
+                    .networkTransmittedKBps(entry.getNetworkTransmittedKbps())
+                    .diskUsage(convertDiskUsage(entry.getDiskUsage()))
+                    .guestDiskUsage(convertGuestUsage(entry.getGuestDiskUsage()))
             );
     }
 
     protected List<DiskUsage> convertDiskUsage(List<DiskUsageMetadata> list) {
         return
             map(list, metadata ->
-                    new DiskUsage()
-                        .id(metadata.getId())
-                        .capacityMB(metadata.getCapacityMB())
+                new DiskUsage()
+                    .id(metadata.getId())
+                    .capacityMB(metadata.getCapacityMB())
             );
     }
 
     protected List<GuestUsage> convertGuestUsage(List<GuestUsageMetadata> list) {
         return
             map(list, metadata ->
-                    new GuestUsage()
-                        .path(metadata.getPath())
-                        .capacityMB(metadata.getCapacityMB())
-                        .consumedMB(metadata.getConsumedMB())
+                new GuestUsage()
+                    .path(metadata.getPath())
+                    .capacityMB(metadata.getCapacityMB())
+                    .consumedMB(metadata.getConsumedMB())
             );
     }
 
@@ -182,14 +182,14 @@ public abstract class GroupMonitoringStatsBy {
                 .keySet()
                 .stream()
                 .map(key ->
-                        new DiskUsage()
-                            .id(key)
-                            .capacityMB(
-                                map
-                                    .get(key)
-                                    .stream()
-                                    .collect(summingInt(DiskUsage::getCapacityMB))
-                            )
+                    new DiskUsage()
+                        .id(key)
+                        .capacityMB(
+                            map
+                                .get(key)
+                                .stream()
+                                .collect(summingInt(DiskUsage::getCapacityMB))
+                        )
                 )
                 .collect(toList());
     }

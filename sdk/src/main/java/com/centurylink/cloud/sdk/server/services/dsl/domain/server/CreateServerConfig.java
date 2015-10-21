@@ -225,6 +225,6 @@ public class CreateServerConfig implements ServerConfig {
 
     @Override
     public CreateServerConfig[] getServerConfig() {
-        return new CreateServerConfig[]{this};
+        return new CreateServerConfig[] { this };
     }
 }
