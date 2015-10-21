@@ -75,66 +75,25 @@ public class ServerConverter {
         CreateServerConfig config,
         List<CustomFieldMetadata> customFieldsMetadata
     ) {
-        GroupMetadata groupMetadata = groupService.findByRef(config.getGroup());
         TemplateMetadata templateMetadata = templateService.findByRef(config.getTemplate());
 
-        if (config.getType().equals(ServerType.HYPERSCALE)) {
-            config.storageType(StorageType.HYPERSCALE);
-        }
+        CreateServerRequest request = new CreateServerRequest();
 
-        List<CustomField> newFields = composeCustomFields(config.getCustomFields(), customFieldsMetadata);
+        fillBuildServerRequest(config, request, customFieldsMetadata);
 
-        return
-            new CreateServerRequest()
-                .name(config.getName())
-                .description(config.getDescription())
-                .cpu(config.getMachine().getCpuCount())
-                .memoryGB(config.getMachine().getRam())
-                .additionalDisks(
-                    buildDiskRequestList(
-                        config.getMachine().getDisks()
-                    )
-                )
-                .password(config.getPassword())
-                .groupId(groupMetadata.getId())
+        request.setManagedOS(
+            config.isManagedOS(),
+            templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
+        );
 
-                .type(
-                    config.getType().getCode(),
-                    templateMetadata.hasCapability(TemplateMetadata.HYPERSCALE_VALUE)
-                )
+        request.setType(
+            config.getType().getCode(),
+            templateMetadata.hasCapability(TemplateMetadata.HYPERSCALE_VALUE)
+        );
 
-                .storageType(
-                    config.getStorageType().getCode(),
-                    dataCenterService
-                        .getDeploymentCapabilities(
-                            DataCenter.refById(groupMetadata.getLocationId())
-                        )
-                        .getSupportsPremiumStorage()
-                )
+        request.sourceServerId(templateMetadata.getName());
 
-                .sourceServerId(templateMetadata.getName())
-                .primaryDns(config.getNetwork().getPrimaryDns())
-                .secondaryDns(config.getNetwork().getSecondaryDns())
-
-                .networkId(
-                    (config.getNetwork().getNetwork() == null) ? null :
-                        dataCenterService
-                            .findNetworkByRef(config.getNetwork().getNetwork())
-                            .getNetworkId()
-                )
-
-                .timeToLive(config.getTimeToLive())
-                .managedOS(
-                    config.isManagedOS(),
-                    templateMetadata.hasCapability(TemplateMetadata.MANAGED_OS_VALUE)
-                )
-                .antiAffinityPolicyId((config.getMachine().getAntiAffinityPolicy()) == null ? null :
-                        policyService.antiAffinity().findByRef(config.getMachine().getAntiAffinityPolicy()).getId()
-                )
-                .cpuAutoscalePolicyId((config.getMachine().getAutoscalePolicy()) == null ? null :
-                        autoscalePolicyService().findByRef(config.getMachine().getAutoscalePolicy()).getId()
-                )
-                .customFields(newFields.isEmpty() ? null : newFields);
+        return request;
     }
 
     public CloneServerRequest buildCloneServerRequest(
@@ -187,13 +146,7 @@ public class ServerConverter {
         request.setName(config.getName());
         request.setDescription(config.getDescription());
 
-        if (config.getMachine() != null) {
-            request.setCpu(config.getMachine().getCpuCount());
-            request.setMemoryGB(config.getMachine().getRam());
-            request.setAdditionalDisks(
-                buildDiskRequestList(config.getMachine().getDisks())
-            );
-        }
+        fillMachineConfig(config, request);
 
         GroupMetadata groupMetadata = groupService.findByRef(config.getGroup());
 
@@ -232,23 +185,6 @@ public class ServerConverter {
             request.managedOS(config.isManagedOS(), true);
         }
 
-        if (config.getMachine().getAntiAffinityPolicy() != null) {
-            request.antiAffinityPolicyId(
-                policyService
-                    .antiAffinity()
-                    .findByRef(config.getMachine().getAntiAffinityPolicy())
-                    .getId()
-            );
-        }
-
-        if (config.getMachine().getAutoscalePolicy() != null) {
-            request.cpuAutoscalePolicyId(
-                autoscalePolicyService()
-                    .findByRef(config.getMachine().getAutoscalePolicy())
-                    .getId()
-            );
-        }
-
         if (!config.getCustomFields().isEmpty()) {
             request.customFields(
                 composeCustomFields(config.getCustomFields(), customFieldsMetadata)
@@ -257,6 +193,33 @@ public class ServerConverter {
 
         if (config.getType() != null) {
             request.setType(config.getType().getCode(), true);
+        }
+    }
+
+    private void fillMachineConfig(CreateServerConfig config, CreateServerRequest request) {
+        if (config.getMachine() != null) {
+            request.setCpu(config.getMachine().getCpuCount());
+            request.setMemoryGB(config.getMachine().getRam());
+            request.setAdditionalDisks(
+                buildDiskRequestList(config.getMachine().getDisks())
+            );
+
+            if (config.getMachine().getAntiAffinityPolicy() != null) {
+                request.antiAffinityPolicyId(
+                    policyService
+                        .antiAffinity()
+                        .findByRef(config.getMachine().getAntiAffinityPolicy())
+                        .getId()
+                );
+            }
+
+            if (config.getMachine().getAutoscalePolicy() != null) {
+                request.cpuAutoscalePolicyId(
+                    autoscalePolicyService()
+                        .findByRef(config.getMachine().getAutoscalePolicy())
+                        .getId()
+                );
+            }
         }
     }
 

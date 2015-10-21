@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/autoscalePolicies/ALTD/02c9a0551e494c0fa6ede693268c0216",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-02c9a0551e494c0fa6ede693268c0216-NxoaR.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Tue, 20 Oct 2015 14:05:44 GMT",
+      "Content-Length" : "354"
+    }
+  }
+}

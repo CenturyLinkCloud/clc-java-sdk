@@ -27,6 +27,7 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.Seque
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
 import com.centurylink.cloud.sdk.core.services.QueryService;
+import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.AddNetworkRequest;
@@ -62,6 +63,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.ServerBy
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
@@ -85,16 +87,19 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     private final QueueClient queueClient;
     private final ExperimentalQueueClient experimentalQueueClient;
     private final PublicIpConverter publicIpConverter;
+    private final Supplier<AutoscalePolicyService> autoscalePolicyServiceSupplier;
 
     public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient,
                          GroupService groupService, PublicIpConverter publicIpConverter,
-                         ExperimentalQueueClient experimentalQueueClient) {
+                         ExperimentalQueueClient experimentalQueueClient,
+                         ServerConverter.AutoscalePolicyServiceSupplier autoscalePolicyServiceSupplier) {
         this.serverConverter = serverConverter;
         this.client = client;
         this.queueClient = queueClient;
         this.groupService = groupService;
         this.publicIpConverter = publicIpConverter;
         this.experimentalQueueClient = experimentalQueueClient;
+        this.autoscalePolicyServiceSupplier = autoscalePolicyServiceSupplier;
     }
 
     /**
@@ -195,18 +200,36 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
         Link response = client.modify(idByRef(server), request);
 
-        if(response == null) {
-            return new OperationFuture<>(
+        OperationFuture<Server> modifyServerFuture;
+
+        if (response == null) {
+            modifyServerFuture = new OperationFuture<>(
                 server,
                 new NoWaitingJobFuture()
             );
+        } else {
+            modifyServerFuture = new OperationFuture<>(
+                server,
+                response.getId(),
+                queueClient
+            );
         }
 
-        return new OperationFuture<>(
-            server,
-            response.getId(),
-            queueClient
-        );
+        if (modifyServerConfig.getMachineConfig() != null &&
+            modifyServerConfig.getMachineConfig().getAutoscalePolicy() != null) {
+
+            return new OperationFuture<>(
+                server,
+                new ParallelJobsFuture(
+                    modifyServerFuture.jobFuture(),
+                    autoscalePolicyServiceSupplier.get().setAutoscalePolicyOnServer(
+                        modifyServerConfig.getMachineConfig().getAutoscalePolicy(), server
+                    ).jobFuture()
+                )
+            );
+        }
+
+        return modifyServerFuture;
     }
 
     /**
