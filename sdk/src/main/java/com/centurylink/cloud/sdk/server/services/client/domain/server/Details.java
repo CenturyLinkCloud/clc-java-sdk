@@ -16,7 +16,7 @@
 package com.centurylink.cloud.sdk.server.services.client.domain.server;
 
 import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.autoscale.AutoscalePolicyMetadata;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

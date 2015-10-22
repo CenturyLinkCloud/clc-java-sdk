@@ -16,7 +16,7 @@
 package com.centurylink.cloud.sdk.policy.services.client;
 
 import com.centurylink.cloud.sdk.policy.services.client.domain.autoscale.SetAutoscalePolicyRequest;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.autoscale.AutoscalePolicyMetadata;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.errors.ClcHttpClientException;

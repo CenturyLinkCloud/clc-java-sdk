@@ -15,7 +15,7 @@
 
 package com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.filter;
 
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.autoscale.AutoscalePolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs.AutoscalePolicy;
 import com.centurylink.cloud.sdk.core.function.Predicates;
 import com.centurylink.cloud.sdk.core.function.Streams;

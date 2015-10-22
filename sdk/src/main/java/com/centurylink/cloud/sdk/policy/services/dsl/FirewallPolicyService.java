@@ -26,7 +26,7 @@ import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.policy.services.client.FirewallPolicyClient;
 import com.centurylink.cloud.sdk.policy.services.client.domain.firewall.FirewallPolicyRequest;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyConfig;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.firewall.FirewallPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.filter.FirewallPolicyFilter;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.refs.FirewallPolicy;
 

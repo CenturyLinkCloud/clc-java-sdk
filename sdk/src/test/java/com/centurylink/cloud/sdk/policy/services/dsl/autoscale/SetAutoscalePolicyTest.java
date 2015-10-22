@@ -16,7 +16,7 @@
 package com.centurylink.cloud.sdk.policy.services.dsl.autoscale;
 
 import com.centurylink.cloud.sdk.policy.services.AbstractAutoscalePolicySdkTest;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.autoscale.AutoscalePolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs.AutoscalePolicy;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;

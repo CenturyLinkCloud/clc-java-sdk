@@ -19,7 +19,7 @@ import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.policy.services.client.domain.firewall.FirewallPolicyRequest;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.firewall.FirewallPolicyMetadata;
 
 import javax.ws.rs.core.GenericType;
 import java.util.List;

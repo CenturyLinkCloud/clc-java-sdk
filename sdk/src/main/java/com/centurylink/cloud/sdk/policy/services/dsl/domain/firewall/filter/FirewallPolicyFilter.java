@@ -24,7 +24,7 @@ import com.centurylink.cloud.sdk.core.services.filter.Filter;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.AndEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.OrEvaluation;
 import com.centurylink.cloud.sdk.core.services.filter.evaluation.SingleFilterEvaluation;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.firewall.FirewallPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.refs.FirewallPolicy;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerMetadata;
 

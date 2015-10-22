@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall;
+package com.centurylink.cloud.sdk.policy.services.client.domain.firewall;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.fasterxml.jackson.annotation.JsonInclude;

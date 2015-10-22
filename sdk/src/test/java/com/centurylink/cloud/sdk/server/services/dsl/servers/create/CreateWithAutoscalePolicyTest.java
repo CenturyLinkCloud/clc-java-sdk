@@ -17,7 +17,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.servers.create;
 
 import com.centurylink.cloud.sdk.core.injector.Inject;
 import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.autoscale.AutoscalePolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs.AutoscalePolicy;
 import com.centurylink.cloud.sdk.server.services.AbstractServersSdkTest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;

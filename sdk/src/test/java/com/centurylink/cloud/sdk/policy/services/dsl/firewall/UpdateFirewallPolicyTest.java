@@ -17,7 +17,7 @@ package com.centurylink.cloud.sdk.policy.services.dsl.firewall;
 
 import com.centurylink.cloud.sdk.policy.services.AbstractFirewallPolicySdkTest;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyConfig;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.FirewallPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.firewall.FirewallPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.firewall.refs.FirewallPolicy;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;

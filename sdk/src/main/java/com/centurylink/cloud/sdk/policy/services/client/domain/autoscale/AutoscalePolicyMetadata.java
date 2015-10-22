@@ -13,9 +13,11 @@
  * limitations under the License.
  */
 
-package com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale;
+package com.centurylink.cloud.sdk.policy.services.client.domain.autoscale;
 
 import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyRange;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.AutoscalePolicyScaleDownWindow;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
