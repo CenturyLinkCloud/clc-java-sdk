@@ -371,8 +371,7 @@ public class SdkClientBuilder extends ClientBuilder
 
     protected ResteasyProviderFactory getProviderFactory()
     {
-        if (providerFactory == null)
-        {
+        if (providerFactory == null) {
             // create a new one
             providerFactory = new ResteasyProviderFactory();
             RegisterBuiltin.register(providerFactory);
@@ -384,22 +383,22 @@ public class SdkClientBuilder extends ClientBuilder
     public ResteasyClient build()
     {
         ClientConfiguration config = new ClientConfiguration(getProviderFactory());
-        for (Map.Entry<String, Object> entry : properties.entrySet())
-        {
+        for (Map.Entry<String, Object> entry : properties.entrySet()) {
             config.property(entry.getKey(), entry.getValue());
         }
 
         ExecutorService executor = asyncExecutor;
 
         boolean cleanupExecutor = false;
-        if (executor == null)
-        {
+        if (executor == null) {
             cleanupExecutor = true;
             executor = Executors.newFixedThreadPool(10);
         }
 
         ClientHttpEngine engine = httpEngine;
-        if (engine == null) engine = initDefaultEngine();
+        if (engine == null) {
+            engine = initDefaultEngine();
+        }
 
         try {
             Constructor<ResteasyClient> constructor = ResteasyClient.class.getDeclaredConstructor(
@@ -418,63 +417,53 @@ public class SdkClientBuilder extends ClientBuilder
     {
         protected HostnameVerifier verifier;
 
-        VerifierWrapper(HostnameVerifier verifier)
-        {
+        VerifierWrapper(HostnameVerifier verifier) {
             this.verifier = verifier;
         }
 
         @Override
-        public void verify(String host, SSLSocket ssl) throws IOException
-        {
-            if (!verifier.verify(host, ssl.getSession())) throw new SSLException("Hostname verification failure");
+        public void verify(String host, SSLSocket ssl) throws IOException {
+            if (!verifier.verify(host, ssl.getSession())) {
+                throw new SSLException("Hostname verification failure");
+            }
         }
 
         @Override
-        public void verify(String host, X509Certificate cert) throws SSLException
-        {
+        public void verify(String host, X509Certificate cert) throws SSLException {
             throw new SSLException("This verification path not implemented");
         }
 
         @Override
-        public void verify(String host, String[] cns, String[] subjectAlts) throws SSLException
-        {
+        public void verify(String host, String[] cns, String[] subjectAlts) throws SSLException {
             throw new SSLException("This verification path not implemented");
         }
 
         @Override
-        public boolean verify(String s, SSLSession sslSession)
-        {
+        public boolean verify(String s, SSLSession sslSession) {
             return verifier.verify(s, sslSession);
         }
     }
 
-    protected ClientHttpEngine initDefaultEngine()
-    {
+    protected ClientHttpEngine initDefaultEngine() {
         HttpClient httpClient;
 
         X509HostnameVerifier verifier = initHostnameVerifier();
-        try
-        {
+        try {
             org.apache.http.conn.ssl.SSLSocketFactory sslsf;
             SSLContext theContext = sslContext;
-            if (disableTrustManager)
-            {
+            if (disableTrustManager) {
                 theContext = SSLContext.getInstance("SSL");
                 theContext.init(null, new TrustManager[]{new PassthroughTrustManager()},
                     new SecureRandom());
                 verifier =  new AllowAllHostnameVerifier();
                 sslsf = new org.apache.http.conn.ssl.SSLSocketFactory(theContext, verifier);
             }
-            else if (theContext != null)
-            {
+            else if (theContext != null) {
                 sslsf = new org.apache.http.conn.ssl.SSLSocketFactory(theContext, verifier);
             }
-            else if (clientKeyStore != null || truststore != null)
-            {
+            else if (clientKeyStore != null || truststore != null) {
                 sslsf = new org.apache.http.conn.ssl.SSLSocketFactory(org.apache.http.conn.ssl.SSLSocketFactory.TLS, clientKeyStore, clientPrivateKeyPassword, truststore, null, verifier);
-            }
-            else
-            {
+            } else {
                 final SSLContext tlsContext = SSLContext.getInstance(org.apache.http.conn.ssl.SSLSocketFactory.TLS);
                 tlsContext.init(null, null, null);
                 sslsf = new org.apache.http.conn.ssl.SSLSocketFactory(tlsContext, verifier);
@@ -508,17 +497,16 @@ public class SdkClientBuilder extends ClientBuilder
             engine.setDefaultProxy(defaultProxy);
             return engine;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private X509HostnameVerifier initHostnameVerifier() {
         X509HostnameVerifier verifier = null;
-        if (this.verifier != null) verifier = new VerifierWrapper(this.verifier);
-        else
-        {
+        if (this.verifier != null) {
+            verifier = new VerifierWrapper(this.verifier);
+        } else {
             switch (policy)
             {
                 case ANY:
@@ -537,19 +525,18 @@ public class SdkClientBuilder extends ClientBuilder
     }
 
     private ClientConnectionManager initClientConnectionManager(SchemeRegistry registry) {
-        ClientConnectionManager cm = null;
-        if (connectionPoolSize > 0)
-        {
+        ClientConnectionManager cm;
+        if (connectionPoolSize > 0) {
             PoolingClientConnectionManager tcm =
                 new PoolingClientConnectionManager(registry, connectionTTL, connectionTTLUnit);
             tcm.setMaxTotal(connectionPoolSize);
-            if (maxPooledPerRoute == 0) maxPooledPerRoute = connectionPoolSize;
+            if (maxPooledPerRoute == 0) {
+                maxPooledPerRoute = connectionPoolSize;
+            }
             tcm.setDefaultMaxPerRoute(maxPooledPerRoute);
             cm = tcm;
 
-        }
-        else
-        {
+        } else {
             cm = new BasicClientConnectionManager(registry);
         }
 
@@ -558,20 +545,17 @@ public class SdkClientBuilder extends ClientBuilder
 
     private BasicHttpParams initHttpParams() {
         BasicHttpParams params = new BasicHttpParams();
-        if (socketTimeout > -1)
-        {
+        if (socketTimeout > -1) {
             HttpConnectionParams.setSoTimeout(params, (int) socketTimeoutUnits.toMillis(socketTimeout));
         }
 
-        if (establishConnectionTimeout > -1)
-        {
+        if (establishConnectionTimeout > -1) {
             HttpConnectionParams.setConnectionTimeout(params,
                 (int)establishConnectionTimeoutUnits.toMillis(establishConnectionTimeout)
             );
         }
 
-        if (connectionCheckoutTimeoutMs > -1)
-        {
+        if (connectionCheckoutTimeoutMs > -1) {
             HttpClientParams.setConnectionManagerTimeout(params, connectionCheckoutTimeoutMs);
         }
 
@@ -579,8 +563,7 @@ public class SdkClientBuilder extends ClientBuilder
     }
 
     @Override
-    public SdkClientBuilder hostnameVerifier(HostnameVerifier verifier)
-    {
+    public SdkClientBuilder hostnameVerifier(HostnameVerifier verifier) {
         this.verifier = verifier;
         return this;
     }
@@ -592,68 +575,58 @@ public class SdkClientBuilder extends ClientBuilder
     }
 
     @Override
-    public SdkClientBuilder register(Class<?> componentClass)
-    {
+    public SdkClientBuilder register(Class<?> componentClass) {
         getProviderFactory().register(componentClass);
         return this;
     }
 
     @Override
-    public SdkClientBuilder register(Class<?> componentClass, int priority)
-    {
+    public SdkClientBuilder register(Class<?> componentClass, int priority) {
         getProviderFactory().register(componentClass, priority);
         return this;
     }
 
     @Override
-    public SdkClientBuilder register(Class<?> componentClass, Class<?>... contracts)
-    {
+    public SdkClientBuilder register(Class<?> componentClass, Class<?>... contracts) {
         getProviderFactory().register(componentClass, contracts);
         return this;
     }
 
     @Override
-    public SdkClientBuilder register(Class<?> componentClass, Map<Class<?>, Integer> contracts)
-    {
+    public SdkClientBuilder register(Class<?> componentClass, Map<Class<?>, Integer> contracts) {
         getProviderFactory().register(componentClass, contracts);
         return this;
     }
 
     @Override
-    public SdkClientBuilder register(Object component)
-    {
+    public SdkClientBuilder register(Object component) {
         getProviderFactory().register(component);
         return this;
     }
 
     @Override
-    public SdkClientBuilder register(Object component, int priority)
-    {
+    public SdkClientBuilder register(Object component, int priority) {
         getProviderFactory().register(component, priority);
         return this;
     }
 
     @Override
-    public SdkClientBuilder register(Object component, Class<?>... contracts)
-    {
+    public SdkClientBuilder register(Object component, Class<?>... contracts) {
         getProviderFactory().register(component, contracts);
         return this;
     }
 
     @Override
-    public SdkClientBuilder register(Object component, Map<Class<?>, Integer> contracts)
-    {
+    public SdkClientBuilder register(Object component, Map<Class<?>, Integer> contracts) {
         getProviderFactory().register(component, contracts);
         return this;
     }
 
     @Override
-    public SdkClientBuilder withConfig(Configuration config)
-    {
+    public SdkClientBuilder withConfig(Configuration config) {
         providerFactory = new ResteasyProviderFactory();
         providerFactory.setProperties(config.getProperties());
-        for (Class clazz : config.getClasses())
-        {
+        for (Class clazz : config.getClasses()) {
             Map<Class<?>, Integer> contracts = config.getContracts(clazz);
             try {
                 register(clazz, contracts);
@@ -662,8 +635,7 @@ public class SdkClientBuilder extends ClientBuilder
                 throw new RuntimeException("failed on registering class: " + clazz.getName(), e);
             }
         }
-        for (Object obj : config.getInstances())
-        {
+        for (Object obj : config.getInstances()) {
             Map<Class<?>, Integer> contracts = config.getContracts(obj.getClass());
             register(obj, contracts);
         }

@@ -27,6 +27,11 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 public class LoadBalancerNodeClient extends AuthenticatedSdkHttpClient {
+    private static final String DATACENTER_ID = "dataCenterId";
+    private static final String BALANCER_ID = "loadBalancerId";
+    private static final String POOL_ID = "poolId";
+    private static final String URL =
+        "/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools/{poolId}/nodes";
 
     public LoadBalancerNodeClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
@@ -38,10 +43,10 @@ public class LoadBalancerNodeClient extends AuthenticatedSdkHttpClient {
             String loadBalancerPoolId
     ) {
         List<LoadBalancerNodeMetadata> metadataList =
-            client("/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools/{loadBalancerPoolId}/nodes")
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .resolveTemplate("loadBalancerId", loadBalancerId)
-                .resolveTemplate("loadBalancerPoolId", loadBalancerPoolId)
+            client(URL)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
+                .resolveTemplate(BALANCER_ID, loadBalancerId)
+                .resolveTemplate(POOL_ID, loadBalancerPoolId)
                 .request()
                 .get(new GenericType<List<LoadBalancerNodeMetadata>>(){});
 
@@ -53,10 +58,10 @@ public class LoadBalancerNodeClient extends AuthenticatedSdkHttpClient {
     }
 
     public void update(String dataCenterId, String loadBalancerId, String poolId, List<LoadBalancerNodeMetadata> request) {
-        client("/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools/{poolId}/nodes")
-            .resolveTemplate("dataCenterId", dataCenterId)
-            .resolveTemplate("loadBalancerId", loadBalancerId)
-            .resolveTemplate("poolId", poolId)
+        client(URL)
+            .resolveTemplate(DATACENTER_ID, dataCenterId)
+            .resolveTemplate(BALANCER_ID, loadBalancerId)
+            .resolveTemplate(POOL_ID, poolId)
             .request()
             .put(entity(request, APPLICATION_JSON_TYPE));
     }

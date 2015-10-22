@@ -25,6 +25,11 @@ import java.util.List;
 public class CustomFieldPatchOperation extends PatchOperation{
     private List<CustomField> value;
 
+    public CustomFieldPatchOperation(List<CustomField> value) {
+        this.value = value;
+        setMember(CUSTOM_FIELD);
+    }
+
     public List<CustomField> getValue() {
         return value;
     }
@@ -36,10 +41,5 @@ public class CustomFieldPatchOperation extends PatchOperation{
     public CustomFieldPatchOperation value(List<CustomField> value) {
         setValue(value);
         return this;
-    }
-
-    public CustomFieldPatchOperation(List<CustomField> value) {
-        this.value = value;
-        setMember(CUSTOM_FIELD);
     }
 }

@@ -30,6 +30,8 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 public class FirewallPolicyClient extends AuthenticatedSdkHttpClient {
+    private static final String DATACENTER_ID = "dataCenterId";
+    private static final String POLICY_ID = "firewallPolicyId";
 
     public FirewallPolicyClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
@@ -38,7 +40,7 @@ public class FirewallPolicyClient extends AuthenticatedSdkHttpClient {
     public List<FirewallPolicyMetadata> getFirewallPolicies(String dataCenterId, String destinationAccountAlias) {
         List<FirewallPolicyMetadata> metadataList =
             experimentalClient("/firewallPolicies/{accountAlias}/{dataCenterId}")
-                .resolveTemplate("dataCenterId", dataCenterId)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
                     .queryParam("destinationAccountAlias", destinationAccountAlias)
                     .request()
                     .get(new GenericType<List<FirewallPolicyMetadata>>() {
@@ -52,8 +54,8 @@ public class FirewallPolicyClient extends AuthenticatedSdkHttpClient {
     public FirewallPolicyMetadata getFirewallPolicy(String dataCenterId, String firewallPolicyId) {
         FirewallPolicyMetadata metadata =
             experimentalClient("/firewallPolicies/{accountAlias}/{dataCenterId}/{firewallPolicyId}")
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .resolveTemplate("firewallPolicyId", firewallPolicyId)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
+                .resolveTemplate(POLICY_ID, firewallPolicyId)
                 .request()
                 .get(FirewallPolicyMetadata.class);
 
@@ -65,7 +67,7 @@ public class FirewallPolicyClient extends AuthenticatedSdkHttpClient {
     public FirewallPolicyMetadata create(String dataCenterId, FirewallPolicyRequest request) {
         FirewallPolicyMetadata metadata =
             experimentalClient("/firewallPolicies/{accountAlias}/{dataCenterId}")
-                .resolveTemplate("dataCenterId", dataCenterId)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
                 .request()
                 .post(entity(request, APPLICATION_JSON_TYPE))
                 .readEntity(FirewallPolicyMetadata.class);
@@ -77,16 +79,16 @@ public class FirewallPolicyClient extends AuthenticatedSdkHttpClient {
 
     public void update(String dataCenterId, String firewallPolicyId, FirewallPolicyRequest request) {
         experimentalClient("/firewallPolicies/{accountAlias}/{dataCenterId}/{firewallPolicyId}")
-            .resolveTemplate("dataCenterId", dataCenterId)
-            .resolveTemplate("firewallPolicyId", firewallPolicyId)
+            .resolveTemplate(DATACENTER_ID, dataCenterId)
+            .resolveTemplate(POLICY_ID, firewallPolicyId)
             .request()
             .put(entity(request, APPLICATION_JSON_TYPE));
     }
 
     public void delete(String dataCenterId, String firewallPolicyId) {
         experimentalClient("/firewallPolicies/{accountAlias}/{dataCenterId}/{firewallPolicyId}")
-            .resolveTemplate("dataCenterId", dataCenterId)
-            .resolveTemplate("firewallPolicyId", firewallPolicyId)
+            .resolveTemplate(DATACENTER_ID, dataCenterId)
+            .resolveTemplate(POLICY_ID, firewallPolicyId)
             .request()
             .delete();
     }

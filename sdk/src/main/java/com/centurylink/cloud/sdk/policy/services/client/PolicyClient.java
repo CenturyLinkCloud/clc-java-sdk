@@ -30,6 +30,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  * @author Aliaksandr Krasitski
  */
 public class PolicyClient extends AuthenticatedSdkHttpClient {
+    private static final String POLICY_ID = "policyId";
 
     public PolicyClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
@@ -46,7 +47,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
     public AntiAffinityPolicyMetadata modifyAntiAffinityPolicy(String policyId, AntiAffinityPolicyRequest policyRequest) {
         return
             client("/antiAffinityPolicies/{accountAlias}/{policyId}")
-                .resolveTemplate("policyId", policyId)
+                .resolveTemplate(POLICY_ID, policyId)
                 .request()
                 .put(entity(policyRequest, APPLICATION_JSON_TYPE))
                 .readEntity(AntiAffinityPolicyMetadata.class);
@@ -55,7 +56,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
     public AntiAffinityPolicyMetadata getAntiAffinityPolicy(String policyId) {
         return
             client("/antiAffinityPolicies/{accountAlias}/{policyId}")
-                .resolveTemplate("policyId", policyId)
+                .resolveTemplate(POLICY_ID, policyId)
                 .request()
                 .get(AntiAffinityPolicyMetadata.class);
     }
@@ -70,7 +71,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public void deleteAntiAffinityPolicy(String policyId) {
         client("/antiAffinityPolicies/{accountAlias}/{policyId}")
-            .resolveTemplate("policyId", policyId)
+            .resolveTemplate(POLICY_ID, policyId)
             .request()
             .delete();
     }
@@ -87,7 +88,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
     public AlertPolicyMetadata modifyAlertPolicy(String policyId, AlertPolicyRequest policyRequest) {
         return
             client("/alertPolicies/{accountAlias}/{policyId}")
-                .resolveTemplate("policyId", policyId)
+                .resolveTemplate(POLICY_ID, policyId)
                 .request()
                 .put(entity(policyRequest, APPLICATION_JSON_TYPE))
                 .readEntity(AlertPolicyMetadata.class);
@@ -96,7 +97,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
     public AlertPolicyMetadata getAlertPolicy(String policyId) {
         return
             client("/alertPolicies/{accountAlias}/{policyId}")
-                .resolveTemplate("policyId", policyId)
+                .resolveTemplate(POLICY_ID, policyId)
                 .request()
                 .get(AlertPolicyMetadata.class);
     }
@@ -111,7 +112,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public void deleteAlertPolicy(String policyId) {
         client("/alertPolicies/{accountAlias}/{policyId}")
-            .resolveTemplate("policyId", policyId)
+            .resolveTemplate(POLICY_ID, policyId)
             .request()
             .delete();
     }

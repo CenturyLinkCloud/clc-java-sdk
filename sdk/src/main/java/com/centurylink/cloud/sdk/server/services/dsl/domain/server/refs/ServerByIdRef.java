@@ -40,8 +40,12 @@ public class ServerByIdRef extends Server {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ServerByIdRef that = (ServerByIdRef) o;
         return Objects.equals(getId(), that.getId());
     }

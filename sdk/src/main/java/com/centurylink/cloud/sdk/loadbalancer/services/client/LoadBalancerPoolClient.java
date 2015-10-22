@@ -28,6 +28,11 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 public class LoadBalancerPoolClient extends AuthenticatedSdkHttpClient {
+    private static final String DATACENTER_ID = "dataCenterId";
+    private static final String BALANCER_ID = "loadBalancerId";
+    private static final String POOL_ID = "loadBalancerPoolId";
+    private static final String URL = "/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools";
+    private static final String URL_WITH_ID = URL + "/{loadBalancerPoolId}";
 
     public LoadBalancerPoolClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
@@ -35,9 +40,9 @@ public class LoadBalancerPoolClient extends AuthenticatedSdkHttpClient {
 
     public List<LoadBalancerPoolMetadata> getLoadBalancerPools(String dataCenterId, String loadBalancerId) {
         List<LoadBalancerPoolMetadata> metadataList =
-            client("/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools")
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .resolveTemplate("loadBalancerId", loadBalancerId)
+            client(URL)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
+                .resolveTemplate(BALANCER_ID, loadBalancerId)
                 .request()
                 .get(new GenericType<List<LoadBalancerPoolMetadata>>(){});
 
@@ -48,10 +53,10 @@ public class LoadBalancerPoolClient extends AuthenticatedSdkHttpClient {
 
     public LoadBalancerPoolMetadata getLoadBalancerPool(String dataCenterId, String loadBalancerId, String poolId) {
         LoadBalancerPoolMetadata metadata =
-            client("/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools/{poolId}")
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .resolveTemplate("loadBalancerId", loadBalancerId)
-                .resolveTemplate("poolId", poolId)
+            client(URL_WITH_ID)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
+                .resolveTemplate(BALANCER_ID, loadBalancerId)
+                .resolveTemplate(POOL_ID, poolId)
                 .request()
                 .get(LoadBalancerPoolMetadata.class);
 
@@ -62,9 +67,9 @@ public class LoadBalancerPoolClient extends AuthenticatedSdkHttpClient {
 
     public LoadBalancerPoolMetadata create(String dataCenterId, String loadBalancerId, LoadBalancerPoolRequest request) {
         LoadBalancerPoolMetadata metadata =
-                client("/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools")
-                    .resolveTemplate("dataCenterId", dataCenterId)
-                    .resolveTemplate("loadBalancerId", loadBalancerId)
+                client(URL)
+                    .resolveTemplate(DATACENTER_ID, dataCenterId)
+                    .resolveTemplate(BALANCER_ID, loadBalancerId)
                     .request()
                     .post(entity(request, APPLICATION_JSON_TYPE))
                     .readEntity(LoadBalancerPoolMetadata.class);
@@ -75,10 +80,10 @@ public class LoadBalancerPoolClient extends AuthenticatedSdkHttpClient {
     }
 
     public void delete(String dataCenterId, String loadBalancerId, String loadBalancerPoolId) {
-        client("/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools/{loadBalancerPoolId}")
-            .resolveTemplate("dataCenterId", dataCenterId)
-            .resolveTemplate("loadBalancerId", loadBalancerId)
-            .resolveTemplate("loadBalancerPoolId", loadBalancerPoolId)
+        client(URL_WITH_ID)
+            .resolveTemplate(DATACENTER_ID, dataCenterId)
+            .resolveTemplate(BALANCER_ID, loadBalancerId)
+            .resolveTemplate(POOL_ID, loadBalancerPoolId)
             .request()
             .delete();
     }
@@ -89,10 +94,10 @@ public class LoadBalancerPoolClient extends AuthenticatedSdkHttpClient {
             String loadBalancerPoolId,
             LoadBalancerPoolRequest request
     ) {
-        client("/sharedLoadBalancers/{accountAlias}/{dataCenterId}/{loadBalancerId}/pools/{loadBalancerPoolId}")
-                .resolveTemplate("dataCenterId", dataCenterId)
-                .resolveTemplate("loadBalancerId", loadBalancerId)
-                .resolveTemplate("loadBalancerPoolId", loadBalancerPoolId)
+        client(URL_WITH_ID)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
+                .resolveTemplate(BALANCER_ID, loadBalancerId)
+                .resolveTemplate(POOL_ID, loadBalancerPoolId)
                 .request()
                 .put(entity(request, APPLICATION_JSON_TYPE));
     }
