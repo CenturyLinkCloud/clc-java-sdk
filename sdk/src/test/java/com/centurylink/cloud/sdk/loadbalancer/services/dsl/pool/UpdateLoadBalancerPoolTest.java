@@ -61,14 +61,15 @@ public class UpdateLoadBalancerPoolTest extends AbstractLoadBalancerSdkTest impl
 
         loadBalancerPool = loadBalancerPoolService
                 .update(
-                    loadBalancerPool,
+                    loadBalancerPool.asFilter(),
                     new LoadBalancerPoolConfig()
                             .method(LoadBalancerPoolMethod.LEAST_CONNECTION)
                             .persistence(LoadBalancerPoolPersistence.STICKY)
                             .loadBalancer(loadBalancer)
                 )
                 .waitUntilComplete()
-                .getResult();
+                .getResult()
+                .get(0);
 
         LoadBalancerPoolMetadata metadata = loadBalancerPoolService.findByRef(loadBalancerPool);
 

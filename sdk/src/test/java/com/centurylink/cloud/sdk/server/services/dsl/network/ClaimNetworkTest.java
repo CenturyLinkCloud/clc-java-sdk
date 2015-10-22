@@ -24,6 +24,8 @@ import com.centurylink.cloud.sdk.tests.recorded.WireMockFileSource;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 
 @Test(groups = {RECORDED})
@@ -35,7 +37,7 @@ public class ClaimNetworkTest extends AbstractServersSdkTest implements WireMock
 
     @Test
     public void testClaim() {
-        NetworkMetadata networkMetadata = networkService.claim(DataCenter.DE_FRANKFURT);
+        List<NetworkMetadata> networkMetadata = networkService.claim(DataCenter.DE_FRANKFURT, DataCenter.DE_FRANKFURT);
         assertNotNull(networkMetadata);
     }
 }

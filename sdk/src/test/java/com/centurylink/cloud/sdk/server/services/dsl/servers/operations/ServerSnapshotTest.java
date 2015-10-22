@@ -10,8 +10,10 @@ import static com.centurylink.cloud.sdk.tests.TestGroups.RECORDED;
 /**
  * @author Aliaksandr Krasitski
  */
-@Test(groups = RECORDED)
+@Test(groups = {RECORDED})
 public class ServerSnapshotTest extends AbstractServerOperationTest implements WireMockMixin {
+
+    ServerMetadata serverMetadata;
 
     @Test
     @WireMockFileSource("/snapshot/create")
@@ -19,27 +21,28 @@ public class ServerSnapshotTest extends AbstractServerOperationTest implements W
         serverService.createSnapshot(server)
             .waitUntilComplete();
 
-        ServerMetadata serverMetadata = serverService.findByRef(server);
-        assert serverMetadata.getDetails().getSnapshots().size() == 1;
+        assert getServerMetadata().getDetails().getSnapshots().size() == 1;
     }
 
     @Test
     @WireMockFileSource("/snapshot/delete")
     public void testDeleteSnapshotServer() {
-        serverService.deleteSnapshot(server)
+        serverService.deleteSnapshot(server.asFilter())
             .waitUntilComplete();
 
-        ServerMetadata serverMetadata = serverService.findByRef(server);
-        assert serverMetadata.getDetails().getSnapshots().size() == 0;
+        assert getServerMetadata().getDetails().getSnapshots().size() == 0;
     }
 
     @Test
     @WireMockFileSource("/snapshot/revert")
     public void testRevertToSnapshotServer() {
-        serverService.revertToSnapshot(server)
+        serverService.revertToSnapshot(server.asFilter())
             .waitUntilComplete();
 
-        ServerMetadata serverMetadata = serverService.findByRef(server);
-        assert serverMetadata.getDetails().getSnapshots().size() == 1;
+        assert getServerMetadata().getDetails().getSnapshots().size() == 1;
+    }
+
+    private ServerMetadata getServerMetadata() {
+        return serverService.findByRef(server);
     }
 }

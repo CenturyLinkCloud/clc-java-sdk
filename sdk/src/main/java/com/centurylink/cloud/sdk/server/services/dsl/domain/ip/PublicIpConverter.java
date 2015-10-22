@@ -29,35 +29,30 @@ import static java.util.stream.Collectors.toList;
  */
 public class PublicIpConverter {
     public PublicIpRequest createPublicIpRequest(CreatePublicIpConfig publicIpConfig) {
-        List<PortConfig> ports = new ArrayList<>(publicIpConfig.getPorts().size());
-        publicIpConfig.getPorts().stream()
-            .forEach(port ->
-                ports.add(new PortConfig()
-                    .protocol(port.getProtocolType().name())
-                    .port(port.getPort())
-                    .portTo(port instanceof PortRangeConfig ? ((PortRangeConfig) port).getPortTo() : null))
-            );
-
         return new PublicIpRequest()
             .internalIPAddress(publicIpConfig.getInternalIpAddress())
             .sourceRestrictions(publicIpConfig.getRestrictions().stream()
                 .map(Subnet::getCidr)
                 .collect(toList()))
-            .ports(ports);
+            .ports(convertPorts(publicIpConfig.getPorts()));
     }
 
     public PublicIpRequest createPublicIpRequest(ModifyPublicIpConfig publicIpConfig) {
-        List<PortConfig> ports = publicIpConfig.getPorts().stream()
+        return new PublicIpRequest()
+            .sourceRestrictions(publicIpConfig.getRestrictions().stream()
+                .map(Subnet::getCidr)
+                .collect(toList()))
+            .ports(convertPorts(publicIpConfig.getPorts()));
+    }
+
+    private List<PortConfig> convertPorts(
+        List<com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig> portConfigs) {
+
+        return portConfigs.stream()
             .map(port -> new PortConfig()
                 .protocol(port.getProtocolType().name())
                 .port(port.getPort())
                 .portTo(port instanceof PortRangeConfig ? ((PortRangeConfig) port).getPortTo() : null))
             .collect(toList());
-
-        return new PublicIpRequest()
-            .sourceRestrictions(publicIpConfig.getRestrictions().stream()
-                .map(Subnet::getCidr)
-                .collect(toList()))
-            .ports(ports);
     }
 }

@@ -70,8 +70,6 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest implements Wi
     }
 
     private void testStatsByServer() {
-        testStatsByDataCenters();
-
         List<BillingStatsEntry> statsByServer = statisticsService
             .billingStats()
             .forServers(new ServerFilter().nameContains("md-srv"))
@@ -90,8 +88,6 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest implements Wi
     }
 
     private void testStatsByGroup() {
-        testStatsByServer();
-
         List<BillingStatsEntry> statsByGroup = statisticsService
             .billingStats()
             .forGroups(new GroupFilter().groups(group))
@@ -112,8 +108,6 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest implements Wi
     }
 
     private void testSummarize() {
-        testStatsByGroup();
-
         Statistics summarize = statisticsService
             .billingStats()
             .forGroups(new GroupFilter().groups(group))
@@ -131,6 +125,9 @@ public class BillingStatsEngineTest extends AbstractServersSdkTest implements Wi
     @Test
     @WireMockFileSource
     public void testBillingStatsEngine() throws Exception {
+        testStatsByDataCenters();
+        testStatsByServer();
+        testStatsByGroup();
         testSummarize();
     }
 }

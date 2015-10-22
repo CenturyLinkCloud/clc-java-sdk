@@ -57,7 +57,7 @@ public class UpdateFirewallPolicyTest extends AbstractFirewallPolicySdkTest impl
 
         firewallPolicyService
             .update(
-                firewallPolicy,
+                firewallPolicy.asFilter(),
                 new FirewallPolicyConfig()
                     .enabled(false)
                     .source(sourceList)

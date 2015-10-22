@@ -37,7 +37,7 @@ public class SetAutoscalePolicyTest extends AbstractAutoscalePolicySdkTest imple
         AutoscalePolicy autoscalePolicy = AutoscalePolicy.refById(policyId);
         Server server = Server.refById(serverId);
 
-        autoscalePolicyService.setAutoscalePolicyOnServer(autoscalePolicy, server);
+        autoscalePolicyService.setAutoscalePolicyOnServer(autoscalePolicy, server.asFilter());
 
         AutoscalePolicyMetadata metadata = autoscalePolicyService.getAutoscalePolicyOnServer(server);
 

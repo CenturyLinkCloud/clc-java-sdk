@@ -62,7 +62,7 @@ public class ModifyCustomFieldsTest extends AbstractServersSdkTest implements Wi
     public void modifyServer() {
         Server serverRef = server.asRefById();
 
-        serverService.modify(serverRef,
+        serverService.modify(serverRef.asFilter(),
             new ModifyServerConfig()
                 .customFields(new CustomField().name("Type").value("1"))
             )

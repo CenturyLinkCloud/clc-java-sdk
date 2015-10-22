@@ -59,10 +59,6 @@ public class PublicIpRequest {
         this.ports = ports;
     }
 
-    public PublicIpRequest ports(PortConfig... ports) {
-        return ports(Arrays.asList(ports));
-    }
-
     public PublicIpRequest ports(List<PortConfig> ports) {
         setPorts(ports);
         return this;

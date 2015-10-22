@@ -62,14 +62,15 @@ public class UpdateLoadBalancerTest extends AbstractLoadBalancerSdkTest implemen
 
         loadBalancer = loadBalancerService
             .update(
-                loadBalancer,
+                loadBalancer.asFilter(),
                 new LoadBalancerConfig()
                     .name(updatedName)
                     .description(updatedDescription)
                     .status(updatedStatus)
             )
             .waitUntilComplete()
-            .getResult();
+            .getResult()
+            .get(0);
 
         LoadBalancerMetadata loadBalancerMetadata = loadBalancerService.findByRef(loadBalancer);
 

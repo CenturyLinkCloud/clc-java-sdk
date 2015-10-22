@@ -103,7 +103,7 @@ public class GetBillingStatsTest extends AbstractServersSdkTest implements WireM
 
     @Test
     public void testModifyServer() throws Exception {
-        BillingStats stats = groupService.getBillingStats(group);
+        BillingStats stats = groupService.getBillingStats(group.asFilter()).get(0);
 
         assertNotNull(stats);
         assertNotNull(stats.getDate());
