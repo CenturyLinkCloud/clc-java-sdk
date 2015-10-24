@@ -1,3 +1,25 @@
+Installation
+------------
+
+If you use Maven or Gradle, you can simply add the CLC SDK as a dependency.
+
+Maven: 
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.centurylink.cloud</groupId>
+        <artifactId>spring-clc-sdk</artifactId>
+        <version>1.1.2</version>
+    </dependency>
+</dependencies>
+```
+
+Gradle:
+```groovy
+compile 'com.centurylink.cloud:spring-clc-sdk:1.1.2'
+```
+
+
 Spring Adapter
 ---------------
 To use spring adapter you need:
