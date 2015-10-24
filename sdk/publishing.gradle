@@ -16,19 +16,18 @@
 apply plugin: 'maven'
 apply plugin: 'signing'
 
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
 artifacts {
-    archives sourcesJar, javadocJar
+    archives javadocJar, sourcesJar
 }
 
 signing {
@@ -36,11 +35,12 @@ signing {
 }
 
 uploadArchives {
+
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            pom.artifactId = artifactId
+            pom.artifactId = 'clc-java-sdk'
             pom.groupId = groupId
             pom.version = version
 
@@ -53,9 +53,9 @@ uploadArchives {
             }
 
             pom.project {
-                name 'CenturyLink sdk spring adapter'
+                name 'CenturyLink Cloud Sdk'
                 packaging 'jar'
-                description 'CenturyLink Java Sdk spring adapter'
+                description 'CenturyLink Cloud Sdk'
                 url 'https://github.com/CenturyLinkCloud/clc-java-sdk'
 
                 scm {
@@ -92,3 +92,5 @@ uploadArchives {
         }
     }
 }
+
+task publishSdk(dependsOn: [install, uploadArchives])
