@@ -19,18 +19,34 @@ repositories {
     jcenter()
 }
 
+ext {
+    publishing =
+        project
+            .gradle
+            .startParameter
+            .taskNames
+            .contains("publishArtefactsToMavenCentral")
+}
+
 dependencies {
 
 }
 
 task run {
-    description('Run it on jetty.')
+    description('Run web-sample')
     dependsOn(':sample:web-app:app:run')
 }
 
 task clientBuild {
-    description('Assemble client part of sample application.')
+    description('Assemble client part of sample application')
     dependsOn(':sample:web-app:client:gulp_build')
 }
 
 build.dependsOn(':sample:web-app:app:build')
+
+task publishArtefactsToMavenCentral {
+    dependsOn(
+        ':sdk:publishSdk',
+        ':sdk-spring-adapter:uploadArchives'
+    )
+}

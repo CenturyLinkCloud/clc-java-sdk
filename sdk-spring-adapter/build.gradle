@@ -14,9 +14,11 @@
  */
 
 apply plugin: 'java'
+apply from: './publishing.gradle'
 
 repositories {
     jcenter()
+    mavenLocal()
 }
 
 task runSpringAdapterTest(type: Test, dependsOn: 'compileTestJava') {
@@ -33,12 +35,12 @@ task runSpringAdapterTest(type: Test, dependsOn: 'compileTestJava') {
 
     systemProperty "clc.username", System.getProperty("clc.username")
     systemProperty "clc.password", System.getProperty("clc.password")
+
 }
 
 dependencies {
-    compile project(':sdk')
+    compile(publishing ? "${groupId}:clc-java-sdk:${version}" : project(':sdk'))
 
-//    compile 'com.centurylink.cloud:clc-java-sdk:1.1.0'
     compile 'org.springframework:spring-context:4.2.1.RELEASE'
 
     testCompile 'org.testng:testng:6.8.21'
@@ -46,4 +48,3 @@ dependencies {
     testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.2'
 }
 
-// apply from: './maven_push.gradle'

@@ -25,6 +25,7 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 apply plugin: 'jacoco'
+apply from: './publishing.gradle'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -119,5 +120,3 @@ dependencies {
     testRuntime 'org.apache.logging.log4j:log4j-core:2.2'
     testRuntime 'org.apache.logging.log4j:log4j-slf4j-impl:2.2'
 }
-
-// apply from: './maven_push.gradle'
