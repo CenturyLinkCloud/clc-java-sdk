@@ -19,15 +19,6 @@ repositories {
     jcenter()
 }
 
-ext {
-    publishing =
-        project
-            .gradle
-            .startParameter
-            .taskNames
-            .contains("publishArtefactsToMavenCentral")
-}
-
 dependencies {
 
 }
@@ -43,6 +34,16 @@ task clientBuild {
 }
 
 build.dependsOn(':sample:web-app:app:build')
+
+
+ext {
+    publishing =
+        project
+            .gradle
+            .startParameter
+            .taskNames
+            .contains('publishArtefactsToMavenCentral')
+}
 
 task publishArtefactsToMavenCentral {
     dependsOn(
