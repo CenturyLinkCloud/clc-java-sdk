@@ -25,6 +25,13 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWai
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
+import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.AntiAffinityPolicyConfig;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AlertPolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AntiAffinityPolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicy;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.ServerMonitoringStatistics;
@@ -63,17 +70,20 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
     private final DataCenterService dataCenterService;
     private final Supplier<ServerService> serverServiceProvider;
     private final QueueClient queueClient;
+    private final PolicyService policyService;
 
     public interface ServerServiceSupplier extends Supplier<ServerService> {}
 
     public GroupService(ServerClient client, GroupConverter converter,
                         DataCenterService dataCenterService, QueueClient queueClient,
-                        ServerServiceSupplier serverServiceProvider) {
+                        ServerServiceSupplier serverServiceProvider,
+                        PolicyService policyService) {
         this.client = client;
         this.converter = converter;
         this.dataCenterService = dataCenterService;
         this.serverServiceProvider = serverServiceProvider;
         this.queueClient = queueClient;
+        this.policyService = policyService;
     }
 
     public ServerService serverService() {
@@ -144,18 +154,36 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      */
     public OperationFuture<List<Group>> defineInfrastructure(InfrastructureConfig... configs) {
         checkNotNull(configs, "array of InfrastructureConfig must be not null");
+
+        Arrays.asList(configs).stream()
+            .map(InfrastructureConfig::getAlertPolicies)
+            .flatMap(List::stream)
+            .forEach(alertConfig -> {
+                List<AlertPolicyMetadata> policies = policyService.alert().find(
+                    new AlertPolicyFilter().names(alertConfig.getName())
+                );
+
+                if (policies.size() == 0) {
+                    policyService.alert().create(alertConfig).waitUntilComplete();
+                }
+            }
+        );
+
         List<OperationFuture<Group>> operationFutures = Arrays.asList(configs).stream()
             .map(cfg ->
-                    cfg.getDataCenters().stream()
-                        .map(dc ->
-                                cfg.getSubitems().stream()
-                                    .map(subCfg -> defineGroupHierarchy(dc, subCfg))
-                                    .collect(toList())
-                        )
-                        .collect(toList())
+                cfg.getDataCenters().stream()
+                    .map(dc -> {
+                            defineAntiAffinityPolicies(dc, cfg.getAntiAffinityPolicies());
+
+                            return cfg.getSubitems().stream()
+                                .map(subCfg -> defineGroupHierarchy(dc, subCfg))
+                                .collect(toList());
+                        }
+                    )
+                    .collect(toList())
             )
-            .flatMap(list -> list.stream())
-            .flatMap(list -> list.stream())
+            .flatMap(List::stream)
+            .flatMap(List::stream)
             .collect(toList());
 
         List<Group> groups = operationFutures.stream()
@@ -167,6 +195,26 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             .collect(toList());
 
         return new OperationFuture<>(groups, new ParallelJobsFuture(futures));
+    }
+
+    private void defineAntiAffinityPolicies(DataCenter dataCenter, List<AntiAffinityPolicyConfig> configs) {
+        configs
+            .forEach(antiAffinityConfig -> {
+                    List<AntiAffinityPolicyMetadata> policies = policyService.antiAffinity().find(
+                        new AntiAffinityPolicyFilter()
+                            .dataCenters(dataCenter)
+                            .names(antiAffinityConfig.getName())
+                    );
+                    if (policies.size() > 0) {
+                        policyService.antiAffinity().modify(
+                            AntiAffinityPolicy.refById(policies.get(0).getId()),
+                            antiAffinityConfig
+                        );
+                    } else {
+                        policyService.antiAffinity().create(antiAffinityConfig.dataCenter(dataCenter));
+                    }
+                }
+            );
     }
 
     /**

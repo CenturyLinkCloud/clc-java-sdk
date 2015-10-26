@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/servers/ALTD/va1altdrs307",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-va1altdrs307-AhDjy.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Fri, 23 Oct 2015 21:16:16 GMT",
+      "Content-Length" : "1011"
+    }
+  }
+}

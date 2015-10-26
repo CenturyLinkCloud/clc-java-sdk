@@ -1,0 +1,1 @@
+{"server":"rs2","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/va1-242953","id":"va1-242953"},{"rel":"self","href":"/v2/servers/ALTD/3c632d33db7b430497a0ae493b19087c?uuid=True","id":"3c632d33db7b430497a0ae493b19087c","verbs":["GET"]}]}

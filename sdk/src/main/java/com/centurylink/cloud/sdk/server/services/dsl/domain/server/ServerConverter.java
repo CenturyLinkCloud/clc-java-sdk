@@ -21,6 +21,9 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataC
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicy;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicyByIdRef;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicyNameRef;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.GroupMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CloneServerRequest;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CreateServerRequest;
@@ -146,12 +149,13 @@ public class ServerConverter {
         request.setName(config.getName());
         request.setDescription(config.getDescription());
 
-        fillMachineConfig(config, request);
 
         GroupMetadata groupMetadata = groupService.findByRef(config.getGroup());
 
         request.setPassword(config.getPassword());
         request.setGroupId(groupMetadata.getId());
+
+        fillMachineConfig(config, request, groupMetadata.getLocationId());
 
         if (config.getStorageType() != null) {
             request.setStorageType(
@@ -196,7 +200,7 @@ public class ServerConverter {
         }
     }
 
-    private void fillMachineConfig(CreateServerConfig config, CreateServerRequest request) {
+    private void fillMachineConfig(CreateServerConfig config, CreateServerRequest request, String dataCenterId) {
         if (config.getMachine() != null) {
             request.setCpu(config.getMachine().getCpuCount());
             request.setMemoryGB(config.getMachine().getRam());
@@ -204,13 +208,21 @@ public class ServerConverter {
                 buildDiskRequestList(config.getMachine().getDisks())
             );
 
-            if (config.getMachine().getAntiAffinityPolicy() != null) {
-                request.antiAffinityPolicyId(
-                    policyService
-                        .antiAffinity()
-                        .findByRef(config.getMachine().getAntiAffinityPolicy())
-                        .getId()
-                );
+            AntiAffinityPolicy antiAffinity = config.getMachine().getAntiAffinityPolicy();
+            if (antiAffinity != null) {
+                if (antiAffinity instanceof AntiAffinityPolicyNameRef) {
+                    antiAffinity = ((AntiAffinityPolicyNameRef) antiAffinity)
+                        .dataCenter(DataCenter.refById(dataCenterId.toLowerCase()));
+
+                    request.antiAffinityPolicyId(
+                        policyService
+                            .antiAffinity()
+                            .findByRef(antiAffinity)
+                            .getId()
+                    );
+                } else {
+                    request.antiAffinityPolicyId(((AntiAffinityPolicyByIdRef) antiAffinity).getId());
+                }
             }
 
             if (config.getMachine().getAutoscalePolicy() != null) {
