@@ -211,7 +211,7 @@ public class ServerConverter {
             AntiAffinityPolicy antiAffinity = config.getMachine().getAntiAffinityPolicy();
             if (antiAffinity != null) {
                 if (antiAffinity instanceof AntiAffinityPolicyNameRef) {
-                    antiAffinity = ((AntiAffinityPolicyNameRef)antiAffinity)
+                    antiAffinity = ((AntiAffinityPolicyNameRef) antiAffinity)
                         .dataCenter(DataCenter.refById(dataCenterId.toLowerCase()));
 
                     request.antiAffinityPolicyId(
@@ -221,7 +221,7 @@ public class ServerConverter {
                             .getId()
                     );
                 } else {
-                    request.antiAffinityPolicyId(((AntiAffinityPolicyByIdRef)antiAffinity).getId());
+                    request.antiAffinityPolicyId(((AntiAffinityPolicyByIdRef) antiAffinity).getId());
                 }
             }
 

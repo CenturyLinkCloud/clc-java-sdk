@@ -28,6 +28,7 @@ import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.AntiAffinityPolicyConfig;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AlertPolicyFilter;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AntiAffinityPolicyFilter;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicy;
@@ -162,9 +163,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                     new AlertPolicyFilter().names(alertConfig.getName())
                 );
 
-                if (policies.size() > 0) {
-
-                } else {
+                if (policies.size() == 0) {
                     policyService.alert().create(alertConfig).waitUntilComplete();
                 }
             }
@@ -174,23 +173,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             .map(cfg ->
                 cfg.getDataCenters().stream()
                     .map(dc -> {
-                            cfg.getAntiAffinityPolicies()
-                                .forEach(antiAffinityConfig -> {
-                                        List<AntiAffinityPolicyMetadata> policies = policyService.antiAffinity().find(
-                                            new AntiAffinityPolicyFilter()
-                                                .dataCenters(dc)
-                                                .names(antiAffinityConfig.getName())
-                                        );
-                                        if (policies.size() > 0) {
-                                            policyService.antiAffinity().modify(
-                                                AntiAffinityPolicy.refById(policies.get(0).getId()),
-                                                antiAffinityConfig
-                                            );
-                                        } else {
-                                            policyService.antiAffinity().create(antiAffinityConfig.dataCenter(dc));
-                                        }
-                                    }
-                                );
+                            defineAntiAffinityPolicies(dc, cfg.getAntiAffinityPolicies());
 
                             return cfg.getSubitems().stream()
                                 .map(subCfg -> defineGroupHierarchy(dc, subCfg))
@@ -212,6 +195,26 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             .collect(toList());
 
         return new OperationFuture<>(groups, new ParallelJobsFuture(futures));
+    }
+
+    private void defineAntiAffinityPolicies(DataCenter dataCenter, List<AntiAffinityPolicyConfig> configs) {
+        configs
+            .forEach(antiAffinityConfig -> {
+                    List<AntiAffinityPolicyMetadata> policies = policyService.antiAffinity().find(
+                        new AntiAffinityPolicyFilter()
+                            .dataCenters(dataCenter)
+                            .names(antiAffinityConfig.getName())
+                    );
+                    if (policies.size() > 0) {
+                        policyService.antiAffinity().modify(
+                            AntiAffinityPolicy.refById(policies.get(0).getId()),
+                            antiAffinityConfig
+                        );
+                    } else {
+                        policyService.antiAffinity().create(antiAffinityConfig.dataCenter(dataCenter));
+                    }
+                }
+            );
     }
 
     /**
