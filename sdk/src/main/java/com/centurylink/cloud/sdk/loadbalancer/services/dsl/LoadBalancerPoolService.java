@@ -170,25 +170,7 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
             new ParallelJobsFuture(
                 configs.stream()
                     .map(poolConfig -> {
-                        if (poolConfig.getId() != null) {
-                            return update(
-                                LoadBalancerPool.refById(poolConfig.getId(), loadBalancer),
-                                poolConfig
-                            );
-                        } else {
-                            LoadBalancerPoolMetadata poolToUpdate = poolsForGroup.stream()
-                                .filter(pool -> pool.getPort().equals(poolConfig.getPort()))
-                                .findFirst()
-                                .orElse(null);
-
-                            if (poolToUpdate != null) {
-                                return update(
-                                    LoadBalancerPool.refById(poolToUpdate.getId(), loadBalancer),
-                                    poolConfig
-                                );
-                            }
-                        }
-                        return create(poolConfig.loadBalancer(loadBalancer));
+                        return createOrUpdate(poolConfig, loadBalancer, poolsForGroup);
                     })
                     .map(OperationFuture::jobFuture)
                     .collect(toList())
@@ -196,6 +178,30 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         );
     }
 
+    protected OperationFuture createOrUpdate(LoadBalancerPoolConfig poolConfig, LoadBalancer loadBalancer,
+        List<LoadBalancerPoolMetadata> poolsForGroup) {
+        //try to update
+        if (poolConfig.getId() != null) {
+            return update(
+                LoadBalancerPool.refById(poolConfig.getId(), loadBalancer),
+                poolConfig
+            );
+        } else {
+            //try to update by port
+            LoadBalancerPoolMetadata poolToUpdate = poolsForGroup.stream()
+                .filter(pool -> pool.getPort().equals(poolConfig.getPort()))
+                .findFirst()
+                .orElse(null);
+
+            if (poolToUpdate != null) {
+                return update(
+                    LoadBalancerPool.refById(poolToUpdate.getId(), loadBalancer),
+                    poolConfig
+                );
+            }
+        }
+        return create(poolConfig.loadBalancer(loadBalancer));
+    }
     /**
      * Update load balancer pool list
      *
