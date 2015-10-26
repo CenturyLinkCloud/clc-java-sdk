@@ -35,7 +35,9 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
+import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.function.Predicates.in;
 import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -146,6 +148,51 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         return new OperationFuture<>(
             loadBalancerPool,
             addLoadBalancerNodes(config, loadBalancerPool)
+        );
+    }
+
+    /**
+     * Update load balancer pools for group
+     *
+     * @param loadBalancer load balancer pool
+     * @param configs load balancer pool configs
+     * @return OperationFuture wrapper for load balancer pool
+     */
+    public OperationFuture<LoadBalancer> update(
+        LoadBalancer loadBalancer, List<LoadBalancerPoolConfig> configs) {
+
+        List<LoadBalancerPoolMetadata> poolsForGroup = find(
+            new LoadBalancerPoolFilter().loadBalancers(loadBalancer)
+        );
+
+        return new OperationFuture<>(
+            loadBalancer,
+            new ParallelJobsFuture(
+                configs.stream()
+                    .map(poolConfig -> {
+                        if (poolConfig.getId() != null) {
+                            return update(
+                                LoadBalancerPool.refById(poolConfig.getId(), loadBalancer),
+                                poolConfig
+                            );
+                        } else {
+                            LoadBalancerPoolMetadata poolToUpdate = poolsForGroup.stream()
+                                .filter(pool -> pool.getPort().equals(poolConfig.getPort()))
+                                .findFirst()
+                                .orElse(null);
+
+                            if (poolToUpdate != null) {
+                                return update(
+                                    LoadBalancerPool.refById(poolToUpdate.getId(), loadBalancer),
+                                    poolConfig
+                                );
+                            }
+                        }
+                        return create(poolConfig.loadBalancer(loadBalancer));
+                    })
+                    .map(OperationFuture::jobFuture)
+                    .collect(toList())
+            )
         );
     }
 

@@ -15,9 +15,7 @@
 
 package com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.future;
 
-import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.JobInfo;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.AbstractSingleJobFuture;
-import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.SingleJobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting.SingleWaitingLoop;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.waiting.WaitingLoop;
 import com.centurylink.cloud.sdk.core.exceptions.ClcException;
@@ -48,7 +46,7 @@ public class CreateLoadBalancerJobFuture extends AbstractSingleJobFuture {
                 try {
                     loadBalancerService.findByRef(loadBalancer);
                     return true;
-                } catch(ClcException e) {
+                } catch (ClcException e) {
                     return false;
                 }
             });

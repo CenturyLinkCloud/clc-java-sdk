@@ -28,21 +28,19 @@ import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerClient
 import com.centurylink.cloud.sdk.loadbalancer.services.client.domain.LoadBalancerRequest;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerConfig;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerMetadata;
-import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerPoolConfig;
-import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerPoolMetadata;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerFilter;
-import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerPoolFilter;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.future.CreateLoadBalancerJobFuture;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancer;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancerByIdRef;
-import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.LoadBalancerPool;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
+import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.function.Predicates.in;
 import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -122,18 +120,12 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
 
             return new ParallelJobsFuture(
                 config.getPool().stream()
-                    .map(cfg -> addLoadBalancerPool(cfg, loadBalancer))
+                    .map(cfg -> loadBalancerPoolService().create(cfg.loadBalancer(loadBalancer)).jobFuture())
                     .collect(toList())
             );
         }
 
         return new NoWaitingJobFuture();
-    }
-
-    private JobFuture addLoadBalancerPool(LoadBalancerPoolConfig config, LoadBalancer loadBalancer) {
-        config.setLoadBalancer(loadBalancer);
-
-        return loadBalancerPoolService().create(config).jobFuture();
     }
 
     /**
@@ -169,44 +161,10 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
 
     private JobFuture updateLoadBalancerPools(LoadBalancerConfig config, LoadBalancerByIdRef loadBalancer) {
         if (config.getPool() != null) {
-
-            List<LoadBalancerPoolMetadata> poolsForGroup = loadBalancerPoolService()
-                .find(
-                    new LoadBalancerPoolFilter().loadBalancers(loadBalancer)
-                );
-
-            return new ParallelJobsFuture(
-                config.getPool().stream()
-                    .map(poolConfig -> {
-                        if (poolConfig.getId() != null) {
-                            return updateLoadBalancerPool(
-                                LoadBalancerPool.refById(poolConfig.getId(), loadBalancer),
-                                poolConfig
-                            );
-                        } else {
-                            LoadBalancerPoolMetadata poolToUpdate = poolsForGroup.stream()
-                                .filter(pool -> pool.getPort().equals(poolConfig.getPort()))
-                                .findFirst()
-                                .orElse(null);
-
-                            if (poolToUpdate != null) {
-                                return updateLoadBalancerPool(
-                                    LoadBalancerPool.refById(poolToUpdate.getId(), loadBalancer),
-                                    poolConfig
-                                );
-                            }
-                        }
-                        return addLoadBalancerPool(poolConfig, loadBalancer);
-                    })
-                    .collect(toList())
-            );
+            return loadBalancerPoolService().update(loadBalancer, config.getPool()).jobFuture();
         }
 
         return new NoWaitingJobFuture();
-    }
-
-    private JobFuture updateLoadBalancerPool(LoadBalancerPool pool, LoadBalancerPoolConfig config) {
-        return loadBalancerPoolService().update(pool, config).jobFuture();
     }
 
     /**
