@@ -32,6 +32,7 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.Load
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.centurylink.cloud.sdk.core.function.Predicates.*;
@@ -43,12 +44,23 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
     private final LoadBalancerPoolClient loadBalancerPoolClient;
     private final LoadBalancerService loadBalancerService;
 
+    private final Supplier<LoadBalancerNodeService> loadBalancerNodeServiceSupplier;
+
+
+    public interface LoadBalancerNodeServiceSupplier extends Supplier<LoadBalancerNodeService> {}
+
     public LoadBalancerPoolService(
             LoadBalancerPoolClient loadBalancerPoolClient,
-            LoadBalancerService loadBalancerService
+            LoadBalancerService loadBalancerService,
+            LoadBalancerNodeServiceSupplier loadBalancerNodeServiceSupplier
     ) {
         this.loadBalancerPoolClient = loadBalancerPoolClient;
         this.loadBalancerService = loadBalancerService;
+        this.loadBalancerNodeServiceSupplier = loadBalancerNodeServiceSupplier;
+    }
+
+    private LoadBalancerNodeService loadBalancerNodeService() {
+        return loadBalancerNodeServiceSupplier.get();
     }
 
     /**
@@ -87,18 +99,29 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         LoadBalancerMetadata loadBalancerMetadata = loadBalancerService.findByRef(loadBalancer);
 
         LoadBalancerPoolMetadata metadata = loadBalancerPoolClient.create(
-                loadBalancerMetadata.getDataCenterId(),
-                loadBalancerMetadata.getId(),
-                new LoadBalancerPoolRequest()
-                        .port(config.getPort())
-                        .method(config.getMethod())
-                        .persistence(config.getPersistence())
+            loadBalancerMetadata.getDataCenterId(),
+            loadBalancerMetadata.getId(),
+            new LoadBalancerPoolRequest()
+                .port(config.getPort())
+                .method(config.getMethod())
+                .persistence(config.getPersistence())
         );
 
+        LoadBalancerPool pool = LoadBalancerPool.refById(metadata.getId(), loadBalancer);
+
         return new OperationFuture<>(
-                LoadBalancerPool.refById(metadata.getId(), loadBalancer),
-                new NoWaitingJobFuture()
+            pool,
+            addLoadBalancerNodes(config, pool)
         );
+    }
+
+    private JobFuture addLoadBalancerNodes(LoadBalancerPoolConfig poolConfig, LoadBalancerPool loadBalancerPool) {
+        if (poolConfig.getNodes() != null) {
+            return loadBalancerNodeService()
+                .update(loadBalancerPool, poolConfig.getNodes())
+                .jobFuture();
+        }
+        return new NoWaitingJobFuture();
     }
 
     /**
@@ -112,17 +135,17 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         LoadBalancerPoolMetadata loadBalancerPoolMetadata = findByRef(loadBalancerPool);
 
         loadBalancerPoolClient.update(
-                loadBalancerPoolMetadata.getDataCenterId(),
-                loadBalancerPoolMetadata.getLoadBalancerId(),
-                loadBalancerPoolMetadata.getId(),
-                new LoadBalancerPoolRequest()
-                        .method(config.getMethod())
-                        .persistence(config.getPersistence())
+            loadBalancerPoolMetadata.getDataCenterId(),
+            loadBalancerPoolMetadata.getLoadBalancerId(),
+            loadBalancerPoolMetadata.getId(),
+            new LoadBalancerPoolRequest()
+                .method(config.getMethod())
+                .persistence(config.getPersistence())
         );
 
         return new OperationFuture<>(
-                loadBalancerPool,
-                new NoWaitingJobFuture()
+            loadBalancerPool,
+            addLoadBalancerNodes(config, loadBalancerPool)
         );
     }
 
@@ -140,8 +163,8 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         loadBalancerPoolList.forEach(pool -> update(pool, config));
 
         return new OperationFuture<>(
-                loadBalancerPoolList,
-                new NoWaitingJobFuture()
+            loadBalancerPoolList,
+            new NoWaitingJobFuture()
         );
     }
 
@@ -159,14 +182,14 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         checkNotNull(loadBalancerPoolFilter, "Load balancer pool filter must be not null");
 
         List<LoadBalancerPool> loadBalancerPoolList = findLazy(loadBalancerPoolFilter)
-                .map(metadata -> LoadBalancerPool.refById(
-                        metadata.getId(),
-                        LoadBalancer.refById(
-                                metadata.getLoadBalancerId(),
-                                DataCenter.refById(metadata.getDataCenterId())
-                        )
-                ))
-                .collect(toList());
+            .map(metadata -> LoadBalancerPool.refById(
+                metadata.getId(),
+                LoadBalancer.refById(
+                    metadata.getLoadBalancerId(),
+                    DataCenter.refById(metadata.getDataCenterId())
+                )
+            ))
+            .collect(toList());
 
         return update(loadBalancerPoolList, config);
     }
@@ -181,14 +204,14 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
         LoadBalancerPoolMetadata loadBalancerPoolMetadata = findByRef(loadBalancerPool);
 
         loadBalancerPoolClient.delete(
-                loadBalancerPoolMetadata.getDataCenterId(),
-                loadBalancerPoolMetadata.getLoadBalancerId(),
-                loadBalancerPoolMetadata.getId()
+            loadBalancerPoolMetadata.getDataCenterId(),
+            loadBalancerPoolMetadata.getLoadBalancerId(),
+            loadBalancerPoolMetadata.getId()
         );
 
         return new OperationFuture<>(
-                loadBalancerPool,
-                new NoWaitingJobFuture()
+            loadBalancerPool,
+            new NoWaitingJobFuture()
         );
     }
 
@@ -209,14 +232,14 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
      */
     public OperationFuture<List<LoadBalancerPool>> delete(LoadBalancerPoolFilter filter) {
         List<LoadBalancerPool> loadBalancerPoolList = findLazy(filter)
-                .map(metadata -> LoadBalancerPool.refById(
-                        metadata.getId(),
-                        LoadBalancer.refById(
-                                metadata.getLoadBalancerId(),
-                                DataCenter.refById(metadata.getDataCenterId())
-                        )
-                ))
-                .collect(toList());
+            .map(metadata -> LoadBalancerPool.refById(
+                metadata.getId(),
+                LoadBalancer.refById(
+                    metadata.getLoadBalancerId(),
+                    DataCenter.refById(metadata.getDataCenterId())
+                )
+            ))
+            .collect(toList());
 
         return delete(loadBalancerPoolList);
     }
@@ -229,13 +252,13 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
      */
     public OperationFuture<List<LoadBalancerPool>> delete(List<LoadBalancerPool> loadBalancerPoolList) {
         List<JobFuture> jobs = loadBalancerPoolList
-                .stream()
-                .map(reference -> delete(reference).jobFuture())
-                .collect(toList());
+            .stream()
+            .map(reference -> delete(reference).jobFuture())
+            .collect(toList());
 
         return new OperationFuture<>(
-                loadBalancerPoolList,
-                new ParallelJobsFuture(jobs)
+            loadBalancerPoolList,
+            new ParallelJobsFuture(jobs)
         );
     }
 

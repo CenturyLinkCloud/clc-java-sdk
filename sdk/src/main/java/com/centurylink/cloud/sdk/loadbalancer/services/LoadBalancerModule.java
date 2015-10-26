@@ -17,12 +17,17 @@ package com.centurylink.cloud.sdk.loadbalancer.services;
 
 import com.centurylink.cloud.sdk.base.services.BaseModule;
 import com.centurylink.cloud.sdk.core.injector.Module;
+import com.centurylink.cloud.sdk.core.injector.bean.factory.BeanFactory;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerNodeClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerPoolClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerNodeService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService;
+import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerPoolService.LoadBalancerNodeServiceSupplier;
+import com.centurylink.cloud.sdk.loadbalancer.services.dsl.LoadBalancerService.LoadBalancerPoolServiceSupplier;
+
+import java.util.Map;
 
 public class LoadBalancerModule extends Module {
 
@@ -36,6 +41,15 @@ public class LoadBalancerModule extends Module {
         bind(LoadBalancerService.class);
         bind(LoadBalancerPoolService.class);
         bind(LoadBalancerNodeService.class);
+        bind(LoadBalancerPoolServiceSupplier.class, this::loadBalancerPoolServiceSupplier);
+        bind(LoadBalancerNodeServiceSupplier.class, this::loadBalancerNodeServiceSupplier);
     }
 
+    private LoadBalancerPoolServiceSupplier loadBalancerPoolServiceSupplier(Map<Class, BeanFactory> registry) {
+        return () -> (LoadBalancerPoolService) registry.get(LoadBalancerPoolService.class).getBean(registry);
+    }
+
+    private LoadBalancerNodeServiceSupplier loadBalancerNodeServiceSupplier(Map<Class, BeanFactory> registry) {
+        return () -> (LoadBalancerNodeService) registry.get(LoadBalancerNodeService.class).getBean(registry);
+    }
 }
