@@ -1,0 +1,24 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/gb1",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Super Balancer\",\"description\":\"Super Balancer description\",\"status\":\"enabled\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-gb1-3wYn8.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Sun, 25 Oct 2015 18:51:08 GMT",
+      "Content-Length" : "337"
+    }
+  }
+}

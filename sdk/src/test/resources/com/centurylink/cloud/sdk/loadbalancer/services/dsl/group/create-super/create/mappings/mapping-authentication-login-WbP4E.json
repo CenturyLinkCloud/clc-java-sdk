@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/authentication/login",
+    "method" : "POST"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-authentication-login-WbP4E.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Sun, 25 Oct 2015 18:50:53 GMT",
+      "Content-Length" : "737"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/gb1/1437f6700cb64ba3bad155535cc8c7bb",
+    "method" : "DELETE"
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-gb1-1437f6700cb64ba3bad155535cc8c7bb-iIYaz.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Mon, 26 Oct 2015 09:04:14 GMT"
+    }
+  }
+}

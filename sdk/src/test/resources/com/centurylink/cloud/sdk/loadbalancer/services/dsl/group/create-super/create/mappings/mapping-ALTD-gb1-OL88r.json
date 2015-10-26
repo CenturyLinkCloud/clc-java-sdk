@@ -1,0 +1,19 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/gb1",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-gb1-OL88r.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Sun, 25 Oct 2015 18:51:08 GMT",
+      "Content-Length" : "419"
+    }
+  }
+}

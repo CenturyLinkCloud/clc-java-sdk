@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/gb1/1437f6700cb64ba3bad155535cc8c7bb/pools/b43e5182318e4d0bac7565ed972a05bb/nodes",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "[{\"ipAddress\":\"66.155.18.22\",\"privatePort\":8085}]",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-b43e5182318e4d0bac7565ed972a05bb-nodes-CQt0X.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Mon, 26 Oct 2015 08:58:13 GMT"
+    }
+  }
+}
