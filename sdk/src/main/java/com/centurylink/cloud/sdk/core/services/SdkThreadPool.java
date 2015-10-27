@@ -21,6 +21,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -39,22 +40,24 @@ public abstract class SdkThreadPool {
     }
 
     public static <M> List<M> executeParallel(Stream<M> stream) {
+        Supplier<Stream<M>> supplier = () -> stream;
         try {
             return pool.submit(() ->
-                    stream.parallel().collect(toList())
+                    supplier.get().parallel().collect(toList())
             ).get();
         } catch (InterruptedException | ExecutionException e) {
-            return stream.collect(toList());
+            return supplier.get().collect(toList());
         }
     }
 
     public static <M> void executeParallel(Stream<M> stream, Consumer<M> consumer) {
+        Supplier<Stream<M>> supplier = () -> stream;
         try {
             pool.submit(() ->
-                    stream.parallel().forEach(consumer)
+                    supplier.get().parallel().forEach(consumer)
             ).get();
         } catch (InterruptedException | ExecutionException e) {
-            stream.forEach(consumer);
+            supplier.get().forEach(consumer);
         }
     }
 }

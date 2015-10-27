@@ -17,12 +17,30 @@ package com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain;
 
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancer;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class LoadBalancerPoolConfig {
 
+    private String id;
     private Integer port;
     private LoadBalancerPoolMethod method = LoadBalancerPoolMethod.ROUND_ROBIN;
     private LoadBalancerPoolPersistence persistence = LoadBalancerPoolPersistence.STANDARD;
     private LoadBalancer loadBalancer;
+    private List<LoadBalancerNodeMetadata> nodes;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public LoadBalancerPoolConfig id(String id) {
+        setId(id);
+        return this;
+    }
 
     public Integer getPort() {
         return port;
@@ -73,6 +91,20 @@ public class LoadBalancerPoolConfig {
 
     public LoadBalancerPoolConfig loadBalancer(LoadBalancer loadBalancer) {
         setLoadBalancer(loadBalancer);
+        return this;
+    }
+
+    public List<LoadBalancerNodeMetadata> getNodes() {
+        return nodes;
+    }
+
+    public LoadBalancerPoolConfig nodes(List<LoadBalancerNodeMetadata> nodes) {
+        this.nodes = nodes;
+        return this;
+    }
+
+    public LoadBalancerPoolConfig nodes(LoadBalancerNodeMetadata... nodes) {
+        this.nodes = Arrays.asList(nodes);
         return this;
     }
 }

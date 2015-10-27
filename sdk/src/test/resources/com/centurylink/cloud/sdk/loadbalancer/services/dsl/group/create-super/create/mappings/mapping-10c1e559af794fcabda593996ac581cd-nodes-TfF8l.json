@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/gb1/c8698002f30e4d899f30a6868d0e8c74/pools/10c1e559af794fcabda593996ac581cd/nodes",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "[{\"ipAddress\":\"66.155.18.22\",\"privatePort\":8088},{\"ipAddress\":\"66.155.18.22\",\"privatePort\":8080}]",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-10c1e559af794fcabda593996ac581cd-nodes-TfF8l.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Sun, 25 Oct 2015 18:51:34 GMT"
+    }
+  }
+}

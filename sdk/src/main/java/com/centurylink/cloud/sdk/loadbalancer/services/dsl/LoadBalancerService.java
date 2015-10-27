@@ -22,19 +22,25 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.JobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.LoadBalancerClient;
 import com.centurylink.cloud.sdk.loadbalancer.services.client.domain.LoadBalancerRequest;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerConfig;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerMetadata;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerFilter;
+import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.future.CreateLoadBalancerJobFuture;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancer;
+import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancerByIdRef;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.centurylink.cloud.sdk.core.function.Predicates.*;
+import static com.centurylink.cloud.sdk.core.function.Predicates.alwaysTrue;
+import static com.centurylink.cloud.sdk.core.function.Predicates.combine;
+import static com.centurylink.cloud.sdk.core.function.Predicates.in;
 import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -42,10 +48,19 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
 
     private final LoadBalancerClient loadBalancerClient;
     private final DataCenterService dataCenterService;
+    private final Supplier<LoadBalancerPoolService> loadBalancerPoolServiceSupplier;
 
-    public LoadBalancerService(LoadBalancerClient loadBalancerClient, DataCenterService dataCenterService) {
+    public interface LoadBalancerPoolServiceSupplier extends Supplier<LoadBalancerPoolService> {}
+
+    public LoadBalancerService(LoadBalancerClient loadBalancerClient, DataCenterService dataCenterService,
+        LoadBalancerPoolServiceSupplier loadBalancerPoolServiceSupplier) {
         this.loadBalancerClient = loadBalancerClient;
         this.dataCenterService = dataCenterService;
+        this.loadBalancerPoolServiceSupplier = loadBalancerPoolServiceSupplier;
+    }
+
+    private LoadBalancerPoolService loadBalancerPoolService() {
+        return loadBalancerPoolServiceSupplier.get();
     }
 
     /**
@@ -89,13 +104,28 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
                 .status(config.getStatus())
         );
 
+        LoadBalancer loadBalancerRef = LoadBalancer.refById(loadBalancer.getId(), DataCenter.refById(dataCenterId));
+
         return new OperationFuture<>(
-            LoadBalancer.refById(
-                loadBalancer.getId(),
-                DataCenter.refById(dataCenterId)
-            ),
-            new NoWaitingJobFuture()
+            loadBalancerRef,
+            new SequentialJobsFuture(
+                () -> new CreateLoadBalancerJobFuture(this, loadBalancerRef),
+                () -> addLoadBalancerPools(config, loadBalancerRef)
+            )
         );
+    }
+
+    private JobFuture addLoadBalancerPools(LoadBalancerConfig config, LoadBalancer loadBalancer) {
+        if (config.getPool() != null) {
+
+            return new ParallelJobsFuture(
+                config.getPool().stream()
+                    .map(cfg -> loadBalancerPoolService().create(cfg.loadBalancer(loadBalancer)).jobFuture())
+                    .collect(toList())
+            );
+        }
+
+        return new NoWaitingJobFuture();
     }
 
     /**
@@ -119,8 +149,22 @@ public class LoadBalancerService implements QueryService<LoadBalancer, LoadBalan
 
         return new OperationFuture<>(
             loadBalancer,
-            new NoWaitingJobFuture()
+            updateLoadBalancerPools(
+                config,
+                LoadBalancer.refById(
+                    loadBalancerMetadata.getId(),
+                    DataCenter.refById(loadBalancerMetadata.getDataCenterId())
+                )
+            )
         );
+    }
+
+    private JobFuture updateLoadBalancerPools(LoadBalancerConfig config, LoadBalancerByIdRef loadBalancer) {
+        if (config.getPool() != null) {
+            return loadBalancerPoolService().update(loadBalancer, config.getPool()).jobFuture();
+        }
+
+        return new NoWaitingJobFuture();
     }
 
     /**
