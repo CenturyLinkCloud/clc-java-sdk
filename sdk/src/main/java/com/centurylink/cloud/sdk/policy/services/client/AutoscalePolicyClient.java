@@ -30,6 +30,9 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 public class AutoscalePolicyClient extends AuthenticatedSdkHttpClient {
 
+    private static final String SERVER_ID = "serverId";
+    private static final String AUTOSCALE_POLICY_URL = "/servers/{accountAlias}/{serverId}/cpuAutoscalePolicy";
+
     public AutoscalePolicyClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }
@@ -50,16 +53,16 @@ public class AutoscalePolicyClient extends AuthenticatedSdkHttpClient {
     }
 
     public void setAutoscalePolicyOnServer(String serverId, SetAutoscalePolicyRequest request) {
-        client("/servers/{accountAlias}/{serverId}/cpuAutoscalePolicy")
-            .resolveTemplate("serverId", serverId)
+        client(AUTOSCALE_POLICY_URL)
+            .resolveTemplate(SERVER_ID, serverId)
             .request()
             .put(entity(request, APPLICATION_JSON_TYPE));
     }
 
     public AutoscalePolicyMetadata getAutoscalePolicyOnServer(String serverId) {
         try {
-            AutoscalePolicyMetadata metadata = client("/servers/{accountAlias}/{serverId}/cpuAutoscalePolicy")
-                .resolveTemplate("serverId", serverId)
+            AutoscalePolicyMetadata metadata = client(AUTOSCALE_POLICY_URL)
+                .resolveTemplate(SERVER_ID, serverId)
                 .request()
                 .get(AutoscalePolicyMetadata.class);
 
@@ -74,8 +77,8 @@ public class AutoscalePolicyClient extends AuthenticatedSdkHttpClient {
     }
 
     public void removeAutoscalePolicyOnServer(String serverId) {
-        client("/servers/{accountAlias}/{serverId}/cpuAutoscalePolicy")
-            .resolveTemplate("serverId", serverId)
+        client(AUTOSCALE_POLICY_URL)
+            .resolveTemplate(SERVER_ID, serverId)
             .request()
             .delete();
     }

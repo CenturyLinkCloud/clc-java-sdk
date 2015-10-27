@@ -169,9 +169,7 @@ public class LoadBalancerPoolService implements QueryService<LoadBalancerPool, L
             loadBalancer,
             new ParallelJobsFuture(
                 configs.stream()
-                    .map(poolConfig -> {
-                        return createOrUpdate(poolConfig, loadBalancer, poolsForGroup);
-                    })
+                    .map(poolConfig -> createOrUpdate(poolConfig, loadBalancer, poolsForGroup))
                     .map(OperationFuture::jobFuture)
                     .collect(toList())
             )
