@@ -41,7 +41,11 @@ public class SdkArtifactSampleApp extends Assert {
             CustomCredentialsProviderConfig.class
         );
 
-        checkCredentials(context.getBean(CredentialsProvider.class));
+        checkCredentials(
+            context
+                .getBean(ClcSdk.class)
+                .getCredentialsProvider()
+        );
 
         context = new AnnotationConfigApplicationContext(
             CustomSdkConfigurationConfig.class
