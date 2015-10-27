@@ -13,19 +13,9 @@
  * limitations under the License.
  */
 
-/*
-// To declare projects as part of a multi-project build use the 'include' method
-include 'shared'
-include 'api'
-include 'services:webservice'
-*/
+package sample;
 
-rootProject.name = 'clc-java-sdk'
+public interface TestGroup {
 
-include 'sdk'
-include 'sample:web-app:app'
-include 'sample:web-app:client'
-include 'sample:scripts'
-include 'sample:sdk-artifact-test'
-include 'sdk-spring-adapter'
-
+    public static final String ARTIFACT_TEST = "ArtifactTest";
+}
