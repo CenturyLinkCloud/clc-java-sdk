@@ -26,6 +26,5 @@ include 'sdk'
 include 'sample:web-app:app'
 include 'sample:web-app:client'
 include 'sample:scripts'
-include 'sample:sdk-artifact-test'
 include 'sdk-spring-adapter'
 
