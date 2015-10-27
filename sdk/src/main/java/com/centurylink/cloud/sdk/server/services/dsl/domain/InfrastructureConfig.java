@@ -18,7 +18,6 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertPolicyConfig;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.AntiAffinityPolicyConfig;
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.autoscale.refs.AutoscalePolicy;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig;
 
 import java.util.ArrayList;

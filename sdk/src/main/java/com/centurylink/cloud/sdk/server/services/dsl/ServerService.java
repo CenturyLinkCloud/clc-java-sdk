@@ -89,6 +89,8 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     private final PublicIpConverter publicIpConverter;
     private final Supplier<AutoscalePolicyService> autoscalePolicyServiceSupplier;
 
+    private static final String CHECK_PUBLIC_IP_CONFIG = "PublicIpConfig must be not null";
+
     public ServerService(ServerConverter serverConverter, ServerClient client, QueueClient queueClient,
                          GroupService groupService, PublicIpConverter publicIpConverter,
                          ExperimentalQueueClient experimentalQueueClient,
@@ -712,7 +714,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         List<Server> serverList = Arrays.asList(servers);
 
         List<JobFuture> futures = serverList.stream()
-            .map(serverRef -> findByRef(serverRef))
+            .map(this::findByRef)
             .flatMap(metadata -> metadata.getDetails().getSnapshots().stream())
             .map(snapshot ->
                 baseServerResponse(
@@ -799,7 +801,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         List<Server> serverList = Arrays.asList(servers);
 
         List<JobFuture> futures = serverList.stream()
-            .map(serverRef -> findByRef(serverRef))
+            .map(this::findByRef)
             .flatMap(metadata -> metadata.getDetails().getSnapshots().stream())
             .map(snapshot ->
                 baseServerResponse(
@@ -859,7 +861,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<Server> addPublicIp(Server serverRef, CreatePublicIpConfig publicIpConfig) {
         checkNotNull(serverRef, "Server reference must be not null");
-        checkNotNull(publicIpConfig, "PublicIpConfig must be not null");
+        checkNotNull(publicIpConfig, CHECK_PUBLIC_IP_CONFIG);
         Link response = client.addPublicIp(idByRef(serverRef), publicIpConverter.createPublicIpRequest(publicIpConfig));
 
         return new OperationFuture<>(
@@ -878,7 +880,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public OperationFuture<List<Server>> addPublicIp(List<Server> servers, CreatePublicIpConfig publicIpConfig) {
         checkNotNull(servers, "Server list must be not null");
-        checkNotNull(publicIpConfig, "PublicIpConfig must be not null");
+        checkNotNull(publicIpConfig, CHECK_PUBLIC_IP_CONFIG);
 
         List<JobFuture> futures = servers.stream()
             .map(serverRef -> addPublicIp(serverRef, publicIpConfig).jobFuture())
@@ -908,7 +910,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @return OperationFuture wrapper for ServerRef
      */
     public OperationFuture<Server> modifyPublicIp(Server server, ModifyPublicIpConfig config) {
-        checkNotNull(config, "PublicIpConfig must be not null");
+        checkNotNull(config, CHECK_PUBLIC_IP_CONFIG);
         List<IpAddress> ipAddresses = findByRef(server).getDetails().getIpAddresses();
 
         List<String> responseIds = ipAddresses.stream()

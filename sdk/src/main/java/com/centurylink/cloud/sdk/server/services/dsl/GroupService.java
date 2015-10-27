@@ -117,7 +117,7 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
                             .flatMap(g -> g.getAllGroups().stream())
                             .filter(criteria.getPredicate())
                             .filter((criteria.getIds().size() > 0) ?
-                                combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
+                                    combine(GroupMetadata::getId, in(criteria.getIds())) : alwaysTrue()
                             );
                 }
             });
@@ -159,13 +159,13 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
             .map(InfrastructureConfig::getAlertPolicies)
             .flatMap(List::stream)
             .forEach(alertConfig -> {
-                List<AlertPolicyMetadata> policies = policyService.alert().find(
-                    new AlertPolicyFilter().names(alertConfig.getName())
-                );
+                    List<AlertPolicyMetadata> policies = policyService.alert().find(
+                        new AlertPolicyFilter().names(alertConfig.getName())
+                    );
 
-                if (policies.size() == 0) {
-                    policyService.alert().create(alertConfig).waitUntilComplete();
-                }
+                    if (policies.size() == 0) {
+                        policyService.alert().create(alertConfig).waitUntilComplete();
+                    }
             }
         );
 
@@ -324,7 +324,6 @@ public class GroupService implements QueryService<Group, GroupFilter, GroupMetad
      * @return OperationFuture wrapper for list of Group
      */
     public OperationFuture<List<Group>> modify(List<Group> groups, GroupConfig groupConfig) {
-        checkNotNull(groupConfig, "GroupConfig must be not null");
 
         groups.stream()
             .forEach(group -> modify(group, groupConfig));

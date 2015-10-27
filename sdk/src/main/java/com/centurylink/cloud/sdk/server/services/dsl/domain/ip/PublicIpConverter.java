@@ -19,7 +19,6 @@ import com.centurylink.cloud.sdk.server.services.client.domain.ip.PortConfig;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpRequest;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortRangeConfig;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;

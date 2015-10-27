@@ -43,13 +43,23 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  */
 public class ServerClient extends AuthenticatedSdkHttpClient {
 
+    private static final String SERVER_ID = "serverId";
+    private static final String GROUP_ID = "groupId";
+    private static final String PUBLIC_IP = "publicIp";
+
+    private static final String SERVER_URL = "/servers/{accountAlias}";
+    private static final String SERVER_URL_WITH_ID = SERVER_URL + "/{serverId}";
+    private static final String WITH_PUBLIC_IP = "/publicIPAddresses/{publicIp}";
+
+
+
     public ServerClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }
 
     public BaseServerResponse create(CreateServerRequest request) {
         return
-            client("/servers/{accountAlias}")
+            client(SERVER_URL)
                 .request().post(
                     entity(request, APPLICATION_JSON_TYPE)
                 )
@@ -58,7 +68,7 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public BaseServerResponse clone(CloneServerRequest request) {
         return
-            client("/servers/{accountAlias}")
+            client(SERVER_URL)
                 .request()
                 .post(entity(request, APPLICATION_JSON_TYPE))
                 .readEntity(BaseServerResponse.class);
@@ -75,32 +85,32 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public BaseServerResponse delete(String serverId) {
         return
-            client("/servers/{accountAlias}/{serverId}")
-                .resolveTemplate("serverId", serverId)
+            client(SERVER_URL_WITH_ID)
+                .resolveTemplate(SERVER_ID, serverId)
                 .request()
                 .delete(BaseServerResponse.class);
     }
 
     public ServerMetadata findServerByUuid(String uuid) {
         return
-            client("/servers/{accountAlias}/{serverId}?uuid=true")
-                .resolveTemplate("serverId", uuid)
+            client(SERVER_URL_WITH_ID + "?uuid=true")
+                .resolveTemplate(SERVER_ID, uuid)
                 .request()
                 .get(ServerMetadata.class);
     }
 
     public ServerMetadata findServerById(String id) {
         return
-            client("/servers/{accountAlias}/{serverId}")
-                .resolveTemplate("serverId", id)
+            client(SERVER_URL_WITH_ID)
+                .resolveTemplate(SERVER_ID, id)
                 .request()
                 .get(ServerMetadata.class);
     }
 
     public Link modify(String serverId, List<ModifyServerRequest> request) {
         return
-            client("/servers/{accountAlias}/{serverId}")
-                .resolveTemplate("serverId", serverId)
+            client(SERVER_URL_WITH_ID)
+                .resolveTemplate(SERVER_ID, serverId)
                 .request()
                 .method("PATCH", entity(request, APPLICATION_JSON_TYPE))
                 .readEntity(Link.class);
@@ -131,7 +141,7 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public boolean updateGroup(String groupId, UpdateGroupRequest updateGroupRequest) {
         int responseStatus = client("/groups/{accountAlias}/{groupId}")
-            .resolveTemplate("groupId", groupId)
+            .resolveTemplate(GROUP_ID, groupId)
             .request()
             .method("PATCH", entity(updateGroupRequest.getOperations(), APPLICATION_JSON_TYPE))
             .getStatus();
@@ -141,7 +151,7 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
     public Link deleteGroup(String groupId) {
         return
             client("/groups/{accountAlias}/{groupId}")
-                .resolveTemplate("groupId", groupId)
+                .resolveTemplate(GROUP_ID, groupId)
                 .request()
                 .delete(Link.class);
     }
@@ -192,8 +202,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public Link deleteSnapshot(String serverId, String snapshotId) {
         return
-            client("/servers/{accountAlias}/{serverId}/snapshots/{snapshotId}")
-                .resolveTemplate("serverId", serverId)
+            client(SERVER_URL_WITH_ID + "/snapshots/{snapshotId}")
+                .resolveTemplate(SERVER_ID, serverId)
                 .resolveTemplate("snapshotId", snapshotId)
                 .request()
                 .delete()
@@ -201,8 +211,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
     }
 
     public Link revertToSnapshot(String serverId, String snapshotId) {
-        return client("/servers/{accountAlias}/{serverId}/snapshots/{snapshotId}/restore")
-            .resolveTemplate("serverId", serverId)
+        return client(SERVER_URL_WITH_ID + "/snapshots/{snapshotId}/restore")
+            .resolveTemplate(SERVER_ID, serverId)
             .resolveTemplate("snapshotId", snapshotId)
             .request()
             .post(entity(new HashMap<>(), APPLICATION_JSON_TYPE))
@@ -211,8 +221,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public Link restore(String serverId, RestoreServerRequest request) {
         return
-            client("/servers/{accountAlias}/{serverId}/restore")
-                .resolveTemplate("serverId", serverId)
+            client(SERVER_URL_WITH_ID + "/restore")
+                .resolveTemplate(SERVER_ID, serverId)
                 .request()
                 .post(entity(request, APPLICATION_JSON_TYPE))
                 .readEntity(Link.class);
@@ -221,14 +231,14 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
     public ClientBillingStats getGroupBillingStats(String groupId) {
         return
             client("/groups/{accountAlias}/{groupId}/billing")
-                .resolveTemplate("groupId", groupId)
+                .resolveTemplate(GROUP_ID, groupId)
                 .request()
                 .get(ClientBillingStats.class);
     }
 
     public List<ServerMonitoringStatistics> getMonitoringStatistics(String groupId, MonitoringStatisticRequest request) {
         WebTarget target = client("/groups/{accountAlias}/{groupId}/statistics")
-            .resolveTemplate("groupId", groupId);
+            .resolveTemplate(GROUP_ID, groupId);
 
         if (request.getStart() != null) {
             target = target.queryParam("start", request.getStart());
@@ -259,8 +269,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public Link addPublicIp(String serverId, PublicIpRequest publicIpRequest) {
         return
-            client("/servers/{accountAlias}/{serverId}/publicIPAddresses")
-                .resolveTemplate("serverId", serverId)
+            client(SERVER_URL_WITH_ID + "/publicIPAddresses")
+                .resolveTemplate(SERVER_ID, serverId)
                 .request()
                 .post(entity(publicIpRequest, APPLICATION_JSON_TYPE))
                 .readEntity(Link.class);
@@ -268,18 +278,18 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public PublicIpMetadata getPublicIp(String serverId, String publicIp) {
         return
-            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
-                .resolveTemplate("serverId", serverId)
-                .resolveTemplate("publicIp", publicIp)
+            client(SERVER_URL_WITH_ID + WITH_PUBLIC_IP)
+                .resolveTemplate(SERVER_ID, serverId)
+                .resolveTemplate(PUBLIC_IP, publicIp)
                 .request()
                 .get(PublicIpMetadata.class);
     }
 
     public Link modifyPublicIp(String serverId, String publicIp, PublicIpRequest publicIpRequest) {
         return
-            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
-                .resolveTemplate("serverId", serverId)
-                .resolveTemplate("publicIp", publicIp)
+            client(SERVER_URL_WITH_ID + WITH_PUBLIC_IP)
+                .resolveTemplate(SERVER_ID, serverId)
+                .resolveTemplate(PUBLIC_IP, publicIp)
                 .request()
                 .put(entity(publicIpRequest, APPLICATION_JSON_TYPE))
                 .readEntity(Link.class);
@@ -287,9 +297,9 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public Link removePublicIp(String serverId, String publicIp) {
         return
-            client("/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIp}")
-                .resolveTemplate("serverId", serverId)
-                .resolveTemplate("publicIp", publicIp)
+            client(SERVER_URL_WITH_ID + WITH_PUBLIC_IP)
+                .resolveTemplate(SERVER_ID, serverId)
+                .resolveTemplate(PUBLIC_IP, publicIp)
                 .request()
                 .delete()
                 .readEntity(Link.class);
@@ -297,8 +307,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public ServerCredentials getServerCredentials(String serverId) {
         return
-            client("/servers/{accountAlias}/{serverId}/credentials")
-                .resolveTemplate("serverId", serverId)
+            client(SERVER_URL_WITH_ID + "/credentials")
+                .resolveTemplate(SERVER_ID, serverId)
                 .request()
                 .get(ServerCredentials.class);
     }
@@ -341,8 +351,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public SecondaryNetworkLink addSecondaryNetwork(String serverId, AddNetworkRequest networkRequest) {
         return
-            client("/servers/{accountAlias}/{server}/networks")
-                .resolveTemplate("server", serverId)
+            client(SERVER_URL_WITH_ID + "/networks")
+                .resolveTemplate(SERVER_ID, serverId)
                 .request()
                 .post(entity(networkRequest, APPLICATION_JSON_TYPE))
                 .readEntity(SecondaryNetworkLink.class);
@@ -350,8 +360,8 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
 
     public SecondaryNetworkLink removeSecondaryNetwork(String serverId, String networkId) {
         return
-            client("/servers/{accountAlias}/{server}/networks/{network}")
-                .resolveTemplate("server", serverId)
+            client(SERVER_URL_WITH_ID + "/networks/{network}")
+                .resolveTemplate(SERVER_ID, serverId)
                 .resolveTemplate("network", networkId)
                 .request()
                 .delete()
