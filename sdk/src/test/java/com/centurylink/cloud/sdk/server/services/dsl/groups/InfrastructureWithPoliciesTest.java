@@ -90,7 +90,11 @@ public class InfrastructureWithPoliciesTest extends AbstractServersSdkTest imple
             .machine(new Machine()
                 .cpuCount(1)
                 .ram(1)
-                .antiAffinityPolicy(AntiAffinityPolicy.refByName().name(antiAffinityPolicyName))
+                .antiAffinityPolicy(
+                    AntiAffinityPolicy
+                        .refByName()
+                        .name(antiAffinityPolicyName)
+                )
             )
             .template(Template.refByOs()
                 .dataCenter(US_EAST_STERLING)
@@ -110,12 +114,31 @@ public class InfrastructureWithPoliciesTest extends AbstractServersSdkTest imple
             .alertPolicies(
                 new AlertPolicyConfig()
                     .name("db space policy")
-                    .action(new AlertAction().settings(new ActionSettingsEmail("test-db@abc.com")))
-                    .trigger(new AlertTrigger().metric(AlertTriggerMetric.DISK).threshold(80f).duration(15)),
+                    .action(
+                        new AlertAction()
+                            .settings(
+                                new ActionSettingsEmail("test-db@abc.com")
+                        )
+                    )
+                    .trigger(
+                        new AlertTrigger()
+                            .metric(AlertTriggerMetric.DISK)
+                            .threshold(80f)
+                            .duration(15)
+                    ),
                 new AlertPolicyConfig()
                     .name("cfg policy")
-                    .action(new AlertAction().settings(new ActionSettingsEmail("test-cfg@abc.com")))
-                    .trigger(new AlertTrigger().metric(AlertTriggerMetric.CPU).threshold(75f).duration(5))
+                    .action(
+                        new AlertAction().settings(
+                            new ActionSettingsEmail("test-cfg@abc.com")
+                        )
+                    )
+                    .trigger(
+                        new AlertTrigger()
+                            .metric(AlertTriggerMetric.CPU)
+                            .threshold(75f)
+                            .duration(5)
+                    )
             )
             .antiAffinityPolicies(
                 new AntiAffinityPolicyConfig()
@@ -138,9 +161,18 @@ public class InfrastructureWithPoliciesTest extends AbstractServersSdkTest imple
     }
 
     private List<GroupMetadata> defineInfrastructure(InfrastructureConfig... config) {
-        List<Group> groups = groupService.defineInfrastructure(config).waitUntilComplete().getResult();
+        List<Group> groups = groupService
+            .defineInfrastructure(config)
+            .waitUntilComplete()
+            .getResult();
 
-        return groupService.find(new GroupFilter().groups(groups.toArray(new Group[groups.size()])));
+        return groupService.find(
+            new GroupFilter().groups(
+                groups.toArray(
+                    new Group[groups.size()]
+                )
+            )
+        );
     }
 
     private void checkPolicies() {
