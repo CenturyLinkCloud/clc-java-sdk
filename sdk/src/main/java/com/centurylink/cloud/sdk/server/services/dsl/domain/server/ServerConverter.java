@@ -146,19 +146,18 @@ public class ServerConverter {
             config.storageType(StorageType.HYPERSCALE);
         }
 
-        request.setName(config.getName());
-        request.setDescription(config.getDescription());
-
-
         GroupMetadata groupMetadata = groupService.findByRef(config.getGroup());
 
-        request.setPassword(config.getPassword());
-        request.setGroupId(groupMetadata.getId());
+        request.name(config.getName())
+            .description(config.getDescription())
+            .password(config.getPassword())
+            .groupId(groupMetadata.getId())
+            .timeToLive(config.getTimeToLive());
 
         fillMachineConfig(config, request, groupMetadata.getLocationId());
 
         if (config.getStorageType() != null) {
-            request.setStorageType(
+            request.storageType(
                 config.getStorageType().getCode(),
                 dataCenterService
                     .getDeploymentCapabilities(
@@ -171,19 +170,17 @@ public class ServerConverter {
         if (config.getNetwork() != null) {
             NetworkConfig networkConfig = config.getNetwork();
 
-            request.setPrimaryDns(networkConfig.getPrimaryDns());
-            request.setSecondaryDns(networkConfig.getSecondaryDns());
+            request.primaryDns(networkConfig.getPrimaryDns())
+                .secondaryDns(networkConfig.getSecondaryDns());
 
             if (networkConfig.getNetwork() != null) {
-                request.setNetworkId(
+                request.networkId(
                     dataCenterService
                         .findNetworkByRef(config.getNetwork().getNetwork())
                         .getNetworkId()
                 );
             }
         }
-
-        config.setTimeToLive(config.getTimeToLive());
 
         if (config.isManagedOS()) {
             request.managedOS(config.isManagedOS(), true);
@@ -196,7 +193,7 @@ public class ServerConverter {
         }
 
         if (config.getType() != null) {
-            request.setType(config.getType().getCode(), true);
+            request.type(config.getType().getCode(), true);
         }
     }
 

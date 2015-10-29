@@ -101,9 +101,6 @@ public class InfrastructureWithPoliciesTest extends AbstractServersSdkTest imple
                 .type(OsType.CENTOS)
                 .version("6")
                 .architecture(CpuArchitecture.x86_64)
-            )
-            .timeToLive(
-                ZonedDateTime.now().plusHours(2)
             );
     }
 
