@@ -22,6 +22,7 @@ import com.centurylink.cloud.sdk.policy.services.client.domain.AlertTriggerMetad
 import com.centurylink.cloud.sdk.policy.services.dsl.PolicyService;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertTriggerMetric;
 import com.centurylink.cloud.sdk.policy.services.dsl.domain.filters.AlertPolicyFilter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AlertPolicy;
 import com.centurylink.cloud.sdk.tests.recorded.WireMockMixin;
 import org.testng.annotations.Test;
 
@@ -39,6 +40,22 @@ public class SearchPolicyTest extends AbstractPoliciesSdkTest implements WireMoc
     PolicyService policyService;
 
     @Test
+    public void testFindByRef() {
+        String policyName = "New Policy Name";
+
+        AlertPolicyMetadata policy = policyService.alert().findByRef(AlertPolicy.refByName(policyName));
+
+        assertEquals(policy.getName(), policyName);
+
+
+        String id = "953586c2bd604848ab1947e8debec72c";
+
+        policy = policyService.alert().findByRef(AlertPolicy.refById(id));
+
+        assertEquals(policy.getId(), id);
+    }
+
+    @Test
     public void testFindByName() {
         List<AlertPolicyMetadata> policies =
             policyService.alert().find(new AlertPolicyFilter().nameContains("PoLiCy"));
@@ -53,7 +70,7 @@ public class SearchPolicyTest extends AbstractPoliciesSdkTest implements WireMoc
         List<AlertPolicyMetadata> policies =
             policyService.alert().find(
                 new AlertPolicyFilter()
-                    .where(ap -> ap.getTriggers().get(0).getMetric().equals(AlertTriggerMetric.CPU) &&
+                    .where(ap -> ap.getTriggers().get(0).getMetric().equals(AlertTriggerMetric.CPU.name()) &&
                         ap.getTriggers().get(0).getThreshold() > 20f)
             );
 
