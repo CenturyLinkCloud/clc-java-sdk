@@ -1,4 +1,4 @@
-Install Spring CLC SDK
+Add Spring CLC SDK dependency
 ------------
 
 Maven: 
