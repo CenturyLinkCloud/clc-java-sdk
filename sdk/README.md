@@ -8,15 +8,15 @@ Maven:
 <dependencies>
     <dependency>
         <groupId>com.centurylink.cloud</groupId>
-        <artifactId>java-sdk</artifactId>
-        <version>1.1.2</version>
+        <artifactId>clc-java-sdk</artifactId>
+        <version>1.2.0</version>
     </dependency>
 </dependencies>
 ```
 
 Gradle:
 ```groovy
-compile 'com.centurylink.cloud:java-sdk:1.1.2'
+compile 'com.centurylink.cloud:clc-java-sdk:1.2.0'
 ```
 
 

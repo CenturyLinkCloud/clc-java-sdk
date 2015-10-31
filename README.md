@@ -3,7 +3,7 @@ Documentation
 -------------
 See the [wiki](https://github.com/CenturyLinkCloud/clc-java-sdk/wiki) for CLC Java SDK getting-started and user guides.
 
-Installation
+SDK Installation
 ------------
 
 If you use Maven or Gradle, you can simply add the CLC SDK as a dependency.
@@ -13,15 +13,67 @@ Maven:
 <dependencies>
     <dependency>
         <groupId>com.centurylink.cloud</groupId>
-        <artifactId>java-sdk</artifactId>
-        <version>1.1.2</version>
+        <artifactId>clc-java-sdk</artifactId>
+        <version>1.2.0</version>
     </dependency>
 </dependencies>
 ```
 
 Gradle:
 ```groovy
-compile 'com.centurylink.cloud:java-sdk:1.1.2'
+compile 'com.centurylink.cloud:clc-java-sdk:1.2.0'
+```
+
+SDK with spring adapter installation
+------------
+
+Add spring clc sdk as dependency
+
+Maven: 
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.centurylink.cloud</groupId>
+        <artifactId>spring-clc-sdk</artifactId>
+        <version>1.2.0</version>
+    </dependency>
+</dependencies>
+```
+
+Gradle:
+```groovy
+compile 'com.centurylink.cloud:spring-clc-sdk:1.2.0'
+```
+
+Provide credentials and config
+
+```java
+@Configuration
+@EnableClcSdk
+class MyConfig {
+
+    @Bean
+    public CredentialsProvider clcCredentialsProvider() {
+        return new StaticCredentialsProvider("john.doe", "strong_password");
+    }
+
+    @Bean
+    public SdkConfiguration clcSdkConfig() {
+        return new SdkConfigurationBuilder().build();
+    }
+
+}
+
+```
+
+Then you can autowire necessary sdk services
+
+```java
+@Autowired
+ServerService serverService;
+
+@Autowired
+GroupService groupService;
 ```
 
 Configuration
