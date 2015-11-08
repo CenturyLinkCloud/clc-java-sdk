@@ -33,22 +33,33 @@ public class AuthenticatedSdkHttpClient extends SdkHttpClient {
         this.authentication = authFilter;
     }
 
+    protected WebTarget client(String targetUrl) {
+        return
+            buildWebTarget(
+                buildClient(),
+                CLC_API_URL + targetUrl
+            );
+    }
+
+    protected WebTarget experimentalClient(String targetUrl) {
+        return
+            buildWebTarget(
+                buildClient(),
+                CLC_API_URL_EXPERIMENTAL + targetUrl
+            );
+    }
+
     @Override
     protected ResteasyClient buildClient() {
         return super.buildClient().register(authentication);
     }
 
-    protected WebTarget client(String target) {
+    private WebTarget buildWebTarget(ResteasyClient resteasyClient, String url) {
         return
-            buildClient()
-                .target(CLC_API_URL + target)
-                .resolveTemplate("accountAlias", authentication.getAccountAlias());
-    }
-
-    protected WebTarget experimentalClient(String target) {
-        return
-            buildClient()
-                .target(CLC_API_URL_EXPERIMENTAL + target)
-                .resolveTemplate("accountAlias", authentication.getAccountAlias());
+            new ClientWebTargetWrapper(
+                resteasyClient
+                    .target(url)
+                    .resolveTemplate("accountAlias", authentication.getAccountAlias())
+            );
     }
 }
