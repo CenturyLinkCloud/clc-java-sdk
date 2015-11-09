@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.core.client;
 
+import com.centurylink.cloud.sdk.core.exceptions.ClcException;
 import org.jboss.resteasy.client.jaxrs.ProxyBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -24,16 +25,21 @@ import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Map;
+import java.util.Properties;
 
 public class ClientWebTargetWrapper implements ResteasyWebTarget {
 
     private ResteasyWebTarget clientWebTarget;
+    private static String userAgent;
 
-    private static final String USER_AGENT_KEY = "User-Agent";
-    private static final String USER_AGENT_VALUE = "clc-java-sdk-v1.2.0";
+    static {
+        loadUserAgentFromProperties();
+    }
 
     public ClientWebTargetWrapper(ResteasyWebTarget clientWebTarget) {
         this.clientWebTarget = clientWebTarget;
@@ -231,6 +237,21 @@ public class ClientWebTargetWrapper implements ResteasyWebTarget {
     }
 
     private void setCustomUserAgentHeader(Invocation.Builder request) {
-        request.header(USER_AGENT_KEY, USER_AGENT_VALUE);
+        request.header("User-Agent", userAgent);
+    }
+
+    private static void loadUserAgentFromProperties() {
+        Properties properties = new Properties();
+
+        try (
+            InputStream stream = ClientWebTargetWrapper.class
+                .getClassLoader()
+                .getResourceAsStream("config.properties")
+        ) {
+            properties.load(stream);
+            userAgent = properties.getProperty("artifactId") + "-v" + properties.getProperty("version");
+        } catch (IOException ex) {
+            throw new ClcException("Can't load user agent data from config.properties");
+        }
     }
 }
