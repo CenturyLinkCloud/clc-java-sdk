@@ -38,7 +38,7 @@ public class ClientWebTargetWrapper implements ResteasyWebTarget {
     private static String userAgent;
 
     static {
-        loadUserAgentFromProperties();
+        fetchUserAgentFromProperties();
     }
 
     public ClientWebTargetWrapper(ResteasyWebTarget clientWebTarget) {
@@ -240,7 +240,7 @@ public class ClientWebTargetWrapper implements ResteasyWebTarget {
         request.header("User-Agent", userAgent);
     }
 
-    private static void loadUserAgentFromProperties() {
+    private static void fetchUserAgentFromProperties() {
         Properties properties = new Properties();
 
         try (
