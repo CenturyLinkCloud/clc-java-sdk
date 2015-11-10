@@ -35,7 +35,8 @@ public class SdkHttpClient {
     public static final SdkClientBuilder CLIENT_BUILDER =
         (SdkClientBuilder) ResteasyClientBuilder
             .newBuilder()
-            .register(new ErrorProcessingFilter());
+            .register(new ErrorProcessingFilter())
+            .register(new UserAgentRequestFilter());
 
     static {
         updateApiUrl();
