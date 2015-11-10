@@ -51,15 +51,16 @@ public class AuthenticatedSdkHttpClient extends SdkHttpClient {
 
     @Override
     protected ResteasyClient buildClient() {
-        return super.buildClient().register(authentication);
+        return
+            super.buildClient()
+                .register(authentication)
+                .register(new UserAgentRequestFilter());
     }
 
     private WebTarget buildWebTarget(ResteasyClient resteasyClient, String url) {
         return
-            new ClientWebTargetWrapper(
-                resteasyClient
-                    .target(url)
-                    .resolveTemplate("accountAlias", authentication.getAccountAlias())
-            );
+            resteasyClient
+                .target(url)
+                .resolveTemplate("accountAlias", authentication.getAccountAlias());
     }
 }
