@@ -21,7 +21,6 @@ import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.UpdateNetworkRequest;
 
-import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.GenericType;
 import java.util.HashMap;
 import java.util.List;
@@ -63,13 +62,11 @@ public class NetworkClient extends AuthenticatedSdkHttpClient {
     }
 
     public void release(String networkId, String dataCenterId) {
-        Invocation.Builder request = experimentalClient("/networks/{accountAlias}/{dataCenterId}/{networkId}/release")
+        experimentalClient("/networks/{accountAlias}/{dataCenterId}/{networkId}/release")
             .resolveTemplate(DATACENTER_ID, dataCenterId)
             .resolveTemplate("networkId", networkId)
-            .request();
-
-
-        request.post(entity(new HashMap<>(), APPLICATION_JSON_TYPE));
+            .request()
+            .post(entity(new HashMap<>(), APPLICATION_JSON_TYPE));
     }
 
     public void update(String dataCenterId, String networkId, UpdateNetworkRequest request) {
