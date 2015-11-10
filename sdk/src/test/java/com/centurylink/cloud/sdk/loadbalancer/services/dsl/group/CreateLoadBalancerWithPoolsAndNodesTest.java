@@ -113,9 +113,4 @@ public class CreateLoadBalancerWithPoolsAndNodesTest extends AbstractLoadBalance
             }
         });
     }
-
-    @AfterClass
-    public void deleteBalancer() {
-        loadBalancerService.delete(loadBalancer.asFilter());
-    }
 }
