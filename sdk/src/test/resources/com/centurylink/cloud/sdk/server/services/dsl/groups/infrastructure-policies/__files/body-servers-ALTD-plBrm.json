@@ -1,0 +1,1 @@
+{"server":"cfg3","isQueued":true,"links":[{"rel":"status","href":"/v2/operations/altd/status/va1-242951","id":"va1-242951"},{"rel":"self","href":"/v2/servers/ALTD/09751337b73249599208c8946bcdd8d0?uuid=True","id":"09751337b73249599208c8946bcdd8d0","verbs":["GET"]}]}

@@ -32,14 +32,30 @@ import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.LoadBalancerSt
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter.LoadBalancerFilter;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group.LoadBalancer;
 import com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool.LoadBalancerPool;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.IpAddress;
+import com.centurylink.cloud.sdk.server.services.client.domain.server.metadata.ServerMetadata;
+import com.centurylink.cloud.sdk.server.services.dsl.ServerService;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.CreatePublicIpConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.Machine;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.NetworkConfig;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerType.STANDARD;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.CpuArchitecture.x86_64;
+import static com.centurylink.cloud.sdk.server.services.dsl.domain.template.filters.os.OsType.CENTOS;
 import static sample.SamplesTestsConstants.SAMPLES;
 
 public class LoadBalancerSampleApp extends Assert {
@@ -47,6 +63,7 @@ public class LoadBalancerSampleApp extends Assert {
     private LoadBalancerService loadBalancerService;
     private LoadBalancerPoolService loadBalancerPoolService;
     private LoadBalancerNodeService loadBalancerNodeService;
+    private ServerService serverService;
 
     private static final DataCenter dataCenter = DataCenter.US_EAST_STERLING;
 
@@ -60,6 +77,8 @@ public class LoadBalancerSampleApp extends Assert {
         loadBalancerPoolService = sdk.loadBalancerPoolService();
         loadBalancerNodeService = sdk.loadBalancerNodeService();
 
+        serverService = sdk.serverService();
+
     }
 
     @BeforeClass(groups = {SAMPLES})
@@ -68,14 +87,19 @@ public class LoadBalancerSampleApp extends Assert {
     }
 
     @AfterClass(groups = {SAMPLES})
-    public void deleteBalancers() {
-        clearAll();
+    public void clearAll () {
+        deleteBalancers();
+        deleteServers();
     }
 
-    private void clearAll() {
+    private void deleteBalancers() {
         loadBalancerService
             .delete(new LoadBalancerFilter().dataCenters(DataCenter.US_EAST_STERLING))
             .waitUntilComplete();
+    }
+
+    private void deleteServers() {
+        serverService.delete(new ServerFilter().dataCenters(DataCenter.US_EAST_STERLING));
     }
 
     private LoadBalancerMetadata fetchLoadBalancerMetadata(LoadBalancer loadBalancer) {
@@ -126,17 +150,17 @@ public class LoadBalancerSampleApp extends Assert {
             .getResult();
     }
 
-    private List<LoadBalancerNodeMetadata> composeNodeList() {
+    private List<LoadBalancerNodeMetadata> composeNodeList(String publicIp) {
         List<LoadBalancerNodeMetadata> result = new ArrayList<>();
 
         LoadBalancerNodeMetadata node1 = new LoadBalancerNodeMetadata()
             .status(LoadBalancerStatus.ENABLED.getCode())
-            .ipAddress("10.135.238.12")
+            .ipAddress(publicIp)
             .privatePort(8088);
 
         LoadBalancerNodeMetadata node2 = new LoadBalancerNodeMetadata()
             .status(LoadBalancerStatus.ENABLED.getCode())
-            .ipAddress("10.135.238.12")
+            .ipAddress(publicIp)
             .privatePort(8089);
 
         result.add(node1);
@@ -180,7 +204,43 @@ public class LoadBalancerSampleApp extends Assert {
         assertEquals(pool2Metadata.getPort(), Integer.valueOf(443));
 
         assertEquals(pool1Metadata.getNodes().size(), 0);
-        setLoadBalancerNodes(pool1, composeNodeList());
+
+        ServerMetadata serverMetadata = serverService.create(
+            new CreateServerConfig()
+                .name("tst")
+                .description("desc")
+                .group(Group.refByName(DataCenter.US_EAST_STERLING, Group.DEFAULT_GROUP))
+                .type(STANDARD)
+                .machine(new Machine()
+                        .cpuCount(1)
+                        .ram(1)
+                )
+                .template(Template.refByOs()
+                        .dataCenter(DataCenter.US_EAST_STERLING)
+                        .type(CENTOS)
+                        .version("6")
+                        .architecture(x86_64)
+                )
+                .timeToLive(ZonedDateTime.now().plusHours(2))
+                .network(
+                    new NetworkConfig()
+                        .publicIpConfig(
+                            new CreatePublicIpConfig()
+                                .openPorts(new PortConfig().port(77))
+                        )
+                )
+        )
+        .waitUntilComplete().getResult();
+
+        serverMetadata = serverService.findByRef(serverMetadata.asRefById());
+
+        String publicIp = serverMetadata.getDetails().getIpAddresses().stream()
+            .map(IpAddress::getPublicIp)
+            .filter(Objects::nonNull)
+            .findFirst()
+            .get();
+
+        setLoadBalancerNodes(pool1, composeNodeList(publicIp));
 
         pool1Metadata = fetchLoadBalancerPoolMetadata(pool1);
         assertEquals(pool1Metadata.getNodes().size(), 2);

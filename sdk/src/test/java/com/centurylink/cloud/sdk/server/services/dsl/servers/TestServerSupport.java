@@ -81,7 +81,7 @@ public class TestServerSupport {
                     .ram(2)
             );
 
-        config.setServer(server);
+        config.server(server);
 
         return config;
     }

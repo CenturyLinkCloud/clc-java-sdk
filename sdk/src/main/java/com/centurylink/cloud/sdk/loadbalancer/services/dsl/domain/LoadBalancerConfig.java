@@ -17,12 +17,16 @@ package com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class LoadBalancerConfig {
 
     private String name;
     private String description;
     private LoadBalancerStatus status = LoadBalancerStatus.ENABLED;
     private DataCenter dataCenter;
+    private List<LoadBalancerPoolConfig> pool;
 
     public String getName() {
         return name;
@@ -73,6 +77,20 @@ public class LoadBalancerConfig {
 
     public LoadBalancerConfig dataCenter(DataCenter dataCenter) {
         setDataCenter(dataCenter);
+        return this;
+    }
+
+    public List<LoadBalancerPoolConfig> getPool() {
+        return pool;
+    }
+
+    public LoadBalancerConfig pool(List<LoadBalancerPoolConfig> pool) {
+        this.pool = pool;
+        return this;
+    }
+
+    public LoadBalancerConfig pool(LoadBalancerPoolConfig... pools) {
+        this.pool = Arrays.asList(pools);
         return this;
     }
 }

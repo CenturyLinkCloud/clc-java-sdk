@@ -42,6 +42,7 @@ com.centurylink.cloud.sdk.loadbalancer.services.client.domain
 com.centurylink.cloud.sdk.loadbalancer.services.dsl
 com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain
 com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.filter
+com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.future
 com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.group
 com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.node
 com.centurylink.cloud.sdk.loadbalancer.services.dsl.domain.refs.pool

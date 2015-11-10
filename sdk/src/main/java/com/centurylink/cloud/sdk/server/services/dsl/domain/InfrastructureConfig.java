@@ -16,6 +16,8 @@
 package com.centurylink.cloud.sdk.server.services.dsl.domain;
 
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.AlertPolicyConfig;
+import com.centurylink.cloud.sdk.policy.services.dsl.domain.AntiAffinityPolicyConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.GroupHierarchyConfig;
 
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ import static java.util.Arrays.asList;
 public class InfrastructureConfig {
     private List<GroupHierarchyConfig> subitems = new ArrayList<>();
     private List<DataCenter> dataCenters = new ArrayList<>();
+    private List<AntiAffinityPolicyConfig> antiAffinityPolicies = new ArrayList<>();
+    private List<AlertPolicyConfig> alertPolicies = new ArrayList<>();
 
     public static InfrastructureConfig dataCenter(DataCenter... dataCenters) {
         return
@@ -77,6 +81,42 @@ public class InfrastructureConfig {
     public InfrastructureConfig dataCenters(DataCenter... datacenters) {
         checkNotNull(datacenters, "List of dataCenters must be not a null");
         this.dataCenters.addAll(asList(datacenters));
+        return this;
+    }
+
+    /**
+     * Returns anti-affinity policies configs
+     * @return list of anti-affinity policies configs
+     */
+    public List<AntiAffinityPolicyConfig> getAntiAffinityPolicies() {
+        return antiAffinityPolicies;
+    }
+
+    /**
+     *
+     * @param antiAffinityPolicies array of anti-affinity policies configs
+     * @return current class instance
+     */
+    public InfrastructureConfig antiAffinityPolicies(AntiAffinityPolicyConfig... antiAffinityPolicies) {
+        this.antiAffinityPolicies.addAll(asList(antiAffinityPolicies));
+        return this;
+    }
+
+    /**
+     * Returns alert policies configs
+     * @return list of alert policies
+     */
+    public List<AlertPolicyConfig> getAlertPolicies() {
+        return alertPolicies;
+    }
+
+    /**
+     *
+     * @param alertPolicies array of alert policies configs
+     * @return current class instance
+     */
+    public InfrastructureConfig alertPolicies(AlertPolicyConfig... alertPolicies) {
+        this.alertPolicies.addAll(asList(alertPolicies));
         return this;
     }
 }

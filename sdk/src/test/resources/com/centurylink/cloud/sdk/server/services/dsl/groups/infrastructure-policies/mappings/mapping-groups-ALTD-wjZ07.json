@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Config\",\"parentGroupId\":\"30f313eab9cd489ca4d61e1f364c97ae\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-groups-ALTD-wjZ07.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/groups/altd/16bd6e540ff7476495b33743f161d613",
+      "Date" : "Fri, 23 Oct 2015 21:12:45 GMT",
+      "Content-Length" : "1447"
+    }
+  }
+}

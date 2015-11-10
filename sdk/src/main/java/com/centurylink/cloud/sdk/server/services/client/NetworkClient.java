@@ -30,6 +30,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 
 public class NetworkClient extends AuthenticatedSdkHttpClient {
 
+    private static final String DATACENTER_ID = "dataCenterId";
+
     public NetworkClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
     }
@@ -37,7 +39,7 @@ public class NetworkClient extends AuthenticatedSdkHttpClient {
     public List<NetworkMetadata> getNetworks(String dataCenterId) {
         List<NetworkMetadata> metadataList =
             experimentalClient("/networks/{accountAlias}/{dataCenterId}")
-                .resolveTemplate("dataCenterId", dataCenterId)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
                 .request()
                 .get(new GenericType<List<NetworkMetadata>>() {});
 
@@ -49,7 +51,7 @@ public class NetworkClient extends AuthenticatedSdkHttpClient {
     public NetworkMetadata claim(String dataCenterId) {
         NetworkMetadata metadata =
             experimentalClient("/networks/{accountAlias}/{dataCenterId}/claim")
-                .resolveTemplate("dataCenterId", dataCenterId)
+                .resolveTemplate(DATACENTER_ID, dataCenterId)
                 .request()
                 .post(entity(new HashMap<>(), APPLICATION_JSON_TYPE))
                 .readEntity(NetworkMetadata.class);
@@ -61,7 +63,7 @@ public class NetworkClient extends AuthenticatedSdkHttpClient {
 
     public void release(String networkId, String dataCenterId) {
         experimentalClient("/networks/{accountAlias}/{dataCenterId}/{networkId}/release")
-            .resolveTemplate("dataCenterId", dataCenterId)
+            .resolveTemplate(DATACENTER_ID, dataCenterId)
             .resolveTemplate("networkId", networkId)
             .request()
             .post(entity(new HashMap<>(), APPLICATION_JSON_TYPE));
@@ -69,7 +71,7 @@ public class NetworkClient extends AuthenticatedSdkHttpClient {
 
     public void update(String dataCenterId, String networkId, UpdateNetworkRequest request) {
         experimentalClient("/networks/{accountAlias}/{dataCenterId}/{networkId}")
-            .resolveTemplate("dataCenterId", dataCenterId)
+            .resolveTemplate(DATACENTER_ID, dataCenterId)
             .resolveTemplate("networkId", networkId)
             .request()
             .put(entity(request, APPLICATION_JSON_TYPE));

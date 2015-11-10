@@ -49,6 +49,37 @@ public class SearchNetworkTest extends AbstractServersSdkTest implements WireMoc
     }
 
     @Test
+    public void testFindByRefId() {
+        String id = "809297928f1d4224b9b9927f745bc082";
+
+        NetworkMetadata metadata = networkService.findByRef(Network.refById(id));
+
+        assertEquals(metadata.getId(), id);
+    }
+
+    @Test
+    public void testFindByRefName() {
+        String name = "vlan_719_10.56.119";
+
+        NetworkMetadata metadata = networkService.findByRef(
+            Network.refByName().name(name).dataCenter(DataCenter.CA_TORONTO_1)
+        );
+
+        assertEquals(metadata.getName(), name);
+    }
+
+    @Test
+    public void testFindByRefGateway() {
+        String gateway = "10.50.48.1";
+
+        NetworkMetadata metadata = networkService.findByRef(
+            Network.refByGateway(DataCenter.CA_VANCOUVER, gateway)
+        );
+
+        assertEquals(metadata.getGateway(), gateway);
+    }
+
+    @Test
     public void testFindByDataCenter() {
 
         List<NetworkMetadata> metadataList = networkService.find(

@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/sharedLoadBalancers/ALTD/gb1/1437f6700cb64ba3bad155535cc8c7bb",
+    "method" : "PUT",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Super Balancer updated\",\"description\":\"Super Balancer description updated\",\"status\":\"enabled\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 204,
+    "bodyFileName" : "body-gb1-1437f6700cb64ba3bad155535cc8c7bb-eRrRt.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Expires" : "-1",
+      "Date" : "Mon, 26 Oct 2015 08:57:38 GMT"
+    }
+  }
+}

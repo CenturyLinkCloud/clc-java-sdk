@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/groups/ALTD",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"Application3\",\"parentGroupId\":\"4356917d548341c8ae7b56e151314a9f\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-groups-ALTD-mnRrX.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Location" : "/v2/groups/altd/30f313eab9cd489ca4d61e1f364c97ae",
+      "Date" : "Fri, 23 Oct 2015 21:12:44 GMT",
+      "Content-Length" : "1453"
+    }
+  }
+}

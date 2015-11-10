@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/operations/ALTD/status/va1-242950",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-status-va1-242950-qsl7S.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Fri, 23 Oct 2015 21:13:18 GMT",
+      "Content-Length" : "141"
+    }
+  }
+}

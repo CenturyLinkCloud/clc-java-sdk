@@ -1,0 +1,20 @@
+{
+  "request" : {
+    "url" : "/v2/alertPolicies/ALTD/953586c2bd604848ab1947e8debec72c",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-ALTD-953586c2bd604848ab1947e8debec72c-rVaac.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Vary" : "Accept-Encoding",
+      "Date" : "Fri, 30 Oct 2015 09:32:11 GMT",
+      "Content-Length" : "362"
+    }
+  }
+}

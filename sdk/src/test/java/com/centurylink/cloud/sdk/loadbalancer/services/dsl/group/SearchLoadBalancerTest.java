@@ -48,7 +48,23 @@ public class SearchLoadBalancerTest extends AbstractLoadBalancerSdkTest implemen
     }
 
     @Test
-    public void testFindByName() {
+    public void testFindByRefs() {
+        String balancerName = "Balancer";
+
+        List<LoadBalancerMetadata> loadBalancersList = loadBalancerService.find(
+            new LoadBalancerFilter()
+                .dataCenters(DataCenter.DE_FRANKFURT.getId())
+                .loadBalancers(LoadBalancer.refByName(balancerName, DataCenter.DE_FRANKFURT))
+        );
+
+        assertNotNull(loadBalancersList);
+        loadBalancersList.forEach(
+            balancer -> assertEquals(balancer.getName(), balancerName)
+        );
+    }
+
+    @Test
+    public void testFindByNameContains() {
         List<LoadBalancerMetadata> loadBalancersList = loadBalancerService.find(
                 new LoadBalancerFilter().nameContains("Balancer1")
         );

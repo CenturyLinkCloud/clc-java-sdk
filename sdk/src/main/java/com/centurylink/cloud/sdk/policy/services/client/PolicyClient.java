@@ -18,7 +18,11 @@ package com.centurylink.cloud.sdk.policy.services.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
-import com.centurylink.cloud.sdk.policy.services.client.domain.*;
+import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.AlertPolicyRequest;
+import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyMetadata;
+import com.centurylink.cloud.sdk.policy.services.client.domain.AntiAffinityPolicyRequest;
+import com.centurylink.cloud.sdk.policy.services.client.domain.PolicyListResponse;
 
 import javax.ws.rs.core.GenericType;
 import java.util.List;
@@ -31,6 +35,10 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
  */
 public class PolicyClient extends AuthenticatedSdkHttpClient {
     private static final String POLICY_ID = "policyId";
+    private static final String ANTI_AFFINITY_POLICY_URL = "/antiAffinityPolicies/{accountAlias}";
+    private static final String ANTI_AFFINITY_POLICY_WITH_ID_URL = ANTI_AFFINITY_POLICY_URL + "/{policyId}";
+    private static final String ALERT_POLICY_URL = "/alertPolicies/{accountAlias}";
+    private static final String ALERT_POLICY_WITH_ID_URL = ALERT_POLICY_URL + "/{policyId}";
 
     public PolicyClient(BearerAuthentication authFilter, SdkConfiguration config) {
         super(authFilter, config);
@@ -38,7 +46,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public AntiAffinityPolicyMetadata createAntiAffinityPolicy(AntiAffinityPolicyRequest policyRequest) {
         return
-            client("/antiAffinityPolicies/{accountAlias}")
+            client(ANTI_AFFINITY_POLICY_URL)
                 .request()
                 .post(entity(policyRequest, APPLICATION_JSON_TYPE))
                 .readEntity(AntiAffinityPolicyMetadata.class);
@@ -46,7 +54,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public AntiAffinityPolicyMetadata modifyAntiAffinityPolicy(String policyId, AntiAffinityPolicyRequest policyRequest) {
         return
-            client("/antiAffinityPolicies/{accountAlias}/{policyId}")
+            client(ANTI_AFFINITY_POLICY_WITH_ID_URL)
                 .resolveTemplate(POLICY_ID, policyId)
                 .request()
                 .put(entity(policyRequest, APPLICATION_JSON_TYPE))
@@ -55,7 +63,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public AntiAffinityPolicyMetadata getAntiAffinityPolicy(String policyId) {
         return
-            client("/antiAffinityPolicies/{accountAlias}/{policyId}")
+            client(ANTI_AFFINITY_POLICY_WITH_ID_URL)
                 .resolveTemplate(POLICY_ID, policyId)
                 .request()
                 .get(AntiAffinityPolicyMetadata.class);
@@ -63,14 +71,14 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public List<AntiAffinityPolicyMetadata> getAntiAffinityPolicies() {
         return
-            client("/antiAffinityPolicies/{accountAlias}")
+            client(ANTI_AFFINITY_POLICY_URL)
                 .request()
                 .get(new GenericType<PolicyListResponse<AntiAffinityPolicyMetadata>>() {})
                 .getItems();
     }
 
     public void deleteAntiAffinityPolicy(String policyId) {
-        client("/antiAffinityPolicies/{accountAlias}/{policyId}")
+        client(ANTI_AFFINITY_POLICY_WITH_ID_URL)
             .resolveTemplate(POLICY_ID, policyId)
             .request()
             .delete();
@@ -79,7 +87,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public AlertPolicyMetadata createAlertPolicy(AlertPolicyRequest policyRequest) {
         return
-            client("/alertPolicies/{accountAlias}")
+            client(ALERT_POLICY_URL)
                 .request()
                 .post(entity(policyRequest, APPLICATION_JSON_TYPE))
                 .readEntity(AlertPolicyMetadata.class);
@@ -87,7 +95,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public AlertPolicyMetadata modifyAlertPolicy(String policyId, AlertPolicyRequest policyRequest) {
         return
-            client("/alertPolicies/{accountAlias}/{policyId}")
+            client(ALERT_POLICY_WITH_ID_URL)
                 .resolveTemplate(POLICY_ID, policyId)
                 .request()
                 .put(entity(policyRequest, APPLICATION_JSON_TYPE))
@@ -96,7 +104,7 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public AlertPolicyMetadata getAlertPolicy(String policyId) {
         return
-            client("/alertPolicies/{accountAlias}/{policyId}")
+            client(ALERT_POLICY_WITH_ID_URL)
                 .resolveTemplate(POLICY_ID, policyId)
                 .request()
                 .get(AlertPolicyMetadata.class);
@@ -104,14 +112,14 @@ public class PolicyClient extends AuthenticatedSdkHttpClient {
 
     public List<AlertPolicyMetadata> getAlertPolicies() {
         return
-            client("/alertPolicies/{accountAlias}")
+            client(ALERT_POLICY_URL)
                 .request()
                 .get(new GenericType<PolicyListResponse<AlertPolicyMetadata>>() {})
                 .getItems();
     }
 
     public void deleteAlertPolicy(String policyId) {
-        client("/alertPolicies/{accountAlias}/{policyId}")
+        client(ALERT_POLICY_WITH_ID_URL)
             .resolveTemplate(POLICY_ID, policyId)
             .request()
             .delete();

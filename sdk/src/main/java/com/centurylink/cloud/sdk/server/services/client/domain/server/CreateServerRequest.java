@@ -74,7 +74,7 @@ public class CreateServerRequest {
      * @return current instance
      */
     public CreateServerRequest name(String name) {
-        this.name = name;
+        setName(name);
         return this;
     }
 
@@ -90,7 +90,7 @@ public class CreateServerRequest {
      * @return current instance
      */
     public CreateServerRequest groupId(String groupId) {
-        this.groupId = groupId;
+        setGroupId(groupId);
         return this;
     }
 
@@ -118,7 +118,7 @@ public class CreateServerRequest {
      * @return current instance
      */
     public CreateServerRequest cpu(Integer cpu) {
-        this.cpu = cpu;
+        setCpu(cpu);
         return this;
     }
 
@@ -133,7 +133,7 @@ public class CreateServerRequest {
      * @return current instance
      */
     public CreateServerRequest memoryGB(Integer memoryGB) {
-        this.memoryGB = memoryGB;
+        setMemoryGB(memoryGB);
         return this;
     }
 
@@ -268,7 +268,7 @@ public class CreateServerRequest {
     }
 
     public CreateServerRequest password(String password) {
-        this.password = password;
+        setPassword(password);
         return this;
     }
 
@@ -396,7 +396,7 @@ public class CreateServerRequest {
     }
 
     public CreateServerRequest customFields(List<CustomField> fields) {
-        this.customFields = fields;
+        setCustomFields(fields);
         return this;
     }
 

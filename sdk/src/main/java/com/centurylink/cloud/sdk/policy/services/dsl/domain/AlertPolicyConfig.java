@@ -42,8 +42,7 @@ public class AlertPolicyConfig {
     }
 
     public AlertPolicyConfig actions(AlertAction... actions) {
-        this.actions.addAll(Arrays.asList(actions));
-        return this;
+        return actions(Arrays.asList(actions));
     }
 
     public AlertPolicyConfig action(AlertAction action) {
@@ -61,8 +60,7 @@ public class AlertPolicyConfig {
     }
 
     public AlertPolicyConfig triggers(AlertTrigger... triggers) {
-        this.triggers.addAll(Arrays.asList(triggers));
-        return this;
+        return triggers(Arrays.asList(triggers));
     }
 
     public AlertPolicyConfig trigger(AlertTrigger trigger) {

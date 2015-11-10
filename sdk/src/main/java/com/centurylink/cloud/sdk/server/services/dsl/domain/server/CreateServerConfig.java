@@ -15,7 +15,6 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl.domain.server;
 
-import com.centurylink.cloud.sdk.policy.services.dsl.domain.refs.AntiAffinityPolicy;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.CustomField;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.group.refs.Group;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.template.refs.Template;

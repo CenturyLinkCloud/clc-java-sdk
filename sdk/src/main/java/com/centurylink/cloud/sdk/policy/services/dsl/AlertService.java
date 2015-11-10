@@ -191,7 +191,7 @@ public class AlertService implements
                     criteria.getIds().size() > 0) {
                     return
                         criteria.getIds().stream()
-                            .map(nullable(curId -> client.getAlertPolicy(curId)))
+                            .map(nullable(client::getAlertPolicy))
                             .filter(notNull());
                 } else {
                     return
