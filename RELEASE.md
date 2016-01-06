@@ -1,6 +1,7 @@
 1.2.2
 ------------
 * Claim network changes according new api
+
 1.2.1
 ------------
 * Customize User Agent Header #193
