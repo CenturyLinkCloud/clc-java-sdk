@@ -15,11 +15,15 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl;
 
+import com.centurylink.cloud.sdk.base.services.client.QueueClient;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.datacenters.refs.DataCenter;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.JobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
+import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.server.services.client.NetworkClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
@@ -41,10 +45,12 @@ public class NetworkService implements QueryService<Network, NetworkFilter, Netw
 
     private final NetworkClient networkClient;
     private final DataCenterService dataCenterService;
+    private final QueueClient queueClient;
 
-    public NetworkService(NetworkClient networkClient, DataCenterService dataCenterService) {
+    public NetworkService(NetworkClient networkClient, DataCenterService dataCenterService, QueueClient queueClient) {
         this.networkClient = networkClient;
         this.dataCenterService = dataCenterService;
+        this.queueClient = queueClient;
     }
 
     /**
@@ -145,14 +151,18 @@ public class NetworkService implements QueryService<Network, NetworkFilter, Netw
      * Claim a network for datacenter
      *
      * @param dataCenter datacenter reference
-     * @return NetworkMetadata network metadata
+     * @return OperationFuture wrapper for dataCenter
      */
-    public NetworkMetadata claim(DataCenter dataCenter) {
+    public OperationFuture<DataCenter> claim(DataCenter dataCenter) {
+        Link response = networkClient.claim(
+            dataCenterService.findByRef(dataCenter).getId()
+        );
+
         return
-            networkClient.claim(
-                dataCenterService
-                    .findByRef(dataCenter)
-                    .getId()
+            new OperationFuture<>(
+                dataCenter,
+                response.getId(),
+                queueClient
             );
     }
 
@@ -160,24 +170,31 @@ public class NetworkService implements QueryService<Network, NetworkFilter, Netw
      * Claim a networks for datacenters
      *
      * @param dataCenters datacenter reference list
-     * @return List of network metadata
+     * @return OperationFuture wrapper for dataCenter list
      */
-    public List<NetworkMetadata> claim(List<DataCenter> dataCenters) {
+    public OperationFuture<List<DataCenter>> claim(List<DataCenter> dataCenters) {
+        List<JobFuture> jobs = dataCenters
+            .stream()
+            .map(dataCenter -> claim(dataCenter).jobFuture())
+            .collect(toList());
+
         return
-            dataCenters
-                .stream()
-                .map(this::claim)
-                .collect(toList());
+            new OperationFuture<>(
+                dataCenters,
+                new ParallelJobsFuture(jobs)
+            );
     }
 
     /**
      * Claim a networks for datacenters
      *
      * @param dataCenters datacenter references
-     * @return List of network metadata
+     * @return OperationFuture wrapper for dataCenter list
      */
-    public List<NetworkMetadata> claim(DataCenter... dataCenters) {
+    public OperationFuture<List<DataCenter>> claim(DataCenter... dataCenters) {
         return claim(Arrays.asList(dataCenters));
     }
+
+
 
 }

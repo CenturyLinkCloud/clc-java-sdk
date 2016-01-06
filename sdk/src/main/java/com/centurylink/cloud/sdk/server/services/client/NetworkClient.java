@@ -17,6 +17,7 @@ package com.centurylink.cloud.sdk.server.services.client;
 
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
+import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.UpdateNetworkRequest;
@@ -48,17 +49,13 @@ public class NetworkClient extends AuthenticatedSdkHttpClient {
         return metadataList;
     }
 
-    public NetworkMetadata claim(String dataCenterId) {
-        NetworkMetadata metadata =
+    public Link claim(String dataCenterId) {
+        return
             experimentalClient("/networks/{accountAlias}/{dataCenterId}/claim")
                 .resolveTemplate(DATACENTER_ID, dataCenterId)
                 .request()
                 .post(entity(new HashMap<>(), APPLICATION_JSON_TYPE))
-                .readEntity(NetworkMetadata.class);
-
-        setDatacenter(metadata, dataCenterId);
-
-        return metadata;
+                .readEntity(Link.class);
     }
 
     public void release(String networkId, String dataCenterId) {

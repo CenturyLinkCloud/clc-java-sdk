@@ -1,15 +1,15 @@
 {
   "request" : {
-    "url" : "/v2-experimental/networks/ALTD/de1/claim",
+    "url" : "/v2/authentication/login",
     "method" : "POST",
     "bodyPatterns" : [ {
-      "equalToJson" : "{}",
+      "equalToJson" : "{\"username\":\"cloud_user\",\"password\":\"cloud_user_password\"}",
       "jsonCompareMode" : "LENIENT"
     } ]
   },
   "response" : {
     "status" : 200,
-    "bodyFileName" : "body-de1-claim-TlsYn.json",
+    "bodyFileName" : "body-authentication-login-vGicw.json",
     "headers" : {
       "Cache-Control" : "no-cache",
       "Pragma" : "no-cache",
@@ -17,8 +17,8 @@
       "Content-Encoding" : "gzip",
       "Expires" : "-1",
       "Vary" : "Accept-Encoding",
-      "Date" : "Tue, 13 Oct 2015 13:42:28 GMT",
-      "Content-Length" : "403"
+      "Date" : "Wed, 06 Jan 2016 08:52:49 GMT",
+      "Content-Length" : "742"
     }
   }
 }
