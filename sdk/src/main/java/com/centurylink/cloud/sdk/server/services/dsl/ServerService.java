@@ -140,7 +140,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 config.getCustomFields().isEmpty() ?
                     null :
                     client.getCustomFields()
-                )
+            )
         );
 
         return postProcessBuildServerResponse(response, config);
@@ -189,7 +189,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public ServerCredentials findCredentials(Server server) {
         return client.getServerCredentials(
-                findByRef(server).getId()
+            findByRef(server).getId()
         );
     }
 
@@ -681,7 +681,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Create snapshot of a single server or group of servers
      *
      * @param expirationDays expiration days (must be between 1 and 10)
-     * @param serverFilter search servers criteria
+     * @param serverFilter   search servers criteria
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<Server>> createSnapshot(Integer expirationDays, ServerFilter serverFilter) {
@@ -1163,7 +1163,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
         ServerMetadata metadata = findByRef(server);
 
-        return getSshClient(getOrCreatePublicIpWithOpenSshPort(server, metadata), metadata.getId());
+        return getSshClient(getOrCreatePublicIpWithOpenSshPort(metadata), metadata.getId());
     }
 
     public SshClient execSsh(Server server, SshConnectionConfig config) {
@@ -1183,15 +1183,15 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
         ServerCredentials serverCredentials = client.getServerCredentials(serverId);
 
         return new SshjClient.Builder()
-                .username(serverCredentials.getUserName())
-                .password(serverCredentials.getPassword())
-                .host(host)
-                .build();
+            .username(serverCredentials.getUserName())
+            .password(serverCredentials.getPassword())
+            .host(host)
+            .build();
     }
 
-    private String getOrCreatePublicIpWithOpenSshPort(Server server, ServerMetadata metadata) {
+    private String getOrCreatePublicIpWithOpenSshPort(ServerMetadata metadata) {
         Optional<String> publicIpWithOpenSshPort = findPublicIpWithOpenSshPort(metadata, null);
-
+        Server server = Server.refById(metadata.getId());
         return publicIpWithOpenSshPort.orElseGet(() -> {
             this.addPublicIp(server, new CreatePublicIpConfig().openPorts(SSH)).waitUntilComplete();
 
@@ -1205,24 +1205,24 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             Optional<String> publicIp = findPublicIpWithOpenSshPort(metadata, ip);
 
             return publicIp.map(r -> publicIp.get())
-                    .orElseThrow(() -> new SshException("Public IP: %s is not exist", ip));
+                .orElseThrow(() -> new SshException("Public IP: %s is not exist", ip));
         }
 
         Optional<String> privateIp = findInternalIp(metadata, ip);
 
         return privateIp.map(r -> privateIp.get())
-                .orElseThrow(() -> new SshException("Internal IP: %s is not exist", ip));
+            .orElseThrow(() -> new SshException("Internal IP: %s is not exist", ip));
     }
 
     private Optional<String> findPublicIpWithOpenSshPort(ServerMetadata metadata, String publicIp) {
         return findPublicIp(metadata)
             .stream()
             .filter(ip -> ip
-                    .getPorts()
-                    .stream()
-                    .filter(Strings.isNullOrEmpty(publicIp) ? p -> p.getPort().equals(SSH)
-                            : p -> p.getPort().equals(SSH) && publicIp.equals(ip.getPublicIPAddress()))
-                    .count() > 0
+                .getPorts()
+                .stream()
+                .filter(Strings.isNullOrEmpty(publicIp) ? p -> p.getPort().equals(SSH)
+                    : p -> p.getPort().equals(SSH) && publicIp.equals(ip.getPublicIPAddress()))
+                .count() > 0
             )
             .map(PublicIpMetadata::getPublicIPAddress)
             .filter(notNull())
@@ -1285,7 +1285,6 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     }
 
 
-
     /**
      * Remove secondary network
      *
@@ -1329,7 +1328,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     /**
      * Remove secondary network
      *
-     * @param filter the server search criteria
+     * @param filter  the server search criteria
      * @param network secondary network reference
      * @return OperationFuture wrapper for list of Server
      */

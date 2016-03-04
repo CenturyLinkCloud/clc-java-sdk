@@ -68,7 +68,7 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
 
     @DataProvider(name = "sshSamples")
     public Object[][] execSshSamples() {
-        return new Object[][] {
+        return new Object[][]{
             {"ping -c google.com", "echo hello"},
             {"mkdir test", "cd ~; pwd"}
         };
@@ -117,18 +117,18 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
     }
 
     @Test(dataProvider = "sshSamples", expectedExceptions = {SshException.class},
-            expectedExceptionsMessageRegExp = "Public IP: 88.48.161.210 is not exist")
+        expectedExceptionsMessageRegExp = "Public IP: 88.48.161.210 is not exist")
     public void testExecSshWithIncorrectPublicIp(String shellCommand1, String shellCommand2) throws Exception {
         testExecSshConfig(shellCommand1, shellCommand2, new SshConnectionConfig()
-                .ip("88.48.161.210"));
+            .ip("88.48.161.210"));
     }
 
     @Test(dataProvider = "sshSamples", expectedExceptions = {SshException.class},
-            expectedExceptionsMessageRegExp = "Internal IP: 88.48.161.210 is not exist")
+        expectedExceptionsMessageRegExp = "Internal IP: 88.48.161.210 is not exist")
     public void testExecSshWithIncorrectInternalIp(String shellCommand1, String shellCommand2) throws Exception {
         testExecSshConfig(shellCommand1, shellCommand2, new SshConnectionConfig()
-                .useInternalIp()
-                .ip("88.48.161.210"));
+            .useInternalIp()
+            .ip("88.48.161.210"));
     }
 
     @Test(dataProvider = "sshSamples")
@@ -144,10 +144,10 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
     private void testExecSshConfig(String shellCommand1, String shellCommand2,
                                    SshConnectionConfig sshConnectionConfig) {
         OperationFuture<ShellResponse> response = serverService.execSsh(server, sshConnectionConfig)
-                .run(shellCommand1)
-                .run(shellCommand2)
-                .execute()
-                .waitUntilComplete();
+            .run(shellCommand1)
+            .run(shellCommand2)
+            .execute()
+            .waitUntilComplete();
 
         assertNotNull(response);
         assertNotNull(response.getResult().getTrace());
@@ -161,15 +161,15 @@ public class ExecuteShellCommandOnRemoteServerTest extends AbstractServersSdkTes
 
     private List<String> findPublicIpWithOpenSshPort() {
         return serverService.findPublicIp(server)
+            .stream()
+            .filter(ip -> ip
+                .getPorts()
                 .stream()
-                .filter(ip -> ip
-                        .getPorts()
-                        .stream()
-                        .filter(p -> p.getPort().equals(SSH))
-                        .count() > 0
-                )
-                .map(PublicIpMetadata::getPublicIPAddress)
-                .filter(notNull())
-                .collect(toList());
+                .filter(p -> p.getPort().equals(SSH))
+                .count() > 0
+            )
+            .map(PublicIpMetadata::getPublicIPAddress)
+            .filter(notNull())
+            .collect(toList());
     }
 }

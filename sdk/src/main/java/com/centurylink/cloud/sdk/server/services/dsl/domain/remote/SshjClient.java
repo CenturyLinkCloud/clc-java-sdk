@@ -174,8 +174,8 @@ public class SshjClient implements SshClient {
         checkArgument(!Strings.isNullOrEmpty(pathToFile), "Path to file must NOT be Null or Empty");
 
         Path path = pathToFile.startsWith("classpath") ?
-                Paths.get(getClass().getClassLoader().getResource(pathToFile.split(":")[1]).toURI())
-                : Paths.get(pathToFile);
+            Paths.get(getClass().getClassLoader().getResource(pathToFile.split(":")[1]).toURI())
+            : Paths.get(pathToFile);
 
         try (BufferedReader br = Files.newBufferedReader(path)) {
             return br.lines().collect(Collectors.toList());
