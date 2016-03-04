@@ -9,4 +9,8 @@ public class SshException extends ClcClientException {
     public SshException(Throwable cause) {
         super(cause);
     }
+
+    public SshException(String format, Object... arguments) {
+        super(format, arguments);
+    }
 }

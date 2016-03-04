@@ -1,0 +1,2 @@
+ping -c google.com
+echo hello

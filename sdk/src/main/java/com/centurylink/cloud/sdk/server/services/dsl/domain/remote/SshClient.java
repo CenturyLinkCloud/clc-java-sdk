@@ -10,6 +10,8 @@ public interface SshClient {
 
     SshClient run(String command);
 
+    SshClient runScript(String pathToFile);
+
     OperationFuture<ShellResponse> execute() throws SshException;
 
 }

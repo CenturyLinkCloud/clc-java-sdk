@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -33,10 +34,10 @@ public class SshjClientTest {
     @Test
     public void testCreateSshClient() {
         SshjClient client = new SshjClient.Builder()
-            .host("10.5.17.29")
-            .username("cloud_user")
-            .password("cloud_user_password")
-            .build();
+                .host("10.5.17.29")
+                .username("cloud_user")
+                .password("cloud_user_password")
+                .build();
 
         assertEquals(client.getHost(), "10.5.17.29");
         assertNotNull(client.getSsh());
@@ -47,10 +48,10 @@ public class SshjClientTest {
         SshjClient client = buildSshClient();
 
         OperationFuture<ShellResponse> response =
-            client
-                .run("ls -al")
-                .run("cd ~")
-                .execute();
+                client
+                        .run("ls -al")
+                        .run("cd ~")
+                        .execute();
 
         assertEquals(response.getResult().getErrorStatus(), 0);
         assertNotNull(response.getResult().getTrace(), "Remote execution command trace");
@@ -58,9 +59,9 @@ public class SshjClientTest {
 
     private SshjClient buildSshClient() {
         return new SshjClient(
-            Mockito.mock(SSHClient.class),
-            "10.5.17.29",
-            new ServerCredentials().userName("ilya").password("1qa@WS3ed")
+                Mockito.mock(SSHClient.class),
+                "10.5.17.29",
+                new ServerCredentials().userName("ilya").password("1qa@WS3ed")
         ) {
             @Override
             ShellResponse execCommand(Session session, String command) throws IOException {
@@ -69,4 +70,15 @@ public class SshjClientTest {
         };
     }
 
+    @Test
+    public void testGetCommandsFromScript() throws Exception {
+        assertEquals(new SshjClient(null, null, null)
+                        .getCommandsFromScript("classpath:ssh-client/classpath-test-ssh.txt"),
+                Arrays.asList("ping -c google.com", "echo hello"));
+    }
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testGetCommandsFromScriptWithIncorrectFilePath() throws Exception {
+        new SshjClient(null, null, null).getCommandsFromScript("classpath:ssh-client/incorrect-classpath-test-ssh.txt");
+    }
 }
