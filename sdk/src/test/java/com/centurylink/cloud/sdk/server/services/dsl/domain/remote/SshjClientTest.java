@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -69,4 +70,15 @@ public class SshjClientTest {
         };
     }
 
+    @Test
+    public void testGetCommandsFromScript() throws Exception {
+        assertEquals(new SshjClient(null, null, null)
+                .getCommandsFromScript("classpath:ssh-client/classpath-test-ssh.txt"),
+            Arrays.asList("ping -c google.com", "echo hello"));
+    }
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testGetCommandsFromScriptWithIncorrectFilePath() throws Exception {
+        new SshjClient(null, null, null).getCommandsFromScript("classpath:ssh-client/incorrect-classpath-test-ssh.txt");
+    }
 }

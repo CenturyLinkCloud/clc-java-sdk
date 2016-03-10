@@ -27,6 +27,7 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.Seque
 import com.centurylink.cloud.sdk.core.client.domain.Link;
 import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
 import com.centurylink.cloud.sdk.core.services.QueryService;
+import com.centurylink.cloud.sdk.core.util.Strings;
 import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
 import com.centurylink.cloud.sdk.server.services.client.ServerClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
@@ -49,12 +50,14 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.network.IPAddressDet
 import com.centurylink.cloud.sdk.server.services.dsl.domain.network.refs.Network;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.network.refs.NetworkByIdRef;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.SshClient;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.SshException;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.SshjClient;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CloneServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.CreateServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ImportServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ModifyServerConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerConverter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.SshConnectionConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.future.CreateServerJobFuture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
@@ -72,9 +75,9 @@ import static com.centurylink.cloud.sdk.core.function.Predicates.in;
 import static com.centurylink.cloud.sdk.core.function.Predicates.isAlwaysTruePredicate;
 import static com.centurylink.cloud.sdk.core.function.Predicates.notNull;
 import static com.centurylink.cloud.sdk.core.function.Streams.map;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static com.centurylink.cloud.sdk.core.services.filter.Filters.nullable;
 import static com.centurylink.cloud.sdk.server.services.dsl.domain.ip.port.PortConfig.SSH;
-import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -137,7 +140,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
                 config.getCustomFields().isEmpty() ?
                     null :
                     client.getCustomFields()
-                )
+            )
         );
 
         return postProcessBuildServerResponse(response, config);
@@ -186,7 +189,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      */
     public ServerCredentials findCredentials(Server server) {
         return client.getServerCredentials(
-                findByRef(server).getId()
+            findByRef(server).getId()
         );
     }
 
@@ -678,7 +681,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * Create snapshot of a single server or group of servers
      *
      * @param expirationDays expiration days (must be between 1 and 10)
-     * @param serverFilter search servers criteria
+     * @param serverFilter   search servers criteria
      * @return OperationFuture wrapper for BaseServerResponse list
      */
     public OperationFuture<List<Server>> createSnapshot(Integer expirationDays, ServerFilter serverFilter) {
@@ -997,7 +1000,11 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @return public IP response object
      */
     public PublicIpMetadata getPublicIp(Server serverRef, String publicIp) {
-        return client.getPublicIp(idByRef(serverRef), publicIp);
+        return this.getPublicIp(idByRef(serverRef), publicIp);
+    }
+
+    private PublicIpMetadata getPublicIp(String serverId, String publicIp) {
+        return client.getPublicIp(serverId, publicIp);
     }
 
     /**
@@ -1007,13 +1014,24 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
      * @return list public IPs
      */
     public List<PublicIpMetadata> findPublicIp(Server server) {
-        List<IpAddress> ipAddresses = findByRef(server).getDetails().getIpAddresses();
+        ServerMetadata metadata = findByRef(server);
 
-        return ipAddresses.stream()
+        return findPublicIp(metadata);
+    }
+
+    private List<PublicIpMetadata> findPublicIp(ServerMetadata metadata) {
+        return metadata.getDetails().getIpAddresses().stream()
             .map(IpAddress::getPublicIp)
             .filter(notNull())
-            .map(address -> getPublicIp(server, address).publicIPAddress(address))
+            .map(address -> getPublicIp(metadata.getId(), address).publicIPAddress(address))
             .collect(toList());
+    }
+
+    private Optional<String> findInternalIp(ServerMetadata metadata, String privateIp) {
+        return metadata.getDetails().getIpAddresses().stream()
+            .map(IpAddress::getInternal)
+            .filter(Strings.isNullOrEmpty(privateIp) ? notNull() : ip -> privateIp.equals(ip))
+            .findFirst();
     }
 
     /**
@@ -1145,30 +1163,66 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
 
         ServerMetadata metadata = findByRef(server);
 
-        if (!findPublicIpWithOpenSshPort(server).isPresent()) {
-            this
-                .addPublicIp(server, new CreatePublicIpConfig().openPorts(SSH))
-                .waitUntilComplete();
-        }
-
-        Optional<String> publicIp = findPublicIpWithOpenSshPort(server);
-
-        ServerCredentials serverCredentials = client.getServerCredentials(metadata.getId());
-        return new SshjClient.Builder()
-                .username(serverCredentials.getUserName())
-                .password(serverCredentials.getPassword())
-                .host(publicIp.get())
-                .build();
+        return getSshClient(getOrCreatePublicIpWithOpenSshPort(metadata), metadata.getId());
     }
 
-    private Optional<String> findPublicIpWithOpenSshPort(Server server) {
-        return findPublicIp(server)
+    public SshClient execSsh(Server server, SshConnectionConfig config) {
+        checkNotNull(server);
+        checkNotNull(config);
+
+        if (!config.isUseInternalIp() && Strings.isNullOrEmpty(config.getIp())) {
+            return execSsh(server);
+        }
+
+        ServerMetadata metadata = findByRef(server);
+
+        return getSshClient(getIpWithOpenSshPort(metadata, config), metadata.getId());
+    }
+
+    private SshClient getSshClient(String host, String serverId) {
+        ServerCredentials serverCredentials = client.getServerCredentials(serverId);
+
+        return new SshjClient.Builder()
+            .username(serverCredentials.getUserName())
+            .password(serverCredentials.getPassword())
+            .host(host)
+            .build();
+    }
+
+    private String getOrCreatePublicIpWithOpenSshPort(ServerMetadata metadata) {
+        Optional<String> publicIpWithOpenSshPort = findPublicIpWithOpenSshPort(metadata, null);
+        Server server = Server.refById(metadata.getId());
+        return publicIpWithOpenSshPort.orElseGet(() -> {
+            this.addPublicIp(server, new CreatePublicIpConfig().openPorts(SSH)).waitUntilComplete();
+
+            return findPublicIpWithOpenSshPort(findByRef(server), null).get();
+        });
+    }
+
+    private String getIpWithOpenSshPort(ServerMetadata metadata, SshConnectionConfig config) {
+        String ip = config.getIp();
+        if (!config.isUseInternalIp()) {
+            Optional<String> publicIp = findPublicIpWithOpenSshPort(metadata, ip);
+
+            return publicIp.map(r -> publicIp.get())
+                .orElseThrow(() -> new SshException("Public IP: %s is not exist", ip));
+        }
+
+        Optional<String> privateIp = findInternalIp(metadata, ip);
+
+        return privateIp.map(r -> privateIp.get())
+            .orElseThrow(() -> new SshException("Internal IP: %s is not exist", ip));
+    }
+
+    private Optional<String> findPublicIpWithOpenSshPort(ServerMetadata metadata, String publicIp) {
+        return findPublicIp(metadata)
             .stream()
             .filter(ip -> ip
-                    .getPorts()
-                    .stream()
-                    .filter(p -> p.getPort().equals(SSH))
-                    .count() > 0
+                .getPorts()
+                .stream()
+                .filter(Strings.isNullOrEmpty(publicIp) ? p -> p.getPort().equals(SSH)
+                    : p -> p.getPort().equals(SSH) && publicIp.equals(ip.getPublicIPAddress()))
+                .count() > 0
             )
             .map(PublicIpMetadata::getPublicIPAddress)
             .filter(notNull())
@@ -1231,7 +1285,6 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     }
 
 
-
     /**
      * Remove secondary network
      *
@@ -1275,7 +1328,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     /**
      * Remove secondary network
      *
-     * @param filter the server search criteria
+     * @param filter  the server search criteria
      * @param network secondary network reference
      * @return OperationFuture wrapper for list of Server
      */

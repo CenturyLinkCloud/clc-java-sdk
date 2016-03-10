@@ -3,6 +3,7 @@ package com.centurylink.cloud.sdk.server.services.dsl.domain.remote;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.core.preconditions.Preconditions;
+import com.centurylink.cloud.sdk.core.util.Strings;
 import com.centurylink.cloud.sdk.server.services.client.domain.server.ServerCredentials;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.remote.domain.ShellResponse;
 import net.schmizz.sshj.SSHClient;
@@ -10,13 +11,19 @@ import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.centurylink.cloud.sdk.core.preconditions.ArgumentPreconditions.notNull;
+import static com.centurylink.cloud.sdk.core.preconditions.Preconditions.checkArgument;
 import static java.time.Duration.ofMinutes;
 import static net.schmizz.sshj.common.IOUtils.closeQuietly;
 
@@ -91,6 +98,16 @@ public class SshjClient implements SshClient {
         return this;
     }
 
+    @Override
+    public SshClient runScript(String pathToFile) {
+        try {
+            commandList.addAll(getCommandsFromScript(pathToFile));
+        } catch (Exception e) {
+            throw new SshException(e);
+        }
+        return this;
+    }
+
     @FunctionalInterface
     public interface SshConnectFunc {
         void connect() throws IOException;
@@ -102,7 +119,7 @@ public class SshjClient implements SshClient {
 
         long startTime = System.currentTimeMillis();
 
-        for (;;) {
+        for (; ; ) {
             try {
                 func.connect();
                 return;
@@ -150,6 +167,18 @@ public class SshjClient implements SshClient {
             return cmd.getExitStatus();
         } else {
             return 0;
+        }
+    }
+
+    List<String> getCommandsFromScript(String pathToFile) throws Exception {
+        checkArgument(!Strings.isNullOrEmpty(pathToFile), "Path to file must NOT be Null or Empty");
+
+        Path path = pathToFile.startsWith("classpath") ?
+            Paths.get(getClass().getClassLoader().getResource(pathToFile.split(":")[1]).toURI())
+            : Paths.get(pathToFile);
+
+        try (BufferedReader br = Files.newBufferedReader(path)) {
+            return br.lines().collect(Collectors.toList());
         }
     }
 
