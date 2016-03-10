@@ -25,7 +25,7 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWai
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.SequentialJobsFuture;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
+import com.centurylink.cloud.sdk.core.client.domain.NetworkLink;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.core.util.Strings;
 import com.centurylink.cloud.sdk.policy.services.dsl.AutoscalePolicyService;
@@ -1243,7 +1243,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public OperationFuture<Server> addSecondaryNetwork(Server server, AddNetworkConfig config) {
         ServerMetadata serverMetadata = findByRef(server);
 
-        SecondaryNetworkLink link = client.addSecondaryNetwork(
+        NetworkLink link = client.addSecondaryNetwork(
             idByRef(server),
             buildSecondaryNetworkRequest(config, serverMetadata.getLocationId())
         );
@@ -1295,7 +1295,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
     public OperationFuture<Server> removeSecondaryNetwork(Server server, Network network) {
         ServerMetadata serverMetadata = findByRef(server);
 
-        SecondaryNetworkLink link = client.removeSecondaryNetwork(
+        NetworkLink link = client.removeSecondaryNetwork(
             idByRef(server),
             networkIdByRef(network, serverMetadata.getLocationId())
         );

@@ -15,6 +15,7 @@
 
 package com.centurylink.cloud.sdk.server.services.dsl;
 
+import com.centurylink.cloud.sdk.base.services.client.ExperimentalQueueClient;
 import com.centurylink.cloud.sdk.base.services.client.QueueClient;
 import com.centurylink.cloud.sdk.base.services.client.domain.datacenters.DataCenterMetadata;
 import com.centurylink.cloud.sdk.base.services.dsl.DataCenterService;
@@ -23,7 +24,7 @@ import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.OperationFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.JobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.NoWaitingJobFuture;
 import com.centurylink.cloud.sdk.base.services.dsl.domain.queue.job.future.ParallelJobsFuture;
-import com.centurylink.cloud.sdk.core.client.domain.Link;
+import com.centurylink.cloud.sdk.core.client.domain.NetworkLink;
 import com.centurylink.cloud.sdk.core.services.QueryService;
 import com.centurylink.cloud.sdk.server.services.client.NetworkClient;
 import com.centurylink.cloud.sdk.server.services.client.domain.network.NetworkMetadata;
@@ -45,9 +46,10 @@ public class NetworkService implements QueryService<Network, NetworkFilter, Netw
 
     private final NetworkClient networkClient;
     private final DataCenterService dataCenterService;
-    private final QueueClient queueClient;
+    private final ExperimentalQueueClient queueClient;
 
-    public NetworkService(NetworkClient networkClient, DataCenterService dataCenterService, QueueClient queueClient) {
+    public NetworkService(NetworkClient networkClient, DataCenterService dataCenterService,
+                          ExperimentalQueueClient queueClient) {
         this.networkClient = networkClient;
         this.dataCenterService = dataCenterService;
         this.queueClient = queueClient;
@@ -154,14 +156,14 @@ public class NetworkService implements QueryService<Network, NetworkFilter, Netw
      * @return OperationFuture wrapper for dataCenter
      */
     public OperationFuture<DataCenter> claim(DataCenter dataCenter) {
-        Link response = networkClient.claim(
+        NetworkLink response = networkClient.claim(
             dataCenterService.findByRef(dataCenter).getId()
         );
 
         return
             new OperationFuture<>(
                 dataCenter,
-                response.getId(),
+                response.getOperationId(),
                 queueClient
             );
     }

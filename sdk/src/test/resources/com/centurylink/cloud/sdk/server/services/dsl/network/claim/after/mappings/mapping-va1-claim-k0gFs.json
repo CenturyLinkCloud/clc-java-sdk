@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2-experimental/networks/ALTD/va1/claim",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 202,
+    "bodyFileName" : "body-va1-claim-k0gFs.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Thu, 10 Mar 2016 13:02:55 GMT",
+      "Content-Length" : "131",
+      "Via" : "1.1 GB3T3NLOADFE01"
+    }
+  }
+}

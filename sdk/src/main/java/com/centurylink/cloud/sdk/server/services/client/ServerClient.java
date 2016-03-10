@@ -18,7 +18,7 @@ package com.centurylink.cloud.sdk.server.services.client;
 import com.centurylink.cloud.sdk.core.auth.services.BearerAuthentication;
 import com.centurylink.cloud.sdk.core.client.AuthenticatedSdkHttpClient;
 import com.centurylink.cloud.sdk.core.client.domain.Link;
-import com.centurylink.cloud.sdk.core.client.domain.SecondaryNetworkLink;
+import com.centurylink.cloud.sdk.core.client.domain.NetworkLink;
 import com.centurylink.cloud.sdk.core.config.SdkConfiguration;
 import com.centurylink.cloud.sdk.server.services.client.domain.group.*;
 import com.centurylink.cloud.sdk.server.services.client.domain.ip.PublicIpMetadata;
@@ -349,22 +349,22 @@ public class ServerClient extends AuthenticatedSdkHttpClient {
                 .get(NetworkMetadata.class);
     }
 
-    public SecondaryNetworkLink addSecondaryNetwork(String serverId, AddNetworkRequest networkRequest) {
+    public NetworkLink addSecondaryNetwork(String serverId, AddNetworkRequest networkRequest) {
         return
             client(SERVER_URL_WITH_ID + "/networks")
                 .resolveTemplate(SERVER_ID, serverId)
                 .request()
                 .post(entity(networkRequest, APPLICATION_JSON_TYPE))
-                .readEntity(SecondaryNetworkLink.class);
+                .readEntity(NetworkLink.class);
     }
 
-    public SecondaryNetworkLink removeSecondaryNetwork(String serverId, String networkId) {
+    public NetworkLink removeSecondaryNetwork(String serverId, String networkId) {
         return
             client(SERVER_URL_WITH_ID + "/networks/{network}")
                 .resolveTemplate(SERVER_ID, serverId)
                 .resolveTemplate("network", networkId)
                 .request()
                 .delete()
-                .readEntity(SecondaryNetworkLink.class);
+                .readEntity(NetworkLink.class);
     }
 }

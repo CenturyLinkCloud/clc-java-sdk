@@ -43,7 +43,7 @@ public class ClaimNetworkTest extends AbstractServersSdkTest implements WireMock
         );
 
         assertNotNull(metadataList);
-        assertEquals(metadataList.size(), 0);
+        assertEquals(metadataList.size(), 1);
     }
 
     @Test
@@ -58,6 +58,6 @@ public class ClaimNetworkTest extends AbstractServersSdkTest implements WireMock
         );
 
         assertNotNull(metadataList);
-        assertEquals(metadataList.size(), 1);
+        assertEquals(metadataList.size(), 2);
     }
 }

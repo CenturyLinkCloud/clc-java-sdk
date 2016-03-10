@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "url" : "/v2/authentication/login",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"username\":\"cloud_user\",\"password\":\"cloud_user_password\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-authentication-login-fyGms.json",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Expires" : "-1",
+      "Date" : "Thu, 10 Mar 2016 13:02:48 GMT",
+      "Content-Length" : "755",
+      "Via" : "1.1 GB3T3NLOADFE01"
+    }
+  }
+}
