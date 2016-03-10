@@ -1,0 +1,17 @@
+{
+  "request" : {
+    "url" : "/v2/datacenters/ALTD?groupLinks=true",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-datacenters-ALTD-9KBlK.json",
+    "headers" : {
+      "Cache-Control" : "max-age=300, private",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Date" : "Thu, 10 Mar 2016 13:02:54 GMT",
+      "Content-Length" : "19664",
+      "Via" : "1.1 GB3T3NLOADFE01"
+    }
+  }
+}

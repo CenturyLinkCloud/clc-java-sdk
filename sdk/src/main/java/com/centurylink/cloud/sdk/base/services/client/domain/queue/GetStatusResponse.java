@@ -15,11 +15,13 @@
 
 package com.centurylink.cloud.sdk.base.services.client.domain.queue;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author ilya.drabenia
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GetStatusResponse {
     private final String status;
 
