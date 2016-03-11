@@ -87,6 +87,11 @@ uploadArchives {
                         name 'Aliaksandr Krasitski'
                         email 'aliaksandr.krasitski@altoros.com'
                     }
+                    developer {
+                        id 'SergeiSidorov'
+                        name 'Siarhei Sidarau'
+                        email 'siarhei.sidarau@altoros.com'
+                    }
                 }
             }
         }

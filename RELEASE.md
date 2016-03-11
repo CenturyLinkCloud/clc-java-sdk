@@ -1,3 +1,8 @@
+1.2.3
+------------
+* Performance issues with SSH via the SDK #198
+* Claim network response has changed #200
+
 1.2.2
 ------------
 * Claim network changes according new api
