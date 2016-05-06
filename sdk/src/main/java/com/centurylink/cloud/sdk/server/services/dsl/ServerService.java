@@ -59,6 +59,7 @@ import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ModifyServerC
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.ServerConverter;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.SshConnectionConfig;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.filters.ServerFilter;
+import com.centurylink.cloud.sdk.server.services.dsl.domain.server.future.CreateServerBlueprintJobFuture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.future.CreateServerJobFuture;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.Server;
 import com.centurylink.cloud.sdk.server.services.dsl.domain.server.refs.ServerByIdRef;
@@ -169,6 +170,7 @@ public class ServerService implements QueryService<Server, ServerFilter, ServerM
             BaseServerResponse response,
             T config
     ) {
+        new CreateServerBlueprintJobFuture(response.findServerUuid(), client).waitUntilComplete();
         ServerMetadata serverInfo = client.findServerByUuid(response.findServerUuid());
 
         return
