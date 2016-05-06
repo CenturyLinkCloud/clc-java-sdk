@@ -1,3 +1,7 @@
+1.2.4
+------------
+* Server not found after server create #202
+
 1.2.3
 ------------
 * Performance issues with SSH via the SDK #198
