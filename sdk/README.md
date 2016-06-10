@@ -9,14 +9,14 @@ Maven:
     <dependency>
         <groupId>com.centurylink.cloud</groupId>
         <artifactId>clc-java-sdk</artifactId>
-        <version>1.2.3</version>
+        <version>1.2.4</version>
     </dependency>
 </dependencies>
 ```
 
 Gradle:
 ```groovy
-compile 'com.centurylink.cloud:clc-java-sdk:1.2.3'
+compile 'com.centurylink.cloud:clc-java-sdk:1.2.4'
 ```
 
 
